@@ -8,6 +8,12 @@ last_updated: 2026-07-07
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
 ---
+## [2026-07-07] [修复] 项目遍历审计：修复6处跨文件矛盾与警告 (v1.3.5 → v1.3.6)
+
+- **受影响文件**: `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `.claude/commands/monthly-review.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/weekly-synthesis.md`, `.claude/shared/paths.md`, `docs/specs/audit-cleanup.md`, `关于我/current.md`（新建）, `README.md`, `VERSION`
+- **改动摘要**: 审计修复6处问题：①PROJECT_STATUS合并重复"低优先级"段落；②evolution-roadmap版本号v1.3.3→v1.3.5；③monthly-review命令描述从硬编码"6视角"改为多模式说明；④monthly-synthesis agent视角数说明改为可变；⑤weekly-synthesis规则编号11→12/12→13/13→14；⑥paths.md新增journal-coach输出路径；⑦audit-cleanup.md标记为已完成；⑧创建current.md占位文件
+
+---
 ## [2026-07-07] [重构] 项目遍历审计：死代码清理 + 功能冻结解除 + 预防机制 (v1.3.4 → v1.3.5)
 
 - **受影响文件**: `.claude/shared/paths.md`, `docs/specs/csv-export.md→_archived/`, `README.md`, `PROJECT_STATUS.md`, `docs/first-principles.md`, `docs/specs/evolution-roadmap.md`, `CLAUDE.md`, `VERSION`, `data/.gitkeep`, `output/.gitkeep`

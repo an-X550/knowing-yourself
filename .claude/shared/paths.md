@@ -22,6 +22,7 @@ last_updated: 2026-07-07
 ## 输出路径（agent 运行时写入）
 
 - 每日反馈: `复盘/每日反馈/YYYY-MM-DD.md`
+- 日志教练报告: `复盘/每日反馈/coach-report-YYYY-MM-DD.md`
 - 周度报告: `复盘/每周复盘/YYYY-Www.md`
 - 月度报告: `复盘/每月复盘/YYYY-MM.md`
 - 年度报告: `复盘/年度回顾/YYYY-annual-review.md`

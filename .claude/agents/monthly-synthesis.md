@@ -1,6 +1,6 @@
 ---
 name: monthly-synthesis
-description: 综合6个视角分析生成主题化月度复盘报告。在所有6个视角子代理完成后使用。
+description: 综合视角分析生成主题化月度复盘报告。在所有视角子代理完成后使用。
 model: inherit
 color: purple
 allowed_tools: Read, Glob, Write
@@ -25,7 +25,7 @@ allowed_tools: Read, Glob, Write
 
 ### 2. 读取所有视角分析
 
-读取视角分析文件（基路径见 `.claude/shared/paths.md` 中的"月度视角分析（中间产物）"，共6个视角：therapist, coach, strengths, values-meaning, relationships, chronicle）。
+读取视角分析文件（基路径见 `.claude/shared/paths.md` 中的"月度视角分析（中间产物）"，共6个核心生活视角：therapist, coach, strengths, values-meaning, relationships, chronicle。full 模式下额外包含3个方法论视角：growth-dimensions, journal-quality, review-coach）。
 
 如果任何文件缺失，记录缺失并使用已有分析继续。
 

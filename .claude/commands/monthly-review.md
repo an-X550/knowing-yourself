@@ -1,5 +1,5 @@
 ---
-description: 从6个视角并行处理日志，生成主题化月度综合复盘报告
+description: 从选定视角并行处理日志，生成主题化月度综合复盘报告。支持 fast(3)/standard(6)/full(9) 三种模式及自定义视角
 allowed-tools:
   - Task
   - Glob
@@ -8,7 +8,7 @@ allowed-tools:
 
 # 月度复盘命令
 
-通过6个视角并行处理日志，综合为主题化最终报告。
+通过选定视角并行处理日志，综合为主题化最终报告。支持 fast(3核心视角)/standard(6生活视角,默认)/full(9全视角) 三种模式，也可自定义视角组合。
 
 ## 输入
 
@@ -45,34 +45,27 @@ allowed-tools:
 - `关于我/Analysis/relationships/`
 - `关于我/Analysis/chronicle/`
 
-### 4. 并行启动6个视角子代理
+### 4. 启动 Workflow
 
-使用 Task 工具，`subagent_type: monthly-processor`，**在一条消息中启动全部6个**（并行执行）：
-
-```
-1. "Process YYYY-MM as therapist"
-2. "Process YYYY-MM as coach"
-3. "Process YYYY-MM as strengths"
-4. "Process YYYY-MM as values-meaning"
-5. "Process YYYY-MM as relationships"
-6. "Process YYYY-MM as chronicle"
-```
-
-**关键**：在一条消息中用6个独立的 Task 工具调用启动全部6个，最大化并行度。
-
-### 5. 等待所有视角完成
-
-全部6个子代理必须完成才能继续。
-
-### 6. 启动综合子代理
-
-使用 Task 工具，`subagent_type: monthly-synthesis`：
+调用 Workflow 工具，`name: "monthly-review"`，传入月份和模式：
 
 ```
-"Synthesize YYYY-MM"
+Workflow({ name: "monthly-review", args: { month: "YYYY-MM", mode: "standard|fast|full" } })
 ```
 
-### 7. 报告完成
+Workflow 负责：
+- 按模式解析视角列表（fast: 3核心 / standard: 6生活 / full: 9全视角）
+- 并行运行视角代理（复用 `monthly-processor`）
+- 运行 `monthly-synthesis` 综合引擎
+- 输出 `复盘/每月复盘/YYYY-MM.md`
+
+**也支持自定义视角**：`args: { month: "YYYY-MM", perspectives: ["therapist", "coach"] }`
+
+### 5. 等待 Workflow 完成
+
+Workflow 会自动报告进度和最终结果。
+
+### 6. 报告完成
 
 综合完成后，报告：
 
