@@ -218,13 +218,15 @@
 
 ### 提交与推送
 
-需要记录 CHANGELOG 的改动，在记录追加且文档同步检查完成后，自动执行 `/提交` 对应的本地提交流程（提取 CHANGELOG 最新条目作为 commit message，执行 `git add .` + `git commit`）。不需要记录 CHANGELOG 的改动，使用简短人工 commit message 本地提交。推送需用户手动执行 `git push`。
+需要记录 CHANGELOG 的改动，在记录追加且文档同步检查完成后，自动执行 `/提交` 对应的本地提交流程（提取 CHANGELOG 最新条目作为 commit message，并发起 `git add .` + `git commit`）。不需要记录 CHANGELOG 的改动，使用简短人工 commit message 本地提交。推送需用户手动执行 `git push`。
+
+在受限环境下，Git 元数据写入（如 `git add`、`git commit`）可能需要一次提权批准；这属于预期流程的一部分，而不是仓库异常。
 
 自动提交成功后，在响应末尾提醒：
 
 💡 已完成本地提交。推送运行 `git push`。
 
-如因验证失败、Git 错误或环境限制无法自动提交，说明原因，并提醒用户修复后再运行 `/提交`。
+如因验证失败、Git 错误或环境限制无法自动提交，说明原因；若属于受限环境的 `.git` 写权限限制，应直接说明“正在等待提权批准”而非笼统报错。
 
 ---
 

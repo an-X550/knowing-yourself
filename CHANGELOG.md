@@ -5,6 +5,11 @@ last_updated: 2026-07-07
 
 # CHANGELOG — 改动记录
 
+## [2026-07-08 00:20] [配置] 优化 Git 提交流程：验证在内，写入在外 (v1.3.19 → v1.3.20)
+
+- **受影响文件**: `.claude/commands/commit.md`, `AGENTS.md`, `CLAUDE.md`, `.claude/settings.json`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `docs/specs/git-commit-escalation-flow.md`, `docs/superpowers/plans/2026-07-08-git-commit-escalation-flow.md`
+- **改动摘要**: 将 `/提交` 的 Git 写阶段改为提权前置：先在沙箱内完成状态检查与同步验证，再把 `git add` / `git commit` 视为受限环境下的预期提权边界；同步 AGENTS/CLAUDE 镜像规则、Stop 提示和 README 中 `/提交` 的描述，避免把 `.git/index.lock` 权限限制误解为仓库故障。
+
 ## [2026-07-07 23:51] [重构] 收紧月度综合引擎：先归并主题，再映射报告骨架 (v1.3.18 → v1.3.19)
 
 - **受影响文件**: `.claude/agents/monthly-synthesis.md`, `.claude/workflows/monthly-review.js`, `docs/specs/monthly-synthesis-theme-compression.md`, `docs/superpowers/plans/2026-07-07-monthly-synthesis-theme-compression.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

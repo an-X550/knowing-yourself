@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'STATUS=$(git status --porcelain 2>/dev/null); if [ -n \"$STATUS\" ]; then echo; echo \"⚠️ 提醒：仍有未提交改动。自动提交可能未完成，请运行 /提交 本地提交；提交后运行 git push 推送。\"; echo; fi'"
+            "command": "bash -c 'STATUS=$(git status --porcelain 2>/dev/null); if [ -n \"$STATUS\" ]; then echo; echo \"⚠️ 提醒：仍有未提交改动。请运行 /提交 发起本地提交；在受限环境下，本地提交可能等待提权批准。提交后运行 git push 推送。\"; echo; fi'"
           }
         ]
       }
