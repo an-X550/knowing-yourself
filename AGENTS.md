@@ -1,4 +1,4 @@
-# CLAUDE.md — 知己
+# AGENTS.md — 知己
 
 ## 元规则
 
@@ -10,14 +10,14 @@
 - 用户明确说"直接改"/"跳过"/"不用走流程"
 - 用户执行日志分析操作（粘贴日志、/daily-review、/weekly-review、/monthly-review、/journal-coach 等）——仅需验证目标日志文件存在，跳过上下文加载（一、上下文加载）和用户状态检测
 
-> ⚠️ **Superpowers 例外**：即使满足以上跳过条件，superpowers 技能调用规则（「六、工作流控制 → Superpowers 集成」）不受跳过阈值影响。Superpowers 技能的判断独立于 CLAUDE.md 的跳过逻辑——两者并行评估，各自触发。
+> ⚠️ **Superpowers 例外**：即使满足以上跳过条件，superpowers 技能调用规则（「六、工作流控制 → Superpowers 集成」）不受跳过阈值影响。Superpowers 技能的判断独立于 AGENTS.md 的跳过逻辑——两者并行评估，各自触发。
 
 ### 日志粘贴处理
 
 当用户消息中包含日志关键词（"幸福日志"、"开心的事情"、"充实的事情"等），且内容尚未被 `log` skill 预处理（即你直接收到了日志原文）时，按以下流程处理，而非自由发挥：
 
 1. **存档**：将日志内容追加到对应月份日志文件（`日志/谢安的YYYY-N月日志.md`）
-2. **分析**：遵循 `.claude/agents/daily-analyzer.md` 的 Step 2-6（昨日检查、镜像反射、模式连接、原子行动），使用其标准输出格式（📋/⏮️/🔍/🔗/⚡/💊），总输出 ≤400 字
+2. **分析**：遵循 `.Codex/agents/daily-analyzer.md` 的 Step 2-6（昨日检查、镜像反射、模式连接、原子行动），使用其标准输出格式（📋/⏮️/🔍/🔗/⚡/💊），总输出 ≤400 字
 3. **存档反馈**：将分析结果写入 `复盘/每日反馈/YYYY-MM-DD.md`
 4. **展示**：在对话中展示分析结果（与文件内容一致）
 
@@ -156,7 +156,7 @@
 
 3. **功能变更**：如果本次新增了命令/代理/工作流，检查 README.md 的对应表格是否包含该项
 
-4. **路径约定同步**：如果本次变更了 `.claude/shared/paths.md` 中定义的路径，grep 全项目确认无其他文件残留旧路径硬编码。paths.md 是路径的**单一权威来源**——所有 agent 应通过它获取路径，而非硬编码
+4. **路径约定同步**：如果本次变更了 `.Codex/shared/paths.md` 中定义的路径，grep 全项目确认无其他文件残留旧路径硬编码。paths.md 是路径的**单一权威来源**——所有 agent 应通过它获取路径，而非硬编码
 
 5. **反向消费者检查**（每次改动后必执行，防止死代码积累）：
    - **配置消费者**：对于 settings.json 中每个非标准顶级键（非 hooks/permissions/env），grep 全项目确认 settings.json 自身外至少有一个消费者文件引用该键名
@@ -182,11 +182,11 @@
 | 变更类型 | 必须同步的文件 |
 |---------|--------------|
 | 版本号递增 | `VERSION` → `PROJECT_STATUS.md`(当前版本) → `README.md`(徽章) |
-| 路径约定变更 | `.claude/shared/paths.md` → grep 全项目确认无旧路径残留 |
+| 路径约定变更 | `.Codex/shared/paths.md` → grep 全项目确认无旧路径残留 |
 | 新增/删除命令 | `README.md`(命令表+结构树) → `PROJECT_STATUS.md`(命令进度表) |
 | 新增/删除代理 | `README.md`(代理表+结构树) → `PROJECT_STATUS.md`(代理进度表) |
 | 新增/删除视角 | `README.md`(视角表+结构树) → `PROJECT_STATUS.md`(视角进度表) → `perspectives/README.md` |
-| 禁用词变更 | `docs/analysis-standards.md` → `.claude/shared/banned-phrases.json` → 3个workflow JS（提交前验证一致性） |
+| 禁用词变更 | `docs/analysis-standards.md` → `.Codex/shared/banned-phrases.json` → 3个workflow JS（提交前验证一致性） |
 | 文件移动/重命名 | grep 全项目旧路径 → 修复所有引用 → grep 确认零残留 |
 | 新增/修改配置键或路径 | `settings.json`自定义键 / `paths.md`路径 → grep 全项目确认消费者存在 |
 
@@ -231,7 +231,7 @@
 
 ## 五、目录管理
 
-根目录仅保留核心文件（≤8个）：`README.md`、`LICENSE`、`CLAUDE.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`.gitignore`。其他文件按类型归入子目录。
+根目录仅保留核心文件（≤8个）：`README.md`、`LICENSE`、`AGENTS.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`.gitignore`。其他文件按类型归入子目录。
 
 | 目录 | 用途 | 版本控制 |
 |------|------|---------|
@@ -254,7 +254,7 @@
 
 ### Superpowers 集成
 
-当用户执行开发任务（需求增删改测试等）时，**自动**根据任务类型调用对应的 superpowers 技能，无需用户手动输入 skill 名。Superpowers 调用独立于 CLAUDE.md 的「跳过阈值」——即使改动 <20 行，仍须评估是否需要 superpowers 技能。
+当用户执行开发任务（需求增删改测试等）时，**自动**根据任务类型调用对应的 superpowers 技能，无需用户手动输入 skill 名。Superpowers 调用独立于 AGENTS.md 的「跳过阈值」——即使改动 <20 行，仍须评估是否需要 superpowers 技能。
 
 #### 场景 → 技能映射
 

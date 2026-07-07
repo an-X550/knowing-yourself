@@ -1,0 +1,24 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "skill log"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'STATUS=$(git status --porcelain 2>/dev/null); if [ -n \"$STATUS\" ]; then echo; echo \"⚠️ 提醒：你有未提交的代码改动。输入 /提交 即可本地提交，然后运行 git push 推送。\"; echo; fi'"
+          }
+        ]
+      }
+    ]
+  }
+}

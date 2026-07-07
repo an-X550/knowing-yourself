@@ -1,0 +1,27 @@
+---
+name: "source-command-update-current"
+description: "根据最近日志更新 current.md 中的当前上下文"
+---
+
+# source-command-update-current
+
+Use this skill when the user asks to run the migrated source command `update-current`.
+
+## Command Template
+
+1. 阅读最近7天的日志条目——检查 `日志/`
+2. 阅读当前上下文文件——先检查 `关于我/current.md`
+3. 分析日志并提取：
+   - **当前焦点**：我目前在做什么？
+   - **心情与精力**：感受如何？精力水平？趋势？
+   - **待决事项**：未解决的事、即将到来的会议、待定决策
+   - **本周模式**：睡眠、工作、运动、社交、值得注意的行为
+   - **近期事件**：每天的关键事件（一行摘要）
+   - **特别备注**：健康问题、重大变化等
+
+4. 用新内容更新 `关于我/current.md`，保持结构不变
+5. 更新 frontmatter 中的 `last_updated` 日期
+
+保持简洁。使用项目符号。对提到的人使用 [[wikilinks]]。
+
+只回复："✓ 当前上下文已更新"

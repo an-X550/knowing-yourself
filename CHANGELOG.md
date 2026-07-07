@@ -8,6 +8,12 @@ last_updated: 2026-07-07
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
 ---
+## [2026-07-07] [修复] 统一日志分析入口：CLAUDE.md 新增日志粘贴处理规则 (v1.3.7 → v1.3.8)
+
+- **受影响文件**: `CLAUDE.md`, `VERSION`, `PROJECT_STATUS.md`, `README.md`, `docs/specs/evolution-roadmap.md`
+- **改动摘要**: 用户粘贴日志时因 hook 未触发导致 Claude 自由发挥分析格式（与 daily-analyzer 模板不一致）。在 CLAUDE.md 跳过阈值与上下文加载之间新增"日志粘贴处理"规则，确保 Claude 直接收到日志原文时也遵循标准输出格式，分析结果同时写入复盘/每日反馈文件
+
+---
 ## [2026-07-07] [重构] /提交 改为仅本地提交，推送由用户手动执行 (v1.3.6 → v1.3.7)
 
 - **受影响文件**: `.claude/commands/commit.md`, `CLAUDE.md`, `README.md`, `.claude/settings.json`, `VERSION`, `PROJECT_STATUS.md`
