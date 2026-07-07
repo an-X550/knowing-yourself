@@ -3,7 +3,7 @@
 > 🎯 AI 日志分析教练 — 让 AI 帮你发现你自己看不见的行为模式
 
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.3.12-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.3.13-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 平台的 AI 日志分析与复盘教练 Skill。它通过多个专业视角并行分析你的每日日志，最终综合为结构化的复盘报告，帮助你进行自我认知、成长追踪和复盘改进。
@@ -278,6 +278,7 @@
 │   │   └── log.md            # 日志存档技能
 │   ├── shared/               # 共享配置
 │   │   ├── paths.md           # 路径权威来源
+│   │   ├── prompt-rules.md    # 共享提示词规则
 │   │   └── banned-phrases.json # 禁用词列表
 │   ├── workflows/            # Workflow 编排脚本
 │   │   ├── monthly-review.js
@@ -337,6 +338,8 @@
 ## 路径配置
 
 所有输入/输出路径由 [.claude/shared/paths.md](.claude/shared/paths.md) 统一管理，agent/workflow/command 启动时读取此文件。如需调整目录结构，只需修改该文件。
+
+跨 agent 重复的提示词硬约束由 [.claude/shared/prompt-rules.md](.claude/shared/prompt-rules.md) 统一管理，用于集中维护路径、证据、输出契约和质量门槛。
 
 ---
 
