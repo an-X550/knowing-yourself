@@ -5,6 +5,11 @@ last_updated: 2026-07-07
 
 # CHANGELOG — 改动记录
 
+## [2026-07-07 21:21] [配置] 维护文件改为影响驱动读取与更新 (v1.3.14 → v1.3.15)
+
+- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将上下文加载从完整读取改为最小足够上下文，明确 README 默认按需读取；将 CHANGELOG、PROJECT_STATUS、VERSION、README 的更新规则收窄为影响驱动，避免每次改动机械触碰四类维护文件；同步版本号至 v1.3.15 并记录关键决策。
+
 ## [2026-07-07 19:25] [配置] 忽略本地 Superpowers 辅助目录并明确维护边界 (v1.3.13 → v1.3.14)
 
 - **受影响文件**: `.gitignore`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
