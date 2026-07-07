@@ -33,9 +33,9 @@ Week identifier from: `$ARGUMENTS`
 ### 2. 验证日志存在
 
 扫描7天的日志文件。至少需要3天日志。
-按顺序检查以下路径：
-1. `日志/YYYY-MM-DD.md`
-2. 合并月志文件（如 `日志/*月日志.md`，按日期头定位）
+按 `.claude/shared/paths.md` 检查：
+1. `input.daily_journal`
+2. `input.monthly_journal_glob_cn` / `input.monthly_journal_glob_iso`（按日期头定位）
 
 少于3天日志时警告但仍继续。
 
@@ -51,7 +51,7 @@ Workflow 负责：
 - 并行运行3个核心生活视角代理（实际发生的事 + 目标与时间 + 情绪与心理）
 - 代理复用 `monthly-processor`，传入周标识（含日期范围）
 - 运行 `weekly-synthesis` 综合引擎
-- 输出 `复盘/每周复盘/YYYY-Www.md`（标题含日期范围）
+- 输出 `paths.md` 的 `output.weekly_report`（标题含日期范围）
 
 ### 4. 报告完成
 
@@ -59,7 +59,7 @@ Workflow 负责：
 周度复盘 [YYYY-Www]（M月D日-M月D日）完成！
 
 视角：实际发生的事、目标与时间、情绪与心理（共3个）
-报告：复盘/每周复盘/YYYY-Www.md（5段简化复盘 + 质量自检）
+报告：output.weekly_report（5段简化复盘 + 质量自检）
 ```
 
 ## 报告结构
@@ -88,4 +88,4 @@ Workflow 负责：
 - 周度固定使用3个核心生活视角，无需用户选择模式
 - 报告是月志的简化版——同框架、同质量标准、更轻更快
 - 4份周志报告自然累积为月志综合的素材
-- 唯一输出：`复盘/每周复盘/YYYY-Www.md`
+- 唯一输出：`paths.md` 的 `output.weekly_report`

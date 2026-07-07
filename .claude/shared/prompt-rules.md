@@ -8,32 +8,54 @@ purpose: Shared prompt constraints for runtime agents
 
 > 本文件只承载跨 agent 反复出现的硬约束。具体任务步骤、输出模板和职责边界仍由各 agent 自己定义。
 
-## 一、路径规则
+## 一、共享文件读取顺序
+
+1. 需要路径时，先读 `.claude/shared/paths.md`，并引用其中的命名 key。
+2. 需要跨 agent 行为约束时，读本文件；不要把本文件整段复制到 agent。
+3. 需要聊天摘要禁用词时，读 `.claude/shared/banned-phrases.json`；人类说明以 `docs/analysis-standards.md` 为准。
+4. 具体任务步骤、参数解析、错误处理、输出模板仍由各 agent/command 自己维护。
+
+## 二、路径规则
 
 1. 运行时先读取 `.claude/shared/paths.md`，所有输入、输出、上下文和报告目录都以该文件为准。
-2. 不在 agent 中硬编码中文目录或历史路径；如需兼容旧路径，只引用 `paths.md` 的“已废弃路径”说明。
-3. 写文件前确认目标目录存在；只创建当前 agent 明确负责的文件。
+2. agent/command 文档中优先引用 `paths.md` 的命名 key（如 `output.daily_feedback`），用户可见提示中才展开具体路径。
+3. 不在 agent 中硬编码中文目录或历史路径；如需兼容旧路径，只引用 `paths.md` 的“已废弃路径”说明。
+4. 写文件前确认目标目录存在；只创建当前 agent 明确负责的文件。
 
-## 二、证据规则
+## 三、Hook 与入口规则
+
+1. `.claude/settings.json` 只做 hook 路由：匹配日志关键词后调用 `skill log`，Stop hook 只提醒未提交改动。
+2. 日志识别语义由 `.claude/skills/log.md` 和本文件的「日反馈输出契约」维护；不要在 `settings.json` 里扩展分析流程。
+3. `UserPromptSubmit.matcher` 只保留高召回触发词：`幸福日志`、`开心的事情`、`充实的事情`、`待改进`、`感谢的人`、`思考...改进`、`todolist`。新增日志模板字段时，同步更新 `log.md` 的日期/字段识别说明。
+4. 命令入口（`/daily-review`、`/weekly-review`、`/monthly-review` 等）只负责参数解析和编排，分析格式由对应 agent 与共享契约决定。
+
+## 四、证据规则
 
 1. 重要结论必须有日志日期、原文引用、已有报告或视角分析作为证据。
 2. 没有证据时标注“证据不足”，不要补全、猜测或编造。
 3. 发现要写成可被用户反驳的观察，不写成权威诊断。
 
-## 三、输出契约
+## 五、输出契约
 
 1. 明确区分“返回文本”和“写文件”：agent 只做自己 frontmatter/正文中声明的输出动作。
 2. 不额外创建中间文件，不把完整报告回读给主代理，除非该 agent 的输出契约明确要求。
 3. 用户可见内容使用简体中文；配置字段、文件名、内部 key 保持英文。
 
-## 四、质量门槛
+## 六、质量门槛
 
 1. 月度、周度、年度综合遵守 `docs/analysis-standards.md` 中的相关质量标准和禁用模糊语。
 2. 日分析遵守 `docs/analysis-standards.md` 的 D0-D6：昨日闭环、原文支撑、指出盲点、模式连接、一个动作、原子粒度、预测可验证。
 3. 建议必须具体到行为和检查方式；避免“注意作息”“继续努力”“加强学习”等空泛表达。
 4. 自检必须诚实。证据不足、数据不足、无昨日反馈时，用警告或 N/A 标记，不强行标满。
 
-## 五、日反馈输出契约
+## 七、禁用词同步规则
+
+1. 人类可读权威说明：`docs/analysis-standards.md` 的「聊天摘要质量门」。
+2. 机器可读镜像：`.claude/shared/banned-phrases.json`，保留 `common` 与 `yearly_extra` 两个数组供 workflow 校验。
+3. workflow JS 当前因运行环境限制保留内嵌数组；修改禁用词时必须同步 3 个 workflow，并由 `/提交` 的提交前验证拦截漂移。
+4. agent 不要在自身提示词里另写一份禁用词列表；只引用质量门或 JSON 镜像。
+
+## 八、日反馈输出契约
 
 日反馈是项目最短闭环。`daily-analyzer`、`/daily-review` 和 `log` skill 必须共享同一契约：
 
@@ -45,7 +67,7 @@ purpose: Shared prompt constraints for runtime agents
 6. **可验证预测**：预测必须能在 24 小时内通过下一篇日志判断，禁止“会更好”“更稳定”这类模糊结果。
 7. **长度上限**：常规输出控制在 320 中文字以内；只有昨日闭环证据复杂时可放宽到 400 字。
 
-## 六、减法边界
+## 九、减法边界
 
 1. 优化提示词时不得改变命令入口、参数格式、输出路径、输出文件名、报告章节结构或 workflow 编排。
 2. 可以删除重复解释、历史背景、旧路径叙述和跨 agent 复制的规则。

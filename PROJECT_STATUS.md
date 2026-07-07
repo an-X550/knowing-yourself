@@ -5,7 +5,7 @@ last_updated: 2026-07-07
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.16
+**当前版本**：1.3.17
 
 ## 项目概述
 
@@ -155,7 +155,7 @@ last_updated: 2026-07-07
 |------|------|
 | 项目规范 | `CLAUDE.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `.gitignore`, `LICENSE` |
 | 设置 | `.claude/settings.json`, `.codex/hooks.json`, `SETUP.md` |
-| 共享配置 | `.claude/shared/paths.md`（路径权威来源）, `.claude/shared/prompt-rules.md`（共享提示词规则）, `.claude/shared/banned-phrases.json`（禁用词权威来源） |
+| 共享配置 | `.claude/shared/paths.md`（命名路径契约）, `.claude/shared/prompt-rules.md`（共享提示词与 hook 契约）, `.claude/shared/banned-phrases.json`（禁用词机器镜像） |
 | 方法论 | `docs/first-principles.md`, `docs/methodology-journal.md`, `docs/methodology-review.md`, `docs/analysis-standards.md` |
 | 示例 | `examples/demo/sample-journal.md`, `examples/analyses/` |
 | CI | `.github/ISSUE_TEMPLATE/`, `.github/PULL_REQUEST_TEMPLATE.md` |
@@ -229,4 +229,5 @@ last_updated: 2026-07-07
 | 2026-07-07 | 维护文件改为影响驱动读取与更新 | 将 PROJECT_STATUS、CHANGELOG、VERSION、README 从“每次必读/必改”调整为按影响触发：启动仅读取最小足够上下文，PROJECT_STATUS 只记录状态事实，README 只同步对外信息，VERSION 只为可发布变化递增，降低维护噪音和上下文成本 |
 | 2026-07-07 | 日反馈链路统一为 daily-analyzer 契约 | 日反馈是最短闭环，`/daily-review` 和 `log` skill 不再各自维护分析流程，而是统一调用 `daily-analyzer`；D0-D6 改为内部质量门，用户只看到短反馈、一个原子行动和可验证预测 |
 | 2026-07-07 | 提示词共享规则集中化 | 将跨 agent 重复的路径、证据、输出契约和质量门槛抽到 `.claude/shared/prompt-rules.md`，减少 synthesis/daily agent 的重复叙述，同时保持命令入口、输出路径和报告结构不变 |
+| 2026-07-07 | 路径与 hook 语义契约化 | 将 `paths.md` 从路径清单升级为命名 key + 创建责任契约；`prompt-rules.md` 增加共享文件读取顺序、hook 路由边界和禁用词同步规则；`settings.json` 保持薄路由，减少路径、触发词和质量门在 agent/command/workflow 间漂移 |
 | 2026-07-07 | `.agents/skills/superpowers/` 作为本地 AI 辅助目录 | 该目录方便 AI 在本项目使用 Superpowers 技能，但不属于 Claude Code Skill 产品逻辑；通过 `.gitignore` 忽略，避免进入运行真相或提交历史 |

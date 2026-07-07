@@ -31,13 +31,13 @@ allowed-tools:
 
 ### 2. 验证日志存在
 
-使用 Glob 检查 `日志/` 目录中目标月份的日志文件（如 `日志/*YYYY*M月*.md`）。
+使用 `.claude/shared/paths.md` 的 `input.monthly_journal_glob_cn` / `input.monthly_journal_glob_iso` 检查目标月份日志文件。
 
 如果未找到日志：报告错误并停止。
 
 ### 3. 创建输出根目录
 
-确保 `关于我/Analysis/` 存在。具体视角子目录由 `monthly-processor` 按本次选中的视角创建，不在命令层硬编码。
+确保 `output.perspective_analysis` 的根目录存在。具体视角子目录由 `monthly-processor` 按本次选中的视角创建，不在命令层硬编码。
 
 ### 4. 启动 Workflow
 
@@ -51,7 +51,7 @@ Workflow 负责：
 - 按模式解析视角列表（fast: 3核心 / standard: 6生活 / full: 9全视角）
 - 并行运行视角代理（复用 `monthly-processor`）
 - 运行 `monthly-synthesis` 综合引擎
-- 输出 `复盘/每月复盘/YYYY-MM.md`
+- 输出 `paths.md` 的 `output.monthly_report`
 
 **也支持自定义视角**：`args: { month: "YYYY-MM", perspectives: ["therapist", "coach"] }`
 
@@ -67,9 +67,9 @@ Workflow 会自动报告进度和最终结果。
 [月份 年份]月度复盘完成！
 
 视角分析已创建：
-- 关于我/Analysis/{视角}/YYYY-MM-{视角}.md（按本次选中的视角生成）
+- output.perspective_analysis（按本次选中的视角生成）
 
-最终报告：复盘/每月复盘/YYYY-MM.md
+最终报告：output.monthly_report
 ```
 
 ## 错误处理

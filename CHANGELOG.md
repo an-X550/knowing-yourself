@@ -5,6 +5,11 @@ last_updated: 2026-07-07
 
 # CHANGELOG — 改动记录
 
+## [2026-07-07 21:57] [配置] 路径与共享规则契约化，降低 agent 硬编码与漂移风险 (v1.3.16 → v1.3.17)
+
+- **受影响文件**: `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `.claude/settings.json`, `.claude/commands/daily-review.md`, `.claude/commands/weekly-review.md`, `.claude/commands/monthly-review.md`, `.claude/commands/commit.md`, `.claude/skills/log.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `docs/superpowers/plans/2026-07-07-shared-path-rules-optimization.md`
+- **改动摘要**: 将 `paths.md` 从路径清单升级为命名 key、创建责任和废弃路径契约；扩展 `prompt-rules.md` 的共享文件读取顺序、hook 路由边界、禁用词同步规则和日反馈契约；为 `banned-phrases.json` 增加机器镜像元数据且保留 `common`/`yearly_extra` 数组；格式化 `settings.json` 并保持其只做 hook 薄路由；轻量同步 daily/log/weekly/monthly/commit 文档中的路径与验证描述，版本同步至 v1.3.17。
+
 ## [2026-07-07 21:40] [重构] 优化日反馈链路：统一契约、收短输出、稳定闭环验证 (v1.3.15 → v1.3.16)
 
 - **受影响文件**: `.claude/agents/daily-analyzer.md`, `.claude/commands/daily-review.md`, `.claude/skills/log.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/paths.md`, `docs/analysis-standards.md`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`

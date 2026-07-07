@@ -32,10 +32,10 @@ description: 用户粘贴日志内容时自动触发。检测"幸福日志""开�
 **确定文件名**：
 - 从内容中解析日期（如"幸福日志 7.4"或"## 7月3日" → 提取月份）
 - 如果解析失败，用今天的日期
-- 文件名格式：先 glob `日志/*N月*.md` 查找已有文件；找到则追加到已有文件，未找到则新建 `日志/YYYY-N月日志.md`
+- 文件名格式：按 `.claude/shared/paths.md` 的 `input.monthly_journal_glob_cn` / `input.monthly_journal_glob_iso` 查找已有文件；找到则追加到已有文件，未找到则在 `input.journal_dir` 下新建当月日志
 
 **追加**：
-- **追加前检查**：用 Bash `mkdir -p 日志` 确保目录存在（首次使用时自动创建）
+- **追加前检查**：确保 `input.journal_dir` 存在（首次使用时自动创建）
 - 如果文件存在 → 在末尾加两个换行，然后追加日志内容
 - 如果文件不存在 → 新建文件，写入日志内容
 
@@ -51,7 +51,7 @@ description: 用户粘贴日志内容时自动触发。检测"幸福日志""开�
 
 分析完成后：
 1. 将输出展示给用户
-2. Bash `mkdir -p 复盘/每日反馈` → Write 保存到 `复盘/每日反馈/YYYY-MM-DD.md`（覆盖已有，不添加额外说明或自检行）
+2. 确保 `output.daily_feedback` 的父目录存在 → Write 保存到 `output.daily_feedback`（覆盖已有，不添加额外说明或自检行）
 
 ---
 

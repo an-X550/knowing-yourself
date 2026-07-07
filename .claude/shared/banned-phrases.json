@@ -1,5 +1,17 @@
 {
-  "_note": "权威来源：docs/analysis-standards.md 五、聊天摘要质量门。此文件供 workflow 脚本引用，修改时需同步更新 analysis-standards.md。",
+  "_schema": "banned_phrases.v1",
+  "_source": "docs/analysis-standards.md 五、聊天摘要质量门",
+  "_purpose": "机器可读镜像，供 workflow 摘要质量门和提交前一致性验证使用。",
+  "_sync": [
+    "修改 common 或 yearly_extra 时，同步 docs/analysis-standards.md 的禁用词说明。",
+    "workflow JS 当前保留内嵌数组；提交前验证必须拦截数组漂移。"
+  ],
+  "_consumers": [
+    ".claude/workflows/weekly-review.js",
+    ".claude/workflows/monthly-review.js",
+    ".claude/workflows/yearly-review.js",
+    ".claude/commands/commit.md"
+  ],
   "common": [
     "有波动",
     "总体还行",

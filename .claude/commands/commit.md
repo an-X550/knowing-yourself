@@ -43,6 +43,11 @@ Read CHANGELOG.md，找到第一条匹配 `## [YYYY-MM-DD` 的标题行，去掉
 - Bash: `grep -L "paths.md" .claude/agents/*.md` — 检查是否有 agent 未引用共享路径文件（`review-readiness-checker.md` 可豁免）
 - 如有输出 → 提示哪些 agent 尚未迁移到 paths.md
 
+#### 禁用词验证
+
+- 对比 `.claude/shared/banned-phrases.json` 的 `common` / `yearly_extra` 与 3 个 workflow JS 中的 `bannedPhrases` 内嵌数组
+- 不一致 → 报告漂移文件，提示同步后再提交
+
 #### 死链验证
 
 - Bash: 提取所有 `.md` 文件中的相对链接，逐一检查目标文件是否存在

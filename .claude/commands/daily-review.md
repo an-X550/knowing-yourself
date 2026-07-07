@@ -49,8 +49,8 @@ allowed-tools:
 
 ### 4. 保存并展示反馈
 
-1. **写入文件**：保存到 `paths.md` 中的每日反馈路径：`复盘/每日反馈/YYYY-MM-DD.md`
-   - 先用 Bash `mkdir -p 复盘/每日反馈` 确保目录存在
+1. **写入文件**：保存到 `paths.md` 的 `output.daily_feedback`
+   - 先确保 `output.daily_feedback` 的父目录存在
    - 用 Write 写入文件（内容原样保存，不添加额外说明或自检行）
 2. **展示给用户**：将同一份反馈文本展示在对话中
 

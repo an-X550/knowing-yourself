@@ -3,7 +3,7 @@
 > 🎯 AI 日志分析教练 — 让 AI 帮你发现你自己看不见的行为模式
 
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.3.16-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.3.17-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 平台的 AI 日志分析与复盘教练 Skill。它通过多个专业视角并行分析你的每日日志，最终综合为结构化的复盘报告，帮助你进行自我认知、成长追踪和复盘改进。
@@ -285,7 +285,7 @@
 │   │   ├── monthly-review.js
 │   │   ├── weekly-review.js
 │   │   └── yearly-review.js
-│   └── settings.json         # 路径配置 + 权限 + Hooks
+│   └── settings.json         # 权限 + Hooks 薄路由
 ├── .codex/
 │   └── hooks.json            # Codex 开发辅助 hook（不承载产品逻辑）
 ├── docs/                     # 方法论文档
@@ -339,9 +339,9 @@
 
 ## 路径配置
 
-所有输入/输出路径由 [.claude/shared/paths.md](.claude/shared/paths.md) 统一管理，agent/workflow/command 启动时读取此文件。如需调整目录结构，只需修改该文件。
+所有输入/输出路径由 [.claude/shared/paths.md](.claude/shared/paths.md) 统一管理。该文件提供命名路径 key、创建责任和废弃路径说明，agent/command 应引用 key，只有用户可见提示才展开具体路径。
 
-跨 agent 重复的提示词硬约束由 [.claude/shared/prompt-rules.md](.claude/shared/prompt-rules.md) 统一管理，用于集中维护路径、证据、输出契约和质量门槛。
+跨 agent 重复的提示词硬约束由 [.claude/shared/prompt-rules.md](.claude/shared/prompt-rules.md) 统一管理，用于集中维护路径、hook 入口、证据、输出契约、禁用词同步和质量门槛。`.claude/settings.json` 只保留 hook 路由，不承载分析逻辑。
 
 ---
 
@@ -371,8 +371,8 @@
 
 1. 修改 `perspectives/` 下的视角文件，替换其中的个人化语境
 2. 在 `关于我/core-profile.md` 中填写你的个人画像（通过 `/interview` 命令生成）
-3. 调整 `settings.json` 中的路径配置以匹配你的目录结构
-4. 更新 `.claude/settings.json` 中 hook 的日志关键词匹配为你常用的日记模板
+3. 调整 `.claude/shared/paths.md` 中的命名路径以匹配你的目录结构
+4. 如更换日记模板，同步更新 `.claude/shared/prompt-rules.md` 的 hook 触发契约、`.claude/skills/log.md` 的识别说明和 `.claude/settings.json` 的 matcher
 
 ---
 

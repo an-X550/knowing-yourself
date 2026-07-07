@@ -2,7 +2,7 @@
   "hooks": {
     "UserPromptSubmit": [
       {
-        "matcher": "幸福日志|开心的事情|充实的事情|待改进|感谢的人|思考.*改进|todolist",
+        "matcher": "幸福日志|开心的事情|充实的事情|待改进|感谢的人|思考.{0,20}改进|[Tt]o[Dd]o[Ll]ist",
         "hooks": [
           {
             "type": "command",
@@ -12,20 +12,23 @@
       }
     ],
     "Stop": [
-  {
-    "matcher": "",
-    "hooks": [
       {
-        "type": "command",
-        "command": "bash -c 'STATUS=$(git status --porcelain 2>/dev/null); if [ -n \"$STATUS\" ]; then echo; echo \"⚠️ 提醒：仍有未提交改动。自动提交可能未完成，请运行 /提交 本地提交；提交后运行 git push 推送。\"; echo; fi'"
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'STATUS=$(git status --porcelain 2>/dev/null); if [ -n \"$STATUS\" ]; then echo; echo \"⚠️ 提醒：仍有未提交改动。自动提交可能未完成，请运行 /提交 本地提交；提交后运行 git push 推送。\"; echo; fi'"
+          }
+        ]
       }
     ]
-  }
-]
-
   },
   "permissions": {
-    "allow": ["Edit", "Write", "Bash"],
+    "allow": [
+      "Edit",
+      "Write",
+      "Bash"
+    ],
     "deny": []
   }
 }
