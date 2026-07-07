@@ -280,9 +280,9 @@ D0-D6 是生成前的内部质量门，不是用户可见报告章节。用户�
 
 ### 工作流级实现
 
-权威列表另存于 `.claude/shared/banned-phrases.json`（`common` + `yearly_extra`）。3 个 workflow 脚本因沙箱限制各自内嵌此校验逻辑。
+权威列表另存于 `.claude/shared/banned-phrases.json`（`common` + `yearly_extra`）。workflow 运行时通过 `.claude/workflows/shared.js` 的摘要质量门统一校验，避免周/月/年三份脚本各自维护禁用词数组。
 
 **修改禁用词时的同步流程**：
 1. 修改此文件（`docs/analysis-standards.md`）和 `.claude/shared/banned-phrases.json`（双权威来源，一个给人读一个给机器读）
-2. 提交时 `/提交` 命令会自动验证 3 个 workflow JS 中的 `bannedPhrases` 数组是否与权威来源一致——不一致则拦截提交
-3. 不再需要手动同步 workflow 文件
+2. 同步 `.claude/workflows/shared.js` 的 `BANNED_PHRASES` 常量
+3. 提交时 `/提交` 命令会自动验证 JSON 与 workflow 运行时常量是否一致，并确认入口 workflow 没有重新声明 `bannedPhrases`

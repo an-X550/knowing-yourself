@@ -51,8 +51,8 @@ purpose: Shared prompt constraints for runtime agents
 ## 七、禁用词同步规则
 
 1. 人类可读权威说明：`docs/analysis-standards.md` 的「聊天摘要质量门」。
-2. 机器可读镜像：`.claude/shared/banned-phrases.json`，保留 `common` 与 `yearly_extra` 两个数组供 workflow 校验。
-3. workflow JS 当前因运行环境限制保留内嵌数组；修改禁用词时必须同步 3 个 workflow，并由 `/提交` 的提交前验证拦截漂移。
+2. 机器可读镜像：`.claude/shared/banned-phrases.json`，保留 `common` 与 `yearly_extra` 两个数组供提交前验证和外部工具读取。
+3. workflow 运行时统一从 `.claude/workflows/shared.js` 的 `BANNED_PHRASES` 常量读取禁用词；修改禁用词时必须同步 JSON 镜像与 shared.js，并由 `/提交` 的提交前验证拦截漂移。
 4. agent 不要在自身提示词里另写一份禁用词列表；只引用质量门或 JSON 镜像。
 
 ## 八、日反馈输出契约

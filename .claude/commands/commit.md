@@ -45,7 +45,8 @@ Read CHANGELOG.md，找到第一条匹配 `## [YYYY-MM-DD` 的标题行，去掉
 
 #### 禁用词验证
 
-- 对比 `.claude/shared/banned-phrases.json` 的 `common` / `yearly_extra` 与 3 个 workflow JS 中的 `bannedPhrases` 内嵌数组
+- 对比 `.claude/shared/banned-phrases.json` 的 `common` / `yearly_extra` 与 `.claude/workflows/shared.js` 的 `BANNED_PHRASES`
+- 确认 3 个 workflow 入口没有重新声明 `bannedPhrases`，而是导入 `validateChatSummary`
 - 不一致 → 报告漂移文件，提示同步后再提交
 
 #### 死链验证

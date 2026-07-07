@@ -30,7 +30,7 @@ allowed-tools:
 ### 2. 验证月度报告存在
 
 检查月度综合报告。按顺序检查：
-1. `复盘/每月复盘/YYYY-MM.md`
+1. `.claude/shared/paths.md` 的 `output.monthly_report`
 2. `月志/YYYY-MM.md`
 
 至少需要12份中的6份月度报告才能做有意义的年度回顾。
@@ -55,7 +55,7 @@ Workflow({ name: "yearly-review", args: { year: "YYYY" } })
 ```
 YYYY年度回顾完成！
 
-完整报告：复盘/年度回顾/YYYY-annual-review.md
+完整报告：output.yearly_report
 ```
 
 ## 错误处理

@@ -5,6 +5,11 @@ last_updated: 2026-07-07
 
 # CHANGELOG — 改动记录
 
+## [2026-07-07 22:09] [重构] 抽取 workflow 共享 helper，统一摘要质量门与路径模板 (v1.3.17 → v1.3.18)
+
+- **受影响文件**: `.claude/workflows/shared.js`, `.claude/workflows/weekly-review.js`, `.claude/workflows/monthly-review.js`, `.claude/workflows/yearly-review.js`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `.claude/commands/commit.md`, `.claude/commands/yearly-review.md`, `docs/analysis-standards.md`, `docs/specs/audit-cleanup.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `docs/superpowers/plans/2026-07-07-workflow-shared-optimization.md`
+- **改动摘要**: 新增 workflow 共享运行时 helper，集中维护报告路径模板、视角注册表、模式定义、聊天摘要提取和质量门；周/月/年 workflow 改为导入共享 helper，移除各自重复的禁用词数组、摘要校验和路径拼接；同步禁用词 JSON、质量标准、提交验证说明和年度命令路径说明，版本更新至 v1.3.18。
+
 ## [2026-07-07 21:57] [配置] 路径与共享规则契约化，降低 agent 硬编码与漂移风险 (v1.3.16 → v1.3.17)
 
 - **受影响文件**: `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `.claude/settings.json`, `.claude/commands/daily-review.md`, `.claude/commands/weekly-review.md`, `.claude/commands/monthly-review.md`, `.claude/commands/commit.md`, `.claude/skills/log.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `docs/superpowers/plans/2026-07-07-shared-path-rules-optimization.md`

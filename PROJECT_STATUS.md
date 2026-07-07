@@ -5,7 +5,7 @@ last_updated: 2026-07-07
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.17
+**当前版本**：1.3.18
 
 ## 项目概述
 
@@ -162,7 +162,7 @@ last_updated: 2026-07-07
 | Spec | `docs/specs/_TEMPLATE.md`, `docs/specs/audit-cleanup.md`, `docs/specs/evolution-roadmap.md` |
 | Skill | `.claude/skills/log.md` |
 | 归档 | `docs/archive/changelog-archive.md` |
-| Workflow | `.claude/workflows/monthly-review.js`, `weekly-review.js`, `yearly-review.js` |
+| Workflow | `.claude/workflows/monthly-review.js`, `weekly-review.js`, `yearly-review.js`, `shared.js` |
 
 ## 待办事项
 
@@ -230,4 +230,5 @@ last_updated: 2026-07-07
 | 2026-07-07 | 日反馈链路统一为 daily-analyzer 契约 | 日反馈是最短闭环，`/daily-review` 和 `log` skill 不再各自维护分析流程，而是统一调用 `daily-analyzer`；D0-D6 改为内部质量门，用户只看到短反馈、一个原子行动和可验证预测 |
 | 2026-07-07 | 提示词共享规则集中化 | 将跨 agent 重复的路径、证据、输出契约和质量门槛抽到 `.claude/shared/prompt-rules.md`，减少 synthesis/daily agent 的重复叙述，同时保持命令入口、输出路径和报告结构不变 |
 | 2026-07-07 | 路径与 hook 语义契约化 | 将 `paths.md` 从路径清单升级为命名 key + 创建责任契约；`prompt-rules.md` 增加共享文件读取顺序、hook 路由边界和禁用词同步规则；`settings.json` 保持薄路由，减少路径、触发词和质量门在 agent/command/workflow 间漂移 |
+| 2026-07-07 | Workflow 共享运行时 helper | 新增 `.claude/workflows/shared.js`，集中维护周/月/年 workflow 共用的视角注册表、模式定义、报告路径模板、聊天摘要提取与质量门；入口 workflow 只保留各自编排差异，降低禁用词、摘要规则、核心视角和报告路径漂移 |
 | 2026-07-07 | `.agents/skills/superpowers/` 作为本地 AI 辅助目录 | 该目录方便 AI 在本项目使用 Superpowers 技能，但不属于 Claude Code Skill 产品逻辑；通过 `.gitignore` 忽略，避免进入运行真相或提交历史 |

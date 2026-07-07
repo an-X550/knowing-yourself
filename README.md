@@ -3,7 +3,7 @@
 > 🎯 AI 日志分析教练 — 让 AI 帮你发现你自己看不见的行为模式
 
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.3.17-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.3.18-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 平台的 AI 日志分析与复盘教练 Skill。它通过多个专业视角并行分析你的每日日志，最终综合为结构化的复盘报告，帮助你进行自我认知、成长追踪和复盘改进。
@@ -216,6 +216,7 @@
 | `monthly-review.js` | 多视角并行月分析→综合 |
 | `weekly-review.js` | 3核心视角并行周分析→综合 |
 | `yearly-review.js` | 12月报告综合→年度回顾 |
+| `shared.js` | 共享视角注册表、路径模板和聊天摘要质量门 |
 
 ---
 
@@ -284,7 +285,8 @@
 │   ├── workflows/            # Workflow 编排脚本
 │   │   ├── monthly-review.js
 │   │   ├── weekly-review.js
-│   │   └── yearly-review.js
+│   │   ├── yearly-review.js
+│   │   └── shared.js          # workflow 共享运行时 helper
 │   └── settings.json         # 权限 + Hooks 薄路由
 ├── .codex/
 │   └── hooks.json            # Codex 开发辅助 hook（不承载产品逻辑）

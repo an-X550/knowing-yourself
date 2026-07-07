@@ -80,9 +80,9 @@ git commit -m "提交核心基础设施：agent/command/workflow/skill + 方法�
 
 ### 1.3 修改 3 个 workflow 文件
 
-- `monthly-review.js`：删除内嵌 `bannedPhrases` 数组（~5行），改为从 `analysis-standards.md` 读取或直接引用标准
+- `monthly-review.js`：删除内嵌 `bannedPhrases` 数组，改为导入 `.claude/workflows/shared.js` 的统一摘要质量门
 - `weekly-review.js`：同上
-- `yearly-review.js`：同上
+- `yearly-review.js`：同上，并额外启用 `yearly_extra` 禁用词
 
 ### 1.4 修改 yearly-synthesis.md
 
