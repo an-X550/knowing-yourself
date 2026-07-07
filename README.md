@@ -3,7 +3,7 @@
 > 🎯 AI 日志分析教练 — 让 AI 帮你发现你自己看不见的行为模式
 
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.3.0-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.3.3-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 平台的 AI 日志分析与复盘教练 Skill。它通过多个专业视角并行分析你的每日日志，最终综合为结构化的复盘报告，帮助你进行自我认知、成长追踪和复盘改进。
@@ -154,7 +154,7 @@
 
 每个视角代表一个专业角色，独立分析同一批日志数据。位于 `perspectives/`。
 
-### 生活内容分析（6个）
+### 生活内容分析
 
 | 视角 | 专业角色 | 分析重点 |
 |------|---------|---------|
@@ -165,7 +165,7 @@
 | `strengths` | 🌟 优势观察者 | 基于证据的积极面、成长、未被承认的胜利 |
 | `values-meaning` | 🎯 哲学顾问 | 真实性、目的感、心流状态、价值对齐 |
 
-### 方法论分析（3个）
+### 方法论分析
 
 | 视角 | 专业角色 | 分析重点 |
 |------|---------|---------|
@@ -245,14 +245,14 @@
 ```
 .
 ├── .claude/
-│   ├── agents/               # 6个专用代理
+│   ├── agents/               # 专用代理
 │   │   ├── daily-analyzer.md
 │   │   ├── weekly-synthesis.md
 │   │   ├── monthly-processor.md
 │   │   ├── monthly-synthesis.md
 │   │   ├── yearly-synthesis.md
 │   │   └── review-readiness-checker.md
-│   ├── commands/             # 10个斜杠命令
+│   ├── commands/             # 斜杠命令
 │   │   ├── review.md         # 🔥 统一入口
 │   │   ├── daily-review.md
 │   │   ├── weekly-review.md
@@ -280,7 +280,7 @@
 │   ├── methodology-review.md  # 复盘六问
 │   ├── analysis-standards.md  # 12条分析质量标准
 │   └── specs/                # 需求规范
-├── perspectives/             # 9个分析视角 + 1个架构说明
+├── perspectives/             # 分析视角 + 架构说明
 │   ├── README.md
 │   ├── chronicle.md
 │   ├── therapist.md
@@ -333,6 +333,8 @@
     "context_path": "关于我/",
     "fallback_paths": {
       "journal": "06 Agenda/Journal/",
+      "weekly": "06 Agenda/Weekly/",
+      "monthly": "06 Agenda/Monthly/",
       "output": "07 Context/Analysis/",
       "context": "07 Context/"
     }
@@ -356,7 +358,7 @@
 | 新功能（向后兼容） | 0.19.0 → 0.20.0 |
 | 破坏性变更 | 0.19.0 → 1.0.0 |
 
-当前版本：**1.3.1** — 功能冻结期，聚焦使用而非开发。
+当前版本见 [VERSION](VERSION) 文件 — 功能冻结期，聚焦使用而非开发。
 
 ---
 

@@ -17,15 +17,18 @@ allowed_tools: Read, Glob
 
 ## Execution Steps
 
+### 0. 加载路径约定
+读取 `.claude/shared/paths.md` 获取所有输入/输出路径约定。后续步骤中的文件路径均从此文件获取，不再硬编码。
+
 ### 1. Parse Input
 
 提取目标日期。如果输入是 "yesterday"/"今天"/"昨天"，计算对应日期。
 
 ### 2. Load Context and Quality Standards
 
-读取 `docs/analysis-standards.md` 的"三、日分析质量标准"章节（D1-D4）。这些是你必须满足的质量标准，每条分析都要对照这4条自检。
+读取分析质量标准（路径见 `.claude/shared/paths.md` 中的"分析质量标准"）的"三、日分析质量标准"章节（D0-D6）。这些是你必须满足的质量标准，每条分析都要对照这些标准自检。
 
-**如果存在当月月度报告**，读取 `复盘/每月复盘/YYYY-MM.md`（计算当月月份），重点关注：
+**如果存在当月月度报告**，读取当月月度报告（路径见 `.claude/shared/paths.md` 中的"月度报告"，计算当月月份），重点关注：
 - "⑤ 认知修正"章节
 - "系统性自我欺骗模式"
 - "需要纠正的核心认知"
@@ -38,7 +41,7 @@ allowed_tools: Read, Glob
 
 查找昨日（或最近一次）的日分析反馈：
 
-1. Glob `复盘/每日反馈/` 查找最近日期的反馈文件（计算昨日日期，搜索 `复盘/每日反馈/昨日.md`）
+1. Glob 每日反馈目录查找最近日期的反馈文件（路径见 `.claude/shared/paths.md` 中的"每日反馈"，计算昨日日期）
 2. 如果存在昨日反馈文件：读取并提取其中的"⚡ 明天试试"行动、预测（如有）、"💊"追踪行
 3. 从今日日志中推断用户是否执行了该建议：
    - ✅ **做到了**：日志中有明确证据 → 简短对照预测，看效果是否符合预期
@@ -52,8 +55,8 @@ allowed_tools: Read, Glob
 ### 4. Find and Read Journal
 
 查找目标日期的日志条目：
-1. 先搜索独立文件：`日志/YYYY-MM-DD.md`、`日志/YYYY-MM-DD.md`
-2. 再搜索合并文件：用 `grep` 扫描 `日志/*.md` 中的日期头
+1. 先搜索独立日志文件（路径见 `.claude/shared/paths.md`）
+2. 再搜索合并文件：用 `grep` 扫描日志目录中的日期头（路径见 `.claude/shared/paths.md`）
 
 读取完整条目。如果找不到，报告错误。
 
@@ -91,7 +94,7 @@ allowed_tools: Read, Glob
 
 ### 6. Return Feedback
 
-**CRITICAL: DO NOT use the Write tool. DO NOT create any files.** 返回纯文本反馈。
+**CRITICAL: DO NOT use the Write tool. DO NOT create any files.** 返回纯文本反馈。文件持久化由调用方负责（daily-review 命令或 log 技能），确保分析引擎与存储逻辑分离。
 
 ## 输出格式
 
@@ -129,7 +132,7 @@ allowed_tools: Read, Glob
 - 不用表格、不用多余章节标题
 
 **质量自检**：在反馈最后一行加上自检标记：
-`D0昨日检查✅/⚠️/❌/— D1原文支撑✅/⚠️/❌ D2指出盲点✅/⚠️/❌ D3模式连接✅/⚠️/❌ D4一个动作✅/⚠️/❌ D4+原子粒度✅/⚠️/❌ D5预测可验证✅/⚠️/❌`
+`D0昨日检查✅/⚠️/❌/— D1原文支撑✅/⚠️/❌ D2指出盲点✅/⚠️/❌ D3模式连接✅/⚠️/❌ D4一个动作✅/⚠️/❌ D5原子粒度✅/⚠️/❌ D6预测可验证✅/⚠️/❌`
 
 对照 `docs/analysis-standards.md` 的D1-D5标准逐条自评。必须诚实——宁可标⚠️也不标虚假✅。D0在无昨日反馈时标 `—`。
 

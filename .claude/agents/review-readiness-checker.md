@@ -15,6 +15,9 @@ allowed_tools: Glob
 
 ## 检测逻辑
 
+### 0. 加载路径约定
+读取 `.claude/shared/paths.md` 获取所有路径约定。后续步骤中的文件路径均从此文件获取，不再硬编码。
+
 ### 1. 获取当前日期
 
 从系统上下文中获取当前日期。
@@ -28,9 +31,9 @@ Glob 扫描 `日志/` 目录，统计：
 ### 3. 检查已有报告
 
 Glob 检查以下报告是否已存在：
-- `复盘/每周复盘/YYYY-Www.md`（上周 ISO 周，如存在则标题含日期范围）
-- `复盘/每月复盘/YYYY-MM.md`（上月）
-- `复盘/年度回顾/YYYY-annual-review.md`（去年）
+- 周度报告（路径见 `.claude/shared/paths.md` 中的"周度报告"）
+- 月度报告（路径见 `.claude/shared/paths.md` 中的"月度报告"）
+- 年度报告（路径见 `.claude/shared/paths.md` 中的"年度报告"）
 
 ### 4. 确定建议
 

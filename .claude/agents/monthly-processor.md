@@ -19,6 +19,9 @@ allowed_tools: Read, Glob, Grep, Write, Edit, Bash
 
 ## 执行步骤
 
+### 0. 加载路径约定
+读取 `.claude/shared/paths.md` 获取所有输入/输出路径约定。后续步骤中的文件路径均从此文件获取，不再硬编码。
+
 ### 1. 解析输入
 
 从用户输入中提取：
@@ -36,13 +39,8 @@ perspectives/[perspective].md
 
 ### 3. 收集日志文件
 
-找到目标月份的所有日志文件：
-```
-日志/谢安的[YYYY]-[M]月日志.md
-```
-
-如果未找到，尝试 glob `日志/*[YYYY]*[M]月*.md` 或 `日志/*[YYYY]-[MM]*.md`。
-按时间顺序排序（第一天 → 最后一天）。
+找到目标月份的所有日志文件：glob `日志/*[YYYY]*[M]月*.md` 或 `日志/*[YYYY]-[MM]*.md`。
+如果未找到，报告错误。按时间顺序排序（第一天 → 最后一天）。
 
 ### 4. 处理日志
 
@@ -55,10 +53,7 @@ perspectives/[perspective].md
 
 ### 5. 生成输出
 
-创建输出文件：
-```
-关于我/Analysis/[perspective]/[YYYY-MM]-[perspective].md
-```
+创建输出文件（路径见 `.claude/shared/paths.md` 中的"视角分析中间产物"。命名格式：`{视角}/YYYY-MM-{视角}.md`）。
 
 **输出结构**遵循视角文件的 `# 输出格式` 段。
 

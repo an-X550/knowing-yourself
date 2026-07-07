@@ -116,7 +116,7 @@ for (var i = 0; i < activePerspectives.length; i++) {
 phase('Synthesize')
 
 var synthResult = await agent(
-  'Synthesize ' + month + '。\n\n下面是' + successful.length + '个视角的分析结果。请综合这些分析，写出唯一一份中文月度综合报告（复盘/每月复盘/' + month + '.md）。\n\n**重要**：报告最前面必须包含「## 聊天摘要」区块（≤200字，3个关键发现+1个建议），用于在聊天中即时展示。不要创建任何中间文件。\n\n**CRITICAL**: Do NOT re-read original journal files, methodology documents (analysis-standards.md, methodology-journal.md, methodology-review.md), or search for focus-personal.md. All necessary data is in the perspective analyses below. Cross-reference perspective analyses when details are uncertain.\n\n' + combinedAnalyses,
+  'Synthesize ' + month + '。\n\n下面是' + successful.length + '个视角的分析结果。请综合这些分析，写出唯一一份中文月度综合报告（复盘/每月复盘/' + month + '.md）。\n\n**重要**：报告最前面必须包含「## 聊天摘要」区块（≤200字，3个关键发现+1个建议），用于在聊天中即时展示。不要创建任何中间文件。\n\n**CRITICAL**: Do NOT re-read original journal files, methodology documents (analysis-standards.md, methodology-journal.md, methodology-review.md). All necessary data is in the perspective analyses below. Cross-reference perspective analyses when details are uncertain.\n\n' + combinedAnalyses,
   { label: '综合引擎', phase: 'Synthesize', agentType: 'monthly-synthesis' }
 )
 

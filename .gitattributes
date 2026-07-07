@@ -1,0 +1,6 @@
+# 让 Markdown 参与语言统计（项目核心资产是提示词和方法论，不是 prose）
+*.md linguist-detectable=true
+*.md linguist-documentation=false
+
+# Workflow JS 文件标记为 vendored（非源代码，是 Claude Code 的配置脚本）
+.claude/workflows/*.js linguist-vendored=true

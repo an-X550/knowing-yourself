@@ -5,7 +5,7 @@ last_updated: 2026-07-07
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.1
+**当前版本**：1.3.3
 
 ## 项目概述
 
@@ -26,7 +26,7 @@ last_updated: 2026-07-07
 | **运行平台** | Claude Code CLI / VSCode Extension |
 | **内容格式** | Markdown + YAML frontmatter |
 | **代理系统** | Claude Code Sub-agents（6个专用代理） |
-| **命令系统** | Claude Code Slash Commands（9个命令） |
+| **命令系统** | Claude Code Slash Commands（10个命令） |
 | **配置** | JSON（settings.json） |
 | **版本控制** | Git + 语义化版本（见 VERSION） |
 | **语言** | 中文（内容）、英文（配置字段） |
@@ -72,7 +72,7 @@ last_updated: 2026-07-07
 
 ## 当前进度
 
-### 命令（9/9）完成
+### 命令（10/10）完成
 
 | 命令 | 文件 | 状态 |
 |------|------|------|
@@ -84,6 +84,7 @@ last_updated: 2026-07-07
 | `/journal-coach` | `.claude/commands/journal-coach.md` | 完成 |
 | `/interview` | `.claude/commands/interview.md` | 完成 |
 | `/update-current` | `.claude/commands/update-current.md` | 完成 |
+| `/import` | `.claude/commands/import.md` | 完成 |
 | **`/提交`** 🆕 | `.claude/commands/commit.md` | 完成（一键 add/commit/push） |
 
 ### 代理（6/6）完成
@@ -146,12 +147,12 @@ last_updated: 2026-07-07
 |------|------|
 | 项目规范 | `CLAUDE.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `.gitignore`, `LICENSE` |
 | 设置 | `.claude/settings.json`, `SETUP.md` |
+| 共享配置 | `.claude/shared/paths.md`（路径权威来源）, `.claude/shared/banned-phrases.json`（禁用词权威来源） |
 | 方法论 | `docs/first-principles.md`, `docs/methodology-journal.md`, `docs/methodology-review.md`, `docs/analysis-standards.md` |
 | 示例 | `examples/demo/sample-journal.md`, `examples/analyses/` |
 | CI | `.github/ISSUE_TEMPLATE/`, `.github/PULL_REQUEST_TEMPLATE.md` |
 | Spec | `docs/specs/_TEMPLATE.md` |
 | Workflow | `.claude/workflows/monthly-review.js`, `weekly-review.js`, `yearly-review.js` |
-| 共享配置 | `.claude/shared/banned-phrases.json` |
 
 ## 待办事项
 
@@ -213,4 +214,5 @@ last_updated: 2026-07-07
 | 2026-07-05 | 评分体系双轨制（日志质量30 + 复盘质量30） | 日志评分评估每日写作质量（六步法），复盘评分评估月/周志的复盘深度（复盘六问）——两套独立但互补的评估框架 |
 | 2026-07-06 | `/monthly-review` 多模式 + 中文视角选择 | fast(3核心)/standard(6生活,默认)/full(9全)+自定义视角；视角用中文功能描述代替内部key；方法论视角缺失时综合引擎自行读标准文档自检 |
 | 2026-07-06 | 周度复盘重构为月志简化版 | 从3个方法论视角改为3个核心生活视角(chronicle/coach/therapist) + weekly-synthesis综合引擎；复用复盘六问框架，5段报告+6条自检；周志=小的月志 |
+| 2026-07-07 | 制定产品进化路线图 | 见 [docs/specs/evolution-roadmap.md](docs/specs/evolution-roadmap.md)。采用 A→B 渐进路线：先验证核心假设（Skill极致化），再扩大用户群（Bot/集成形态），最后评估全栈SaaS |
 

@@ -21,6 +21,9 @@ allowed_tools: Read, Glob, Write
 
 ## Execution Steps
 
+### 0. 加载路径约定
+读取 `.claude/shared/paths.md` 获取所有输入/输出路径约定。后续步骤中的文件路径均从此文件获取，不再硬编码。
+
 ### 1. Parse Input
 
 提取目标周。从用户消息中读取3份视角分析。
@@ -28,13 +31,13 @@ allowed_tools: Read, Glob, Write
 ### 2. Read Foundational Documents
 
 读取以下文件作为分析标准：
-- `docs/analysis-standards.md` — 12条 AI 分析质量标准（周度应用其中6条核心标准）
-- `docs/methodology-review.md` — 复盘六问框架
-- `关于我/core-profile.md` — 用户的核心价值观（如存在）
+- 分析质量标准（路径见 `.claude/shared/paths.md`）— 12条 AI 分析质量标准（周度应用其中6条核心标准）
+- 复盘方法论（路径见 `.claude/shared/paths.md`）— 复盘六问框架
+- 核心画像（路径见 `.claude/shared/paths.md`）— 用户的核心价值观（如存在）
 
 ### 2a. Read Daily Feedback Files (执行数据汇总)
 
-读取本周每天的日反馈文件（`复盘/每日反馈/YYYY-MM-DD.md`），提取：
+读取本周每天的日反馈文件（路径见 `.claude/shared/paths.md` 中的"每日反馈"），提取：
 - ⚡ 段中的行动建议
 - ⏮️ 段中的昨日检查结果
 - 💊 追踪行
@@ -43,7 +46,7 @@ allowed_tools: Read, Glob, Write
 
 ### 2b. Check Monthly Hypotheses (如果存在)
 
-读取当月月度报告（`复盘/每月复盘/YYYY-MM.md`）中的"下月验证假说"段。
+读取当月月度报告（路径见 `.claude/shared/paths.md` 中的"月度报告"）中的"下月验证假说"段。
 如果存在，检查本周日志是否提供了支持/反对这些假说的证据。
 
 ### 3. Read Journal for Direct Evidence
@@ -62,11 +65,11 @@ allowed_tools: Read, Glob, Write
 
 ### 5. Generate Report
 
-写唯一一份中文报告到 `复盘/每周复盘/YYYY-Www.md`。
+写唯一一份中文报告（路径见 `.claude/shared/paths.md` 中的"周度报告"，格式 `YYYY-Www.md`）。
 
 ## 输出模板
 
-参考 `复盘/每周复盘/` 下最新报告的结构。核心要求：
+参考周度报告目录下最新报告的结构（路径见 `.claude/shared/paths.md`）。核心要求：
 
 - frontmatter: `week` + `date_range` + `created` + `perspectives` + `journals_analyzed`
 - 标题: `# 周度复盘：YYYY-Www（M月D日-M月D日）`
@@ -114,8 +117,8 @@ allowed_tools: Read, Glob, Write
 
 ## Output
 
-**写文件前**：用 Bash `mkdir -p 复盘/每周复盘` 确保目录存在。
+**写文件前**：用 Bash 确保输出目录存在（路径见 `.claude/shared/paths.md` 中的"周度报告"）。
 
-创建唯一报告文件 `复盘/每周复盘/YYYY-Www.md`，返回："周度认知复盘已创建：YYYY-Www（M月D日-M月D日）"
+创建唯一报告文件（路径见 `.claude/shared/paths.md` 中的"周度报告"，格式 `YYYY-Www.md`），返回："周度认知复盘已创建：YYYY-Www（M月D日-M月D日）"
 
 **这是唯一创建的文件。不创建任何中间文件。**

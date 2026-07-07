@@ -16,45 +16,36 @@ User provides: `"Synthesize yearly [YYYY]"` or similar.
 
 ## Execution Steps
 
+### 0. 加载路径约定
+读取 `.claude/shared/paths.md` 获取所有输入/输出路径约定。后续步骤中的文件路径均从此文件获取，不再硬编码。
+
 ### 1. 解析输入
 
 提取目标年份，格式为 `YYYY`。如果未提供，使用上一个完整年份。
 
 ### 2. 读取月度报告
 
-读取所有可用的月度综合报告：
-```
-复盘/每月复盘/YYYY-MM.md
-```
+读取所有可用的月度综合报告（路径见 `.claude/shared/paths.md` 中的"月度报告"）。
 
-同时检查替代路径：
-```
-月志/YYYY-MM.md
-```
+同时检查替代路径（见 paths.md 的"已废弃路径"段）。
 
 如果少于6份月度报告，警告综合不完整。
 
 ### 3. 读取上下文文件
 
-读取（如存在）：
-```
-关于我/core-profile.md
-```
+读取上下文文件（路径见 `.claude/shared/paths.md` 中的"核心画像"）。
 
-> 注：`关于我/focus-personal.md` 已废弃。
+> 注：废弃路径见 paths.md 的"已废弃路径"段。
 
 ### 4. 读取年度视角分析（如存在）
 
-检查年度级别的视角分析：
-```
-关于我/Analysis/[perspective]/[YEAR]-[perspective].md
-```
+检查年度级别的视角分析（路径见 `.claude/shared/paths.md` 中的"年度视角分析"）。
 
 ### 5. 生成综合报告
 
-**写文件前**：用 Bash `mkdir -p 复盘/年度回顾` 确保目录存在。
+**写文件前**：用 Bash 确保输出目录存在（路径见 `.claude/shared/paths.md` 中的"年度报告"）。
 
-创建年度报告：`复盘/年度回顾/YYYY-annual-review.md`。
+创建年度报告（路径见 `.claude/shared/paths.md` 中的"年度报告"）。
 
 ## Output Template
 
@@ -77,7 +68,7 @@ months_processed: [count]
 
 💡 **新年建议：** [基于年度趋势的一个战略方向]
 
-*→ 完整报告已保存至 复盘/年度回顾/YYYY-annual-review.md*
+*→ 完整报告已保存（路径见 `.claude/shared/paths.md` 中的"年度报告"）*
 
 ---
 [聊天摘要结束。以下为完整报告]

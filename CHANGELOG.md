@@ -8,6 +8,16 @@ last_updated: 2026-07-07
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
 ---
+## [2026-07-07] [文档] 审计修复：9处跨文件不一致 (v1.3.2 → v1.3.3)
+
+- **受影响文件**: `PROJECT_STATUS.md`, `.claude/agents/daily-analyzer.md`, `docs/analysis-standards.md`, `README.md`, `.claude/workflows/monthly-review.js`, `.claude/skills/log.md`, `.claude/commands/import.md`, `.claude/agents/monthly-processor.md`, `VERSION`
+- **改动摘要**: 项目审计修复9处不一致——PROJECT_STATUS命令计数9→10并补/import行、删除重复banned-phrases行；daily-analyzer标准引用扩展至D0-D6+职责边界注释；README补全weekly/monthly fallback路径；monthly-review.js移除废弃focus-personal引用；analysis-standards新增D0定义+D4+→D5重新编号；硬编码"谢安"替换为glob发现模式
+
+## [2026-07-07] [配置] 修复 GitHub 语言标签：添加 .gitattributes 让 Markdown 参与统计 (v1.3.1 → v1.3.2)
+
+- **受影响文件**: `.gitattributes`（新建）, `VERSION`, `PROJECT_STATUS.md`
+- **改动摘要**: 新建 .gitattributes，将 Markdown 标记为 linguist-detectable 以参与语言统计，workflow JS 标记为 vendored 排除统计；修复 GitHub 语言标签从 100% JavaScript 变为 Markdown 为主
+
 ## [2026-07-07] [文档] README 项目状态同步：版本号/命令数/代理表/结构树修复 (v1.3.0 → v1.3.1)
 
 - **受影响文件**: `README.md`, `VERSION`, `PROJECT_STATUS.md`

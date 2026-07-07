@@ -16,46 +16,36 @@ allowed_tools: Read, Glob, Write
 
 ## 执行步骤
 
+### 0. 加载路径约定
+读取 `.claude/shared/paths.md` 获取所有输入/输出路径约定。后续步骤中的文件路径均从此文件获取，不再硬编码。
+
 ### 1. 解析输入
 
 提取目标月份，格式为 `YYYY-MM`。
 
 ### 2. 读取所有视角分析
 
-读取以下6个文件：
-```
-关于我/Analysis/therapist/YYYY-MM-therapist.md
-关于我/Analysis/coach/YYYY-MM-coach.md
-关于我/Analysis/strengths/YYYY-MM-strengths.md
-关于我/Analysis/values-meaning/YYYY-MM-values-meaning.md
-关于我/Analysis/relationships/YYYY-MM-relationships.md
-关于我/Analysis/chronicle/YYYY-MM-chronicle.md
-```
+读取视角分析文件（基路径见 `.claude/shared/paths.md` 中的"月度视角分析（中间产物）"，共6个视角：therapist, coach, strengths, values-meaning, relationships, chronicle）。
 
 如果任何文件缺失，记录缺失并使用已有分析继续。
 
 ### 3. 读取上下文文件
 
-读取：
-```
-关于我/core-profile.md
-```
+读取上下文文件（路径见 `.claude/shared/paths.md` 中的"核心画像"）。
 
-> 注：`关于我/focus-personal.md` 已废弃。目标数据从 coach 视角分析输出中提取。
+> 注：废弃路径见 paths.md 的"已废弃路径"段。
 
 ### 4. 查找对比基线和上月重点关注
 
 **先查上月：**
 计算上月（如 2026-01 → 2025-12）。
-检查 `复盘/每月复盘/[上月-YYYY-MM].md` 是否存在。
+检查上月月度报告是否存在（路径见 `.claude/shared/paths.md` 中的"月度报告"，格式 `[上月-YYYY-MM]`）。
 
 **如果上月存在：**
 - 用于对比
 - **提取"下月重点关注"段**——这些将在本月报告中追踪
 
-**如果上月不存在：** 回退到年度分析：
-- `关于我/Analysis/therapist/[YEAR]-therapist.md`
-- `关于我/Analysis/strengths/[YEAR]-strengths.md`
+**如果上月不存在：** 回退到年度视角分析（路径见 `.claude/shared/paths.md` 中的"年度视角分析"）。
 
 使用任何可用的文件作为对比上下文。
 
@@ -69,14 +59,11 @@ allowed_tools: Read, Glob, Write
 
 ### 5. 生成综合报告
 
-创建主题报告：
-```
-复盘/每月复盘/YYYY-MM.md
-```
+创建主题报告（路径见 `.claude/shared/paths.md` 中的"月度报告"）。
 
 ## 输出模板
 
-参考 `复盘/每月复盘/` 下最新报告的结构。核心要求：
+参考月度报告目录下最新报告的结构（路径见 `.claude/shared/paths.md`）。核心要求：
 
 - frontmatter: `month` + `created` + `perspectives_processed` + `journals_analyzed`
 - 标题: `# 月度复盘：[YYYY年M月]`
