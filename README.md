@@ -3,7 +3,7 @@
 > 🎯 AI 日志分析教练：用更低摩擦的方式，把日志变成可行动的复盘
 
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.3.23-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.3.24-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的日志分析与复盘 Skill。它围绕日、周、月、年的复盘节奏工作，用多个专业视角并行分析日志，再输出结构化反馈，帮助用户识别模式、形成行动、持续闭环。
