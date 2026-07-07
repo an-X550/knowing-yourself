@@ -1,0 +1,32 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "幸福日志|开心的事情|充实的事情|待改进|感谢的人|思考.*改进|todolist",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "skill log"
+          }
+        ]
+      }
+    ]
+  },
+  "journaling": {
+    "journal_path": "日志/",
+    "weekly_path": "日志/周志/",
+    "monthly_path": "日志/月志/",
+    "output_path": "复盘/",
+    "context_path": "关于我/",
+    "fallback_paths": {
+      "journal": "06 Agenda/Journal/",
+      "weekly": "06 Agenda/Weekly/",
+      "monthly": "06 Agenda/Monthly/",
+      "output": "07 Context/Analysis/",
+      "context": "07 Context/"
+    }
+  },
+  "permissions": {
+    "allow": ["Edit", "Write", "Bash"]
+  }
+}

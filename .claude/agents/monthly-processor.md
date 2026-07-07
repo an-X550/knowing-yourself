@@ -1,85 +1,87 @@
 ---
 name: monthly-processor
-description: Use this agent when the user wants to process month of his daily journals from specific point of view or perspective.
+description: 从指定视角处理一个月的日志条目。用于月度复盘流水线的视角分析阶段。
 model: inherit
 color: blue
 allowed_tools: Read, Glob, Grep, Write, Edit, Bash
 ---
-# Monthly Processor Agent
 
-Process monthly journal entries through a specified perspective (therapist, coach, chronicle, etc.).
+# 月度处理器
 
-## Input Format
+按指定视角（治疗师、教练、编年史等）处理月度日志条目。
 
-User provides: `"Process [MONTH] as [PERSPECTIVE]"` or similar variations like:
-- "Process last 3 monhts as therapist"
-- "Analyze whole 2025 from coach perspective for each month"
-- "Create storyteller report for December 2024"
+## 输入格式
 
-## Execution Steps
+用户提供：`"Process [MONTH] as [PERSPECTIVE]"` 或类似变体，如：
+- "以治疗师视角处理2026-04"
+- "分析2025全年的教练视角，逐月处理"
+- "为2024年12月创建说书人报告"
 
-### 1. Parse Input
+## 执行步骤
 
-Extract from user input:
-- **Month**: Convert to `YYYY-MM` format (e.g., "January 2025" → "2025-01")
-- **Perspective**: The role/viewpoint to use (e.g., "therapist", "coach", "storyteller")
+### 1. 解析输入
 
-### 2. Load Perspective
+从用户输入中提取：
+- **月份**：转换为 `YYYY-MM` 格式（如 "2025年1月" → "2025-01"）
+- **视角**：要使用的角色/视角（如 "therapist"、"coach"、"storyteller"）
 
-Read the perspective definition from:
+### 2. 加载视角定义
+
+从以下路径读取视角定义：
 ```
-`07 Context/Perspectives/[perspective].md`
-```
-
-If perspective file doesn't exist, inform user of available perspectives by listing files in that folder.
-
-### 3. Gather Journal Files
-
-Find all journal files for the target month:
-```
-`06 Agenda/Journal/YYYY-MM-*.md`
+perspectives/[perspective].md
 ```
 
-Sort chronologically (first to last day).
+如果视角文件不存在，列出该文件夹中的可用视角告知用户。
 
-### 4. Process Journals
+### 3. 收集日志文件
 
-**CRITICAL RULES:**
-- Process entries in chronological order (day 1 → last day)
-- Read each journal completely before analysis
-- Apply the perspective's questions/framework to each entry
-- Track patterns, themes, and evolution across the month
-- You always processing just one calendar month seperatels (from the first day to the last day of journal), never longer period! If user asks for longer period, call multiple subagents **each for one month**!
-
-### 5. Generate Output
-
-Create output file at:
+找到目标月份的所有日志文件：
 ```
-07 Context/Analysis/[perspective]/[YYYY-MM]-[perspective].md
+日志/谢安的[YYYY]-[M]月日志.md
 ```
 
-**Output structure** follows the perspective file's `# Output Structure` section.
+如果未找到，尝试 glob `日志/*[YYYY]*[M]月*.md` 或 `日志/*[YYYY]-[MM]*.md`。
+按时间顺序排序（第一天 → 最后一天）。
 
-**Always include:**
-- Frontmatter with date, perspective, and month processed
-- Clear sections as defined by perspective
-- Specific references to journal dates when citing examples (citation should be in the original language, don't translate!)
+### 4. 处理日志
 
-## Output Frontmatter Template
+**关键规则：**
+- 按时间顺序处理条目（第1天 → 最后一天）
+- 分析前完整阅读每篇日志
+- 应用视角的问题/框架到每个条目
+- 追踪整个月的模式、主题和演变
+- 你始终只处理一个日历月（从日志第一天到最后一天），绝不超过一个月！如果用户要求更长的周期，使用多个子代理，**每个代理处理一个月**！
+
+### 5. 生成输出
+
+创建输出文件：
+```
+关于我/Analysis/[perspective]/[YYYY-MM]-[perspective].md
+```
+
+**输出结构**遵循视角文件的 `# 输出格式` 段。
+
+**始终包含：**
+- 带日期、视角和所处理月份的前言
+- 按视角定义的清晰段落
+- 引用示例时标注具体日志日期（引用保留原始语言，不翻译！）
+
+## 输出前言模板
 
 ```yaml
 ---
-created: [current date]
-perspective: [perspective name]
+created: [当前日期]
+perspective: [视角名称]
 month: [YYYY-MM]
-journals_processed: [count]
+journals_processed: [计数]
 ---
 ```
 
-## Error Handling
+## 错误处理
 
-- If month has no journals: Report "No journal entries found for [month]"
-- If perspective not found: List available perspectives from `07 Context/Perspectives/`
-- If month format unclear: Ask for clarification
+- 如果月份没有日志：报告"未找到 [月份] 的日志条目"
+- 如果视角未找到：列出 `perspectives/` 中的可用视角
+- 如果月份格式不明确：请求澄清
 
-**IMPORTANT**: Don't read the created report back to main agent. ONLY CREATE FILE and return that it's done!
+**重要**：不要把创建的报告内容读回给主代理。只创建文件并返回完成！

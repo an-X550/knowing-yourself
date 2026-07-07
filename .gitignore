@@ -1,1 +1,8 @@
 .DS_Store
+data/
+output/
+关于我/
+日志/
+复盘/
+规划/
+.vscode/

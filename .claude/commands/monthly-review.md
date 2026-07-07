@@ -1,53 +1,53 @@
 ---
-description: Generate comprehensive monthly review from 6 perspectives with themed synthesis
+description: 从6个视角并行处理日志，生成主题化月度综合复盘报告
 allowed-tools:
   - Task
   - Glob
   - Read
 ---
 
-# Monthly Review Command
+# 月度复盘命令
 
-Generate a comprehensive monthly review by processing journals through 6 perspectives in parallel, then synthesizing into a themed final report.
+通过6个视角并行处理日志，综合为主题化最终报告。
 
-## Input
+## 输入
 
-Month identifier from: $ARGUMENTS
+月份标识来自：`$ARGUMENTS`
 
-**Default**: If no argument provided, use the last completed month (e.g., if today is February, process January).
+**默认值**：如果未提供参数，使用上一个完整月份（如当前为2月，则处理1月）。
 
-**Accepted formats**:
-- `YYYY-MM` (e.g., "2026-01")
-- Month name + year (e.g., "January 2026", "Jan 2026")
-- Just month name for current year (e.g., "January")
+**支持的格式**：
+- `YYYY-MM`（如 "2026-01"）
+- 月份名+年份（如 "2026年1月"、"Jan 2026"）
+- 仅月份名表示当年（如 "1月"）
 
-## Execution Steps
+## 执行步骤
 
-### 1. Determine Target Month
+### 1. 确定目标月份
 
-Parse arguments to get `YYYY-MM` format.
+解析参数获取 `YYYY-MM` 格式。
 
-If no arguments: Calculate last completed month based on current date.
+如无参数：根据当前日期计算上一个完整月份。
 
-### 2. Verify Journals Exist
+### 2. 验证日志存在
 
-Use Glob to check `06 Agenda/Journal/YYYY-MM-*.md` files exist for target month.
+使用 Glob 检查 `日志/` 目录中目标月份的日志文件（如 `日志/*YYYY*M月*.md`）。
 
-If no journals found: Report error and stop.
+如果未找到日志：报告错误并停止。
 
-### 3. Create Output Directories
+### 3. 创建输出目录
 
-Ensure these directories exist (check with Glob, create if needed):
-- `07 Context/Analysis/therapist/`
-- `07 Context/Analysis/coach/`
-- `07 Context/Analysis/strengths/`
-- `07 Context/Analysis/values-meaning/`
-- `07 Context/Analysis/relationships/`
-- `07 Context/Analysis/chronicle/`
+确保以下目录存在（用 Glob 检查，不存在则创建）：
+- `关于我/Analysis/therapist/`
+- `关于我/Analysis/coach/`
+- `关于我/Analysis/strengths/`
+- `关于我/Analysis/values-meaning/`
+- `关于我/Analysis/relationships/`
+- `关于我/Analysis/chronicle/`
 
-### 4. Launch 6 Perspective Subagents in Parallel
+### 4. 并行启动6个视角子代理
 
-Use the Task tool with `subagent_type: monthly-processor` to launch **all 6 in a single message** (parallel execution):
+使用 Task 工具，`subagent_type: monthly-processor`，**在一条消息中启动全部6个**（并行执行）：
 
 ```
 1. "Process YYYY-MM as therapist"
@@ -58,47 +58,47 @@ Use the Task tool with `subagent_type: monthly-processor` to launch **all 6 in a
 6. "Process YYYY-MM as chronicle"
 ```
 
-**CRITICAL**: Launch all 6 in a single message with 6 separate Task tool calls to maximize parallelism.
+**关键**：在一条消息中用6个独立的 Task 工具调用启动全部6个，最大化并行度。
 
-### 5. Wait for All Perspectives to Complete
+### 5. 等待所有视角完成
 
-All 6 subagents must complete before proceeding.
+全部6个子代理必须完成才能继续。
 
-### 6. Launch Synthesis Subagent
+### 6. 启动综合子代理
 
-Use the Task tool with `subagent_type: monthly-synthesis`:
+使用 Task 工具，`subagent_type: monthly-synthesis`：
 
 ```
 "Synthesize YYYY-MM"
 ```
 
-### 7. Report Completion
+### 7. 报告完成
 
-After synthesis completes, report:
+综合完成后，报告：
 
 ```
-Monthly review for [Month Year] complete!
+[月份 年份]月度复盘完成！
 
-Perspective analyses created:
-- 07 Context/Analysis/therapist/YYYY-MM-therapist.md
-- 07 Context/Analysis/coach/YYYY-MM-coach.md
-- 07 Context/Analysis/strengths/YYYY-MM-strengths.md
-- 07 Context/Analysis/values-meaning/YYYY-MM-values-meaning.md
-- 07 Context/Analysis/relationships/YYYY-MM-relationships.md
-- 07 Context/Analysis/chronicle/YYYY-MM-chronicle.md
+视角分析已创建：
+- 关于我/Analysis/therapist/YYYY-MM-therapist.md
+- 关于我/Analysis/coach/YYYY-MM-coach.md
+- 关于我/Analysis/strengths/YYYY-MM-strengths.md
+- 关于我/Analysis/values-meaning/YYYY-MM-values-meaning.md
+- 关于我/Analysis/relationships/YYYY-MM-relationships.md
+- 关于我/Analysis/chronicle/YYYY-MM-chronicle.md
 
-Final report: [[06 Agenda/Monthly/YYYY-MM]]
+最终报告：复盘/每月复盘/YYYY-MM.md
 ```
 
-## Error Handling
+## 错误处理
 
-- If no journals for target month: "No journal entries found for [month]. Cannot generate review."
-- If perspective fails: Note which perspective failed, continue with others, warn in final output
-- If synthesis fails: Report error, note that perspective files were still created
+- 如果目标月份无日志："未找到 [月份] 的日志条目，无法生成复盘。"
+- 如果某视角失败：记录失败的视角，继续处理其余视角，在最终输出中警告
+- 如果综合失败：报告错误，说明视角文件仍已创建
 
-## Notes
+## 备注
 
-- This command orchestrates existing agents - it doesn't process journals directly
-- The monthly-processor agent handles each perspective
-- The monthly-synthesis agent creates the final themed report
-- All perspective analyses are preserved as separate files for future reference
+- 此命令编排已有代理——不直接处理日志
+- monthly-processor 代理负责每个视角的分析
+- monthly-synthesis 代理负责创建最终主题报告
+- 所有视角分析文件均保留供将来参考
