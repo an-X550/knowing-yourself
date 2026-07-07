@@ -5,6 +5,11 @@ last_updated: 2026-07-07
 
 # CHANGELOG — 改动记录
 
+## [2026-07-08 00:55] [重构] 月度综合链路第2阶段：上游中间产物收紧为证据包，补做视角审计 (v1.3.20 → v1.3.21)
+
+- **受影响文件**: `.claude/agents/monthly-processor.md`, `perspectives/therapist.md`, `perspectives/values-meaning.md`, `perspectives/README.md`, `docs/specs/monthly-processor-evidence-packets.md`, `docs/superpowers/plans/2026-07-08-monthly-processor-evidence-packets.md`, `docs/specs/monthly-perspective-audit-2026-07-08.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 继续执行“月度综合链路优化”第 2 阶段与第 3 阶段：将 `monthly-processor` 从“生成报告”收紧为“生成证据包/综合材料”，为上游新增候选发现、证据、反例/证据不足与边界说明约束；优先把 `therapist` 与 `values-meaning` 从长叙事小报告改成证据包格式；同步更新视角体系总说明，并新增一次视角审计，明确哪些生活类视角已材料化、哪些方法论视角暂不纳入本轮压缩。
+
 ## [2026-07-08 00:20] [配置] 优化 Git 提交流程：验证在内，写入在外 (v1.3.19 → v1.3.20)
 
 - **受影响文件**: `.claude/commands/commit.md`, `AGENTS.md`, `CLAUDE.md`, `.claude/settings.json`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `docs/specs/git-commit-escalation-flow.md`, `docs/superpowers/plans/2026-07-08-git-commit-escalation-flow.md`
