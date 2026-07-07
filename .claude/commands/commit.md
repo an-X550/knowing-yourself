@@ -1,5 +1,5 @@
 ---
-description: 提交并推送代码到GitHub（自动从CHANGELOG提取提交信息）
+description: 本地提交代码（自动从CHANGELOG提取提交信息）。推送需用户手动执行
 allowed-tools:
   - Bash
   - Read
@@ -7,7 +7,7 @@ allowed-tools:
 
 # /提交
 
-将当前改动提交并推送到 GitHub。提交信息自动从 CHANGELOG.md 最新条目提取。
+将当前改动提交到本地 Git。推送由用户手动执行。
 
 ## 执行步骤
 
@@ -58,7 +58,6 @@ Read CHANGELOG.md，找到第一条匹配 `## [YYYY-MM-DD` 的标题行，去掉
 ```bash
 git add .
 git commit -m "<提取的提交信息>"
-git push
 ```
 
 ### 4. 报告结果
@@ -66,7 +65,7 @@ git push
 运行 `git log -1 --oneline` 确认提交，向用户报告：
 - 短 commit hash
 - 提交信息
-- 推送结果（成功/失败）
+- 提醒用户手动推送：💡 提交已在本地。运行 `git push` 推送到远程。
 
 ## 错误处理
 
@@ -76,5 +75,4 @@ git push
 | CHANGELOG 无条目 | 使用默认信息 `chore: 项目更新` 继续提交 |
 | git add 失败 | 报错并停止，不执行后续步骤 |
 | git commit 失败 | 报错，提示可能原因（冲突/无改动等） |
-| git push 失败（网络问题） | "❌ 推送失败。可能是网络问题。改动已在本地提交，网络恢复后运行 `git push` 即可。" |
 | 不在 Git 仓库 | "❌ 当前目录不是 Git 仓库。" |

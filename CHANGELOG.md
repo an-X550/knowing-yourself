@@ -8,6 +8,12 @@ last_updated: 2026-07-07
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
 ---
+## [2026-07-07] [重构] /提交 改为仅本地提交，推送由用户手动执行 (v1.3.6 → v1.3.7)
+
+- **受影响文件**: `.claude/commands/commit.md`, `CLAUDE.md`, `README.md`, `.claude/settings.json`, `VERSION`, `PROJECT_STATUS.md`
+- **改动摘要**: `/提交` 命令不再自动执行 git push，仅做本地 add/commit 并提醒用户手动推送。同步更新 CLAUDE.md 提交提示规则、README 命令表/结构树、settings.json Stop 钩子消息
+
+---
 ## [2026-07-07] [修复] 项目遍历审计：修复6处跨文件矛盾与警告 (v1.3.5 → v1.3.6)
 
 - **受影响文件**: `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `.claude/commands/monthly-review.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/weekly-synthesis.md`, `.claude/shared/paths.md`, `docs/specs/audit-cleanup.md`, `关于我/current.md`（新建）, `README.md`, `VERSION`
