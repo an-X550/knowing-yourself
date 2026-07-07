@@ -9,6 +9,20 @@ last_updated: 2026-07-07
 
 ---
 
+## [2026-07-07] [重构] 两轮第一性原理审计清理：消除冗余、统一格式、建立单一权威来源 (v1.1.0 → v1.2.0)
+
+- **受影响文件**: 40+个文件（5 agent + 5 command + 3 workflow + 9 perspective + 7 文档 + 4 新建）
+- **改动摘要**: 基于两轮全项目第一性原理审计，执行5阶段系统清理：
+  - 阶段0 安全基线：36个未跟踪核心文件入Git
+  - 阶段1 单一权威来源：创建 `.claude/shared/banned-phrases.json` + `perspectives/README.md`，禁用词列表引用链统一
+  - 阶段2 W-格式管道同步：6文件×16处 `YYYY-Www` → `YYYY-Www（M月D日-M月D日）`，修复 weekly-synthesis/yearly-synthesis mkdir bug，修复 W27-coach frontmatter month→week
+  - 阶段3 消除重复：12处语言要求→CLAUDE.md全局规则，log.md 131→85行，切记引用清理
+  - 阶段4 统一格式：weekly-processor幽灵代理清理（README+PROJECT_STATUS共5处），growth-dimensions/journal-quality Rules中文化
+  - 阶段5 上下文精简：values-meaning去硬编码，first-principles诚实检查动态化，PROJECT_STATUS文件清单压缩，weekly/monthly-synthesis模板 ~250→~50行
+- **净效果**: ~250行冗余删除，~200行上下文加载节省，0个未跟踪文件
+
+---
+
 ## [2026-07-07] [重构] 第一性原理文档审计清理 (v1.0.4 → v1.1.0)
 
 - **受影响文件**: 25+个文件（README, CLAUDE, PROJECT_STATUS, CHANGELOG, yearly-synthesis, weekly-synthesis, log.md, first-principles.md, analysis-standards.md, 9个perspective, 3个command, 3个workflow）
