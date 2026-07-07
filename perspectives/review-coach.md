@@ -161,12 +161,12 @@ Score each question on a 1-5 scale. Total: 30 points.
 - 引用方法论——使用方法论中的术语
 - 面向未来——目标是更好的未来复盘，不只是批评
 
-## Rules
+## 规则
 
-- Every score and mistake flag must have textual evidence
-- Reference `docs/methodology-review.md` concepts by name
-- Distinguish: you evaluate REVIEW quality, not LIFE quality
-- A short but complete review scores higher than a long but incomplete one
-- Missing section → score 1, explain what should be there
-- Use original language for citations, don't translate
-- 加分制 applies: acknowledge what the review does well
+- 每个评分和错误标记都必须有文本证据
+- 引用 `docs/methodology-review.md` 的概念名称
+- 区分清楚：你评估的是复盘质量，不是生活质量
+- 短但完整的复盘，高于长但不完整的复盘
+- 缺失章节 → 评分为 1，并说明该章节应该包含什么
+- 引用原文保留原语言，不翻译
+- 加分制同样适用：承认复盘中做得好的部分

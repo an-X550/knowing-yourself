@@ -35,15 +35,9 @@ allowed-tools:
 
 如果未找到日志：报告错误并停止。
 
-### 3. 创建输出目录
+### 3. 创建输出根目录
 
-确保以下目录存在（用 Glob 检查，不存在则创建）：
-- `关于我/Analysis/therapist/`
-- `关于我/Analysis/coach/`
-- `关于我/Analysis/strengths/`
-- `关于我/Analysis/values-meaning/`
-- `关于我/Analysis/relationships/`
-- `关于我/Analysis/chronicle/`
+确保 `关于我/Analysis/` 存在。具体视角子目录由 `monthly-processor` 按本次选中的视角创建，不在命令层硬编码。
 
 ### 4. 启动 Workflow
 
@@ -73,12 +67,7 @@ Workflow 会自动报告进度和最终结果。
 [月份 年份]月度复盘完成！
 
 视角分析已创建：
-- 关于我/Analysis/therapist/YYYY-MM-therapist.md
-- 关于我/Analysis/coach/YYYY-MM-coach.md
-- 关于我/Analysis/strengths/YYYY-MM-strengths.md
-- 关于我/Analysis/values-meaning/YYYY-MM-values-meaning.md
-- 关于我/Analysis/relationships/YYYY-MM-relationships.md
-- 关于我/Analysis/chronicle/YYYY-MM-chronicle.md
+- 关于我/Analysis/{视角}/YYYY-MM-{视角}.md（按本次选中的视角生成）
 
 最终报告：复盘/每月复盘/YYYY-MM.md
 ```

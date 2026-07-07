@@ -12,12 +12,18 @@
 
 > ⚠️ **Superpowers 例外**：即使满足以上跳过条件，superpowers 技能调用规则（「六、工作流控制 → Superpowers 集成」）不受跳过阈值影响。Superpowers 技能的判断独立于 AGENTS.md 的跳过逻辑——两者并行评估，各自触发。
 
+### 维护边界
+
+- **唯一运行真相**：`.claude/`。Claude Code Skill 的产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
+- **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。需求增删改、文档同步、版本管理、目录规则以这两份规范为准。
+- **Codex 边界**：`.codex/` 不作为产品逻辑维护面。允许保留 `.codex/hooks.json` 等 Codex 开发辅助配置（如未提交提醒），但不得承载日志分析、agent 定义、workflow 编排等产品逻辑；不得手工维护 `.codex/agents/` 作为第二套 agent 真相。如未来需要 Codex 专属 agent，必须从 `.claude/agents/` 自动生成，而不是手写双份。
+
 ### 日志粘贴处理
 
 当用户消息中包含日志关键词（"幸福日志"、"开心的事情"、"充实的事情"等），且内容尚未被 `log` skill 预处理（即你直接收到了日志原文）时，按以下流程处理，而非自由发挥：
 
 1. **存档**：将日志内容追加到对应月份日志文件（`日志/谢安的YYYY-N月日志.md`）
-2. **分析**：遵循 `.Codex/agents/daily-analyzer.md` 的 Step 2-6（昨日检查、镜像反射、模式连接、原子行动），使用其标准输出格式（📋/⏮️/🔍/🔗/⚡/💊），总输出 ≤400 字
+2. **分析**：遵循 `.claude/agents/daily-analyzer.md` 的 Step 2-6（昨日检查、镜像反射、模式连接、原子行动），使用其标准输出格式（📋/⏮️/🔍/🔗/⚡/💊），总输出 ≤400 字
 3. **存档反馈**：将分析结果写入 `复盘/每日反馈/YYYY-MM-DD.md`
 4. **展示**：在对话中展示分析结果（与文件内容一致）
 
@@ -156,7 +162,7 @@
 
 3. **功能变更**：如果本次新增了命令/代理/工作流，检查 README.md 的对应表格是否包含该项
 
-4. **路径约定同步**：如果本次变更了 `.Codex/shared/paths.md` 中定义的路径，grep 全项目确认无其他文件残留旧路径硬编码。paths.md 是路径的**单一权威来源**——所有 agent 应通过它获取路径，而非硬编码
+4. **路径约定同步**：如果本次变更了 `.claude/shared/paths.md` 中定义的路径，grep 全项目确认无其他文件残留旧路径硬编码。paths.md 是路径的**单一权威来源**——所有 agent 应通过它获取路径，而非硬编码
 
 5. **反向消费者检查**（每次改动后必执行，防止死代码积累）：
    - **配置消费者**：对于 settings.json 中每个非标准顶级键（非 hooks/permissions/env），grep 全项目确认 settings.json 自身外至少有一个消费者文件引用该键名
@@ -182,11 +188,11 @@
 | 变更类型 | 必须同步的文件 |
 |---------|--------------|
 | 版本号递增 | `VERSION` → `PROJECT_STATUS.md`(当前版本) → `README.md`(徽章) |
-| 路径约定变更 | `.Codex/shared/paths.md` → grep 全项目确认无旧路径残留 |
+| 路径约定变更 | `.claude/shared/paths.md` → grep 全项目确认无旧路径残留 |
 | 新增/删除命令 | `README.md`(命令表+结构树) → `PROJECT_STATUS.md`(命令进度表) |
 | 新增/删除代理 | `README.md`(代理表+结构树) → `PROJECT_STATUS.md`(代理进度表) |
 | 新增/删除视角 | `README.md`(视角表+结构树) → `PROJECT_STATUS.md`(视角进度表) → `perspectives/README.md` |
-| 禁用词变更 | `docs/analysis-standards.md` → `.Codex/shared/banned-phrases.json` → 3个workflow JS（提交前验证一致性） |
+| 禁用词变更 | `docs/analysis-standards.md` → `.claude/shared/banned-phrases.json` → 3个workflow JS（提交前验证一致性） |
 | 文件移动/重命名 | grep 全项目旧路径 → 修复所有引用 → grep 确认零残留 |
 | 新增/修改配置键或路径 | `settings.json`自定义键 / `paths.md`路径 → grep 全项目确认消费者存在 |
 
@@ -196,11 +202,13 @@
 
 ### 提交与推送
 
-改动记录追加到 CHANGELOG 且文档同步检查完成后，提示用户可运行 `/提交` 一键本地提交。推送需用户手动执行 `git push`。提示格式：
+改动记录追加到 CHANGELOG 且文档同步检查完成后，自动执行 `/提交` 对应的本地提交流程（提取 CHANGELOG 最新条目作为 commit message，执行 `git add .` + `git commit`）。推送需用户手动执行 `git push`。
 
-💡 改动已记录到 CHANGELOG。输入 /提交 即可本地提交。推送运行 `git push`。
+自动提交成功后，在响应末尾提醒：
 
-此提示应在每次有代码改动的响应末尾自动输出，无需用户提醒。
+💡 已完成本地提交。推送运行 `git push`。
+
+如因验证失败、Git 错误或环境限制无法自动提交，说明原因，并提醒用户修复后再运行 `/提交`。
 
 ---
 
@@ -308,7 +316,7 @@
 
 流程：
 1. 在 `docs/specs/` 创建 `<功能名>.md`（需求目标 + 边界约束 + 验收标准 + 实施计划 + 状态），参考 `docs/specs/_TEMPLATE.md`
-2. 高优先级需求在 PROJECT_STATUS.md 添加 `- [ ] [标题](docs/specs/<文件>.md) — 规划中`
+2. 高优先级需求在 PROJECT_STATUS.md 添加 `- [ ] 标题（docs/specs/<文件>.md） — 规划中`
 3. 展示 spec 摘要，等待用户确认。若否定，移至 `docs/specs/_archived/`
 4. 确认后状态改为"开发中"，按改动追踪规则开始实施
 5. 完成后状态改为"已完成"，勾选 PROJECT_STATUS.md 对应条目

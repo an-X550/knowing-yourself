@@ -5,7 +5,7 @@ last_updated: 2026-07-07
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.8
+**当前版本**：1.3.11
 
 ## 项目概述
 
@@ -30,6 +30,12 @@ last_updated: 2026-07-07
 | **配置** | JSON（settings.json） |
 | **版本控制** | Git + 语义化版本（见 VERSION） |
 | **语言** | 中文（内容）、英文（配置字段） |
+
+### 维护边界
+
+- **唯一运行真相**：`.claude/`。Claude Code Skill 的产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
+- **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。需求增删改、文档同步、版本管理、目录规则以这两份规范为准。
+- **Codex 边界**：`.codex/` 只保留 Codex 开发辅助配置（如未提交提醒 hook），不作为产品逻辑维护面；`.codex/agents/` 已停用并忽略，避免与 `.claude/agents/` 形成双份手写真相。
 
 ## 架构设计
 
@@ -85,7 +91,7 @@ last_updated: 2026-07-07
 | `/interview` | `.claude/commands/interview.md` | 完成 |
 | `/update-current` | `.claude/commands/update-current.md` | 完成 |
 | `/import` | `.claude/commands/import.md` | 完成 |
-| **`/提交`** 🆕 | `.claude/commands/commit.md` | 完成（一键 add/commit/push） |
+| **`/提交`** 🆕 | `.claude/commands/commit.md` | 完成（改动后自动本地 add/commit；推送手动执行） |
 
 ### 代理（6/6）完成
 
@@ -147,14 +153,15 @@ last_updated: 2026-07-07
 | 类别 | 文件 |
 |------|------|
 | 项目规范 | `CLAUDE.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `.gitignore`, `LICENSE` |
-| 设置 | `.claude/settings.json`, `SETUP.md` |
+| 设置 | `.claude/settings.json`, `.codex/hooks.json`, `SETUP.md` |
 | 共享配置 | `.claude/shared/paths.md`（路径权威来源）, `.claude/shared/banned-phrases.json`（禁用词权威来源） |
 | 方法论 | `docs/first-principles.md`, `docs/methodology-journal.md`, `docs/methodology-review.md`, `docs/analysis-standards.md` |
 | 示例 | `examples/demo/sample-journal.md`, `examples/analyses/` |
 | CI | `.github/ISSUE_TEMPLATE/`, `.github/PULL_REQUEST_TEMPLATE.md` |
 | Spec | `docs/specs/_TEMPLATE.md`, `docs/specs/audit-cleanup.md`, `docs/specs/evolution-roadmap.md` |
 | Skill | `.claude/skills/log.md` |
-| 归档 | `docs/archive/changelog-archive.md` || Workflow | `.claude/workflows/monthly-review.js`, `weekly-review.js`, `yearly-review.js` |
+| 归档 | `docs/archive/changelog-archive.md` |
+| Workflow | `.claude/workflows/monthly-review.js`, `weekly-review.js`, `yearly-review.js` |
 
 ## 待办事项
 
@@ -215,4 +222,5 @@ last_updated: 2026-07-07
 | 2026-07-06 | `/monthly-review` 多模式 + 中文视角选择 | fast(3核心)/standard(6生活,默认)/full(9全)+自定义视角；视角用中文功能描述代替内部key；方法论视角缺失时综合引擎自行读标准文档自检 |
 | 2026-07-06 | 周度复盘重构为月志简化版 | 从3个方法论视角改为3个核心生活视角(chronicle/coach/therapist) + weekly-synthesis综合引擎；复用复盘六问框架，5段报告+6条自检；周志=小的月志 |
 | 2026-07-07 | 制定产品进化路线图 | 见 [docs/specs/evolution-roadmap.md](docs/specs/evolution-roadmap.md)。采用 A→B 渐进路线：先验证核心假设（Skill极致化），再扩大用户群（Bot/集成形态），最后评估全栈SaaS |
-
+| 2026-07-07 | `.claude/` 作为唯一运行真相，停用 `.codex/agents` | 项目目标是 Claude Code Skill，产品逻辑只维护 `.claude/`，Codex 仅作为开发助手和开发辅助 hook 配置面。删除手写 `.codex/agents` 并停用 Codex 日志触发 hook，可避免 agent 定义与日志入口双份漂移；未来如需 Codex 专属 agent，必须从 `.claude/agents` 自动生成 |
+| 2026-07-07 | 改动完成后自动执行本地提交，推送仍由用户手动执行 | 代码/文档改动完成、CHANGELOG 记录且验证通过后，AI 自动执行 `/提交` 对应的本地 add/commit 流程，减少遗忘提交的摩擦；远程推送保持手动 `git push`，避免未经确认发布 |

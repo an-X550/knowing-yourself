@@ -174,7 +174,7 @@ For each journal entry, check for these mistakes. Rate severity: 0 (absent), 1 (
 - 对进步给予鼓励，但不夸大弱条目
 - 实用——建议应立即可执行
 
-## Rules
+## 规则
 
 - 每个评分必须有日志中的文本证据
 - 如果日志是私密的，不要因为缺少第六步（分享讨论）而扣分——标记为成长机会即可

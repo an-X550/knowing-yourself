@@ -1,6 +1,6 @@
 ---
 created: 2026-07-07
-status: 已完成（v1.2.0 实施，剩余阶段5上下文精简在 v1.3.6 继续推进）
+status: 基本完成（仅余 workflow 禁用词内嵌项待后续处理）
 based_on:
   - 两轮第一性原理审计（2026-07-07）
   - 规划/2026-07-06~12.md（date_range 格式先例）
@@ -22,13 +22,13 @@ based_on:
 
 ## 验收标准
 
-- [ ] `git status` 显示 0 个未跟踪文件（全部核心文件已提交）
-- [ ] `grep "YYYY-Www"` 在所有用户可见输出中附带日期范围
+- [x] `git status` 显示 0 个未跟踪文件（全部核心文件已提交）
+- [x] `grep "YYYY-Www"` 在所有用户可见输出中附带日期范围
 - [ ] 禁用模糊词列表只在 `analysis-standards.md` 和 `.claude/shared/` 中出现，workflow 文件不内嵌
-- [ ] `weekly-processor` 不再出现在 README 和 PROJECT_STATUS 中
-- [ ] `perspectives/README.md` 存在，说明提取器 vs 评估器两种架构
-- [ ] `values-meaning.md` 不再硬编码用户个人数据
-- [ ] 所有 perspective Rules 段落统一使用中文
+- [x] `weekly-processor` 不再出现在 README 和 PROJECT_STATUS 中
+- [x] `perspectives/README.md` 存在，说明提取器 vs 评估器两种架构
+- [x] `values-meaning.md` 不再硬编码用户个人数据
+- [x] 所有 perspective Rules 段落统一使用中文
 
 ---
 

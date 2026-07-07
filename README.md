@@ -3,7 +3,7 @@
 > 🎯 AI 日志分析教练 — 让 AI 帮你发现你自己看不见的行为模式
 
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.3.8-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.3.11-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 平台的 AI 日志分析与复盘教练 Skill。它通过多个专业视角并行分析你的每日日志，最终综合为结构化的复盘报告，帮助你进行自我认知、成长追踪和复盘改进。
@@ -16,6 +16,7 @@
 - [核心哲学](#核心哲学)
 - [快速开始](#快速开始)
 - [架构概览](#架构概览)
+- [维护边界](#维护边界)
 - [命令系统](#命令系统)
 - [视角体系](#视角体系)
 - [代理系统](#代理系统)
@@ -107,6 +108,16 @@
 视角层 (Perspectives) →  定义分析框架、评分标准、输出结构
 ```
 
+---
+
+## 维护边界
+
+- **唯一运行真相**：`.claude/`。Claude Code Skill 的产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
+- **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。需求增删改、文档同步、版本管理、目录规则以这两份规范为准。
+- **Codex 边界**：`.codex/` 只保留 Codex 开发辅助配置（如未提交提醒 hook），不作为产品逻辑维护面；`.codex/agents/` 不手工维护。如未来需要 Codex 专属 agent，必须从 `.claude/agents/` 自动生成。
+
+---
+
 ### 周期层次
 
 | 周期 | 命令 | 代理 | 频率 | 深度 |
@@ -142,7 +153,7 @@
 | `/interview` | 问答式建立个人画像（核心价值观、优势、目标等） |
 | `/update-current` | 从最近日志自动更新当前状态快照 |
 | `/import` | 导入外部日志文件（支持单日/多日/任意路径） |
-| **`/提交`** 🆕 | 一键 git add/commit（本地），推送需手动 `git push` |
+| **`/提交`** 🆕 | 自动/手动执行本地 git add/commit，推送需手动 `git push` |
 
 ### 自动触发
 
@@ -273,6 +284,8 @@
 │   │   ├── weekly-review.js
 │   │   └── yearly-review.js
 │   └── settings.json         # 路径配置 + 权限 + Hooks
+├── .codex/
+│   └── hooks.json            # Codex 开发辅助 hook（不承载产品逻辑）
 ├── docs/                     # 方法论文档
 │   ├── archive/
 │   │   └── changelog-archive.md  # 完整改动历史
@@ -317,6 +330,7 @@
 | `关于我/` | 个人画像与快照 |
 | `规划/` | 个人计划与日程 |
 | `.vscode/` | 本地编辑器配置 |
+| `.codex/agents/` | 不维护的 Codex agent 手写副本 |
 
 ---
 

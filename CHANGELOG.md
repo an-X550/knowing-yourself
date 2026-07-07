@@ -8,6 +8,24 @@ last_updated: 2026-07-07
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
 ---
+## [2026-07-07 18:14] [配置] 提交流程改为改动后自动本地提交，推送仍手动执行 (v1.3.10 → v1.3.11)
+
+- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `.claude/commands/commit.md`, `.claude/settings.json`, `.codex/hooks.json`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `VERSION`
+- **改动摘要**: 将提交规则从“提示用户输入 /提交”改为“CHANGELOG 记录与验证完成后自动执行 /提交 对应的本地 add/commit 流程”。`/提交` 仍只做本地提交，远程推送由用户手动运行 `git push`；Stop hook 提醒文案同步为“自动提交可能未完成时再运行 /提交”。
+
+---
+## [2026-07-07 18:07] [重构] 项目遍历优化：去硬编码目录、同步当前数据、修正审计状态 (v1.3.9 → v1.3.10)
+
+- **受影响文件**: `.claude/commands/monthly-review.md`, `perspectives/growth-dimensions.md`, `perspectives/journal-quality.md`, `perspectives/review-coach.md`, `docs/first-principles.md`, `docs/specs/evolution-roadmap.md`, `docs/specs/audit-cleanup.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 优化月度复盘命令，将视角输出目录从固定6个生活视角改为按选中视角动态生成，避免 full/custom 模式文档漂移；统一3个 perspective 的 Rules 段落为中文；同步第一性原理与路线图中的日反馈/月报当前数据；修正 audit-cleanup 的验收勾选与状态，保留 workflow 禁用词内嵌项作为后续待处理；版本同步至 v1.3.10。
+
+---
+## [2026-07-07 17:57] [重构] 确立 .claude 唯一运行真相，停用 .codex/agents 手写副本 (v1.3.8 → v1.3.9)
+
+- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `.gitignore`, `.codex/hooks.json`, `.codex/agents/*.toml`（删除）, `docs/specs/evolution-roadmap.md`, `VERSION`
+- **改动摘要**: 将维护边界固化为「唯一运行真相：.claude/；唯一开发规范：AGENTS.md / CLAUDE.md；.codex/ 不作为产品逻辑维护面」。删除 6 个 `.codex/agents` 手写 agent 副本，停用 `.codex/hooks.json` 中的日志触发入口，仅保留未提交提醒，并将 `.codex/agents/` 加入 .gitignore，避免 Claude agent、日志入口与 Codex 配置双份漂移。同步 README/PROJECT_STATUS/路线图版本号，并修正 PROJECT_STATUS 中 `/提交` 的旧 push 描述。
+
+---
 ## [2026-07-07] [修复] 统一日志分析入口：CLAUDE.md 新增日志粘贴处理规则 (v1.3.7 → v1.3.8)
 
 - **受影响文件**: `CLAUDE.md`, `VERSION`, `PROJECT_STATUS.md`, `README.md`, `docs/specs/evolution-roadmap.md`

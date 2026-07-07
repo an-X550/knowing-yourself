@@ -1,4 +1,5 @@
 .DS_Store
+.codex/agents/
 data/
 output/
 关于我/

@@ -12,6 +12,12 @@
 
 > ⚠️ **Superpowers 例外**：即使满足以上跳过条件，superpowers 技能调用规则（「六、工作流控制 → Superpowers 集成」）不受跳过阈值影响。Superpowers 技能的判断独立于 CLAUDE.md 的跳过逻辑——两者并行评估，各自触发。
 
+### 维护边界
+
+- **唯一运行真相**：`.claude/`。Claude Code Skill 的产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
+- **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。需求增删改、文档同步、版本管理、目录规则以这两份规范为准。
+- **Codex 边界**：`.codex/` 不作为产品逻辑维护面。允许保留 `.codex/hooks.json` 等 Codex 开发辅助配置（如未提交提醒），但不得承载日志分析、agent 定义、workflow 编排等产品逻辑；不得手工维护 `.codex/agents/` 作为第二套 agent 真相。如未来需要 Codex 专属 agent，必须从 `.claude/agents/` 自动生成，而不是手写双份。
+
 ### 日志粘贴处理
 
 当用户消息中包含日志关键词（"幸福日志"、"开心的事情"、"充实的事情"等），且内容尚未被 `log` skill 预处理（即你直接收到了日志原文）时，按以下流程处理，而非自由发挥：
@@ -196,11 +202,13 @@
 
 ### 提交与推送
 
-改动记录追加到 CHANGELOG 且文档同步检查完成后，提示用户可运行 `/提交` 一键本地提交。推送需用户手动执行 `git push`。提示格式：
+改动记录追加到 CHANGELOG 且文档同步检查完成后，自动执行 `/提交` 对应的本地提交流程（提取 CHANGELOG 最新条目作为 commit message，执行 `git add .` + `git commit`）。推送需用户手动执行 `git push`。
 
-💡 改动已记录到 CHANGELOG。输入 /提交 即可本地提交。推送运行 `git push`。
+自动提交成功后，在响应末尾提醒：
 
-此提示应在每次有代码改动的响应末尾自动输出，无需用户提醒。
+💡 已完成本地提交。推送运行 `git push`。
+
+如因验证失败、Git 错误或环境限制无法自动提交，说明原因，并提醒用户修复后再运行 `/提交`。
 
 ---
 
@@ -308,7 +316,7 @@
 
 流程：
 1. 在 `docs/specs/` 创建 `<功能名>.md`（需求目标 + 边界约束 + 验收标准 + 实施计划 + 状态），参考 `docs/specs/_TEMPLATE.md`
-2. 高优先级需求在 PROJECT_STATUS.md 添加 `- [ ] [标题](docs/specs/<文件>.md) — 规划中`
+2. 高优先级需求在 PROJECT_STATUS.md 添加 `- [ ] 标题（docs/specs/<文件>.md） — 规划中`
 3. 展示 spec 摘要，等待用户确认。若否定，移至 `docs/specs/_archived/`
 4. 确认后状态改为"开发中"，按改动追踪规则开始实施
 5. 完成后状态改为"已完成"，勾选 PROJECT_STATUS.md 对应条目
