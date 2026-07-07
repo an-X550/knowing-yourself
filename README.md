@@ -3,7 +3,7 @@
 > 🎯 AI 日志分析教练 — 让 AI 帮你发现你自己看不见的行为模式
 
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.3.3-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.3.5-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 平台的 AI 日志分析与复盘教练 Skill。它通过多个专业视角并行分析你的每日日志，最终综合为结构化的复盘报告，帮助你进行自我认知、成长追踪和复盘改进。
@@ -266,6 +266,7 @@
 │   ├── skills/               # 技能定义
 │   │   └── log.md            # 日志存档技能
 │   ├── shared/               # 共享配置
+│   │   ├── paths.md           # 路径权威来源
 │   │   └── banned-phrases.json # 禁用词列表
 │   ├── workflows/            # Workflow 编排脚本
 │   │   ├── monthly-review.js
@@ -319,32 +320,9 @@
 
 ---
 
-## 配置说明
+## 路径配置
 
-`settings.json` 中的 `journaling` 字段管理路径配置：
-
-```json
-{
-  "journaling": {
-    "journal_path": "日志/",
-    "weekly_path": "日志/周志/",
-    "monthly_path": "日志/月志/",
-    "output_path": "复盘/",
-    "context_path": "关于我/",
-    "fallback_paths": {
-      "journal": "06 Agenda/Journal/",
-      "weekly": "06 Agenda/Weekly/",
-      "monthly": "06 Agenda/Monthly/",
-      "output": "07 Context/Analysis/",
-      "context": "07 Context/"
-    }
-  }
-}
-```
-
-- **主路径**：中文目录名，适配本项目默认结构
-- **Fallback 路径**：英文目录名，兼容 Obsidian 等英文路径工具的工作流
-- 代理执行时会依次尝试主路径和 fallback 路径
+所有输入/输出路径由 [.claude/shared/paths.md](.claude/shared/paths.md) 统一管理，agent/workflow/command 启动时读取此文件。如需调整目录结构，只需修改该文件。
 
 ---
 
@@ -358,7 +336,7 @@
 | 新功能（向后兼容） | 0.19.0 → 0.20.0 |
 | 破坏性变更 | 0.19.0 → 1.0.0 |
 
-当前版本见 [VERSION](VERSION) 文件 — 功能冻结期，聚焦使用而非开发。
+当前版本见 [VERSION](VERSION) 文件。
 
 ---
 

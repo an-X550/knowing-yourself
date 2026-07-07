@@ -5,7 +5,7 @@ last_updated: 2026-07-07
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.3
+**当前版本**：1.3.5
 
 ## 项目概述
 
@@ -126,10 +126,11 @@ last_updated: 2026-07-07
 | 核心画像 | `关于我/core-profile.md` | ✅ 已更新（基于5/6/7月日志，含跨月持续模式识别） |
 | 当前状态 | `关于我/current.md` | 待创建（由 `/update-current` 生成） |
 
-### 月度分析报告（3/12）
+### 月度分析报告（4/12）
 
 | 月份 | 路径 | 状态 |
 |------|------|------|
+| 2026-04 | `复盘/每月复盘/2026-04.md` | ✅ 完成 |
 | 2026-05 | `复盘/每月复盘/2026-05.md` | ✅ 完成（6视角standard，31天日志） |
 | 2026-06 | `复盘/每月复盘/2026-06.md` | ✅ 完成（9视角full，33天日志） |
 | 2026-07 | `复盘/每月复盘/2026-07.md` | ✅ 完成（6视角standard，5天日志） |
@@ -151,8 +152,9 @@ last_updated: 2026-07-07
 | 方法论 | `docs/first-principles.md`, `docs/methodology-journal.md`, `docs/methodology-review.md`, `docs/analysis-standards.md` |
 | 示例 | `examples/demo/sample-journal.md`, `examples/analyses/` |
 | CI | `.github/ISSUE_TEMPLATE/`, `.github/PULL_REQUEST_TEMPLATE.md` |
-| Spec | `docs/specs/_TEMPLATE.md` |
-| Workflow | `.claude/workflows/monthly-review.js`, `weekly-review.js`, `yearly-review.js` |
+| Spec | `docs/specs/_TEMPLATE.md`, `docs/specs/audit-cleanup.md`, `docs/specs/evolution-roadmap.md` |
+| Skill | `.claude/skills/log.md` |
+| 归档 | `docs/archive/changelog-archive.md` || Workflow | `.claude/workflows/monthly-review.js`, `weekly-review.js`, `yearly-review.js` |
 
 ## 待办事项
 
@@ -175,16 +177,16 @@ last_updated: 2026-07-07
 - [ ] 考虑添加 `--mode quick` 和 `--mode life` 的周度版本
 - [ ] 为视角文件添加更多示例输出
 
-### 暂缓（功能冻结期）
-- [ ] CSV 导出功能 — 功能冻结期间不实施
-- [ ] 自动化测试 — 功能冻结期间不实施
-- [ ] 国际化支持 — 功能冻结期间不实施
-- [ ] README 英文版 — 功能冻结期间不实施
+### 低优先级
+- [ ] CSV 导出功能
+- [ ] 自动化测试
+- [ ] 国际化支持
+- [ ] README 英文版
 
 ## 已知问题
 
 ### 路径与兼容性
-1. **中文目录名**：所有输入/输出目录使用中文名（日志、周志、分析输出等），在部分 Windows 系统或 CI 环境中可能遇到编码问题。`settings.json` 中已配置 `fallback_paths` 采用英文路径（`06 Agenda/Journal/` 等）作为备选。
+1. **中文目录名**：所有输入/输出目录使用中文名（日志、复盘、关于我等），在部分 Windows 系统或 CI 环境中可能遇到编码问题。当前无自动 fallback 机制——如遇编码问题需手动调整 `paths.md` 中的路径。
 2. **路径未创建**：`日志/`、`日志/周志/`、`日志/月志/` 输入目录和 `output/` 下的子目录尚未在仓库中创建（仅存在于 README 的目录结构中）。
 
 ### 日志格式
@@ -194,7 +196,7 @@ last_updated: 2026-07-07
 ### 代理行为
 5. **日志/月志/周志评估依赖用户输入**：`review-coach` 视角需要用户已写好日志/月志/周志文件才能评估复盘质量。如果用户未写，该视角无法产出有意义的分析。
 6. **年度分析依赖链长**：`/yearly-review` 需要12份月度综合报告，而每份月度报告又需要6-9份视角分析。整个链条尚未端到端测试。
-7. **上下文文件加载路径不一致**：部分视角（如 `relationships`、`values-meaning`）指导代理读取 `07 Context/` 下的上下文文件，但实际上下文文件在 `关于我/` 目录。代理实现的路径查找顺序需要确认。
+7. **上下文文件加载路径已统一**：所有视角通过 `paths.md` 的「上下文文件」节获取路径，`07 Context/` 废弃引用已在 v1.2.0 清理。
 
 ### 内容
 8. **单用户设计**：整个 Skill 当前硬编码了用户"谢安"的画像和六维图状态，重用于其他用户需要修改大量文件。
@@ -210,7 +212,7 @@ last_updated: 2026-07-07
 | 2026-07-05 | 月度分析采用并行代理 + 综合代理 | 9个视角可独立并行分析（~10x faster），最后由 synthesis 代理综合——避免单代理上下文过载 |
 | 2026-07-05 | 支持合并日志文件（非仅独立文件） | 用户实际使用飞书文档单文件记录整月日志，代理需扫描日期头定位条目而非假设独立文件 |
 | 2026-07-05 | 日志质量采用加分制（非扣分制） | 与"问问大象"方法论一致——关注积极面，上不封顶，区别于传统教育的扣分制思维 |
-| 2026-07-05 | 双路径 fallback 配置 | settings.json 同时配置中文路径（主）和英文路径（fallback），兼容不同文件系统 |
+| 2026-07-05 | 双路径 fallback 配置（已废弃） | 曾计划在 settings.json 配置中英文双路径备选，但运行时代码从未实现该逻辑。v1.3.4 清理死配置，路径管理统一归入 paths.md |
 | 2026-07-05 | 评分体系双轨制（日志质量30 + 复盘质量30） | 日志评分评估每日写作质量（六步法），复盘评分评估月/周志的复盘深度（复盘六问）——两套独立但互补的评估框架 |
 | 2026-07-06 | `/monthly-review` 多模式 + 中文视角选择 | fast(3核心)/standard(6生活,默认)/full(9全)+自定义视角；视角用中文功能描述代替内部key；方法论视角缺失时综合引擎自行读标准文档自检 |
 | 2026-07-06 | 周度复盘重构为月志简化版 | 从3个方法论视角改为3个核心生活视角(chronicle/coach/therapist) + weekly-synthesis综合引擎；复用复盘六问框架，5段报告+6条自检；周志=小的月志 |

@@ -147,6 +147,12 @@
 
 4. **路径约定同步**：如果本次变更了 `.claude/shared/paths.md` 中定义的路径，grep 全项目确认无其他文件残留旧路径硬编码。paths.md 是路径的**单一权威来源**——所有 agent 应通过它获取路径，而非硬编码
 
+5. **反向消费者检查**（每次改动后必执行，防止死代码积累）：
+   - **配置消费者**：对于 settings.json 中每个非标准顶级键（非 hooks/permissions/env），grep 全项目确认 settings.json 自身外至少有一个消费者文件引用该键名
+   - **路径消费者**：对于 paths.md「输入路径」和「输出路径」节中每个路径模式，grep 全项目 agent/command/workflow 文件确认至少有一个引用其静态前缀
+   - **文件消费者**：对于 docs/specs/ 下每个非模板 spec 文件，确认其被 README 或 PROJECT_STATUS 引用
+   - 零消费者的定义 → 本次改动中清理或标记废弃
+
 #### 同步验证（必执行）
 
 上述检查全部完成后，执行以下验证。任一失败则修复后重新验证：
@@ -154,6 +160,7 @@
 1. **版本一致性**：`cat VERSION` = `grep "当前版本" PROJECT_STATUS.md` = README.md 徽章中的版本号
 2. **路径有效性**：grep 所有 .md 文件中的相对链接 `[text](path.md)`，确认目标文件存在
 3. **无残留旧引用**：如有旧名称/旧路径/旧版本号，`grep -r "旧值" --include="*.md"` 确认全项目零残留
+4. **零死配置**：grep settings.json 中每个自定义键名和 paths.md 中每个路径模式，确认 settings.json/paths.md 自身外至少有一个消费者文件
 
 验证通过后方可追加 CHANGELOG。
 
@@ -170,6 +177,7 @@
 | 新增/删除视角 | `README.md`(视角表+结构树) → `PROJECT_STATUS.md`(视角进度表) → `perspectives/README.md` |
 | 禁用词变更 | `docs/analysis-standards.md` → `.claude/shared/banned-phrases.json` → 3个workflow JS（提交前验证一致性） |
 | 文件移动/重命名 | grep 全项目旧路径 → 修复所有引用 → grep 确认零残留 |
+| 新增/修改配置键或路径 | `settings.json`自定义键 / `paths.md`路径 → grep 全项目确认消费者存在 |
 
 > 表格是"最少必须检查"——如果发现其他引用点，一并修复。
 

@@ -14,7 +14,6 @@ last_updated: 2026-07-07
 - 当前状态: `关于我/current.md`
 - 分析质量标准: `docs/analysis-standards.md`
 - 复盘方法论: `docs/methodology-review.md`
-- 日志写法: `docs/methodology-journal.md`
 - 每日反馈: `复盘/每日反馈/YYYY-MM-DD.md`
 - 视角定义: `perspectives/{视角名}.md`
 - 月度视角分析（中间产物）: `关于我/Analysis/{视角}/YYYY-MM-{视角}.md`
@@ -40,3 +39,4 @@ last_updated: 2026-07-07
 - `关于我/focus-personal.md` — 功能已并入 coach 视角分析
 - `07 Context/` 目录 — 已迁移至 `关于我/`
 - `06 Agenda/Journal/` — 已迁移至 `日志/`
+- `docs/methodology-journal.md` — 零运行时消费者。文件保留在磁盘作为方法论文档，但不在 agent 运行时读取

@@ -8,6 +8,18 @@ last_updated: 2026-07-07
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
 ---
+## [2026-07-07] [重构] 项目遍历审计：死代码清理 + 功能冻结解除 + 预防机制 (v1.3.4 → v1.3.5)
+
+- **受影响文件**: `.claude/shared/paths.md`, `docs/specs/csv-export.md→_archived/`, `README.md`, `PROJECT_STATUS.md`, `docs/first-principles.md`, `docs/specs/evolution-roadmap.md`, `CLAUDE.md`, `VERSION`, `data/.gitkeep`, `output/.gitkeep`
+- **改动摘要**: ①死代码清理：paths.md移除零消费者methodology-journal、归档僵尸spec csv-export、README结构树补全paths.md、PROJECT_STATUS补全配置表+月度报告+遗漏文件、创建data/output目录；②永久解除功能冻结：README/PROJECT_STATUS/first-principles/evolution-roadmap共5处移除冻结语言，待办从"暂缓（功能冻结期）"改为"低优先级"；③预防机制：CLAUDE.md同步检查清单新增反向消费者检查（配置/路径/文件三级）+高风险管理表新增行+同步验证新增零死配置检查
+
+---
+## [2026-07-07] [重构] 清理 settings.json 死配置：移除 journaling 块 (v1.3.3 → v1.3.4)
+
+- **受影响文件**: `.claude/settings.json`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 删除 settings.json 中整个 journaling 块（含 fallback_paths）——该配置自 v1.2.0 创建以来无任何代码消费；README 配置说明替换为 paths.md 引用；PROJECT_STATUS 已知问题 #1/#7 和决策记录同步更新
+
+---
 ## [2026-07-07] [文档] 审计修复：9处跨文件不一致 (v1.3.2 → v1.3.3)
 
 - **受影响文件**: `PROJECT_STATUS.md`, `.claude/agents/daily-analyzer.md`, `docs/analysis-standards.md`, `README.md`, `.claude/workflows/monthly-review.js`, `.claude/skills/log.md`, `.claude/commands/import.md`, `.claude/agents/monthly-processor.md`, `VERSION`

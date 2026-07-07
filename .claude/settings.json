@@ -24,20 +24,6 @@
 ]
 
   },
-  "journaling": {
-    "journal_path": "日志/",
-    "weekly_path": "日志/周志/",
-    "monthly_path": "日志/月志/",
-    "output_path": "复盘/",
-    "context_path": "关于我/",
-    "fallback_paths": {
-      "journal": "06 Agenda/Journal/",
-      "weekly": "06 Agenda/Weekly/",
-      "monthly": "06 Agenda/Monthly/",
-      "output": "07 Context/Analysis/",
-      "context": "07 Context/"
-    }
-  },
   "permissions": {
     "allow": ["Edit", "Write", "Bash"],
     "deny": []
