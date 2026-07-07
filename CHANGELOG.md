@@ -8,6 +8,12 @@ last_updated: 2026-07-07
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
 ---
+## [2026-07-07 18:23] [配置] 规则合理化：同步检查分级、Superpowers 条件化、根目录约束校准 (v1.3.11 → v1.3.12)
+
+- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `VERSION`
+- **改动摘要**: 审查现有规则后修复三类不合理点：① 将文档同步检查从“每次全量”改为轻量/标准/全量三级，降低小改动摩擦；② 将 Superpowers 从无条件强制改为“环境提供时触发，不可用时回退内置流程”，避免不可执行规则阻塞任务；③ 将根目录规则从不符合现状的“≤8个核心文件”校准为当前允许的10个核心/元数据文件，并明确 AGENTS.md 与 CLAUDE.md 是跨工具镜像规范，修改一份必须同步另一份。
+
+---
 ## [2026-07-07 18:14] [配置] 提交流程改为改动后自动本地提交，推送仍手动执行 (v1.3.10 → v1.3.11)
 
 - **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `.claude/commands/commit.md`, `.claude/settings.json`, `.codex/hooks.json`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `VERSION`

@@ -4,18 +4,18 @@
 
 **冲突解决**：当多条规则冲突时，具体规则优先于通用规则，编号大的规则优先于编号小的规则。
 
-**跳过阈值**：以下情况可跳过非必要规则（不含 Superpowers 集成，见「六、工作流控制」），直接执行：
+**跳过阈值**：以下情况可跳过非必要规则（不含可用的 Superpowers 集成，见「六、工作流控制」），直接执行：
 - 纯信息查询、阅读文件回答问题
 - 单文件小改动（<20 行变更）
 - 用户明确说"直接改"/"跳过"/"不用走流程"
 - 用户执行日志分析操作（粘贴日志、/daily-review、/weekly-review、/monthly-review、/journal-coach 等）——仅需验证目标日志文件存在，跳过上下文加载（一、上下文加载）和用户状态检测
 
-> ⚠️ **Superpowers 例外**：即使满足以上跳过条件，superpowers 技能调用规则（「六、工作流控制 → Superpowers 集成」）不受跳过阈值影响。Superpowers 技能的判断独立于 CLAUDE.md 的跳过逻辑——两者并行评估，各自触发。
+> ⚠️ **Superpowers 例外**：仅当当前环境实际提供 superpowers 技能时，即使满足以上跳过条件，也按「六、工作流控制 → Superpowers 集成」评估是否触发。若环境未提供这些技能，不阻塞任务，回退到本文件的 Spec-Before-Code / 调试 / 验证流程。
 
 ### 维护边界
 
 - **唯一运行真相**：`.claude/`。Claude Code Skill 的产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
-- **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。需求增删改、文档同步、版本管理、目录规则以这两份规范为准。
+- **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。两份文件是跨工具镜像规范：改动任意一份时必须同步另一份，避免 Codex 与 Claude Code 看到不同规则。
 - **Codex 边界**：`.codex/` 不作为产品逻辑维护面。允许保留 `.codex/hooks.json` 等 Codex 开发辅助配置（如未提交提醒），但不得承载日志分析、agent 定义、workflow 编排等产品逻辑；不得手工维护 `.codex/agents/` 作为第二套 agent 真相。如未来需要 Codex 专属 agent，必须从 `.claude/agents/` 自动生成，而不是手写双份。
 
 ### 日志粘贴处理
@@ -147,7 +147,15 @@
 
 ### 文档自动同步
 
-改动完成后、追加 CHANGELOG 之前，按以下顺序执行同步检查。
+改动完成后、追加 CHANGELOG 之前，按风险等级执行同步检查。目标是保证一致性，不把小改动拖成全项目审计。
+
+#### 同步等级
+
+| 等级 | 触发条件 | 必做检查 |
+|------|---------|---------|
+| **轻量** | 单文件小改动（<20 行）、措辞/注释/格式修正、不影响路径/版本/命令/代理/视角/配置 | 检查被改文件内链接有效；如有版本号则做版本一致性；追加 CHANGELOG；自动本地提交 |
+| **标准** | 默认等级；涉及多个文档、命令描述、agent/perspective 文案、README/PROJECT_STATUS 同步 | 执行下方同步检查清单中与本次改动相关的项目 + 同步验证 |
+| **全量** | 涉及版本号、路径约定、文件移动/删除、新增/删除命令/代理/视角、settings.json、`.claude/shared/paths.md`、禁用词、目录结构 | 执行完整同步检查清单、高风险管理表和同步验证 |
 
 #### 同步检查清单（按优先级排序）
 
@@ -164,7 +172,7 @@
 
 4. **路径约定同步**：如果本次变更了 `.claude/shared/paths.md` 中定义的路径，grep 全项目确认无其他文件残留旧路径硬编码。paths.md 是路径的**单一权威来源**——所有 agent 应通过它获取路径，而非硬编码
 
-5. **反向消费者检查**（每次改动后必执行，防止死代码积累）：
+5. **反向消费者检查**（标准/全量检查时执行，防止死代码积累）：
    - **配置消费者**：对于 settings.json 中每个非标准顶级键（非 hooks/permissions/env），grep 全项目确认 settings.json 自身外至少有一个消费者文件引用该键名
    - **路径消费者**：对于 paths.md「输入路径」和「输出路径」节中每个路径模式，grep 全项目 agent/command/workflow 文件确认至少有一个引用其静态前缀
    - **文件消费者**：对于 docs/specs/ 下每个非模板 spec 文件，确认其被 README 或 PROJECT_STATUS 引用
@@ -172,12 +180,12 @@
 
 #### 同步验证（必执行）
 
-上述检查全部完成后，执行以下验证。任一失败则修复后重新验证：
+按同步等级完成检查后，执行以下验证。任一失败则修复后重新验证：
 
 1. **版本一致性**：`cat VERSION` = `grep "当前版本" PROJECT_STATUS.md` = README.md 徽章中的版本号
 2. **路径有效性**：grep 所有 .md 文件中的相对链接 `[text](path.md)`，确认目标文件存在
 3. **无残留旧引用**：如有旧名称/旧路径/旧版本号，`grep -r "旧值" --include="*.md"` 确认全项目零残留
-4. **零死配置**：grep settings.json 中每个自定义键名和 paths.md 中每个路径模式，确认 settings.json/paths.md 自身外至少有一个消费者文件
+4. **零死配置**：标准/全量检查时，grep settings.json 中每个自定义键名和 paths.md 中每个路径模式，确认 settings.json/paths.md 自身外至少有一个消费者文件
 
 验证通过后方可追加 CHANGELOG。
 
@@ -198,7 +206,7 @@
 
 > 表格是"最少必须检查"——如果发现其他引用点，一并修复。
 
-以上检查与 CHANGELOG 追加一同在响应结束前完成，无需用户提醒。
+所选等级的检查与 CHANGELOG 追加一同在响应结束前完成，无需用户提醒。
 
 ### 提交与推送
 
@@ -239,7 +247,7 @@
 
 ## 五、目录管理
 
-根目录仅保留核心文件（≤8个）：`README.md`、`LICENSE`、`CLAUDE.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`.gitignore`。其他文件按类型归入子目录。
+根目录仅保留核心文件与仓库元数据（当前允许 10 个）：`README.md`、`LICENSE`、`AGENTS.md`、`CLAUDE.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`.gitignore`、`.gitattributes`、`SETUP.md`。其他文件按类型归入子目录。
 
 | 目录 | 用途 | 版本控制 |
 |------|------|---------|
@@ -262,7 +270,7 @@
 
 ### Superpowers 集成
 
-当用户执行开发任务（需求增删改测试等）时，**自动**根据任务类型调用对应的 superpowers 技能，无需用户手动输入 skill 名。Superpowers 调用独立于 CLAUDE.md 的「跳过阈值」——即使改动 <20 行，仍须评估是否需要 superpowers 技能。
+当用户执行开发任务（需求增删改测试等）且当前环境实际提供对应 superpowers 技能时，**自动**根据任务类型调用。若技能不可用，不报错、不阻塞，改用本文件内置流程：需求先澄清/写 spec，bug 先定位复现，改动后按同步等级验证。
 
 #### 场景 → 技能映射
 
@@ -281,9 +289,9 @@
 
 #### 与 Spec-Before-Code 的关系
 
-- `superpowers:brainstorming` + `superpowers:writing-plans` ≈ Spec-Before-Code 流程。两者目标一致（先规划再编码）。
-- **优先级**：superpowers 先触发。brainstorming 阶段产出方案方向 → writing-plans 产出实施计划。如果 writing-plans 产出的计划与 Spec-Before-Code 的 spec 文件格式兼容，直接复用为 spec 文件。
-- **不重复**：如果 superpowers 已产出完整计划，不再重复走 Spec-Before-Code 的 spec 创建流程。两者合并为一条路径。
+- 可用时，`superpowers:brainstorming` + `superpowers:writing-plans` ≈ Spec-Before-Code 流程。两者目标一致（先规划再编码）。
+- **优先级**：如果 superpowers 可用，superpowers 先触发。brainstorming 阶段产出方案方向 → writing-plans 产出实施计划。如果 writing-plans 产出的计划与 Spec-Before-Code 的 spec 文件格式兼容，直接复用为 spec 文件。
+- **不重复**：如果 superpowers 已产出完整计划，不再重复走 Spec-Before-Code 的 spec 创建流程。若 superpowers 不可用，直接使用下方 Spec-Before-Code 流程。
 
 #### 何时不调用
 
@@ -312,7 +320,7 @@
 
 收到新功能需求时，不得直接编码。触发条件：用户提出"新增/添加/实现"需求、需创建新文件、需修改核心行为逻辑。Bug 修复/文档更新/小改动可跳过。
 
-> 🔗 **与 Superpowers 的协作**：新功能需求先走 `superpowers:brainstorming` → `superpowers:writing-plans`（见上方「Superpowers 集成」）。若 writing-plans 产出计划足够详细，直接以此计划替代下方 spec 文件流程——不重复创建 spec。若 superpowers 因故未触发，则回退到以下标准流程。
+> 🔗 **与 Superpowers 的协作**：如果当前环境提供 superpowers，新功能需求先走 `superpowers:brainstorming` → `superpowers:writing-plans`（见上方「Superpowers 集成」）。若 writing-plans 产出计划足够详细，直接以此计划替代下方 spec 文件流程——不重复创建 spec。若 superpowers 不可用或未触发，则使用以下标准流程。
 
 流程：
 1. 在 `docs/specs/` 创建 `<功能名>.md`（需求目标 + 边界约束 + 验收标准 + 实施计划 + 状态），参考 `docs/specs/_TEMPLATE.md`

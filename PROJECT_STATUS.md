@@ -5,7 +5,7 @@ last_updated: 2026-07-07
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.11
+**当前版本**：1.3.12
 
 ## 项目概述
 
@@ -224,3 +224,4 @@ last_updated: 2026-07-07
 | 2026-07-07 | 制定产品进化路线图 | 见 [docs/specs/evolution-roadmap.md](docs/specs/evolution-roadmap.md)。采用 A→B 渐进路线：先验证核心假设（Skill极致化），再扩大用户群（Bot/集成形态），最后评估全栈SaaS |
 | 2026-07-07 | `.claude/` 作为唯一运行真相，停用 `.codex/agents` | 项目目标是 Claude Code Skill，产品逻辑只维护 `.claude/`，Codex 仅作为开发助手和开发辅助 hook 配置面。删除手写 `.codex/agents` 并停用 Codex 日志触发 hook，可避免 agent 定义与日志入口双份漂移；未来如需 Codex 专属 agent，必须从 `.claude/agents` 自动生成 |
 | 2026-07-07 | 改动完成后自动执行本地提交，推送仍由用户手动执行 | 代码/文档改动完成、CHANGELOG 记录且验证通过后，AI 自动执行 `/提交` 对应的本地 add/commit 流程，减少遗忘提交的摩擦；远程推送保持手动 `git push`，避免未经确认发布 |
+| 2026-07-07 | 规则执行改为风险分级，Superpowers 条件化 | 将文档同步检查拆分为轻量/标准/全量三级，避免小改动被全项目审计拖慢；Superpowers 改为“环境提供时自动触发”，不可用时回退到内置 spec/debug/verification 流程，避免规则要求不可执行能力 |
