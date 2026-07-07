@@ -5,7 +5,7 @@ last_updated: 2026-07-07
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.18
+**当前版本**：1.3.19
 
 ## 项目概述
 
@@ -232,3 +232,4 @@ last_updated: 2026-07-07
 | 2026-07-07 | 路径与 hook 语义契约化 | 将 `paths.md` 从路径清单升级为命名 key + 创建责任契约；`prompt-rules.md` 增加共享文件读取顺序、hook 路由边界和禁用词同步规则；`settings.json` 保持薄路由，减少路径、触发词和质量门在 agent/command/workflow 间漂移 |
 | 2026-07-07 | Workflow 共享运行时 helper | 新增 `.claude/workflows/shared.js`，集中维护周/月/年 workflow 共用的视角注册表、模式定义、报告路径模板、聊天摘要提取与质量门；入口 workflow 只保留各自编排差异，降低禁用词、摘要规则、核心视角和报告路径漂移 |
 | 2026-07-07 | `.agents/skills/superpowers/` 作为本地 AI 辅助目录 | 该目录方便 AI 在本项目使用 Superpowers 技能，但不属于 Claude Code Skill 产品逻辑；通过 `.gitignore` 忽略，避免进入运行真相或提交历史 |
+| 2026-07-07 | 月度综合先做主题归并再写章节 | 月度综合引擎先从视角分析提取候选发现并压缩为 2-3 个主主题，再映射进既有报告骨架；视角不再天然充当月报结构，优先减少“按视角拼贴”的读感 |

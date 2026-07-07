@@ -73,7 +73,7 @@ var synthResult = await agent(
     summaryShape: '3个关键发现+1个建议',
     successfulCount: successful.length,
     combinedAnalyses: formatAnalyses(activePerspectives, analyses),
-    extraInstruction: '不要重新读取原始日志、方法论文档或质量标准文档。所有必要数据已在下方视角分析中；细节不确定时交叉引用视角分析。',
+    extraInstruction: '不要重新读取原始日志、方法论文档或质量标准文档。所有必要数据已在下方视角分析中；细节不确定时交叉引用视角分析。按主题综合，不按视角顺序展开。',
   }),
   { label: '综合引擎', phase: 'Synthesize', agentType: 'monthly-synthesis' }
 )

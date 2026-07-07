@@ -5,6 +5,11 @@ last_updated: 2026-07-07
 
 # CHANGELOG — 改动记录
 
+## [2026-07-07 23:51] [重构] 收紧月度综合引擎：先归并主题，再映射报告骨架 (v1.3.18 → v1.3.19)
+
+- **受影响文件**: `.claude/agents/monthly-synthesis.md`, `.claude/workflows/monthly-review.js`, `docs/specs/monthly-synthesis-theme-compression.md`, `docs/superpowers/plans/2026-07-07-monthly-synthesis-theme-compression.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 为月度综合引擎增加“候选发现提取 → 主题归并 → 弱信号降权 → 映射既有章节骨架”的硬步骤，并要求整份月报只保留 2-3 个主主题、每个主题都附支持视角、关键证据与反例/证据不足说明；同时在月度 workflow 的综合交接指令中补充“按主题综合，不按视角顺序展开”，以减少月报读感上的视角拼贴。
+
 ## [2026-07-07 22:09] [重构] 抽取 workflow 共享 helper，统一摘要质量门与路径模板 (v1.3.17 → v1.3.18)
 
 - **受影响文件**: `.claude/workflows/shared.js`, `.claude/workflows/weekly-review.js`, `.claude/workflows/monthly-review.js`, `.claude/workflows/yearly-review.js`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `.claude/commands/commit.md`, `.claude/commands/yearly-review.md`, `docs/analysis-standards.md`, `docs/specs/audit-cleanup.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `docs/superpowers/plans/2026-07-07-workflow-shared-optimization.md`
@@ -36,8 +41,6 @@ last_updated: 2026-07-07
 - **改动摘要**: 新增共享提示词规则，集中维护路径、证据、输出契约和质量门槛；精简 daily/weekly/monthly/yearly 四个高重复 agent 的提示词，保留原有命令入口、输出路径、文件名和报告结构；同步 README、PROJECT_STATUS 与版本号至 v1.3.13。
 
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
-
----
 ## [2026-07-07 18:23] [配置] 规则合理化：同步检查分级、Superpowers 条件化、根目录约束校准 (v1.3.11 → v1.3.12)
 
 - **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `VERSION`
