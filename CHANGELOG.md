@@ -5,6 +5,11 @@ last_updated: 2026-07-07
 
 # CHANGELOG — 改动记录
 
+## [2026-07-07 21:40] [重构] 优化日反馈链路：统一契约、收短输出、稳定闭环验证 (v1.3.15 → v1.3.16)
+
+- **受影响文件**: `.claude/agents/daily-analyzer.md`, `.claude/commands/daily-review.md`, `.claude/skills/log.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/paths.md`, `docs/analysis-standards.md`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 将日反馈契约集中到共享提示词规则，要求 `/daily-review` 与 `log` skill 统一调用 `daily-analyzer`，避免两套即时分析格式分叉；D0-D6 改为内部质量门，不再输出自检行；补全日志输入路径权威定义，修正 `/daily-review` 工具权限与中文错误提示；回归检查 7/4-7/6 既有反馈，确认新契约针对 7/6 过长、旧标题和预测口误风险进行了约束。
+
 ## [2026-07-07 21:21] [配置] 维护文件改为影响驱动读取与更新 (v1.3.14 → v1.3.15)
 
 - **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

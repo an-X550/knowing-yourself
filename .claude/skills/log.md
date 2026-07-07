@@ -41,11 +41,17 @@ description: 用户粘贴日志内容时自动触发。检测"幸福日志""开�
 
 ### 1.2 即时分析 + 输出 + 存档反馈
 
-遵循 `.claude/agents/daily-analyzer.md` 的完整流程（执行步骤 Step 2-6 + 输出格式 + 字数控制 + 规则），直接分析对话中的日志内容（不启动代理）。
+单日日志反馈必须和 `/daily-review` 走同一套输出格式：
+
+1. 完成存档后，用 Task 启动 `daily-analyzer`：
+   ```text
+   Analyze YYYY-MM-DD
+   ```
+2. 不要在 `log` skill 内手写另一套分析流程；如 Task 不可用，再按 `.claude/shared/prompt-rules.md` 的「日反馈输出契约」和 `.claude/agents/daily-analyzer.md` 的输出格式临时回退。
 
 分析完成后：
 1. 将输出展示给用户
-2. Bash `mkdir -p 复盘/每日反馈` → Write 保存到 `复盘/每日反馈/YYYY-MM-DD.md`（覆盖已有）
+2. Bash `mkdir -p 复盘/每日反馈` → Write 保存到 `复盘/每日反馈/YYYY-MM-DD.md`（覆盖已有，不添加额外说明或自检行）
 
 ---
 

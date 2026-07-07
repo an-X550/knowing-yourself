@@ -10,6 +10,9 @@ last_updated: 2026-07-07
 
 ## 输入路径（agent 运行时读取）
 
+- 日志目录: `日志/`
+- 独立日记: `日志/YYYY-MM-DD.md`
+- 合并月日志: `日志/*YYYY*M月*.md` 或 `日志/*YYYY-MM*.md`
 - 核心画像: `关于我/core-profile.md`
 - 当前状态: `关于我/current.md`
 - 分析质量标准: `docs/analysis-standards.md`
