@@ -3,7 +3,7 @@
 > 🎯 AI 日志分析教练 — 让 AI 帮你发现你自己看不见的行为模式
 
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.3.13-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.3.14-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 平台的 AI 日志分析与复盘教练 Skill。它通过多个专业视角并行分析你的每日日志，最终综合为结构化的复盘报告，帮助你进行自我认知、成长追踪和复盘改进。
@@ -115,6 +115,7 @@
 - **唯一运行真相**：`.claude/`。Claude Code Skill 的产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
 - **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。需求增删改、文档同步、版本管理、目录规则以这两份规范为准。
 - **Codex 边界**：`.codex/` 只保留 Codex 开发辅助配置（如未提交提醒 hook），不作为产品逻辑维护面；`.codex/agents/` 不手工维护。如未来需要 Codex 专属 agent，必须从 `.claude/agents/` 自动生成。
+- **本地 AI 辅助边界**：`.agents/skills/superpowers/` 可作为本地开发辅助目录，方便 AI 使用 Superpowers 技能；该目录已 gitignore，不属于产品运行真相。
 
 ---
 
@@ -332,6 +333,7 @@
 | `规划/` | 个人计划与日程 |
 | `.vscode/` | 本地编辑器配置 |
 | `.codex/agents/` | 不维护的 Codex agent 手写副本 |
+| `.agents/skills/superpowers/` | 本地 AI 开发辅助技能目录 |
 
 ---
 

@@ -17,6 +17,7 @@
 - **唯一运行真相**：`.claude/`。Claude Code Skill 的产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
 - **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。两份文件是跨工具镜像规范：改动任意一份时必须同步另一份，避免 Codex 与 Claude Code 看到不同规则。
 - **Codex 边界**：`.codex/` 不作为产品逻辑维护面。允许保留 `.codex/hooks.json` 等 Codex 开发辅助配置（如未提交提醒），但不得承载日志分析、agent 定义、workflow 编排等产品逻辑；不得手工维护 `.codex/agents/` 作为第二套 agent 真相。如未来需要 Codex 专属 agent，必须从 `.claude/agents/` 自动生成，而不是手写双份。
+- **本地 AI 辅助边界**：`.agents/skills/superpowers/` 可作为本地开发辅助目录，方便 AI 在本项目使用 Superpowers 技能；该目录已 gitignore，不属于产品运行真相，也不得承载日志分析、agent 定义或 workflow 编排。
 
 ### 日志粘贴处理
 

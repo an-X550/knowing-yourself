@@ -5,7 +5,7 @@ last_updated: 2026-07-07
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.13
+**当前版本**：1.3.14
 
 ## 项目概述
 
@@ -36,6 +36,7 @@ last_updated: 2026-07-07
 - **唯一运行真相**：`.claude/`。Claude Code Skill 的产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
 - **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。需求增删改、文档同步、版本管理、目录规则以这两份规范为准。
 - **Codex 边界**：`.codex/` 只保留 Codex 开发辅助配置（如未提交提醒 hook），不作为产品逻辑维护面；`.codex/agents/` 已停用并忽略，避免与 `.claude/agents/` 形成双份手写真相。
+- **本地 AI 辅助边界**：`.agents/skills/superpowers/` 可作为本地开发辅助目录，方便 AI 使用 Superpowers 技能；该目录已 gitignore，不属于产品运行真相。
 
 ## 架构设计
 
@@ -226,3 +227,4 @@ last_updated: 2026-07-07
 | 2026-07-07 | 改动完成后自动执行本地提交，推送仍由用户手动执行 | 代码/文档改动完成、CHANGELOG 记录且验证通过后，AI 自动执行 `/提交` 对应的本地 add/commit 流程，减少遗忘提交的摩擦；远程推送保持手动 `git push`，避免未经确认发布 |
 | 2026-07-07 | 规则执行改为风险分级，Superpowers 条件化 | 将文档同步检查拆分为轻量/标准/全量三级，避免小改动被全项目审计拖慢；Superpowers 改为“环境提供时自动触发”，不可用时回退到内置 spec/debug/verification 流程，避免规则要求不可执行能力 |
 | 2026-07-07 | 提示词共享规则集中化 | 将跨 agent 重复的路径、证据、输出契约和质量门槛抽到 `.claude/shared/prompt-rules.md`，减少 synthesis/daily agent 的重复叙述，同时保持命令入口、输出路径和报告结构不变 |
+| 2026-07-07 | `.agents/skills/superpowers/` 作为本地 AI 辅助目录 | 该目录方便 AI 在本项目使用 Superpowers 技能，但不属于 Claude Code Skill 产品逻辑；通过 `.gitignore` 忽略，避免进入运行真相或提交历史 |

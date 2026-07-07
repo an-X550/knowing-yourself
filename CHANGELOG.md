@@ -5,6 +5,11 @@ last_updated: 2026-07-07
 
 # CHANGELOG — 改动记录
 
+## [2026-07-07 19:25] [配置] 忽略本地 Superpowers 辅助目录并明确维护边界 (v1.3.13 → v1.3.14)
+
+- **受影响文件**: `.gitignore`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 将 `.agents/skills/superpowers/` 标记为本地 AI 开发辅助目录并加入 `.gitignore`，明确其方便 AI 使用 Superpowers 技能但不属于 `.claude/` 产品运行真相；同步 AGENTS/CLAUDE 镜像规范、README、PROJECT_STATUS 与版本号至 v1.3.14。
+
 ## [2026-07-07 19:10] [重构] 提示词去重：新增共享规则并精简高重复 agent (v1.3.12 → v1.3.13)
 
 - **受影响文件**: `.claude/shared/prompt-rules.md`, `.claude/agents/daily-analyzer.md`, `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `docs/superpowers/plans/2026-07-07-prompt-dedup-optimization.md`
