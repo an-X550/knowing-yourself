@@ -5,7 +5,7 @@ last_updated: 2026-07-07
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.2.0
+**当前版本**：1.3.1
 
 ## 项目概述
 
@@ -26,7 +26,7 @@ last_updated: 2026-07-07
 | **运行平台** | Claude Code CLI / VSCode Extension |
 | **内容格式** | Markdown + YAML frontmatter |
 | **代理系统** | Claude Code Sub-agents（6个专用代理） |
-| **命令系统** | Claude Code Slash Commands（7个命令） |
+| **命令系统** | Claude Code Slash Commands（9个命令） |
 | **配置** | JSON（settings.json） |
 | **版本控制** | Git + 语义化版本（见 VERSION） |
 | **语言** | 中文（内容）、英文（配置字段） |
@@ -72,7 +72,7 @@ last_updated: 2026-07-07
 
 ## 当前进度
 
-### 命令（8/8）完成
+### 命令（9/9）完成
 
 | 命令 | 文件 | 状态 |
 |------|------|------|
@@ -84,6 +84,7 @@ last_updated: 2026-07-07
 | `/journal-coach` | `.claude/commands/journal-coach.md` | 完成 |
 | `/interview` | `.claude/commands/interview.md` | 完成 |
 | `/update-current` | `.claude/commands/update-current.md` | 完成 |
+| **`/提交`** 🆕 | `.claude/commands/commit.md` | 完成（一键 add/commit/push） |
 
 ### 代理（6/6）完成
 

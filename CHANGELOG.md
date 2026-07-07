@@ -8,6 +8,17 @@ last_updated: 2026-07-07
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
 ---
+## [2026-07-07] [文档] README 项目状态同步：版本号/命令数/代理表/结构树修复 (v1.3.0 → v1.3.1)
+
+- **受影响文件**: `README.md`, `VERSION`, `PROJECT_STATUS.md`
+- **改动摘要**: README 版本号从 1.1.0 同步至 1.3.0；命令数量从 8→10 并补回 commit.md；代理表格删除重复的 monthly-processor 行；项目结构树补回 shared/、archive/、perspectives/README.md；命令系统表新增 /提交；Git忽略规则表新增 规划/
+
+## [2026-07-07] [功能] Git 自动化：/提交 命令 + 未提交改动提醒 (v1.2.0 → v1.3.0)
+
+- **受影响文件**: `.claude/commands/commit.md`（新建）, `.claude/settings.json`, `CLAUDE.md`, `VERSION`, `PROJECT_STATUS.md`
+- **改动摘要**: 新增 /提交 斜杠命令实现 git add/commit/push 一键操作，提交信息自动提取自 CHANGELOG 最新条目；新增 Stop 钩子在会话结束时提醒未提交改动；CLAUDE.md 改动追踪章节新增提交与推送提示规则
+
+---
 
 ## [2026-07-07] [重构] 两轮第一性原理审计清理：消除冗余、统一格式、建立单一权威来源 (v1.1.0 → v1.2.0)
 

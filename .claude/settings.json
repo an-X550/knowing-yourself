@@ -10,7 +10,19 @@
           }
         ]
       }
+    ],
+    "Stop": [
+  {
+    "matcher": "",
+    "hooks": [
+      {
+        "type": "command",
+        "command": "bash -c 'STATUS=$(git status --porcelain 2>/dev/null); if [ -n \"$STATUS\" ]; then echo; echo \"⚠️ 提醒：你有未提交的代码改动。输入 /提交 即可一键提交推送。\"; echo; fi'"
+      }
     ]
+  }
+]
+
   },
   "journaling": {
     "journal_path": "日志/",
@@ -27,6 +39,7 @@
     }
   },
   "permissions": {
-    "allow": ["Edit", "Write", "Bash"]
+    "allow": ["Edit", "Write", "Bash"],
+    "deny": []
   }
 }

@@ -3,7 +3,7 @@
 > 🎯 AI 日志分析教练 — 让 AI 帮你发现你自己看不见的行为模式
 
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.1.0-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.3.0-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 平台的 AI 日志分析与复盘教练 Skill。它通过多个专业视角并行分析你的每日日志，最终综合为结构化的复盘报告，帮助你进行自我认知、成长追踪和复盘改进。
@@ -142,6 +142,7 @@
 | `/interview` | 问答式建立个人画像（核心价值观、优势、目标等） |
 | `/update-current` | 从最近日志自动更新当前状态快照 |
 | `/import` | 导入外部日志文件（支持单日/多日/任意路径） |
+| **`/提交`** 🆕 | 一键 git add/commit/push，提交信息自动提取自 CHANGELOG |
 
 ### 自动触发
 
@@ -190,7 +191,6 @@
 | `daily-analyzer` | 分析单日日志：昨日检查→模式反思→盲点检测→原子行动+预测 |
 | `monthly-processor` | 以指定视角处理月度/周度日志，输出结构化分析 |
 | `weekly-synthesis` | 综合3个核心视角分析，生成复盘六问结构的周报告 |
-| `monthly-processor` | 以指定视角处理整月日志，输出结构化分析 |
 | `monthly-synthesis` | 综合6-9个视角分析，生成主题化月度报告 |
 | `yearly-synthesis` | 综合12份月度报告，生成年度成长回顾 |
 | `review-readiness-checker` | 轻量检测：当前是否适合建议复盘（周/月/年） |
@@ -252,7 +252,7 @@
 │   │   ├── monthly-synthesis.md
 │   │   ├── yearly-synthesis.md
 │   │   └── review-readiness-checker.md
-│   ├── commands/             # 8个斜杠命令
+│   ├── commands/             # 10个斜杠命令
 │   │   ├── review.md         # 🔥 统一入口
 │   │   ├── daily-review.md
 │   │   ├── weekly-review.md
@@ -261,21 +261,27 @@
 │   │   ├── journal-coach.md
 │   │   ├── interview.md
 │   │   ├── update-current.md
-│   │   └── import.md
+│   │   ├── import.md
+│   │   └── commit.md          # /提交 一键 Git 提交推送
 │   ├── skills/               # 技能定义
 │   │   └── log.md            # 日志存档技能
+│   ├── shared/               # 共享配置
+│   │   └── banned-phrases.json # 禁用词列表
 │   ├── workflows/            # Workflow 编排脚本
 │   │   ├── monthly-review.js
 │   │   ├── weekly-review.js
 │   │   └── yearly-review.js
 │   └── settings.json         # 路径配置 + 权限 + Hooks
 ├── docs/                     # 方法论文档
+│   ├── archive/
+│   │   └── changelog-archive.md  # 完整改动历史
 │   ├── first-principles.md   # 第一性原理行动指南
 │   ├── methodology-journal.md # 日志六步法
 │   ├── methodology-review.md  # 复盘六问
 │   ├── analysis-standards.md  # 12条分析质量标准
 │   └── specs/                # 需求规范
-├── perspectives/             # 9个分析视角
+├── perspectives/             # 9个分析视角 + 1个架构说明
+│   ├── README.md
 │   ├── chronicle.md
 │   ├── therapist.md
 │   ├── coach.md
@@ -295,7 +301,6 @@
 ├── CHANGELOG.md              # 改动记录
 ├── SETUP.md                  # 独立可复用的初始化指南
 ├── VERSION                   # 语义化版本号
-
 ├── LICENSE                   # MIT
 └── .gitignore
 ```
@@ -309,6 +314,7 @@
 | `日志/` | 每日日志原始文件 |
 | `复盘/` | 生成的分析报告 |
 | `关于我/` | 个人画像与快照 |
+| `规划/` | 个人计划与日程 |
 | `.vscode/` | 本地编辑器配置 |
 
 ---
@@ -350,7 +356,7 @@
 | 新功能（向后兼容） | 0.19.0 → 0.20.0 |
 | 破坏性变更 | 0.19.0 → 1.0.0 |
 
-当前版本：**1.1.0** — 功能冻结期，聚焦使用而非开发。
+当前版本：**1.3.1** — 功能冻结期，聚焦使用而非开发。
 
 ---
 
