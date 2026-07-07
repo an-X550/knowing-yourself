@@ -1,5 +1,5 @@
 ---
-description: 从选定视角并行处理日志，生成主题化月度综合复盘报告。支持 fast(3)/standard(6)/full(9) 三种模式及自定义视角
+description: 从选定视角并行处理日志，先生成视角证据包，再综合为主题化月度复盘报告。支持 fast(3)/standard(6)/full(9) 三种模式及自定义视角
 allowed-tools:
   - Task
   - Glob
@@ -8,7 +8,7 @@ allowed-tools:
 
 # 月度复盘命令
 
-通过选定视角并行处理日志，综合为主题化最终报告。支持 fast(3核心视角)/standard(6生活视角,默认)/full(9全视角) 三种模式，也可自定义视角组合。
+通过选定视角并行处理日志，先生成视角证据包/综合材料，再由综合引擎收敛为主题化最终报告。支持 fast(3核心视角)/standard(6生活视角,默认)/full(9全视角) 三种模式，也可自定义视角组合。
 
 ## 输入
 
@@ -49,8 +49,8 @@ Workflow({ name: "monthly-review", args: { month: "YYYY-MM", mode: "standard|fas
 
 Workflow 负责：
 - 按模式解析视角列表（fast: 3核心 / standard: 6生活 / full: 9全视角）
-- 并行运行视角代理（复用 `monthly-processor`）
-- 运行 `monthly-synthesis` 综合引擎
+- 并行运行视角代理（复用 `monthly-processor`），生成各视角证据包
+- 运行 `monthly-synthesis` 综合引擎，按主题归并这些证据包
 - 输出 `paths.md` 的 `output.monthly_report`
 
 **也支持自定义视角**：`args: { month: "YYYY-MM", perspectives: ["therapist", "coach"] }`
@@ -66,21 +66,21 @@ Workflow 会自动报告进度和最终结果。
 ```
 [月份 年份]月度复盘完成！
 
-视角分析已创建：
+视角证据包已创建：
 - output.perspective_analysis（按本次选中的视角生成）
 
-最终报告：output.monthly_report
+主题化最终报告：output.monthly_report
 ```
 
 ## 错误处理
 
 - 如果目标月份无日志："未找到 [月份] 的日志条目，无法生成复盘。"
 - 如果某视角失败：记录失败的视角，继续处理其余视角，在最终输出中警告
-- 如果综合失败：报告错误，说明视角文件仍已创建
+- 如果综合失败：报告错误，说明视角证据包仍已创建
 
 ## 备注
 
 - 此命令编排已有代理——不直接处理日志
-- monthly-processor 代理负责每个视角的分析
-- monthly-synthesis 代理负责创建最终主题报告
-- 所有视角分析文件均保留供将来参考
+- monthly-processor 代理负责为每个视角生成月度证据包
+- monthly-synthesis 代理负责将这些证据包压缩为最终主题报告
+- 所有视角分析文件均保留供将来参考，不会在命令层被当作最终月报读回

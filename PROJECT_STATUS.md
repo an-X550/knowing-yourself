@@ -5,7 +5,7 @@ last_updated: 2026-07-08
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.21
+**当前版本**：1.3.22
 
 ## 项目概述
 
@@ -86,7 +86,7 @@ last_updated: 2026-07-08
 | **`/review`** 🔥 | `.claude/commands/review.md` | 完成（统一入口，智能路由，自然语言） |
 | `/daily-review` | `.claude/commands/daily-review.md` | 完成 |
 | `/weekly-review` | `.claude/commands/weekly-review.md` | 完成 |
-| `/monthly-review` | `.claude/commands/monthly-review.md` | 完成（支持 fast/standard/full + 零配置默认） |
+| `/monthly-review` | `.claude/commands/monthly-review.md` | 完成（支持 fast/standard/full + 零配置默认；v1.3.22 对齐“证据包 -> 主题综合”链路表述） |
 | `/yearly-review` | `.claude/commands/yearly-review.md` | 完成 |
 | `/journal-coach` | `.claude/commands/journal-coach.md` | 完成 |
 | `/interview` | `.claude/commands/interview.md` | 完成 |

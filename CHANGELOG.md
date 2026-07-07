@@ -5,6 +5,11 @@ last_updated: 2026-07-07
 
 # CHANGELOG — 改动记录
 
+## [2026-07-08 01:20] [文档] 对齐月度复盘命令表述：先生成视角证据包，再做主题综合 (v1.3.21 → v1.3.22)
+
+- **受影响文件**: `.claude/commands/monthly-review.md`, `PROJECT_STATUS.md`, `README.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 补齐 `/monthly-review` 命令层文案，使其与已完成的月度综合链路优化保持一致：命令入口不再把并行视角输出描述成直接产出的“月报内容”，而是明确为“先生成视角证据包/综合材料，再由 `monthly-synthesis` 做主题归并并输出最终月报”；同步更新版本号与状态记录，作为第三优先级月度链路优化的命令层收口。
+
 ## [2026-07-08 00:55] [重构] 月度综合链路第2阶段：上游中间产物收紧为证据包，补做视角审计 (v1.3.20 → v1.3.21)
 
 - **受影响文件**: `.claude/agents/monthly-processor.md`, `perspectives/therapist.md`, `perspectives/values-meaning.md`, `perspectives/README.md`, `docs/specs/monthly-processor-evidence-packets.md`, `docs/superpowers/plans/2026-07-08-monthly-processor-evidence-packets.md`, `docs/specs/monthly-perspective-audit-2026-07-08.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
