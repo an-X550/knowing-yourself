@@ -1,9 +1,14 @@
 ---
 created: 2026-07-05
-last_updated: 2026-07-07
+last_updated: 2026-07-08
 ---
 
 # CHANGELOG — 改动记录
+
+## [2026-07-08 10:30] [文档] 收紧项目规范与维护文档职责，降低重复与维护成本 (v1.3.22 → v1.3.23)
+
+- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `PROJECT_STATUS.md`, `README.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将镜像规范收紧为同一份更短的规则文本，保留维护边界、版本/追踪、同步验证与工作流控制等高价值规则，删除过细的重复展开；将 `README.md` 收回到“项目说明与使用入口”，将 `PROJECT_STATUS.md` 收回到“事实状态面板”，减少它们与规范文件之间的重复叙述；同步整理 `CHANGELOG.md` 头部日期与时间线展示，并将版本号更新至 `v1.3.23`。
 
 ## [2026-07-08 01:20] [文档] 对齐月度复盘命令表述：先生成视角证据包，再做主题综合 (v1.3.21 → v1.3.22)
 
@@ -54,8 +59,6 @@ last_updated: 2026-07-07
 
 - **受影响文件**: `.claude/shared/prompt-rules.md`, `.claude/agents/daily-analyzer.md`, `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `docs/superpowers/plans/2026-07-07-prompt-dedup-optimization.md`
 - **改动摘要**: 新增共享提示词规则，集中维护路径、证据、输出契约和质量门槛；精简 daily/weekly/monthly/yearly 四个高重复 agent 的提示词，保留原有命令入口、输出路径、文件名和报告结构；同步 README、PROJECT_STATUS 与版本号至 v1.3.13。
-
-> 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 ## [2026-07-07 18:23] [配置] 规则合理化：同步检查分级、Superpowers 条件化、根目录约束校准 (v1.3.11 → v1.3.12)
 
 - **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `VERSION`
@@ -179,3 +182,7 @@ last_updated: 2026-07-07
 
 - **受影响文件**: VERSION, PROJECT_STATUS.md, CHANGELOG.md
 - **改动摘要**: 项目达到首个稳定发布版本。核心功能完整：9个视角、8个命令、6个代理、3个生命周期工作流、3层分析架构全部就绪。
+
+---
+
+> 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。

@@ -5,233 +5,150 @@ last_updated: 2026-07-08
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.22
+**当前版本**：1.3.23
 
 ## 项目概述
 
-**知己** 是一个基于 Claude Code 平台的 AI 日志分析与复盘教练 Skill。它融合了"问问大象"系统的个人成长方法论，通过多个专业视角（9个）并行分析用户的每日日志、周志和月志，最终综合为结构化报告，帮助用户进行自我认知、成长追踪和复盘改进。
+**知己** 是一个基于 Claude Code 的 AI 日志分析与复盘教练 Skill，围绕日、周、月、年的复盘节奏运行，通过多视角分析帮助用户做自我认知、成长追踪和行动改进。
 
-**用户画像**：大学生（计科专业，大三），面临秋招，主要目标为考公和实习就业。
+**目标场景**：个人长期日志记录、周期性复盘、成长模式识别。
 
 **方法论基础**：
-- 日志六步法（回忆事实 → 筛选重点 → 评估结果 → 洞察思考 → 行为改进 → 分享讨论）
-- 六维成长模型（大学适应 / 自我认知 / 探索实际 / 能力发展 / 校招技术 / 系统思考）
-- 复盘六问框架（回顾目标 → 评估结果 → 正向归因 → 负向归因 → 重来演练 → 下月规划）
+- 日志六步法
+- 六维成长模型
+- 复盘六问框架
 - 加分制评分体系
 
 ## 技术栈
 
 | 层面 | 技术 |
 |------|------|
-| **运行平台** | Claude Code CLI / VSCode Extension |
-| **内容格式** | Markdown + YAML frontmatter |
-| **代理系统** | Claude Code Sub-agents（6个专用代理） |
-| **命令系统** | Claude Code Slash Commands（10个命令） |
-| **配置** | JSON（settings.json） |
-| **版本控制** | Git + 语义化版本（见 VERSION） |
-| **语言** | 中文（内容）、英文（配置字段） |
+| 运行平台 | Claude Code CLI / VSCode Extension |
+| 内容格式 | Markdown + YAML frontmatter |
+| 命令系统 | Claude Code Slash Commands（10 个） |
+| 代理系统 | Claude Code Sub-agents（6 个） |
+| 配置 | JSON |
+| 版本控制 | Git + 语义化版本 |
+| 语言 | 中文内容 + 英文配置字段 |
 
 ### 维护边界
 
-- **唯一运行真相**：`.claude/`。Claude Code Skill 的产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
-- **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`。需求增删改、文档同步、版本管理、目录规则以这两份规范为准。
-- **Codex 边界**：`.codex/` 只保留 Codex 开发辅助配置（如未提交提醒 hook），不作为产品逻辑维护面；`.codex/agents/` 已停用并忽略，避免与 `.claude/agents/` 形成双份手写真相。
-- **本地 AI 辅助边界**：`.agents/skills/superpowers/` 可作为本地开发辅助目录，方便 AI 使用 Superpowers 技能；该目录已 gitignore，不属于产品运行真相。
+- **唯一运行真相**：`.claude/`
+- **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`
+- **Codex 边界**：`.codex/` 仅保留开发辅助配置
+- **本地 AI 辅助边界**：`.agents/skills/superpowers/` 不属于产品逻辑且不纳入提交
 
 ## 架构设计
 
-### 三层分析架构
+### 三层结构
 
+```text
+命令层 -> 用户入口与流程编排
+代理层 -> 日志读取、分析执行、综合输出
+视角层 -> 分析框架、评分标准、输出边界
 ```
-命令层 (Commands)     →  用户入口，解析参数，编排流程
-代理层 (Agents)       →  执行分析任务，读取日志，应用视角
-视角层 (Perspectives) →  定义分析框架、评分标准、输出结构
-```
 
-### 周期层次
+### 生命周期入口
 
-| 周期 | 命令 | 代理 | 深度 |
-|------|------|------|------|
-| **日** | `/daily-review` | `daily-analyzer` | 单篇日志质量评分 + 简要洞察 |
-| **周** | `/weekly-review` | `monthly-processor` ×3 + `weekly-synthesis` | 7天模式识别 + 周志评估 |
-| **月** | `/monthly-review` | `monthly-processor` x N + `monthly-synthesis` | 全视角并行分析 + 主题综合 |
-| **年** | `/yearly-review` | `yearly-synthesis` | 12月趋势综合 + 战略方向 |
-| **任意** | `/journal-coach` | `daily-analyzer` x N | 多日趋势 + 教练反馈 |
-| **—** | `/interview` | — | 问答式建立个人画像 |
-| **7天** | `/update-current` | — | 从日志更新当前状态快照 |
+| 周期 | 命令 | 核心处理 |
+|------|------|---------|
+| 日 | `/daily-review` | `daily-analyzer` |
+| 周 | `/weekly-review` | `monthly-processor` ×3 + `weekly-synthesis` |
+| 月 | `/monthly-review` | `monthly-processor` ×N + `monthly-synthesis` |
+| 年 | `/yearly-review` | `yearly-synthesis` |
+| 任意 | `/review` | `review-readiness-checker` 路由 |
 
-### 视角体系（9个）
+### 视角结构
 
-**提取器/生活内容（6个）** — 数据采集层，产出结构化数据供综合引擎消费：
-- `chronicle` — 编年史家：事实性事件、人物、活动记录
-- `coach` — 绩效教练：目标、生产力、障碍、习惯
-- `therapist` — 临床心理学家：情绪模式、应对机制、认知模式
-- `relationships` — 关系治疗师：连接感、依恋模式、社交能量
-- `strengths` — 优势观察者：基于证据的积极面、成长、未被承认的胜利
-- `values-meaning` — 哲学顾问：真实性、目的感、心流状态、价值对齐
-
-**评估器/方法论（3个）** — 独立评估层，产出评分+诊断：
-- `growth-dimensions` — 六维成长观察者：审视六维图覆盖度
-- `journal-quality` — 日志质量评估师：对照六步法评分（1-30）、诊断六大典型问题
-- `review-coach` — 复盘教练：对照复盘六问评估日志/月志/周志质量（1-30）
-
-> 两类视角的架构差异详见 [`perspectives/README.md`](perspectives/README.md)
+- **生活内容视角（6）**：`chronicle`、`coach`、`therapist`、`relationships`、`strengths`、`values-meaning`
+- **方法论视角（3）**：`growth-dimensions`、`journal-quality`、`review-coach`
 
 ## 当前进度
 
-### 命令（10/10）完成
+### 核心模块
 
-| 命令 | 文件 | 状态 |
+| 模块 | 状态 | 说明 |
 |------|------|------|
-| **`/review`** 🔥 | `.claude/commands/review.md` | 完成（统一入口，智能路由，自然语言） |
-| `/daily-review` | `.claude/commands/daily-review.md` | 完成 |
-| `/weekly-review` | `.claude/commands/weekly-review.md` | 完成 |
-| `/monthly-review` | `.claude/commands/monthly-review.md` | 完成（支持 fast/standard/full + 零配置默认；v1.3.22 对齐“证据包 -> 主题综合”链路表述） |
-| `/yearly-review` | `.claude/commands/yearly-review.md` | 完成 |
-| `/journal-coach` | `.claude/commands/journal-coach.md` | 完成 |
-| `/interview` | `.claude/commands/interview.md` | 完成 |
-| `/update-current` | `.claude/commands/update-current.md` | 完成 |
-| `/import` | `.claude/commands/import.md` | 完成 |
-| **`/提交`** 🆕 | `.claude/commands/commit.md` | 完成（自动准备并发起本地提交；受限环境下 Git 写入可能等待提权批准；推送手动执行） |
+| 命令系统 | ✅ 完成 | 10 个命令均已就绪 |
+| 代理系统 | ✅ 完成 | 6 个代理均已就绪 |
+| 视角体系 | ✅ 完成 | 9 个视角均已就绪 |
+| 共享规则与路径契约 | ✅ 完成 | `paths.md` / `prompt-rules.md` / `banned-phrases.json` 已收口 |
+| 月度综合链路 | ✅ 完成 | 已对齐“证据包 → 主题综合” |
+| 年度链路端到端验证 | 🔶 进行中 | 依赖更多月度报告和实测 |
+| 示例与自动化测试 | 🔶 进行中 | 仍需补样本与测试覆盖 |
 
-### 代理（6/6）完成
+### 命令完成度（10/10）
 
-| 代理 | 文件 | 状态 |
-|------|------|------|
-| `daily-analyzer` | `.claude/agents/daily-analyzer.md` | 完成 |
-| `weekly-synthesis` | `.claude/agents/weekly-synthesis.md` | 完成（含聊天摘要 + 5段报告 + 6条自检） |
-| `monthly-processor` | `.claude/agents/monthly-processor.md` | 完成（v1.3.21 收紧为月度证据包处理器） |
-| `monthly-synthesis` | `.claude/agents/monthly-synthesis.md` | 完成（含聊天摘要 + 完整输出模板） |
-| `yearly-synthesis` | `.claude/agents/yearly-synthesis.md` | 完成（含聊天摘要 + 中文输出） |
-| `review-readiness-checker` | `.claude/agents/review-readiness-checker.md` | 完成（复盘时机检测） |
+`/review`、`/daily-review`、`/weekly-review`、`/monthly-review`、`/yearly-review`、`/journal-coach`、`/interview`、`/update-current`、`/import`、`/提交`
 
-### 视角（9/9）完成
+### 代理完成度（6/6）
 
-| 视角 | 文件 | 状态 |
-|------|------|------|
-| `therapist` | `perspectives/therapist.md` | 完成（v1.3.21 收紧为心理证据包） |
-| `coach` | `perspectives/coach.md` | 完成（含完整输出结构） |
-| `relationships` | `perspectives/relationships.md` | 完成（含上下文加载指导） |
-| `strengths` | `perspectives/strengths.md` | 完成（含反阿谀规则） |
-| `values-meaning` | `perspectives/values-meaning.md` | 完成（v1.3.21 收紧为意义证据包） |
-| `chronicle` | `perspectives/chronicle.md` | 完成（纯事实记录视角） |
-| `growth-dimensions` | `perspectives/growth-dimensions.md` | 完成（含六维详细定义） |
-| `journal-quality` | `perspectives/journal-quality.md` | 完成（含1-5评分细则） |
-| `review-coach` | `perspectives/review-coach.md` | 完成（含常见错误检测） |
+`daily-analyzer`、`weekly-synthesis`、`monthly-processor`、`monthly-synthesis`、`yearly-synthesis`、`review-readiness-checker`
 
-### 方法论文档（2/2）完成
+### 产出与样本
 
-| 文档 | 文件 | 状态 |
-|------|------|------|
-| 日志写法 | `docs/methodology-journal.md` | 完成（六步法 + 六大典型问题） |
-| 月志与复盘 | `docs/methodology-review.md` | 完成（复盘六问 + SMART + 周志简化版） |
-
-### 上下文文件（2/2）✅
-
-| 文件 | 路径 | 状态 |
-|------|------|------|
-| 核心画像 | `关于我/core-profile.md` | ✅ 已更新（基于5/6/7月日志，含跨月持续模式识别） |
-| 当前状态 | `关于我/current.md` | ✅ 已创建（占位文件，由 `/update-current` 填充内容） |
-
-### 月度分析报告（4/12）
-
-| 月份 | 路径 | 状态 |
-|------|------|------|
-| 2026-04 | `复盘/每月复盘/2026-04.md` | ✅ 完成 |
-| 2026-05 | `复盘/每月复盘/2026-05.md` | ✅ 完成（6视角standard，31天日志） |
-| 2026-06 | `复盘/每月复盘/2026-06.md` | ✅ 完成（9视角full，33天日志） |
-| 2026-07 | `复盘/每月复盘/2026-07.md` | ✅ 完成（6视角standard，5天日志） |
-
-### 示例分析（2/N）
-
-| 文件 | 路径 | 状态 |
-|------|------|------|
-| 2026-06-13 日志分析 | `examples/analyses/2026-06-13-analysis.md` | A级（26/30） |
-| 2026-07-03 日志分析 | `examples/analyses/2026-07-03-analysis.md` | B+级（22/30） |
-
-### 配置与文档（全部完成 ✅）
-
-| 类别 | 文件 |
+| 项目 | 状态 |
 |------|------|
-| 项目规范 | `CLAUDE.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `.gitignore`, `LICENSE` |
-| 设置 | `.claude/settings.json`, `.codex/hooks.json`, `SETUP.md` |
-| 共享配置 | `.claude/shared/paths.md`（命名路径契约）, `.claude/shared/prompt-rules.md`（共享提示词与 hook 契约）, `.claude/shared/banned-phrases.json`（禁用词机器镜像） |
-| 方法论 | `docs/first-principles.md`, `docs/methodology-journal.md`, `docs/methodology-review.md`, `docs/analysis-standards.md` |
-| 示例 | `examples/demo/sample-journal.md`, `examples/analyses/` |
-| CI | `.github/ISSUE_TEMPLATE/`, `.github/PULL_REQUEST_TEMPLATE.md` |
-| Spec | `docs/specs/_TEMPLATE.md`, `docs/specs/audit-cleanup.md`, `docs/specs/evolution-roadmap.md` |
-| Skill | `.claude/skills/log.md` |
-| 归档 | `docs/archive/changelog-archive.md` |
-| Workflow | `.claude/workflows/monthly-review.js`, `weekly-review.js`, `yearly-review.js`, `shared.js` |
+| 月度复盘报告 | ✅ 已有 2026-04 / 2026-05 / 2026-06 / 2026-07 |
+| 日分析样本 | ✅ 已有 2 份 |
+| 周/月样本补充 | 🔶 待继续增加 |
+| `关于我/current.md` | ✅ 已建占位，由 `/update-current` 维护 |
 
 ## 待办事项
 
 ### 高优先级
-- [x] 洞察效用追踪 ✅
-- [x] 创建输入/输出目录结构 ✅
-- [x] 月度分析管道效率优化 ✅
-- [x] 6月/5月/7月月度分析完成 ✅
-- [x] 运行 `/update-current` 生成 `关于我/current.md` ✅
-- [ ] 运行 `/weekly-review` 对最近一周进行完整测试
-- [ ] 运行 `/journal-coach` 对最近7天进行教练反馈测试
+
+- [ ] 运行 `/weekly-review` 对最近一周做完整测试
+- [ ] 运行 `/journal-coach` 对最近 7 天做完整测试
 
 ### 中优先级
-- [ ] 生成更多单日分析样本（覆盖不同质量等级：A/B/C/D）
-- [x] 生成至少一套完整的9视角月度分析 ✅
-- [ ] 测试 `/yearly-review`（需要至少6个月度报告）
+
+- [ ] 增加更多单日分析样本，覆盖 A/B/C/D 不同质量等级
+- [ ] 测试 `/yearly-review`（需要至少 6 个月度报告）
 - [ ] 添加示例周志/月志文件
 
 ### 低优先级
-- [ ] 考虑添加 `--mode quick` 和 `--mode life` 的周度版本
-- [ ] 为视角文件添加更多示例输出
-- [ ] CSV 导出功能
+
+- [ ] 为视角文件增加更多示例输出
 - [ ] 自动化测试
+- [ ] CSV 导出功能
 - [ ] 国际化支持
 - [ ] README 英文版
 
 ## 已知问题
 
 ### 路径与兼容性
-1. **中文目录名**：所有输入/输出目录使用中文名（日志、复盘、关于我等），在部分 Windows 系统或 CI 环境中可能遇到编码问题。当前无自动 fallback 机制——如遇编码问题需手动调整 `paths.md` 中的路径。
-2. **路径未创建**：`日志/`、`日志/周志/`、`日志/月志/` 输入目录和 `output/` 下的子目录尚未在仓库中创建（仅存在于 README 的目录结构中）。
 
-### 日志格式
-3. **日志文件命名不统一**：当前实际日志文件为 `谢安的2026-6月日志.md`（单文件包含整月），而非标准的 `日志/YYYY-MM-DD.md`（每日独立文件）。所有代理已对此做了适配（支持扫描合并文件中的日期头），但这增加了复杂度。
-4. **日志模板缺失第六步**：核心画像中记录了用户的七栏模板（开心/充实/感谢/思考/改进/夸奖/ToDolist），但缺少第六步"分享讨论"的明确记录。`journal-quality` 视角在评分时会因此扣分。
+1. 输入/输出目录使用中文名，在部分 Windows / CI 环境中可能遇到编码问题。
+2. `日志/周志/`、`日志/月志/` 与 `output/` 的部分目录仍依赖运行时创建。
 
-### 代理行为
-5. **日志/月志/周志评估依赖用户输入**：`review-coach` 视角需要用户已写好日志/月志/周志文件才能评估复盘质量。如果用户未写，该视角无法产出有意义的分析。
-6. **年度分析依赖链长**：`/yearly-review` 需要12份月度综合报告，而每份月度报告又需要6-9份视角分析。整个链条尚未端到端测试。
-7. **上下文文件加载路径已统一**：所有视角通过 `paths.md` 的「上下文文件」节获取路径，`07 Context/` 废弃引用已在 v1.2.0 清理。
+### 数据与格式
 
-### 内容
-8. **单用户设计**：整个 Skill 当前硬编码了用户"谢安"的画像和六维图状态，重用于其他用户需要修改大量文件。
-9. **方法论文档仅中文**：两份方法论文档（日志写法、月志与复盘）仅中文版本，来自"问问大象"系统教学，未提供英文翻译。
-10. **分析样本不足**：仅有2份日分析样本，缺少周度和月度分析样本，无法充分验证完整的分析管道。
+3. 当前日志常以“单文件包整月”的方式存储，而不是每日独立文件，增加了解析复杂度。
+4. 用户现有日志模板缺少“分享讨论”这一显式栏位，会影响 `journal-quality` 评分。
+
+### 行为与验证
+
+5. `review-coach` 依赖用户先写好周志/月志，否则无法产出有效评估。
+6. `/yearly-review` 依赖链较长，尚未完成端到端验证。
+7. 当前分析样本仍偏少，尤其缺周度与月度示例。
+
+### 适配性
+
+8. 项目仍偏单用户语境，迁移到其他用户时需调整画像与部分提示语境。
+9. 方法论文档当前仅提供中文版本。
 
 ## 关键决策记录
 
 | 日期 | 决策 | 理由 |
 |------|------|------|
-| 2026-07-05 | 采用三层架构（命令→代理→视角） | 分离关注点：命令处理用户交互和参数解析，代理处理文件I/O和执行流程，视角定义纯粹的分析框架 |
-| 2026-07-05 | 视角分为生活内容(6) + 方法论(3) | 生活视角覆盖情感、关系、意义等"软"维度；方法论视角确保日志质量、复盘质量和维度覆盖的"硬"评估 |
-| 2026-07-05 | 月度分析采用并行代理 + 综合代理 | 9个视角可独立并行分析（~10x faster），最后由 synthesis 代理综合——避免单代理上下文过载 |
-| 2026-07-05 | 支持合并日志文件（非仅独立文件） | 用户实际使用飞书文档单文件记录整月日志，代理需扫描日期头定位条目而非假设独立文件 |
-| 2026-07-05 | 日志质量采用加分制（非扣分制） | 与"问问大象"方法论一致——关注积极面，上不封顶，区别于传统教育的扣分制思维 |
-| 2026-07-05 | 双路径 fallback 配置（已废弃） | 曾计划在 settings.json 配置中英文双路径备选，但运行时代码从未实现该逻辑。v1.3.4 清理死配置，路径管理统一归入 paths.md |
-| 2026-07-05 | 评分体系双轨制（日志质量30 + 复盘质量30） | 日志评分评估每日写作质量（六步法），复盘评分评估月/周志的复盘深度（复盘六问）——两套独立但互补的评估框架 |
-| 2026-07-06 | `/monthly-review` 多模式 + 中文视角选择 | fast(3核心)/standard(6生活,默认)/full(9全)+自定义视角；视角用中文功能描述代替内部key；方法论视角缺失时综合引擎自行读标准文档自检 |
-| 2026-07-06 | 周度复盘重构为月志简化版 | 从3个方法论视角改为3个核心生活视角(chronicle/coach/therapist) + weekly-synthesis综合引擎；复用复盘六问框架，5段报告+6条自检；周志=小的月志 |
-| 2026-07-07 | 制定产品进化路线图 | 见 [docs/specs/evolution-roadmap.md](docs/specs/evolution-roadmap.md)。采用 A→B 渐进路线：先验证核心假设（Skill极致化），再扩大用户群（Bot/集成形态），最后评估全栈SaaS |
-| 2026-07-07 | `.claude/` 作为唯一运行真相，停用 `.codex/agents` | 项目目标是 Claude Code Skill，产品逻辑只维护 `.claude/`，Codex 仅作为开发助手和开发辅助 hook 配置面。删除手写 `.codex/agents` 并停用 Codex 日志触发 hook，可避免 agent 定义与日志入口双份漂移；未来如需 Codex 专属 agent，必须从 `.claude/agents` 自动生成 |
-| 2026-07-07 | 改动完成后自动执行本地提交，推送仍由用户手动执行 | 代码/文档改动完成、CHANGELOG 记录且验证通过后，AI 自动执行 `/提交` 对应的本地 add/commit 流程，减少遗忘提交的摩擦；远程推送保持手动 `git push`，避免未经确认发布 |
-| 2026-07-08 | Git 提交流程改为“验证在内、写入在外” | 在受限环境下，`git add` / `git commit` 这类 `.git` 元数据写入预期需要一次提权批准；先在沙箱内完成验证，再直接发起提权，避免先报 `.git/index.lock` 权限错误再解释 |
-| 2026-07-08 | 月度综合链路第 2 阶段将上游中间产物收紧为证据包 | `monthly-synthesis` 已在第 1 阶段承担主题归并；第 2 阶段继续把 `monthly-processor` 与高叙事视角改为“候选发现 + 证据 + 边界说明”，减少视角直接抢最终月报叙事 |
-| 2026-07-07 | 规则执行改为风险分级，Superpowers 条件化 | 将文档同步检查拆分为轻量/标准/全量三级，避免小改动被全项目审计拖慢；Superpowers 改为“环境提供时自动触发”，不可用时回退到内置 spec/debug/verification 流程，避免规则要求不可执行能力 |
-| 2026-07-07 | 维护文件改为影响驱动读取与更新 | 将 PROJECT_STATUS、CHANGELOG、VERSION、README 从“每次必读/必改”调整为按影响触发：启动仅读取最小足够上下文，PROJECT_STATUS 只记录状态事实，README 只同步对外信息，VERSION 只为可发布变化递增，降低维护噪音和上下文成本 |
-| 2026-07-07 | 日反馈链路统一为 daily-analyzer 契约 | 日反馈是最短闭环，`/daily-review` 和 `log` skill 不再各自维护分析流程，而是统一调用 `daily-analyzer`；D0-D6 改为内部质量门，用户只看到短反馈、一个原子行动和可验证预测 |
-| 2026-07-07 | 提示词共享规则集中化 | 将跨 agent 重复的路径、证据、输出契约和质量门槛抽到 `.claude/shared/prompt-rules.md`，减少 synthesis/daily agent 的重复叙述，同时保持命令入口、输出路径和报告结构不变 |
-| 2026-07-07 | 路径与 hook 语义契约化 | 将 `paths.md` 从路径清单升级为命名 key + 创建责任契约；`prompt-rules.md` 增加共享文件读取顺序、hook 路由边界和禁用词同步规则；`settings.json` 保持薄路由，减少路径、触发词和质量门在 agent/command/workflow 间漂移 |
-| 2026-07-07 | Workflow 共享运行时 helper | 新增 `.claude/workflows/shared.js`，集中维护周/月/年 workflow 共用的视角注册表、模式定义、报告路径模板、聊天摘要提取与质量门；入口 workflow 只保留各自编排差异，降低禁用词、摘要规则、核心视角和报告路径漂移 |
-| 2026-07-07 | `.agents/skills/superpowers/` 作为本地 AI 辅助目录 | 该目录方便 AI 在本项目使用 Superpowers 技能，但不属于 Claude Code Skill 产品逻辑；通过 `.gitignore` 忽略，避免进入运行真相或提交历史 |
-| 2026-07-07 | 月度综合先做主题归并再写章节 | 月度综合引擎先从视角分析提取候选发现并压缩为 2-3 个主主题，再映射进既有报告骨架；视角不再天然充当月报结构，优先减少“按视角拼贴”的读感 |
+| 2026-07-05 | 采用命令 → 代理 → 视角三层结构 | 降低耦合，分离入口、执行与分析定义 |
+| 2026-07-05 | 视角拆分为生活内容 6 + 方法论 3 | 同时覆盖“内容洞察”和“写作/复盘质量评估” |
+| 2026-07-05 | 支持单文件整月日志 | 适配真实使用方式，而非强制每日独立文件 |
+| 2026-07-06 | `/monthly-review` 支持多模式 | 在速度、覆盖度与摩擦之间做分层选择 |
+| 2026-07-07 | `.claude/` 固化为唯一运行真相 | 避免 `.codex/` 与 `.claude/` 双份漂移 |
+| 2026-07-07 | 维护文件改为影响驱动读取与更新 | 降低上下文噪音和维护成本 |
+| 2026-07-07 | 日反馈统一为 `daily-analyzer` 契约 | 保证 `/daily-review` 与 `log` skill 输出一致 |
+| 2026-07-07 | 路径与提示词规则集中到共享文件 | 降低 agent/command/workflow 漂移风险 |
+| 2026-07-08 | Git 提交流程改为“验证在内、写入在外” | 适配受限环境下的提权边界 |
+| 2026-07-08 | 月度上游中间产物收紧为证据包 | 让综合层按主题归并，减少“按视角拼贴”的月报读感 |
