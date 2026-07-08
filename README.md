@@ -2,7 +2,7 @@
 
 > AI 日志分析与复盘技能：用更低摩擦的方式，把日记变成可验证的行动改变。
 
-[![Version](https://img.shields.io/badge/版本-v1.5.7-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.5.8-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的中文日志分析与复盘 skill。它围绕日、周、月、项目、年与人生设计六类节奏工作，帮助用户发现模式、形成行动、继续验证。
