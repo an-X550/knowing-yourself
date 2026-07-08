@@ -3,75 +3,41 @@ created: 2026-07-05
 last_updated: 2026-07-08
 ---
 
-# CHANGELOG — 改动记录
+# CHANGELOG - 改动记录
 
-> 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
-## [2026-07-08 17:20] [修复] 将 Stop hook 切换为 PowerShell 原生命令 (v1.5.5 → v1.5.6)
+> 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
-- **受影响文件**: `.claude/settings.json`, `.claude/shared/prompt-rules.md`, `docs/specs/directory-boundary-tightening.md`, `PROJECT_STATUS.md`, `README.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 基于当前 Windows 环境的实测结果，确认裸 `bash` 会优先命中 `C:\Windows\System32\bash.exe` 并退化到 WSL launcher，因此将 `Stop` hook 的默认实现从 `bash -c` 切换为 PowerShell 原生命令；同时把兼容性说明从“已知风险”升级为“已验证结论”，同步更新状态、版本与决策记录。
+## [2026-07-08 20:10] [文档] 收紧治理文档职责并切换 CHANGELOG 视角 (v1.5.6 -> v1.5.7)
 
-## [2026-07-08 16:55] [重构] 落地目录边界收口与共享契约去重 (v1.5.4 → v1.5.5)
+- **受影响文件**: `CHANGELOG.md`, `PROJECT_STATUS.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `docs/archive/README.md`, `VERSION`
+- **改动摘要**: 将根目录 CHANGELOG 改为发布视角，只保留对用户或协作者重要的变化；同步收紧 README、PROJECT_STATUS 与 AGENTS/CLAUDE 的职责边界；把 frontmatter 规则真收口为“核心治理文档必须有 YAML frontmatter”。
 
-- **受影响文件**: `.claude/shared/runtime-contracts.js`, `.claude/workflows/shared.js`, `.claude/workflows/weekly-review.js`, `.claude/workflows/monthly-review.js`, `.claude/workflows/project-review.js`, `.claude/workflows/yearly-review.js`, `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `.claude/commands/commit.md`, `.claude/skills/log.md`, `.claude/agents/daily-analyzer.md`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/_TEMPLATE.md`, `docs/first-principles.md`, `docs/archive/README.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 新增 `.claude/shared/runtime-contracts.js` 作为 workflow 运行时镜像层，移除 `workflows/shared.js` 中对路径模板和禁用词的重复维护；将 `log` skill 收紧为日志入口编排器，明确单日日反馈只由 `daily-analyzer` 生成；补齐 README、PROJECT_STATUS、spec 模板与 archive 说明中的文档分层和归档规则，进一步收紧 `.claude/` 与 `docs/` 的职责边界。
+## [2026-07-08 17:20] [修复] Stop hook 默认切换为 PowerShell 原生命令 (v1.5.5 -> v1.5.6)
 
-## [2026-07-08 16:21] [文档] 新增目录边界收口 spec 与 plan (v1.5.3 → v1.5.4)
+- **受影响文件**: `.claude/settings.json`, `.claude/shared/prompt-rules.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 基于当前 Windows 环境验证结果，停止依赖 `bash -c` 作为默认 Stop hook，实现改为 PowerShell 原生命令，降低 WSL launcher 兼容性风险。
 
-- **受影响文件**: `docs/specs/directory-boundary-tightening.md`, `docs/superpowers/plans/2026-07-08-directory-boundary-tightening.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 将“减少重复权威来源，明确 `.claude/` 与 `docs/` 的职责边界，降低后续维护成本”固化为正式 spec 与执行 plan，明确 shared 契约、入口职责、文档分层与归档策略，并同步版本与项目状态入口，方便后续按阶段落地。
+## [2026-07-08 16:55] [重构] 收紧运行契约与目录边界 (v1.5.4 -> v1.5.5)
 
-## [2026-07-08 16:00] [文档] 拆分第一性原理提醒与 AI 运行原则 (v1.5.2 → v1.5.3)
+- **受影响文件**: `.claude/shared/runtime-contracts.js`, `.claude/workflows/*.js`, `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 新增运行时共享契约，减少 workflow 与 skill 中对路径模板和禁用词规则的重复维护；同步收紧 `.claude/` 与 `docs/` 的边界。
 
-- **受影响文件**: `docs/first-principles.md`, `.claude/shared/ai-operating-principles.md`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `docs/superpowers/plans/2026-07-08-first-principles-split.md`
-- **改动摘要**: 将 `docs/first-principles.md` 压缩回面向开发者和用户的提醒文档，新增 `.claude/shared/ai-operating-principles.md` 作为 AI 默认读取的精简运行原则；同步 AGENTS/CLAUDE 的最小上下文加载规则、README 方法论入口、项目状态与版本号，避免第一性原理文档继续承担 AI 操作手册职责。
+## [2026-07-08 15:45] [修复] 日反馈升级为验证闭环入口 (v1.5.1 -> v1.5.2)
 
-## [2026-07-08 15:45] [修复] 日反馈链路升级为验证闭环入口 (v1.5.1 → v1.5.2)
+- **受影响文件**: `.claude/agents/daily-analyzer.md`, `.claude/commands/daily-review.md`, `.claude/skills/log.md`, `.claude/shared/paths.md`, `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: `/daily-review` 与日志粘贴入口开始检查上一条行动并沉淀到 `verified-patterns.md`；周报和月报优先消费验证结果，减少“只产生新建议、不追踪改变”的漂移。
 
-- **受影响文件**: `.claude/agents/daily-analyzer.md`, `.claude/commands/daily-review.md`, `.claude/skills/log.md`, `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `docs/first-principles.md`, `docs/superpowers/specs/2026-07-08-verification-loop-design.md`, `docs/superpowers/plans/2026-07-08-verification-loop.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 将现有日反馈入口从“生成建议”升级为“检查上一条行动并沉淀验证结果”的最短闭环：`daily-analyzer` 提取上一条 `💊` 与行动预测，`/daily-review` 和 `log` skill 保存反馈后写回 `verified-patterns.md`；周/月综合报告优先消费已验证、已证伪、待验证和连续没做的行动，减少只生产新建议但不追踪行为改变的问题。
+## [2026-07-08 14:30] [功能] 新增人生设计低频校准链路 (v1.3.27 -> v1.4.0)
 
-## [2026-07-08 15:20] [功能] 周/月复盘新增方向锚点与缺席项校准协议 (v1.5.0 → v1.5.1)
+- **受影响文件**: `.claude/commands/life-design.md`, `.claude/agents/life-design-synthesis.md`, `.claude/commands/review.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 新增 `/life-design` 与 `life-design-synthesis`，把人生设计从一次性 prompt 收敛为证据优先、低频调用、可验证实验的长期方向校准入口。
 
-- **受影响文件**: `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `docs/methodology-review.md`, `docs/superpowers/specs/2026-07-08-direction-anchor-calibration-design.md`, `docs/superpowers/plans/2026-07-08-direction-anchor-calibration.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 在周/月综合 agent 中新增方向锚点读取与五类缺席项检查，要求复盘同时检查“发生了什么”和“重要但缺席了什么”；方法论文档新增回应复盘的方向校准模板，防止考公、行测等长期主线因本周期材料缺席而从后续规划中自然消失。
+## [2026-07-08 14:10] [功能] 项目复盘正式并入统一复盘体系 (v1.3.26 -> v1.3.27)
 
-## [2026-07-08 14:45] [功能] 增强人生设计盲点触发与第三方提醒机制 (v1.4.0 → v1.5.0)
+- **受影响文件**: `.claude/commands/project-review.md`, `.claude/workflows/project-review.js`, `.claude/agents/project-synthesis.md`, `.claude/shared/paths.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 新增 `/project-review` 与项目复盘专用综合链路，使周、月、项目三类复盘统一进入“复盘六问”协议。
 
-- **受影响文件**: `.claude/agents/review-readiness-checker.md`, `.claude/commands/review.md`, `.claude/commands/journal-coach.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 将 `/life-design` 触发从“主动调用 + 月/年复盘提醒”升级为“主动调用 + 周期升级提醒 + 盲点探测提醒”；增强 `/review` 无参数智能检测和 `/journal-coach` 近 7 天方向信号提醒，并要求月报 / 年报输出基于证据的 `/life-design --quick` 升级提示。
+## [2026-07-08 12:13] [重构] 统一周报与月报输出骨架 (v1.3.25 -> v1.3.26)
 
-## [2026-07-08 14:30] [功能] 新增人生设计专项命令与低频方向校准链路 (v1.3.27 → v1.4.0)
-
-- **受影响文件**: `.claude/commands/life-design.md`, `.claude/agents/life-design-synthesis.md`, `.claude/shared/paths.md`, `.claude/commands/review.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `docs/superpowers/plans/2026-07-08-life-design-command.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `人生设计skill.md`
-- **改动摘要**: 新增 `/life-design` 专项命令与 `life-design-synthesis` agent，将原始人生设计 prompt 改造为证据优先、低频调用、可验证原型实验的方向校准链路；同步 `/review` 路由、月报 / 年报升级提醒和人生设计报告输出路径，并清理根目录临时来源文件。
-
-## [2026-07-08 14:10] [功能] 新增项目复盘完整链路并并入统一六问协议 (v1.3.26 → v1.3.27)
-
-- **受影响文件**: `.claude/commands/project-review.md`, `.claude/workflows/project-review.js`, `.claude/agents/project-synthesis.md`, `.claude/shared/paths.md`, `.claude/workflows/shared.js`, `.claude/commands/review.md`, `docs/methodology-review.md`, `docs/superpowers/specs/2026-07-08-project-review-unification-design.md`, `docs/superpowers/plans/2026-07-08-project-review-unification.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 新增 `/project-review` 命令、`project-review.js` workflow、`project-synthesis` 综合 agent 与 `output.project_report` 路径契约，让项目复盘正式并入“六问一级标题 + 内层综合分析”统一协议；同时补齐项目复盘专用模板与命令骨架说明，更新 README、项目状态与版本记录，完成周 / 月 / 项目三类复盘的同构化。
-
-## [2026-07-08 12:13] [重构] 统一周/月复盘输出骨架为六问一级标题，保留内层综合分析 (v1.3.25 → v1.3.26)
-
-- **受影响文件**: `.claude/agents/monthly-synthesis.md`, `.claude/agents/weekly-synthesis.md`, `docs/methodology-review.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 将运行时周/月复盘综合模板从主题章节式骨架收紧为“复盘六问”显式一级标题协议，同时保留主题归并、多视角证据、假说追踪和数据边界等优化能力作为六问内部的二级结构；同步补写方法论文档中的统一输出协议，并在 README、PROJECT_STATUS 与版本记录中对齐“六问外壳 + 内层综合分析”的新约定。
-
-## [2026-07-08 11:32] [文档] 重写未来优化路线图，突出阶段判断与升级门槛 (v1.3.24 → v1.3.25)
-
-- **受影响文件**: `docs/specs/evolution-roadmap.md`, `docs/superpowers/specs/2026-07-08-evolution-roadmap-design.md`, `docs/superpowers/plans/2026-07-08-evolution-roadmap-rewrite.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 将未来优化方向文档从“三路径平铺”改为“战略摘要 → 当前判断 → 升级门槛 → 近 12 周动作 → A/B/C 附录展开”的双层结构，修正过期版本与阶段表述，强化“先验证闭环，再扩形态”的路线判断；同时补写本轮设计文档与实施计划，并同步 README 徽章、项目状态与版本号至 v1.3.25。
-
-## [2026-07-08 11:10] [文档] 清理 CHANGELOG 历史格式并复审低优先级待办 (v1.3.23 → v1.3.24)
-
-- **受影响文件**: `CHANGELOG.md`, `PROJECT_STATUS.md`, `README.md`, `VERSION`
-- **改动摘要**: 清理 CHANGELOG 头部格式与旧记录粘连问题，复审 PROJECT_STATUS 的中低优先级待办，将样本与年度回归保留为中优先级验证任务，将自动化测试、CSV 导出和国际化标记为等待真实需求的暂缓项；同步版本号至 v1.3.24。
-
-## [2026-07-08 10:30] [文档] 收紧项目规范与维护文档职责，降低重复与维护成本 (v1.3.22 → v1.3.23)
-
-- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `PROJECT_STATUS.md`, `README.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 将镜像规范收紧为同一份更短的规则文本，保留维护边界、版本追踪、同步验证与工作流控制等高价值规则，删除过细的重复展开；将 `README.md` 收回到“项目说明与使用入口”，将 `PROJECT_STATUS.md` 收回到“事实状态面板”，减少它们与规范文件之间的重复叙述；同步版本号至 `v1.3.23`。
-
-## [2026-07-08 01:20] [文档] 对齐月度复盘命令表述：先生成视角证据包，再做主题综合 (v1.3.21 → v1.3.22)
-
-- **受影响文件**: `.claude/commands/monthly-review.md`, `PROJECT_STATUS.md`, `README.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 补齐 `/monthly-review` 命令层文案，使其与已完成的月度综合链路优化保持一致：命令入口不再把并行视角输出描述成直接产出的“月报内容”，而是明确为“先生成视角证据包 / 综合材料，再由 `monthly-synthesis` 做主题归并并输出最终月报”；同步更新版本号与状态记录，作为月度链路优化的命令层收口。
+- **受影响文件**: `.claude/agents/monthly-synthesis.md`, `.claude/agents/weekly-synthesis.md`, `docs/methodology-review.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 周报和月报统一切换为“复盘六问一级标题 + 内层综合分析”的输出协议，降低不同复盘形态之间的认知切换成本。

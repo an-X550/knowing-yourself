@@ -1,4 +1,4 @@
-# 开发规范 — 知己
+# 开发规范 - 知己
 
 ## 元规则
 
@@ -16,9 +16,14 @@
 
 - **唯一运行真相**：`.claude/`。产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。
 - **唯一开发规范**：`AGENTS.md` / `CLAUDE.md` 必须保持逐字同步。
-- **Codex 边界**：`.codex/` 仅保留开发辅助配置，不承载日志分析、agent 定义、workflow 编排等产品逻辑。
+- **Codex 边界**：`.codex/` 仅保留开发辅助配置，不承载产品逻辑。
 - **本地 AI 辅助边界**：`.agents/skills/superpowers/` 仅作本地开发辅助目录，已 gitignore，不属于产品运行真相，也不纳入提交范围。
-- **文档分层边界**：`docs/specs/` 只放正式采纳的产品/结构 spec；`docs/superpowers/specs/` 只放开发过程设计；`docs/superpowers/plans/` 只放执行计划；`docs/archive/` 只放不再作为活跃上下文的历史文档。
+- **文档职责边界**：
+  - `README.md`：项目入口与使用导航
+  - `PROJECT_STATUS.md`：当前事实、进度、待办、已知问题
+  - `CHANGELOG.md`：发布级变化历史
+  - `AGENTS.md` / `CLAUDE.md`：执行规范
+  - `docs/archive/`：不再作为当前真相，但仍需保留引用价值的历史文档
 
 ### 日志粘贴处理
 
@@ -28,8 +33,6 @@
 2. 优先调用 `daily-analyzer`；如无法调用，则按 `.claude/shared/prompt-rules.md` 与 `.claude/agents/daily-analyzer.md` 的约定回退生成
 3. 将分析结果写入 `复盘/每日反馈/YYYY-MM-DD.md`
 4. 对话中展示与文件一致的反馈内容
-
-> 目标：无论 hook 是否触发，日志分析入口与输出格式都保持一致。
 
 ---
 
@@ -46,41 +49,12 @@
 
 `docs/first-principles.md` 是给开发者和用户看的提醒文档，不作为 AI 默认长上下文；当讨论项目初心、开发者纪律或用户纪律时再读取。
 
-若文件不存在，先根据仓库现状补建，再执行用户任务。
-
 ### 启动校验
 
 读取 `VERSION` 并与 `PROJECT_STATUS.md` 中 `**当前版本**` 对比：
 
 - 若本次只是答疑：说明不一致即可，不为校验制造改动
 - 若本次会修改文件：以 `VERSION` 为准修正 `PROJECT_STATUS.md`，并在 `CHANGELOG.md` 追加一条 `[修复]` 记录
-
-### 用户状态检测
-
-仅在需要展示欢迎面板/状态面板时执行：
-
-1. 检查 `日志/` 是否已有 ≥3 天日志
-2. 检查 `关于我/core-profile.md` 是否存在
-3. 检查 `output/` 下是否已有分析报告
-
-判定规则：
-
-- **新用户**：日志少于 3 天，且 `output/` 无报告
-- **回归用户**：日志已达 3 天及以上
-
-展示规则：
-
-- 若用户首条消息本身就是操作指令，先执行，再附面板
-- 欢迎面板只在连续对话前 3 次内使用
-- 状态面板只显示一条最高优先级行动提示
-
-行动提示优先级：
-
-1. 今日日志未写，且昨日日志未分析
-2. 今日日志已写，但今日未分析
-3. 周一/周二，上周日志 ≥3 天，且周报不存在
-4. 每月 1-5 号，上月日志 ≥10 天，且月报不存在
-5. 最近 7 天无任何报告
 
 ### PROJECT_STATUS.md 必含章节
 
@@ -99,13 +73,15 @@
 
 ### CHANGELOG.md 格式
 
-倒序时间线，单条记录格式如下：
+`CHANGELOG.md` 采用**发布视角**，只记录对用户或协作者重要的变化；详细过程记录归档到 `docs/archive/`。
+
+单条记录格式如下：
 
 ```markdown
-## [YYYY-MM-DD HH:MM] [标签] 改动简述 (vX.Y.Z → vX.Y.Z)
+## [YYYY-MM-DD HH:MM] [标签] 改动简述 (vX.Y.Z -> vX.Y.Z)
 
 - **受影响文件**: 文件路径列表
-- **改动摘要**: 简要描述做了什么
+- **改动摘要**: 面向用户或协作者说明这次变化为什么重要
 ```
 
 标签类型：`[功能]` `[修复]` `[重构]` `[文档]` `[配置]` `[破坏性变更]` `[回退]`
@@ -116,7 +92,7 @@
 
 ### 自动记录
 
-凡是修改了产品行为、运行配置、公开文档、开发规范或发布状态相关文件，都必须在响应结束前自动向 `CHANGELOG.md` 顶部追加一条记录。同一任务的多文件修改合并为一条。
+凡是修改了产品行为、运行配置、公开文档、开发规范或发布状态相关文件，都必须在响应结束前自动向 `CHANGELOG.md` 顶部追加一条**发布级**记录。同一任务的多文件修改合并为一条。
 
 不记录 CHANGELOG 的情况：
 
@@ -126,6 +102,7 @@
 - 临时草稿
 - 未被采纳的 spec / plan
 - 无语义变化的格式化
+- 纯内部过程性整理，且对用户/协作者无感知
 - 本地辅助文件改动
 
 ### 同步 PROJECT_STATUS
@@ -140,8 +117,6 @@
 - 关键决策
 - 维护边界
 
-普通实现细节、小修辞优化、内部小修不更新。
-
 ### 文档同步等级
 
 | 等级 | 触发条件 | 必做检查 |
@@ -155,7 +130,7 @@
 1. 若涉及版本号变更：全局搜索并替换旧版本号
 2. 若涉及文件移动/重命名：搜索并修复旧路径引用
 3. 若涉及公开结构变化：检查 `README.md` 目录结构图
-4. 若涉及命令/代理/工作流增删：检查 `README.md` 对应表格
+4. 若涉及命令/代理/工作流增删：检查 `README.md` 对应入口说明
 5. 若涉及 `paths.md`：确认无旧路径残留
 6. 标准/全量改动执行反向消费者检查：
    - `settings.json` 自定义键必须有消费者
@@ -171,26 +146,13 @@
 3. 若有旧名称/旧路径/旧版本号，确认零残留
 4. 标准/全量改动时确认无死配置、死路径
 
-### 高风险变更最少核对项
-
-| 变更类型 | 必须同步的文件 |
-|---------|--------------|
-| 版本号递增 | `VERSION` → `PROJECT_STATUS.md` → `README.md` → `CHANGELOG.md` |
-| 路径约定变更 | `.claude/shared/paths.md` → 全项目旧路径残留检查 |
-| 新增/删除命令 | `README.md` → `PROJECT_STATUS.md` |
-| 新增/删除代理 | `README.md` → `PROJECT_STATUS.md` |
-| 新增/删除视角 | `README.md` → `PROJECT_STATUS.md` → `perspectives/README.md` |
-| 禁用词变更 | `docs/analysis-standards.md` → `.claude/shared/banned-phrases.json` → 相关 workflow |
-| 文件移动/重命名 | 修复所有旧路径引用并确认零残留 |
-| 新增/修改配置键或路径 | 确认消费者存在 |
-
 ### 提交与推送
 
 - 需要记录 CHANGELOG 的改动：在记录追加且验证完成后，自动执行 `/提交` 对应的本地提交流程
 - 不需要记录 CHANGELOG 的改动：使用简短人工 commit message 本地提交
 - 推送始终由用户手动执行 `git push`
 
-若 `.git` 写入受限导致需要提权，应直接说明“正在等待提权批准”，不要笼统报错。
+若 `.git` 写入受限导致需要提权，应直接说明“正在等待提权批准”。
 
 ---
 
@@ -221,15 +183,15 @@
 
 ### 递增规则
 
-- 修复 bug、小优化、规范/文档更新 → 修订号 +1
-- 新增功能且向后兼容 → 次版本号 +1，修订号归零
-- 破坏性变更 → 主版本号 +1，其余归零
+- 修复 bug、小优化、规范/文档更新 -> 修订号 +1
+- 新增功能且向后兼容 -> 次版本号 +1，修订号归零
+- 破坏性变更 -> 主版本号 +1，其余归零
 
 ---
 
 ## 四、代码风格
 
-- 所有 Markdown 文件使用 YAML frontmatter
+- **核心治理文档**必须使用 YAML frontmatter：`PROJECT_STATUS.md`、`CHANGELOG.md`
 - 中文内容文件用中文；配置字段和文件名用英文
 - 文件路径使用相对于项目根目录的路径
 - 文件名与目录名默认使用英文 kebab-case
@@ -259,13 +221,6 @@
 | `output/` | 生成的分析、报告 | gitignore |
 | `关于我/` | 个人画像、快照 | gitignore |
 
-新增文件时检查：
-
-1. 是否应位于根目录之外
-2. 命名是否符合规则
-3. 个人数据是否已加入 `.gitignore`
-4. 公开示例是否已脱敏
-
 ---
 
 ## 六、工作流控制
@@ -276,9 +231,9 @@
 
 | 用户场景 | 自动调用的技能 |
 |---------|----------------|
-| 新增功能/需求 | `superpowers:brainstorming` → `superpowers:writing-plans` → `superpowers:executing-plans` |
+| 新增功能/需求 | `superpowers:brainstorming` -> `superpowers:writing-plans` -> `superpowers:executing-plans` |
 | Bug 修复 | `superpowers:systematic-debugging` |
-| 代码重构 | `superpowers:writing-plans` → `superpowers:verification-before-completion` |
+| 代码重构 | `superpowers:writing-plans` -> `superpowers:verification-before-completion` |
 | 测试 | `superpowers:test-driven-development` |
 | 请求代码审查 | `superpowers:requesting-code-review` |
 | 接收审查反馈 | `superpowers:receiving-code-review` |
@@ -325,4 +280,3 @@
 5. 完成后更新状态
 
 若当前环境可用 superpowers 且已产出足够详细的计划，则直接复用，不重复创建 spec。
-若同一主题还需要保留开发过程推演，过程设计写入 `docs/superpowers/specs/`，但不替代 `docs/specs/` 中的正式 spec。
