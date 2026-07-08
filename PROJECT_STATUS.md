@@ -5,13 +5,13 @@ last_updated: 2026-07-08
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.27
+**当前版本**：1.4.0
 
 ## 项目概述
 
-**知己** 是一个基于 Claude Code 的 AI 日志分析与复盘 Skill，围绕日、周、月、项目、年的复盘节奏运行，通过多视角分析帮助用户做自我认知、成长追踪和行动改进。
+**知己** 是一个基于 Claude Code 的 AI 日志分析与复盘 Skill，围绕日、周、月、项目、年与低频人生设计节奏运行，通过多视角分析、统一复盘和方向校准帮助用户做自我认知、成长追踪和行动改进。
 
-**目标场景**：个人长期日志记录、周期性复盘、成长模式识别、项目优化验收与阶段复盘。
+**目标场景**：个人长期日志记录、周期性复盘、成长模式识别、项目优化验收、阶段复盘与长期方向校准。
 
 **方法论基础**：
 
@@ -26,8 +26,8 @@ last_updated: 2026-07-08
 |------|------|
 | 运行平台 | Claude Code CLI / VSCode Extension |
 | 内容格式 | Markdown + YAML frontmatter |
-| 命令系统 | Claude Code Slash Commands（11 个） |
-| 代理系统 | Claude Code Sub-agents（7 个） |
+| 命令系统 | Claude Code Slash Commands（12 个） |
+| 代理系统 | Claude Code Sub-agents（8 个） |
 | 配置 | JSON |
 | 版本控制 | Git + 语义化版本 |
 | 语言 | 中文内容 + 英文配置字段 |
@@ -58,6 +58,7 @@ last_updated: 2026-07-08
 | 月 | `/monthly-review` | `monthly-processor` ×N + `monthly-synthesis`（六问外壳 + 主题综合） |
 | 项目 | `/project-review` | `project-synthesis`（六问外壳 + 项目机制综合） |
 | 年 | `/yearly-review` | `yearly-synthesis` |
+| 人生设计 | `/life-design` | `life-design-synthesis`（证据优先 + 奥德赛原型 + 7 天验证实验） |
 | 任意 | `/review` | `review-readiness-checker` 路由 |
 
 ### 视角结构
@@ -71,23 +72,24 @@ last_updated: 2026-07-08
 
 | 模块 | 状态 | 说明 |
 |------|------|------|
-| 命令系统 | ✅ 完成 | 11 个命令均已就绪 |
-| 代理系统 | ✅ 完成 | 7 个代理均已就绪 |
+| 命令系统 | ✅ 完成 | 12 个命令均已就绪，新增 `/life-design` 低频方向校准入口 |
+| 代理系统 | ✅ 完成 | 8 个代理均已就绪，新增 `life-design-synthesis` 人生设计综合引擎 |
 | 视角体系 | ✅ 完成 | 9 个视角均已就绪 |
 | 共享规则与路径契约 | ✅ 完成 | `paths.md` / `prompt-rules.md` / `banned-phrases.json` 已收口 |
 | 周/月复盘统一输出协议 | ✅ 完成 | 已切换为“六问一级标题 + 内层综合分析” |
 | 月度综合链路 | ✅ 完成 | 已对齐“证据包 → 主题综合”，并映射回六问外壳 |
 | 项目复盘统一链路 | ✅ 完成 | 已补齐 command / workflow / agent / path，纳入统一六问协议 |
+| 人生设计专项链路 | ✅ 完成 | 已新增 `/life-design` 与 `life-design-synthesis`，用于长期方向冲突时的证据优先校准 |
 | 年度链路端到端验证 | 🔄 进行中 | 依赖更多月度报告和实测 |
 | 示例与自动化测试 | 🔄 进行中 | 仍需补样本与测试覆盖 |
 
-### 命令完成度（11/11）
+### 命令完成度（12/12）
 
-`/review`、`/daily-review`、`/weekly-review`、`/monthly-review`、`/project-review`、`/yearly-review`、`/journal-coach`、`/interview`、`/update-current`、`/import`、`/提交`
+`/review`、`/daily-review`、`/weekly-review`、`/monthly-review`、`/project-review`、`/yearly-review`、`/life-design`、`/journal-coach`、`/interview`、`/update-current`、`/import`、`/提交`
 
-### 代理完成度（7/7）
+### 代理完成度（8/8）
 
-`daily-analyzer`、`weekly-synthesis`、`monthly-processor`、`monthly-synthesis`、`project-synthesis`、`yearly-synthesis`、`review-readiness-checker`
+`daily-analyzer`、`weekly-synthesis`、`monthly-processor`、`monthly-synthesis`、`project-synthesis`、`yearly-synthesis`、`life-design-synthesis`、`review-readiness-checker`
 
 ### 产出与样本
 
@@ -157,3 +159,4 @@ last_updated: 2026-07-08
 | 2026-07-08 | 月度上游中间产物收紧为证据包 | 让综合层按主题归并，减少“按视角拼贴”的月报读感 |
 | 2026-07-08 | 未来优化路线图改为“先判断、后展开”的双层结构 | 让协作者先看懂当前取舍，同时保留内部决策门槛与 A/B/C 路径展开 |
 | 2026-07-08 | 项目复盘纳入与周 / 月复盘同构的六问统一链路 | 保留统一外壳，同时为项目场景预留可扩展内层槽位 |
+| 2026-07-08 | 新增人生设计专项命令作为低频方向校准层 | 支持用户主动处理重大迷茫，并在月报 / 年报发现方向冲突时提醒升级，不把人生设计做成常规月度视角 |

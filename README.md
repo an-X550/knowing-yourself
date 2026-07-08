@@ -2,10 +2,10 @@
 
 > AI 日志分析教练：用更低摩擦的方式，把日志变成可行动的复盘。
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.3.27-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.4.0-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
-**知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的日志分析与复盘 Skill。它围绕日、周、月、项目、年五种复盘节奏工作，用多视角分析和统一复盘协议帮助用户识别模式、形成行动、持续闭环。
+**知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的日志分析与复盘 Skill。它围绕日、周、月、项目、年与低频人生设计六类节奏工作，用多视角分析、统一复盘协议和方向校准帮助用户识别模式、形成行动、持续闭环。
 
 ## 快速开始
 
@@ -18,6 +18,7 @@
 /weekly-review
 /monthly-review
 /project-review
+/life-design
 /review
 ```
 
@@ -27,12 +28,13 @@
 
 | 命令 | 用途 | 备注 |
 |------|------|------|
-| `/review` | 自然语言统一入口 | 自动判断更适合日 / 周 / 月 / 项目 / 年哪类复盘 |
+| `/review` | 自然语言统一入口 | 自动判断更适合日 / 周 / 月 / 项目 / 年 / 人生设计哪类分析 |
 | `/daily-review` | 单日日志即时反馈 | 最短闭环，适合日常使用 |
 | `/weekly-review` | 周度综合复盘 | 3 个核心视角并行，输出遵守六问一级标题 |
 | `/monthly-review` | 月度深度复盘 | `fast` / `standard` / `full` / 自定义，输出遵守六问一级标题 |
 | `/project-review` | 项目 / 版本 / 里程碑复盘 | 项目复盘专用入口，固定输出六问一级标题 |
 | `/yearly-review` | 年度成长回顾 | 依赖已有月度报告 |
+| `/life-design` | 人生设计校准 | 基于长期日志、日反馈和复盘证据，输出重力问题、能量地图、奥德赛原型和 7 天验证实验 |
 | `/journal-coach` | 多日趋势反馈 | 适合最近几天的连续观察 |
 | `/interview` | 建立个人画像 | 生成 `关于我/core-profile.md` |
 | `/update-current` | 更新当前状态快照 | 输出到 `关于我/current.md` |
@@ -56,6 +58,7 @@
 | 月 | `/monthly-review` | `monthly-processor` ×N + `monthly-synthesis`（六问外壳 + 主题综合） |
 | 项目 | `/project-review` | `project-synthesis`（六问外壳 + 项目机制综合） |
 | 年 | `/yearly-review` | `yearly-synthesis` |
+| 人生设计 | `/life-design` | `life-design-synthesis`（证据优先 + 奥德赛原型 + 7 天验证实验） |
 
 ## 视角体系
 

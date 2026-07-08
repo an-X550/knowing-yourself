@@ -7,6 +7,11 @@ last_updated: 2026-07-08
 
 > 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
+## [2026-07-08 14:30] [功能] 新增人生设计专项命令与低频方向校准链路 (v1.3.27 → v1.4.0)
+
+- **受影响文件**: `.claude/commands/life-design.md`, `.claude/agents/life-design-synthesis.md`, `.claude/shared/paths.md`, `.claude/commands/review.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `docs/superpowers/plans/2026-07-08-life-design-command.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `人生设计skill.md`
+- **改动摘要**: 新增 `/life-design` 专项命令与 `life-design-synthesis` agent，将原始人生设计 prompt 改造为证据优先、低频调用、可验证原型实验的方向校准链路；同步 `/review` 路由、月报 / 年报升级提醒和人生设计报告输出路径，并清理根目录临时来源文件。
+
 ## [2026-07-08 14:10] [功能] 新增项目复盘完整链路并并入统一六问协议 (v1.3.26 → v1.3.27)
 
 - **受影响文件**: `.claude/commands/project-review.md`, `.claude/workflows/project-review.js`, `.claude/agents/project-synthesis.md`, `.claude/shared/paths.md`, `.claude/workflows/shared.js`, `.claude/commands/review.md`, `docs/methodology-review.md`, `docs/superpowers/specs/2026-07-08-project-review-unification-design.md`, `docs/superpowers/plans/2026-07-08-project-review-unification.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

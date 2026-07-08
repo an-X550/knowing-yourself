@@ -30,6 +30,7 @@ allowed-tools:
 | `上周` `本周` `YYYY-Www` | weekly-review workflow（含日期范围） |
 | `上月` `六月` `2026-07` | monthly-review workflow |
 | `项目复盘` `版本复盘` `里程碑复盘` `验收复盘` | project-review workflow |
+| `人生设计` `职业方向` `长期方向` `奥德赛计划` `人生规划` | life-design-synthesis agent |
 | `今年` `去年` `2026` | yearly-review workflow |
 | `最近` `最近几天` | journal-coach（默认 7 天） |
 | `--deep` `深度` | 追加 full 模式 |
@@ -53,6 +54,7 @@ allowed-tools:
 - **weekly-review**: `Workflow({ name: "weekly-review", args: { week: "YYYY-Www" } })`
 - **monthly-review**: `Workflow({ name: "monthly-review", args: { month: "YYYY-MM", mode: "standard|fast|full" } })`
 - **project-review**: `Workflow({ name: "project-review", args: { project: "项目主题", mode: "standard|full" } })`
+- **life-design**: Task 工具，subagent_type: life-design-synthesis
 - **yearly-review**: `Workflow({ name: "yearly-review", args: { year: "YYYY" } })`
 - **journal-coach**: Task 并行 daily-analyzer + 汇总，默认 7 天
 
@@ -61,7 +63,7 @@ allowed-tools:
 | 情况 | 处理 |
 |------|------|
 | 无日志 | “还没找到日志。直接粘贴日志内容即可开始。” |
-| 无法识别 | “试试：昨天 / 上周 / 六月 / 最近几天 / 项目复盘 / 2026-06” |
+| 无法识别 | “试试：昨天 / 上周 / 六月 / 最近几天 / 项目复盘 / 人生设计 / 2026-06” |
 | 报告已存在 | 告知并询问是否覆盖 |
 
 ## Notes
