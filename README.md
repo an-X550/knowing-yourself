@@ -2,7 +2,7 @@
 
 > AI 日志分析教练：用更低摩擦的方式，把日志变成可行动的复盘。
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.5.1-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.5.2-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的日志分析与复盘 Skill。它围绕日、周、月、项目、年与低频人生设计六类节奏工作，用多视角分析、统一复盘协议和方向校准帮助用户识别模式、形成行动、持续闭环。
@@ -86,6 +86,8 @@
 - 复盘写法（含方向锚点与回应复盘）：[`docs/methodology-review.md`](docs/methodology-review.md)
 - 分析质量标准：[`docs/analysis-standards.md`](docs/analysis-standards.md)
 
+日反馈现在同时承担验证闭环：有上一条反馈时，`/daily-review` 和日志粘贴入口会检查上一条行动是否执行，并将结果沉淀到 `关于我/verified-patterns.md`。周报和月报会优先读取这些验证结果，避免只生成新建议而不追踪行为改变。
+
 README 只保留总览；具体规则以上述文档和 `AGENTS.md` / `CLAUDE.md` 为准。
 
 ## 项目结构
@@ -127,6 +129,7 @@ README 只保留总览；具体规则以上述文档和 `AGENTS.md` / `CLAUDE.md
 - 路径约定：[`.claude/shared/paths.md`](.claude/shared/paths.md)
 - 共享提示词规则：[`.claude/shared/prompt-rules.md`](.claude/shared/prompt-rules.md)
 - Hook 与权限配置：[`.claude/settings.json`](.claude/settings.json)
+- 行为模式沉淀：`关于我/verified-patterns.md`
 
 ## 版本管理
 

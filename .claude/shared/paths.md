@@ -26,6 +26,7 @@ last_updated: 2026-07-08
 | `input.daily_feedback` | `复盘/每日反馈/YYYY-MM-DD.md` | 上一条每日反馈，用于昨日闭环 |
 | `context.core_profile` | `关于我/core-profile.md` | 核心画像 |
 | `context.current` | `关于我/current.md` | 当前状态 |
+| `context.verified_patterns` | `关于我/verified-patterns.md` | 已验证 / 已证伪 / 待验证的行为模式 |
 | `standards.analysis` | `docs/analysis-standards.md` | 分析质量标准 |
 | `standards.review_methodology` | `docs/methodology-review.md` | 复盘方法论 |
 | `perspective.definition` | `perspectives/{视角名}.md` | 视角定义 |
@@ -51,6 +52,7 @@ last_updated: 2026-07-08
 |-----|------|------------|
 | `context.core_profile` | `关于我/core-profile.md` | 标注“画像缺失”，继续使用日志证据 |
 | `context.current` | `关于我/current.md` | 标注“当前状态缺失”，不读旧路径 |
+| `context.verified_patterns` | `关于我/verified-patterns.md` | 缺失时由调用方按标准模板创建 |
 
 ## 已废弃路径
 

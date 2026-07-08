@@ -7,6 +7,11 @@ last_updated: 2026-07-08
 
 > 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
+## [2026-07-08 15:45] [修复] 日反馈链路升级为验证闭环入口 (v1.5.1 → v1.5.2)
+
+- **受影响文件**: `.claude/agents/daily-analyzer.md`, `.claude/commands/daily-review.md`, `.claude/skills/log.md`, `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `docs/first-principles.md`, `docs/superpowers/specs/2026-07-08-verification-loop-design.md`, `docs/superpowers/plans/2026-07-08-verification-loop.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将现有日反馈入口从“生成建议”升级为“检查上一条行动并沉淀验证结果”的最短闭环：`daily-analyzer` 提取上一条 `💊` 与行动预测，`/daily-review` 和 `log` skill 保存反馈后写回 `verified-patterns.md`；周/月综合报告优先消费已验证、已证伪、待验证和连续没做的行动，减少只生产新建议但不追踪行为改变的问题。
+
 ## [2026-07-08 15:20] [功能] 周/月复盘新增方向锚点与缺席项校准协议 (v1.5.0 → v1.5.1)
 
 - **受影响文件**: `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `docs/methodology-review.md`, `docs/superpowers/specs/2026-07-08-direction-anchor-calibration-design.md`, `docs/superpowers/plans/2026-07-08-direction-anchor-calibration.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
