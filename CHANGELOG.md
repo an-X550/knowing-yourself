@@ -7,6 +7,11 @@ last_updated: 2026-07-08
 
 > 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
+## [2026-07-08 15:20] [功能] 周/月复盘新增方向锚点与缺席项校准协议 (v1.5.0 → v1.5.1)
+
+- **受影响文件**: `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `docs/methodology-review.md`, `docs/superpowers/specs/2026-07-08-direction-anchor-calibration-design.md`, `docs/superpowers/plans/2026-07-08-direction-anchor-calibration.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 在周/月综合 agent 中新增方向锚点读取与五类缺席项检查，要求复盘同时检查“发生了什么”和“重要但缺席了什么”；方法论文档新增回应复盘的方向校准模板，防止考公、行测等长期主线因本周期材料缺席而从后续规划中自然消失。
+
 ## [2026-07-08 14:45] [功能] 增强人生设计盲点触发与第三方提醒机制 (v1.4.0 → v1.5.0)
 
 - **受影响文件**: `.claude/agents/review-readiness-checker.md`, `.claude/commands/review.md`, `.claude/commands/journal-coach.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

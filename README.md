@@ -2,7 +2,7 @@
 
 > AI 日志分析教练：用更低摩擦的方式，把日志变成可行动的复盘。
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.5.0-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.5.1-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的日志分析与复盘 Skill。它围绕日、周、月、项目、年与低频人生设计六类节奏工作，用多视角分析、统一复盘协议和方向校准帮助用户识别模式、形成行动、持续闭环。
@@ -54,8 +54,8 @@
 | 周期 | 入口 | 核心处理 |
 |------|------|---------|
 | 日 | `/daily-review` | `daily-analyzer` |
-| 周 | `/weekly-review` | `monthly-processor` ×3 + `weekly-synthesis`（六问外壳 + 轻量综合） |
-| 月 | `/monthly-review` | `monthly-processor` ×N + `monthly-synthesis`（六问外壳 + 主题综合） |
+| 周 | `/weekly-review` | `monthly-processor` ×3 + `weekly-synthesis`（六问外壳 + 轻量综合 + 方向锚点缺席检查） |
+| 月 | `/monthly-review` | `monthly-processor` ×N + `monthly-synthesis`（六问外壳 + 主题综合 + 方向锚点缺席检查） |
 | 项目 | `/project-review` | `project-synthesis`（六问外壳 + 项目机制综合） |
 | 年 | `/yearly-review` | `yearly-synthesis` |
 | 人生设计 | `/life-design` | `life-design-synthesis`（证据优先 + 奥德赛原型 + 7 天验证实验） |
@@ -83,7 +83,7 @@
 
 - 产品哲学与行动原则：[`docs/first-principles.md`](docs/first-principles.md)
 - 日志写法：[`docs/methodology-journal.md`](docs/methodology-journal.md)
-- 复盘写法：[`docs/methodology-review.md`](docs/methodology-review.md)
+- 复盘写法（含方向锚点与回应复盘）：[`docs/methodology-review.md`](docs/methodology-review.md)
 - 分析质量标准：[`docs/analysis-standards.md`](docs/analysis-standards.md)
 
 README 只保留总览；具体规则以上述文档和 `AGENTS.md` / `CLAUDE.md` 为准。

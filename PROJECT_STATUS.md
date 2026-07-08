@@ -5,7 +5,7 @@ last_updated: 2026-07-08
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.5.0
+**当前版本**：1.5.1
 
 ## 项目概述
 
@@ -54,8 +54,8 @@ last_updated: 2026-07-08
 | 周期 | 命令 | 核心处理 |
 |------|------|---------|
 | 日 | `/daily-review` | `daily-analyzer` |
-| 周 | `/weekly-review` | `monthly-processor` ×3 + `weekly-synthesis`（六问外壳 + 轻量综合） |
-| 月 | `/monthly-review` | `monthly-processor` ×N + `monthly-synthesis`（六问外壳 + 主题综合） |
+| 周 | `/weekly-review` | `monthly-processor` ×3 + `weekly-synthesis`（六问外壳 + 轻量综合 + 方向锚点缺席检查） |
+| 月 | `/monthly-review` | `monthly-processor` ×N + `monthly-synthesis`（六问外壳 + 主题综合 + 方向锚点缺席检查） |
 | 项目 | `/project-review` | `project-synthesis`（六问外壳 + 项目机制综合） |
 | 年 | `/yearly-review` | `yearly-synthesis` |
 | 人生设计 | `/life-design` | `life-design-synthesis`（证据优先 + 奥德赛原型 + 7 天验证实验） |
@@ -76,8 +76,8 @@ last_updated: 2026-07-08
 | 代理系统 | ✅ 完成 | 8 个代理均已就绪，新增 `life-design-synthesis` 人生设计综合引擎 |
 | 视角体系 | ✅ 完成 | 9 个视角均已就绪 |
 | 共享规则与路径契约 | ✅ 完成 | `paths.md` / `prompt-rules.md` / `banned-phrases.json` 已收口 |
-| 周/月复盘统一输出协议 | ✅ 完成 | 已切换为“六问一级标题 + 内层综合分析” |
-| 月度综合链路 | ✅ 完成 | 已对齐“证据包 → 主题综合”，并映射回六问外壳 |
+| 周/月复盘统一输出协议 | ✅ 完成 | 已切换为“六问一级标题 + 内层综合分析 + 方向锚点缺席检查” |
+| 月度综合链路 | ✅ 完成 | 已对齐“证据包 → 主题综合”，并映射回六问外壳；同时检查重要但缺席的方向锚点 |
 | 项目复盘统一链路 | ✅ 完成 | 已补齐 command / workflow / agent / path，纳入统一六问协议 |
 | 人生设计专项链路 | ✅ 完成 | 已新增 `/life-design` 与 `life-design-synthesis`，并通过 `/review`、`/journal-coach`、月报 / 年报提供方向异常提醒 |
 | 年度链路端到端验证 | 🔄 进行中 | 依赖更多月度报告和实测 |
@@ -161,3 +161,4 @@ last_updated: 2026-07-08
 | 2026-07-08 | 项目复盘纳入与周 / 月复盘同构的六问统一链路 | 保留统一外壳，同时为项目场景预留可扩展内层槽位 |
 | 2026-07-08 | 新增人生设计专项命令作为低频方向校准层 | 支持用户主动处理重大迷茫，并在月报 / 年报发现方向冲突时提醒升级，不把人生设计做成常规月度视角 |
 | 2026-07-08 | 人生设计触发从双触发升级为三层触发 | 增加 `/review` 无参数与 `/journal-coach` 的方向异常探测，让系统能在用户尚未意识到问题时给出第三方提醒 |
+| 2026-07-08 | 周/月复盘新增方向锚点缺席检查 | 防止重要但本周期缺席的长期目标从复盘中自然消失，让回应复盘承担方向校准而不是只回应 AI 总结 |
