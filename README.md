@@ -2,7 +2,7 @@
 
 > AI 日志分析教练：用更低摩擦的方式，把日志变成可行动的复盘。
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.5.4-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.5.5-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的日志分析与复盘 Skill。它围绕日、周、月、项目、年与低频人生设计六类节奏工作，用多视角分析、统一复盘协议和方向校准帮助用户识别模式、形成行动、持续闭环。
@@ -125,6 +125,16 @@ README 只保留总览；具体规则以上述文档和 `AGENTS.md` / `CLAUDE.md
 - `AGENTS.md` 与 `CLAUDE.md` 是唯一开发规范，且保持同步
 - `.codex/` 仅承载开发辅助配置
 - `.agents/skills/superpowers/` 是本地 AI 辅助目录，已 gitignore，不纳入产品逻辑
+
+## 文档分层
+
+- `docs/first-principles.md`：给开发者和用户的人类提醒，不承载 AI 默认运行上下文
+- `docs/specs/`：已采纳或待采纳的正式产品/结构 spec
+- `docs/superpowers/specs/`：开发过程中的设计推演与工作记录
+- `docs/superpowers/plans/`：执行计划与拆解步骤
+- `docs/archive/`：不再活跃但仍需保留的历史文档
+
+当前事实、版本、进度与待办以 `PROJECT_STATUS.md` 为准；长期运行契约以 `.claude/shared/` 与 `AGENTS.md` / `CLAUDE.md` 为准。
 
 ## 配置入口
 

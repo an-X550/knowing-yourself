@@ -12,7 +12,7 @@ purpose: Shared prompt constraints for runtime agents
 
 1. 需要路径时，先读 `.claude/shared/paths.md`，并引用其中的命名 key。
 2. 需要跨 agent 行为约束时，读本文件；不要把本文件整段复制到 agent。
-3. 需要聊天摘要禁用词时，读 `.claude/shared/banned-phrases.json`；人类说明以 `docs/analysis-standards.md` 为准。
+3. 需要聊天摘要禁用词时，读 `.claude/shared/banned-phrases.json`；workflow 运行时镜像只允许放在 `.claude/shared/runtime-contracts.js`；人类说明以 `docs/analysis-standards.md` 为准。
 4. 具体任务步骤、参数解析、错误处理、输出模板仍由各 agent/command 自己维护。
 
 ## 二、路径规则
@@ -25,9 +25,10 @@ purpose: Shared prompt constraints for runtime agents
 ## 三、Hook 与入口规则
 
 1. `.claude/settings.json` 只做 hook 路由：匹配日志关键词后调用 `skill log`，Stop hook 只提醒未提交改动。
-2. 日志识别语义由 `.claude/skills/log.md` 和本文件的「日反馈输出契约」维护；不要在 `settings.json` 里扩展分析流程。
-3. `UserPromptSubmit.matcher` 只保留高召回触发词：`幸福日志`、`开心的事情`、`充实的事情`、`待改进`、`感谢的人`、`思考...改进`、`todolist`。新增日志模板字段时，同步更新 `log.md` 的日期/字段识别说明。
-4. 命令入口（`/daily-review`、`/weekly-review`、`/monthly-review` 等）只负责参数解析和编排，分析格式由对应 agent 与共享契约决定。
+2. `Stop` hook 当前使用 `bash -c`，在 Windows 语境下属于兼容性风险点；后续若要增强 hook，优先收敛路由和提示，不继续把分析逻辑塞进 `settings.json`。
+3. 日志识别语义由 `.claude/skills/log.md` 和本文件的「日反馈输出契约」维护；不要在 `settings.json` 里扩展分析流程。
+4. `UserPromptSubmit.matcher` 只保留高召回触发词：`幸福日志`、`开心的事情`、`充实的事情`、`待改进`、`感谢的人`、`思考...改进`、`todolist`。新增日志模板字段时，同步更新 `log.md` 的日期/字段识别说明。
+5. 命令入口（`/daily-review`、`/weekly-review`、`/monthly-review` 等）只负责参数解析和编排，分析格式由对应 agent 与共享契约决定。
 
 ## 四、证据规则
 
@@ -52,7 +53,7 @@ purpose: Shared prompt constraints for runtime agents
 
 1. 人类可读权威说明：`docs/analysis-standards.md` 的「聊天摘要质量门」。
 2. 机器可读镜像：`.claude/shared/banned-phrases.json`，保留 `common` 与 `yearly_extra` 两个数组供提交前验证和外部工具读取。
-3. workflow 运行时统一从 `.claude/workflows/shared.js` 的 `BANNED_PHRASES` 常量读取禁用词；修改禁用词时必须同步 JSON 镜像与 shared.js，并由 `/提交` 的提交前验证拦截漂移。
+3. workflow 运行时统一从 `.claude/shared/runtime-contracts.js` 的 `BANNED_PHRASE_GROUPS` 读取禁用词；修改禁用词时必须同步 JSON 镜像与 runtime mirror，并由 `/提交` 的提交前验证拦截漂移。
 4. agent 不要在自身提示词里另写一份禁用词列表；只引用质量门或 JSON 镜像。
 
 ## 八、日反馈输出契约

@@ -3,6 +3,8 @@ created: [YYYY-MM-DD]
 status: 规划中
 ---
 
+> 用于正式产品/结构 spec。开发过程中的探索、推演与工作中间稿请放在 `docs/superpowers/specs/` 或 `docs/superpowers/plans/`，不要与这里形成双份设计真相。
+
 # 需求目标
 
 [一句话描述]

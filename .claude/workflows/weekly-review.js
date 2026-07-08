@@ -1,10 +1,9 @@
 import {
-  PATH_TEMPLATES,
   buildSynthesisPrompt,
   corePerspectives,
   extractChatSummary,
   formatAnalyses,
-  renderPath,
+  resolveReportPath,
   validateChatSummary,
 } from './shared.js'
 
@@ -18,7 +17,7 @@ export const meta = {
 }
 
 var week = args.week
-var reportPath = renderPath(PATH_TEMPLATES.weeklyReport, { week: week })
+var reportPath = resolveReportPath('weekly_report', { week: week })
 
 // 周志 = 小的月志，固定复用月度核心生活视角。
 var PERSPECTIVES = corePerspectives()

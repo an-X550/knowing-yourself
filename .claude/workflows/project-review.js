@@ -1,8 +1,7 @@
 import {
-  PATH_TEMPLATES,
   buildSynthesisPrompt,
   extractChatSummary,
-  renderPath,
+  resolveReportPath,
   sanitizeProjectSlug,
   validateChatSummary,
 } from './shared.js'
@@ -20,7 +19,7 @@ var projectName = (args.project || 'project-review').trim()
 var mode = args.mode || 'standard'
 var today = new Date().toISOString().slice(0, 10)
 var projectSlug = sanitizeProjectSlug(projectName)
-var reportPath = renderPath(PATH_TEMPLATES.projectReport, {
+var reportPath = resolveReportPath('project_report', {
   date: today,
   project: projectSlug,
 })

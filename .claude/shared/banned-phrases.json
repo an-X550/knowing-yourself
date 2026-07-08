@@ -4,10 +4,10 @@
   "_purpose": "机器可读镜像，供 workflow 摘要质量门和提交前一致性验证使用。",
   "_sync": [
     "修改 common 或 yearly_extra 时，同步 docs/analysis-standards.md 的禁用词说明。",
-    "同步 .claude/workflows/shared.js 的 BANNED_PHRASES；提交前验证必须拦截数组漂移。"
+    "同步 .claude/shared/runtime-contracts.js 的 BANNED_PHRASE_GROUPS；提交前验证必须拦截数组漂移。"
   ],
   "_consumers": [
-    ".claude/workflows/shared.js",
+    ".claude/shared/runtime-contracts.js",
     ".claude/workflows/weekly-review.js",
     ".claude/workflows/monthly-review.js",
     ".claude/workflows/yearly-review.js",

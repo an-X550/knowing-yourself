@@ -1,8 +1,7 @@
 import {
-  PATH_TEMPLATES,
   buildSynthesisPrompt,
   extractChatSummary,
-  renderPath,
+  resolveReportPath,
   validateChatSummary,
 } from './shared.js'
 
@@ -16,7 +15,7 @@ export const meta = {
 }
 
 var year = args.year
-var reportPath = renderPath(PATH_TEMPLATES.yearlyReport, { year: year })
+var reportPath = resolveReportPath('yearly_report', { year: year })
 
 phase('Gather')
 log('Reading monthly reports for ' + year + '...')

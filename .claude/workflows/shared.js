@@ -1,12 +1,10 @@
 // Shared runtime helpers for Claude workflow scripts.
-// Keep constants aligned with .claude/shared/paths.md and .claude/shared/banned-phrases.json.
+// Runtime contract mirrors live in .claude/shared/, not in this helper file.
 
-export var PATH_TEMPLATES = {
-  weeklyReport: '复盘/每周复盘/{week}.md',
-  monthlyReport: '复盘/每月复盘/{month}.md',
-  projectReport: '复盘/项目复盘/{date}-project-{project}.md',
-  yearlyReport: '复盘/年度回顾/{year}-annual-review.md',
-}
+import {
+  BANNED_PHRASE_GROUPS,
+  REPORT_PATH_TEMPLATES,
+} from '../shared/runtime-contracts.js'
 
 export var PERSPECTIVE_REGISTRY = [
   { key: 'chronicle',         name: '实际发生的事', desc: '实际发生了什么？（关键事件、时间线）',             category: 'core',        number: 1 },
@@ -26,36 +24,18 @@ export var MODES = {
   full:     { categories: ['core', 'extended', 'methodology'], timeEstimate: '10-18分钟' },
 }
 
-export var BANNED_PHRASES = {
-  common: [
-    '有波动',
-    '总体还行',
-    '有好有坏',
-    '表现不错',
-    '还可以',
-    '情绪稳定',
-    '整体良好',
-    '继续努力',
-    '保持下去',
-    '有待提高',
-    '需要改进',
-    '要加强',
-    '多注意',
-    '总体不错',
-    '还可以吧',
-    '还行吧',
-  ],
-  yearlyExtra: [
-    '这一年有成长',
-    '进步很大',
-    '收获很多',
-  ],
-}
-
 export function renderPath(template, vars) {
   return template.replace(/\{([^}]+)\}/g, function (_, key) {
     return vars[key] || ''
   })
+}
+
+export function resolveReportPath(pathKey, vars) {
+  var template = REPORT_PATH_TEMPLATES[pathKey]
+  if (!template) {
+    throw new Error('Unknown report path key: ' + pathKey)
+  }
+  return renderPath(template, vars)
 }
 
 export function sanitizeProjectSlug(input) {
@@ -115,9 +95,9 @@ export function extractChatSummary(result) {
 
 export function validateChatSummary(summaryText, options) {
   options = options || {}
-  var bannedPhrases = BANNED_PHRASES.common.slice()
+  var bannedPhrases = BANNED_PHRASE_GROUPS.common.slice()
   if (options.includeYearlyExtra) {
-    bannedPhrases = bannedPhrases.concat(BANNED_PHRASES.yearlyExtra)
+    bannedPhrases = bannedPhrases.concat(BANNED_PHRASE_GROUPS.yearly_extra)
   }
 
   var hasBanned = false

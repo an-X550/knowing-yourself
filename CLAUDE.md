@@ -18,6 +18,7 @@
 - **唯一开发规范**：`AGENTS.md` / `CLAUDE.md` 必须保持逐字同步。
 - **Codex 边界**：`.codex/` 仅保留开发辅助配置，不承载日志分析、agent 定义、workflow 编排等产品逻辑。
 - **本地 AI 辅助边界**：`.agents/skills/superpowers/` 仅作本地开发辅助目录，已 gitignore，不属于产品运行真相，也不纳入提交范围。
+- **文档分层边界**：`docs/specs/` 只放正式采纳的产品/结构 spec；`docs/superpowers/specs/` 只放开发过程设计；`docs/superpowers/plans/` 只放执行计划；`docs/archive/` 只放不再作为活跃上下文的历史文档。
 
 ### 日志粘贴处理
 
@@ -324,3 +325,4 @@
 5. 完成后更新状态
 
 若当前环境可用 superpowers 且已产出足够详细的计划，则直接复用，不重复创建 spec。
+若同一主题还需要保留开发过程推演，过程设计写入 `docs/superpowers/specs/`，但不替代 `docs/specs/` 中的正式 spec。

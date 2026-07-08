@@ -6,6 +6,11 @@ last_updated: 2026-07-08
 # CHANGELOG — 改动记录
 
 > 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
+## [2026-07-08 16:55] [重构] 落地目录边界收口与共享契约去重 (v1.5.4 → v1.5.5)
+
+- **受影响文件**: `.claude/shared/runtime-contracts.js`, `.claude/workflows/shared.js`, `.claude/workflows/weekly-review.js`, `.claude/workflows/monthly-review.js`, `.claude/workflows/project-review.js`, `.claude/workflows/yearly-review.js`, `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `.claude/commands/commit.md`, `.claude/skills/log.md`, `.claude/agents/daily-analyzer.md`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/_TEMPLATE.md`, `docs/first-principles.md`, `docs/archive/README.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 新增 `.claude/shared/runtime-contracts.js` 作为 workflow 运行时镜像层，移除 `workflows/shared.js` 中对路径模板和禁用词的重复维护；将 `log` skill 收紧为日志入口编排器，明确单日日反馈只由 `daily-analyzer` 生成；补齐 README、PROJECT_STATUS、spec 模板与 archive 说明中的文档分层和归档规则，进一步收紧 `.claude/` 与 `docs/` 的职责边界。
+
 ## [2026-07-08 16:21] [文档] 新增目录边界收口 spec 与 plan (v1.5.3 → v1.5.4)
 
 - **受影响文件**: `docs/specs/directory-boundary-tightening.md`, `docs/superpowers/plans/2026-07-08-directory-boundary-tightening.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

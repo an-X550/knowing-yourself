@@ -1,10 +1,9 @@
 import {
-  PATH_TEMPLATES,
   buildSynthesisPrompt,
   estimateTime,
   extractChatSummary,
   formatAnalyses,
-  renderPath,
+  resolveReportPath,
   resolvePerspectives,
   validateChatSummary,
 } from './shared.js'
@@ -22,7 +21,7 @@ export const meta = {
 var month = args.month
 var mode = args.mode || 'standard'
 var perspectiveKeys = args.perspectives || []
-var reportPath = renderPath(PATH_TEMPLATES.monthlyReport, { month: month })
+var reportPath = resolveReportPath('monthly_report', { month: month })
 
 phase('Select')
 
