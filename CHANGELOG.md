@@ -5,7 +5,17 @@ last_updated: 2026-07-08
 
 # CHANGELOG — 改动记录
 
-> 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
+> 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
+
+## [2026-07-08 14:10] [功能] 新增项目复盘完整链路并并入统一六问协议 (v1.3.26 → v1.3.27)
+
+- **受影响文件**: `.claude/commands/project-review.md`, `.claude/workflows/project-review.js`, `.claude/agents/project-synthesis.md`, `.claude/shared/paths.md`, `.claude/workflows/shared.js`, `.claude/commands/review.md`, `docs/methodology-review.md`, `docs/superpowers/specs/2026-07-08-project-review-unification-design.md`, `docs/superpowers/plans/2026-07-08-project-review-unification.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 新增 `/project-review` 命令、`project-review.js` workflow、`project-synthesis` 综合 agent 与 `output.project_report` 路径契约，让项目复盘正式并入“六问一级标题 + 内层综合分析”统一协议；同时补齐项目复盘专用模板与命令骨架说明，更新 README、项目状态与版本记录，完成周 / 月 / 项目三类复盘的同构化。
+
+## [2026-07-08 12:13] [重构] 统一周/月复盘输出骨架为六问一级标题，保留内层综合分析 (v1.3.25 → v1.3.26)
+
+- **受影响文件**: `.claude/agents/monthly-synthesis.md`, `.claude/agents/weekly-synthesis.md`, `docs/methodology-review.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将运行时周/月复盘综合模板从主题章节式骨架收紧为“复盘六问”显式一级标题协议，同时保留主题归并、多视角证据、假说追踪和数据边界等优化能力作为六问内部的二级结构；同步补写方法论文档中的统一输出协议，并在 README、PROJECT_STATUS 与版本记录中对齐“六问外壳 + 内层综合分析”的新约定。
 
 ## [2026-07-08 11:32] [文档] 重写未来优化路线图，突出阶段判断与升级门槛 (v1.3.24 → v1.3.25)
 
@@ -15,183 +25,14 @@ last_updated: 2026-07-08
 ## [2026-07-08 11:10] [文档] 清理 CHANGELOG 历史格式并复审低优先级待办 (v1.3.23 → v1.3.24)
 
 - **受影响文件**: `CHANGELOG.md`, `PROJECT_STATUS.md`, `README.md`, `VERSION`
-- **改动摘要**: 将 CHANGELOG 的时间线说明移回顶部，修复旧记录中 v1.3.13 与 v1.3.12 条目粘连的问题，并移除底部重复说明；复审 PROJECT_STATUS 的中低优先级待办，将样本与年度回归保留为中优先级验证任务，将自动化测试、CSV 导出和国际化/英文 README 标记为等待真实需求的暂缓项；同步版本号至 v1.3.24。
+- **改动摘要**: 清理 CHANGELOG 头部格式与旧记录粘连问题，复审 PROJECT_STATUS 的中低优先级待办，将样本与年度回归保留为中优先级验证任务，将自动化测试、CSV 导出和国际化标记为等待真实需求的暂缓项；同步版本号至 v1.3.24。
 
 ## [2026-07-08 10:30] [文档] 收紧项目规范与维护文档职责，降低重复与维护成本 (v1.3.22 → v1.3.23)
 
 - **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `PROJECT_STATUS.md`, `README.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 将镜像规范收紧为同一份更短的规则文本，保留维护边界、版本/追踪、同步验证与工作流控制等高价值规则，删除过细的重复展开；将 `README.md` 收回到“项目说明与使用入口”，将 `PROJECT_STATUS.md` 收回到“事实状态面板”，减少它们与规范文件之间的重复叙述；同步整理 `CHANGELOG.md` 头部日期与时间线展示，并将版本号更新至 `v1.3.23`。
+- **改动摘要**: 将镜像规范收紧为同一份更短的规则文本，保留维护边界、版本追踪、同步验证与工作流控制等高价值规则，删除过细的重复展开；将 `README.md` 收回到“项目说明与使用入口”，将 `PROJECT_STATUS.md` 收回到“事实状态面板”，减少它们与规范文件之间的重复叙述；同步版本号至 `v1.3.23`。
 
 ## [2026-07-08 01:20] [文档] 对齐月度复盘命令表述：先生成视角证据包，再做主题综合 (v1.3.21 → v1.3.22)
 
 - **受影响文件**: `.claude/commands/monthly-review.md`, `PROJECT_STATUS.md`, `README.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 补齐 `/monthly-review` 命令层文案，使其与已完成的月度综合链路优化保持一致：命令入口不再把并行视角输出描述成直接产出的“月报内容”，而是明确为“先生成视角证据包/综合材料，再由 `monthly-synthesis` 做主题归并并输出最终月报”；同步更新版本号与状态记录，作为第三优先级月度链路优化的命令层收口。
-
-## [2026-07-08 00:55] [重构] 月度综合链路第2阶段：上游中间产物收紧为证据包，补做视角审计 (v1.3.20 → v1.3.21)
-
-- **受影响文件**: `.claude/agents/monthly-processor.md`, `perspectives/therapist.md`, `perspectives/values-meaning.md`, `perspectives/README.md`, `docs/specs/monthly-processor-evidence-packets.md`, `docs/superpowers/plans/2026-07-08-monthly-processor-evidence-packets.md`, `docs/specs/monthly-perspective-audit-2026-07-08.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 继续执行“月度综合链路优化”第 2 阶段与第 3 阶段：将 `monthly-processor` 从“生成报告”收紧为“生成证据包/综合材料”，为上游新增候选发现、证据、反例/证据不足与边界说明约束；优先把 `therapist` 与 `values-meaning` 从长叙事小报告改成证据包格式；同步更新视角体系总说明，并新增一次视角审计，明确哪些生活类视角已材料化、哪些方法论视角暂不纳入本轮压缩。
-
-## [2026-07-08 00:20] [配置] 优化 Git 提交流程：验证在内，写入在外 (v1.3.19 → v1.3.20)
-
-- **受影响文件**: `.claude/commands/commit.md`, `AGENTS.md`, `CLAUDE.md`, `.claude/settings.json`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `docs/specs/git-commit-escalation-flow.md`, `docs/superpowers/plans/2026-07-08-git-commit-escalation-flow.md`
-- **改动摘要**: 将 `/提交` 的 Git 写阶段改为提权前置：先在沙箱内完成状态检查与同步验证，再把 `git add` / `git commit` 视为受限环境下的预期提权边界；同步 AGENTS/CLAUDE 镜像规则、Stop 提示和 README 中 `/提交` 的描述，避免把 `.git/index.lock` 权限限制误解为仓库故障。
-
-## [2026-07-07 23:51] [重构] 收紧月度综合引擎：先归并主题，再映射报告骨架 (v1.3.18 → v1.3.19)
-
-- **受影响文件**: `.claude/agents/monthly-synthesis.md`, `.claude/workflows/monthly-review.js`, `docs/specs/monthly-synthesis-theme-compression.md`, `docs/superpowers/plans/2026-07-07-monthly-synthesis-theme-compression.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 为月度综合引擎增加“候选发现提取 → 主题归并 → 弱信号降权 → 映射既有章节骨架”的硬步骤，并要求整份月报只保留 2-3 个主主题、每个主题都附支持视角、关键证据与反例/证据不足说明；同时在月度 workflow 的综合交接指令中补充“按主题综合，不按视角顺序展开”，以减少月报读感上的视角拼贴。
-
-## [2026-07-07 22:09] [重构] 抽取 workflow 共享 helper，统一摘要质量门与路径模板 (v1.3.17 → v1.3.18)
-
-- **受影响文件**: `.claude/workflows/shared.js`, `.claude/workflows/weekly-review.js`, `.claude/workflows/monthly-review.js`, `.claude/workflows/yearly-review.js`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `.claude/commands/commit.md`, `.claude/commands/yearly-review.md`, `docs/analysis-standards.md`, `docs/specs/audit-cleanup.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `docs/superpowers/plans/2026-07-07-workflow-shared-optimization.md`
-- **改动摘要**: 新增 workflow 共享运行时 helper，集中维护报告路径模板、视角注册表、模式定义、聊天摘要提取和质量门；周/月/年 workflow 改为导入共享 helper，移除各自重复的禁用词数组、摘要校验和路径拼接；同步禁用词 JSON、质量标准、提交验证说明和年度命令路径说明，版本更新至 v1.3.18。
-
-## [2026-07-07 21:57] [配置] 路径与共享规则契约化，降低 agent 硬编码与漂移风险 (v1.3.16 → v1.3.17)
-
-- **受影响文件**: `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `.claude/settings.json`, `.claude/commands/daily-review.md`, `.claude/commands/weekly-review.md`, `.claude/commands/monthly-review.md`, `.claude/commands/commit.md`, `.claude/skills/log.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `docs/superpowers/plans/2026-07-07-shared-path-rules-optimization.md`
-- **改动摘要**: 将 `paths.md` 从路径清单升级为命名 key、创建责任和废弃路径契约；扩展 `prompt-rules.md` 的共享文件读取顺序、hook 路由边界、禁用词同步规则和日反馈契约；为 `banned-phrases.json` 增加机器镜像元数据且保留 `common`/`yearly_extra` 数组；格式化 `settings.json` 并保持其只做 hook 薄路由；轻量同步 daily/log/weekly/monthly/commit 文档中的路径与验证描述，版本同步至 v1.3.17。
-
-## [2026-07-07 21:40] [重构] 优化日反馈链路：统一契约、收短输出、稳定闭环验证 (v1.3.15 → v1.3.16)
-
-- **受影响文件**: `.claude/agents/daily-analyzer.md`, `.claude/commands/daily-review.md`, `.claude/skills/log.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/paths.md`, `docs/analysis-standards.md`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
-- **改动摘要**: 将日反馈契约集中到共享提示词规则，要求 `/daily-review` 与 `log` skill 统一调用 `daily-analyzer`，避免两套即时分析格式分叉；D0-D6 改为内部质量门，不再输出自检行；补全日志输入路径权威定义，修正 `/daily-review` 工具权限与中文错误提示；回归检查 7/4-7/6 既有反馈，确认新契约针对 7/6 过长、旧标题和预测口误风险进行了约束。
-
-## [2026-07-07 21:21] [配置] 维护文件改为影响驱动读取与更新 (v1.3.14 → v1.3.15)
-
-- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 将上下文加载从完整读取改为最小足够上下文，明确 README 默认按需读取；将 CHANGELOG、PROJECT_STATUS、VERSION、README 的更新规则收窄为影响驱动，避免每次改动机械触碰四类维护文件；同步版本号至 v1.3.15 并记录关键决策。
-
-## [2026-07-07 19:25] [配置] 忽略本地 Superpowers 辅助目录并明确维护边界 (v1.3.13 → v1.3.14)
-
-- **受影响文件**: `.gitignore`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
-- **改动摘要**: 将 `.agents/skills/superpowers/` 标记为本地 AI 开发辅助目录并加入 `.gitignore`，明确其方便 AI 使用 Superpowers 技能但不属于 `.claude/` 产品运行真相；同步 AGENTS/CLAUDE 镜像规范、README、PROJECT_STATUS 与版本号至 v1.3.14。
-
-## [2026-07-07 19:10] [重构] 提示词去重：新增共享规则并精简高重复 agent (v1.3.12 → v1.3.13)
-
-- **受影响文件**: `.claude/shared/prompt-rules.md`, `.claude/agents/daily-analyzer.md`, `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `docs/superpowers/plans/2026-07-07-prompt-dedup-optimization.md`
-- **改动摘要**: 新增共享提示词规则，集中维护路径、证据、输出契约和质量门槛；精简 daily/weekly/monthly/yearly 四个高重复 agent 的提示词，保留原有命令入口、输出路径、文件名和报告结构；同步 README、PROJECT_STATUS 与版本号至 v1.3.13。
-
-## [2026-07-07 18:23] [配置] 规则合理化：同步检查分级、Superpowers 条件化、根目录约束校准 (v1.3.11 → v1.3.12)
-
-- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `VERSION`
-- **改动摘要**: 审查现有规则后修复三类不合理点：① 将文档同步检查从“每次全量”改为轻量/标准/全量三级，降低小改动摩擦；② 将 Superpowers 从无条件强制改为“环境提供时触发，不可用时回退内置流程”，避免不可执行规则阻塞任务；③ 将根目录规则从不符合现状的“≤8个核心文件”校准为当前允许的10个核心/元数据文件，并明确 AGENTS.md 与 CLAUDE.md 是跨工具镜像规范，修改一份必须同步另一份。
-
----
-## [2026-07-07 18:14] [配置] 提交流程改为改动后自动本地提交，推送仍手动执行 (v1.3.10 → v1.3.11)
-
-- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `.claude/commands/commit.md`, `.claude/settings.json`, `.codex/hooks.json`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `VERSION`
-- **改动摘要**: 将提交规则从“提示用户输入 /提交”改为“CHANGELOG 记录与验证完成后自动执行 /提交 对应的本地 add/commit 流程”。`/提交` 仍只做本地提交，远程推送由用户手动运行 `git push`；Stop hook 提醒文案同步为“自动提交可能未完成时再运行 /提交”。
-
----
-## [2026-07-07 18:07] [重构] 项目遍历优化：去硬编码目录、同步当前数据、修正审计状态 (v1.3.9 → v1.3.10)
-
-- **受影响文件**: `.claude/commands/monthly-review.md`, `perspectives/growth-dimensions.md`, `perspectives/journal-quality.md`, `perspectives/review-coach.md`, `docs/first-principles.md`, `docs/specs/evolution-roadmap.md`, `docs/specs/audit-cleanup.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
-- **改动摘要**: 优化月度复盘命令，将视角输出目录从固定6个生活视角改为按选中视角动态生成，避免 full/custom 模式文档漂移；统一3个 perspective 的 Rules 段落为中文；同步第一性原理与路线图中的日反馈/月报当前数据；修正 audit-cleanup 的验收勾选与状态，保留 workflow 禁用词内嵌项作为后续待处理；版本同步至 v1.3.10。
-
----
-## [2026-07-07 17:57] [重构] 确立 .claude 唯一运行真相，停用 .codex/agents 手写副本 (v1.3.8 → v1.3.9)
-
-- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `.gitignore`, `.codex/hooks.json`, `.codex/agents/*.toml`（删除）, `docs/specs/evolution-roadmap.md`, `VERSION`
-- **改动摘要**: 将维护边界固化为「唯一运行真相：.claude/；唯一开发规范：AGENTS.md / CLAUDE.md；.codex/ 不作为产品逻辑维护面」。删除 6 个 `.codex/agents` 手写 agent 副本，停用 `.codex/hooks.json` 中的日志触发入口，仅保留未提交提醒，并将 `.codex/agents/` 加入 .gitignore，避免 Claude agent、日志入口与 Codex 配置双份漂移。同步 README/PROJECT_STATUS/路线图版本号，并修正 PROJECT_STATUS 中 `/提交` 的旧 push 描述。
-
----
-## [2026-07-07] [修复] 统一日志分析入口：CLAUDE.md 新增日志粘贴处理规则 (v1.3.7 → v1.3.8)
-
-- **受影响文件**: `CLAUDE.md`, `VERSION`, `PROJECT_STATUS.md`, `README.md`, `docs/specs/evolution-roadmap.md`
-- **改动摘要**: 用户粘贴日志时因 hook 未触发导致 Claude 自由发挥分析格式（与 daily-analyzer 模板不一致）。在 CLAUDE.md 跳过阈值与上下文加载之间新增"日志粘贴处理"规则，确保 Claude 直接收到日志原文时也遵循标准输出格式，分析结果同时写入复盘/每日反馈文件
-
----
-## [2026-07-07] [重构] /提交 改为仅本地提交，推送由用户手动执行 (v1.3.6 → v1.3.7)
-
-- **受影响文件**: `.claude/commands/commit.md`, `CLAUDE.md`, `README.md`, `.claude/settings.json`, `VERSION`, `PROJECT_STATUS.md`
-- **改动摘要**: `/提交` 命令不再自动执行 git push，仅做本地 add/commit 并提醒用户手动推送。同步更新 CLAUDE.md 提交提示规则、README 命令表/结构树、settings.json Stop 钩子消息
-
----
-## [2026-07-07] [修复] 项目遍历审计：修复6处跨文件矛盾与警告 (v1.3.5 → v1.3.6)
-
-- **受影响文件**: `PROJECT_STATUS.md`, `docs/specs/evolution-roadmap.md`, `.claude/commands/monthly-review.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/weekly-synthesis.md`, `.claude/shared/paths.md`, `docs/specs/audit-cleanup.md`, `关于我/current.md`（新建）, `README.md`, `VERSION`
-- **改动摘要**: 审计修复6处问题：①PROJECT_STATUS合并重复"低优先级"段落；②evolution-roadmap版本号v1.3.3→v1.3.5；③monthly-review命令描述从硬编码"6视角"改为多模式说明；④monthly-synthesis agent视角数说明改为可变；⑤weekly-synthesis规则编号11→12/12→13/13→14；⑥paths.md新增journal-coach输出路径；⑦audit-cleanup.md标记为已完成；⑧创建current.md占位文件
-
----
-## [2026-07-07] [重构] 项目遍历审计：死代码清理 + 功能冻结解除 + 预防机制 (v1.3.4 → v1.3.5)
-
-- **受影响文件**: `.claude/shared/paths.md`, `docs/specs/csv-export.md→_archived/`, `README.md`, `PROJECT_STATUS.md`, `docs/first-principles.md`, `docs/specs/evolution-roadmap.md`, `CLAUDE.md`, `VERSION`, `data/.gitkeep`, `output/.gitkeep`
-- **改动摘要**: ①死代码清理：paths.md移除零消费者methodology-journal、归档僵尸spec csv-export、README结构树补全paths.md、PROJECT_STATUS补全配置表+月度报告+遗漏文件、创建data/output目录；②永久解除功能冻结：README/PROJECT_STATUS/first-principles/evolution-roadmap共5处移除冻结语言，待办从"暂缓（功能冻结期）"改为"低优先级"；③预防机制：CLAUDE.md同步检查清单新增反向消费者检查（配置/路径/文件三级）+高风险管理表新增行+同步验证新增零死配置检查
-
----
-## [2026-07-07] [重构] 清理 settings.json 死配置：移除 journaling 块 (v1.3.3 → v1.3.4)
-
-- **受影响文件**: `.claude/settings.json`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
-- **改动摘要**: 删除 settings.json 中整个 journaling 块（含 fallback_paths）——该配置自 v1.2.0 创建以来无任何代码消费；README 配置说明替换为 paths.md 引用；PROJECT_STATUS 已知问题 #1/#7 和决策记录同步更新
-
----
-## [2026-07-07] [文档] 审计修复：9处跨文件不一致 (v1.3.2 → v1.3.3)
-
-- **受影响文件**: `PROJECT_STATUS.md`, `.claude/agents/daily-analyzer.md`, `docs/analysis-standards.md`, `README.md`, `.claude/workflows/monthly-review.js`, `.claude/skills/log.md`, `.claude/commands/import.md`, `.claude/agents/monthly-processor.md`, `VERSION`
-- **改动摘要**: 项目审计修复9处不一致——PROJECT_STATUS命令计数9→10并补/import行、删除重复banned-phrases行；daily-analyzer标准引用扩展至D0-D6+职责边界注释；README补全weekly/monthly fallback路径；monthly-review.js移除废弃focus-personal引用；analysis-standards新增D0定义+D4+→D5重新编号；硬编码"谢安"替换为glob发现模式
-
-## [2026-07-07] [配置] 修复 GitHub 语言标签：添加 .gitattributes 让 Markdown 参与统计 (v1.3.1 → v1.3.2)
-
-- **受影响文件**: `.gitattributes`（新建）, `VERSION`, `PROJECT_STATUS.md`
-- **改动摘要**: 新建 .gitattributes，将 Markdown 标记为 linguist-detectable 以参与语言统计，workflow JS 标记为 vendored 排除统计；修复 GitHub 语言标签从 100% JavaScript 变为 Markdown 为主
-
-## [2026-07-07] [文档] README 项目状态同步：版本号/命令数/代理表/结构树修复 (v1.3.0 → v1.3.1)
-
-- **受影响文件**: `README.md`, `VERSION`, `PROJECT_STATUS.md`
-- **改动摘要**: README 版本号从 1.1.0 同步至 1.3.0；命令数量从 8→10 并补回 commit.md；代理表格删除重复的 monthly-processor 行；项目结构树补回 shared/、archive/、perspectives/README.md；命令系统表新增 /提交；Git忽略规则表新增 规划/
-
-## [2026-07-07] [功能] Git 自动化：/提交 命令 + 未提交改动提醒 (v1.2.0 → v1.3.0)
-
-- **受影响文件**: `.claude/commands/commit.md`（新建）, `.claude/settings.json`, `CLAUDE.md`, `VERSION`, `PROJECT_STATUS.md`
-- **改动摘要**: 新增 /提交 斜杠命令实现 git add/commit/push 一键操作，提交信息自动提取自 CHANGELOG 最新条目；新增 Stop 钩子在会话结束时提醒未提交改动；CLAUDE.md 改动追踪章节新增提交与推送提示规则
-
----
-
-## [2026-07-07] [重构] 两轮第一性原理审计清理：消除冗余、统一格式、建立单一权威来源 (v1.1.0 → v1.2.0)
-
-- **受影响文件**: 40+个文件（5 agent + 5 command + 3 workflow + 9 perspective + 7 文档 + 4 新建）
-- **改动摘要**: 基于两轮全项目第一性原理审计，执行5阶段系统清理：
-  - 阶段0 安全基线：36个未跟踪核心文件入Git
-  - 阶段1 单一权威来源：创建 `.claude/shared/banned-phrases.json` + `perspectives/README.md`，禁用词列表引用链统一
-  - 阶段2 W-格式管道同步：6文件×16处 `YYYY-Www` → `YYYY-Www（M月D日-M月D日）`，修复 weekly-synthesis/yearly-synthesis mkdir bug，修复 W27-coach frontmatter month→week
-  - 阶段3 消除重复：12处语言要求→CLAUDE.md全局规则，log.md 131→85行，切记引用清理
-  - 阶段4 统一格式：weekly-processor幽灵代理清理（README+PROJECT_STATUS共5处），growth-dimensions/journal-quality Rules中文化
-  - 阶段5 上下文精简：values-meaning去硬编码，first-principles诚实检查动态化，PROJECT_STATUS文件清单压缩，weekly/monthly-synthesis模板 ~250→~50行
-- **净效果**: ~250行冗余删除，~200行上下文加载节省，0个未跟踪文件
-
----
-
-## [2026-07-07] [重构] 第一性原理文档审计清理 (v1.0.4 → v1.1.0)
-
-- **受影响文件**: 25+个文件（README, CLAUDE, PROJECT_STATUS, CHANGELOG, yearly-synthesis, weekly-synthesis, log.md, first-principles.md, analysis-standards.md, 9个perspective, 3个command, 3个workflow）
-- **改动摘要**: 基于完整第一性原理审计，执行三阶段清理：
-  - Phase 1 修复矛盾：README版本号同步、PROJECT_STATUS代理计数修正、analysis-standards过时指导更新、yearly-synthesis模板中文化+旧路径清理
-  - Phase 2 消除重复：聊天摘要质量门集中到analysis-standards、log.md输出格式引用daily-analyzer、9个perspective文件删除冗余语言声明、切记.md浓缩并入first-principles、README与first-principles重叠内容精简
-  - Phase 3 清理死内容：journal-coach/yearly-review/update-current清理过期英文路径、PROJECT_STATUS待办归类整理、CHANGELOG归档（274→40行）、5个perspective添加对比职责说明、CHANGELOG上下文加载优化（完整阅读→最近5条）
-- **净效果**: ~400行删除，CHANGELOG上下文加载从~7,000 tokens降至~1,500 tokens
-
-## [2026-07-06 23:30] [配置] 规划目录文件命名规则优化：降低用户摩擦 (v1.0.3 → v1.0.4)
-
-- **受影响文件**: `规划/2026-07-06~12.md`（新建）, `CLAUDE.md`, `.gitignore`, `VERSION`
-- **改动摘要**: 规划文件从英文周号改为ISO日期范围命名，个人数据目录豁免英文kebab-case规则
-
-## [2026-07-06 23:00] [重构] 月度分析管道效率优化：删除不产生洞察的文件读取 (v1.0.2 → v1.0.3)
-
-- **受影响文件**: `.claude/agents/monthly-synthesis.md`, `.claude/agents/monthly-processor.md`, `.claude/workflows/monthly-review.js`, 等
-- **改动摘要**: 删除 synthesis agent 对用户洞察无贡献的4类文件读取，修复6处过期路径引用。预计每次月度分析节省21-33k tokens
-
-## [2026-07-06 22:00] [数据] 5月+7月月度分析完成 + 核心画像跨月更新 (v1.0.1 → v1.0.2)
-
-- **受影响文件**: `关于我/core-profile.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
-- **改动摘要**: 5月（31天）和7月（5天）月度分析完成；核心画像新增跨月对比表和7条持续模式
-
-## [2026-07-06] [修复] 日志分析操作跳过上下文加载，减少80%等待时间 (v1.0.0 → v1.0.1)
-
-- **受影响文件**: `CLAUDE.md`, `VERSION`, `PROJECT_STATUS.md`
-- **改动摘要**: 日志分析操作跳过上下文加载和用户状态检测，仅验证目标日志文件存在
-
-## [2026-07-06] [发布] 首个正式版本 v1.0.0 (v0.19.2 → v1.0.0)
-
-- **受影响文件**: VERSION, PROJECT_STATUS.md, CHANGELOG.md
-- **改动摘要**: 项目达到首个稳定发布版本。核心功能完整：9个视角、8个命令、6个代理、3个生命周期工作流、3层分析架构全部就绪。
+- **改动摘要**: 补齐 `/monthly-review` 命令层文案，使其与已完成的月度综合链路优化保持一致：命令入口不再把并行视角输出描述成直接产出的“月报内容”，而是明确为“先生成视角证据包 / 综合材料，再由 `monthly-synthesis` 做主题归并并输出最终月报”；同步更新版本号与状态记录，作为月度链路优化的命令层收口。

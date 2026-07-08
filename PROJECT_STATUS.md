@@ -5,15 +5,16 @@ last_updated: 2026-07-08
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.3.25
+**当前版本**：1.3.27
 
 ## 项目概述
 
-**知己** 是一个基于 Claude Code 的 AI 日志分析与复盘教练 Skill，围绕日、周、月、年的复盘节奏运行，通过多视角分析帮助用户做自我认知、成长追踪和行动改进。
+**知己** 是一个基于 Claude Code 的 AI 日志分析与复盘 Skill，围绕日、周、月、项目、年的复盘节奏运行，通过多视角分析帮助用户做自我认知、成长追踪和行动改进。
 
-**目标场景**：个人长期日志记录、周期性复盘、成长模式识别。
+**目标场景**：个人长期日志记录、周期性复盘、成长模式识别、项目优化验收与阶段复盘。
 
 **方法论基础**：
+
 - 日志六步法
 - 六维成长模型
 - 复盘六问框架
@@ -25,8 +26,8 @@ last_updated: 2026-07-08
 |------|------|
 | 运行平台 | Claude Code CLI / VSCode Extension |
 | 内容格式 | Markdown + YAML frontmatter |
-| 命令系统 | Claude Code Slash Commands（10 个） |
-| 代理系统 | Claude Code Sub-agents（6 个） |
+| 命令系统 | Claude Code Slash Commands（11 个） |
+| 代理系统 | Claude Code Sub-agents（7 个） |
 | 配置 | JSON |
 | 版本控制 | Git + 语义化版本 |
 | 语言 | 中文内容 + 英文配置字段 |
@@ -36,7 +37,7 @@ last_updated: 2026-07-08
 - **唯一运行真相**：`.claude/`
 - **唯一开发规范**：`AGENTS.md` / `CLAUDE.md`
 - **Codex 边界**：`.codex/` 仅保留开发辅助配置
-- **本地 AI 辅助边界**：`.agents/skills/superpowers/` 不属于产品逻辑且不纳入提交
+- **本地 AI 辅助边界**：`.agents/skills/superpowers/` 不属于产品运行逻辑且不纳入提交
 
 ## 架构设计
 
@@ -53,8 +54,9 @@ last_updated: 2026-07-08
 | 周期 | 命令 | 核心处理 |
 |------|------|---------|
 | 日 | `/daily-review` | `daily-analyzer` |
-| 周 | `/weekly-review` | `monthly-processor` ×3 + `weekly-synthesis` |
-| 月 | `/monthly-review` | `monthly-processor` ×N + `monthly-synthesis` |
+| 周 | `/weekly-review` | `monthly-processor` ×3 + `weekly-synthesis`（六问外壳 + 轻量综合） |
+| 月 | `/monthly-review` | `monthly-processor` ×N + `monthly-synthesis`（六问外壳 + 主题综合） |
+| 项目 | `/project-review` | `project-synthesis`（六问外壳 + 项目机制综合） |
 | 年 | `/yearly-review` | `yearly-synthesis` |
 | 任意 | `/review` | `review-readiness-checker` 路由 |
 
@@ -69,21 +71,23 @@ last_updated: 2026-07-08
 
 | 模块 | 状态 | 说明 |
 |------|------|------|
-| 命令系统 | ✅ 完成 | 10 个命令均已就绪 |
-| 代理系统 | ✅ 完成 | 6 个代理均已就绪 |
+| 命令系统 | ✅ 完成 | 11 个命令均已就绪 |
+| 代理系统 | ✅ 完成 | 7 个代理均已就绪 |
 | 视角体系 | ✅ 完成 | 9 个视角均已就绪 |
 | 共享规则与路径契约 | ✅ 完成 | `paths.md` / `prompt-rules.md` / `banned-phrases.json` 已收口 |
-| 月度综合链路 | ✅ 完成 | 已对齐“证据包 → 主题综合” |
-| 年度链路端到端验证 | 🔶 进行中 | 依赖更多月度报告和实测 |
-| 示例与自动化测试 | 🔶 进行中 | 仍需补样本与测试覆盖 |
+| 周/月复盘统一输出协议 | ✅ 完成 | 已切换为“六问一级标题 + 内层综合分析” |
+| 月度综合链路 | ✅ 完成 | 已对齐“证据包 → 主题综合”，并映射回六问外壳 |
+| 项目复盘统一链路 | ✅ 完成 | 已补齐 command / workflow / agent / path，纳入统一六问协议 |
+| 年度链路端到端验证 | 🔄 进行中 | 依赖更多月度报告和实测 |
+| 示例与自动化测试 | 🔄 进行中 | 仍需补样本与测试覆盖 |
 
-### 命令完成度（10/10）
+### 命令完成度（11/11）
 
-`/review`、`/daily-review`、`/weekly-review`、`/monthly-review`、`/yearly-review`、`/journal-coach`、`/interview`、`/update-current`、`/import`、`/提交`
+`/review`、`/daily-review`、`/weekly-review`、`/monthly-review`、`/project-review`、`/yearly-review`、`/journal-coach`、`/interview`、`/update-current`、`/import`、`/提交`
 
-### 代理完成度（6/6）
+### 代理完成度（7/7）
 
-`daily-analyzer`、`weekly-synthesis`、`monthly-processor`、`monthly-synthesis`、`yearly-synthesis`、`review-readiness-checker`
+`daily-analyzer`、`weekly-synthesis`、`monthly-processor`、`monthly-synthesis`、`project-synthesis`、`yearly-synthesis`、`review-readiness-checker`
 
 ### 产出与样本
 
@@ -91,7 +95,7 @@ last_updated: 2026-07-08
 |------|------|
 | 月度复盘报告 | ✅ 已有 2026-04 / 2026-05 / 2026-06 / 2026-07 |
 | 日分析样本 | ✅ 已有 2 份 |
-| 周/月样本补充 | 🔶 待继续增加 |
+| 周 / 月样本补充 | 🔄 待继续增加 |
 | `关于我/current.md` | ✅ 已建占位，由 `/update-current` 维护 |
 
 ## 待办事项
@@ -99,26 +103,27 @@ last_updated: 2026-07-08
 ### 高优先级
 
 - [ ] 运行 `/weekly-review` 对最近一周做完整测试
+- [ ] 运行 `/project-review` 做一次真实项目验收回归
 - [ ] 运行 `/journal-coach` 对最近 7 天做完整测试
 
 ### 中优先级（验证与样本）
 
 - [ ] 增加更多单日分析样本，覆盖 A/B/C/D 不同质量等级
 - [ ] 测试 `/yearly-review`（需要至少 6 个月度报告）
-- [ ] 添加示例周志/月志文件
+- [ ] 添加示例周志 / 月志 / 项目复盘文件
 
-### 低优先级（暂缓，等待真实需求）
+### 低优先级（等待真实需求）
 
-- [ ] 自动化测试：等日/周/月回归样本稳定后再补，避免测试固化尚在调整的输出形态。
-- [ ] CSV 导出功能：仅当真实复盘需要结构化数据外部分析时再做。
-- [ ] 国际化支持 / README 英文版：当前项目面向中文个人使用，暂不投入。
+- [ ] 自动化测试：等日 / 周 / 月 / 项目回归样本稳定后再补
+- [ ] CSV 导出功能：仅当真实复盘需要结构化数据外部分析时再做
+- [ ] 国际化支持 / README 英文版：当前项目面向中文个人使用，暂不投入
 
 ## 已知问题
 
 ### 路径与兼容性
 
-1. 输入/输出目录使用中文名，在部分 Windows / CI 环境中可能遇到编码问题。
-2. `日志/周志/`、`日志/月志/` 与 `output/` 的部分目录仍依赖运行时创建。
+1. 输入 / 输出目录使用中文名，在部分 Windows / CI 环境中可能遇到编码问题。
+2. `日志/` 与 `复盘/` 的部分目录仍依赖运行时创建。
 
 ### 数据与格式
 
@@ -127,13 +132,13 @@ last_updated: 2026-07-08
 
 ### 行为与验证
 
-5. `review-coach` 依赖用户先写好周志/月志，否则无法产出有效评估。
+5. `review-coach` 依赖用户先写好周志 / 月志，否则无法产出有效评估。
 6. `/yearly-review` 依赖链较长，尚未完成端到端验证。
-7. 当前分析样本仍偏少，尤其缺周度与月度示例。
+7. 当前分析样本仍偏少，尤其缺周度、项目与月度示例。
 
 ### 适配性
 
-8. 项目仍偏单用户语境，迁移到其他用户时需调整画像与部分提示语境。
+8. 项目仍偏单用户语境，迁移到其他用户时需调整画像和部分提示语境。
 9. 方法论文档当前仅提供中文版本。
 
 ## 关键决策记录
@@ -141,13 +146,14 @@ last_updated: 2026-07-08
 | 日期 | 决策 | 理由 |
 |------|------|------|
 | 2026-07-05 | 采用命令 → 代理 → 视角三层结构 | 降低耦合，分离入口、执行与分析定义 |
-| 2026-07-05 | 视角拆分为生活内容 6 + 方法论 3 | 同时覆盖“内容洞察”和“写作/复盘质量评估” |
+| 2026-07-05 | 视角拆分为生活内容 6 + 方法论 3 | 同时覆盖“内容洞察”和“写作 / 复盘质量评估” |
 | 2026-07-05 | 支持单文件整月日志 | 适配真实使用方式，而非强制每日独立文件 |
 | 2026-07-06 | `/monthly-review` 支持多模式 | 在速度、覆盖度与摩擦之间做分层选择 |
 | 2026-07-07 | `.claude/` 固化为唯一运行真相 | 避免 `.codex/` 与 `.claude/` 双份漂移 |
 | 2026-07-07 | 维护文件改为影响驱动读取与更新 | 降低上下文噪音和维护成本 |
-| 2026-07-07 | 日反馈统一为 `daily-analyzer` 契约 | 保证 `/daily-review` 与 `log` skill 输出一致 |
-| 2026-07-07 | 路径与提示词规则集中到共享文件 | 降低 agent/command/workflow 漂移风险 |
+| 2026-07-07 | 日反馈统一走 `daily-analyzer` 契约 | 保证 `/daily-review` 与 `log` skill 输出一致 |
+| 2026-07-07 | 路径与提示词规则集中到共享文件 | 降低 agent / command / workflow 漂移风险 |
 | 2026-07-08 | Git 提交流程改为“验证在内、写入在外” | 适配受限环境下的提权边界 |
 | 2026-07-08 | 月度上游中间产物收紧为证据包 | 让综合层按主题归并，减少“按视角拼贴”的月报读感 |
-| 2026-07-08 | 未来优化路线图改为“先判断、后展开”的双层结构 | 让协作者/面试官先看懂当前取舍，同时保留内部决策门槛与 A/B/C 路径展开 |
+| 2026-07-08 | 未来优化路线图改为“先判断、后展开”的双层结构 | 让协作者先看懂当前取舍，同时保留内部决策门槛与 A/B/C 路径展开 |
+| 2026-07-08 | 项目复盘纳入与周 / 月复盘同构的六问统一链路 | 保留统一外壳，同时为项目场景预留可扩展内层槽位 |

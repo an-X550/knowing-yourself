@@ -1,5 +1,5 @@
 ---
-description: Smart review command — one entry point for all journal analysis. Auto-detects scope or routes based on natural language input.
+description: Smart review command - one entry point for all journal analysis. Auto-detects scope or routes based on natural language input.
 allowed-tools:
   - Task
   - Glob
@@ -9,11 +9,11 @@ allowed-tools:
 
 # Review Command（统一复盘入口）
 
-一句话复盘——你不需要记住日/周/月/年分别用什么命令。说出你想分析的范围即可。
+一句话复盘，你不需要记住日 / 周 / 月 / 项目 / 年分别用什么命令。说出你想分析的范围即可。
 
 ## Input
 
-自然语言，从: `$ARGUMENTS`
+自然语言，来自：`$ARGUMENTS`
 
 **无参数**：智能检测当前最适合的分析类型，主动提议。
 
@@ -29,30 +29,30 @@ allowed-tools:
 | `昨天` `今天` `YYYY-MM-DD` | daily-analyzer agent |
 | `上周` `本周` `YYYY-Www` | weekly-review workflow（含日期范围） |
 | `上月` `六月` `2026-07` | monthly-review workflow |
+| `项目复盘` `版本复盘` `里程碑复盘` `验收复盘` | project-review workflow |
 | `今年` `去年` `2026` | yearly-review workflow |
-| `最近` `最近N天` | journal-coach（默认7天） |
+| `最近` `最近几天` | journal-coach（默认 7 天） |
 | `--deep` `深度` | 追加 full 模式 |
 | `--quick` `快速` | 追加 fast 模式 |
 
-**自然语言查询**（无法匹配时）：用户可能在问具体问题，直接读日志针对性分析。
+**自然语言查询**（无法匹配时）：用户可能在问具体问题，直接读日志做针对性分析。
 
 ### 2. 智能检测（无参数时）
 
-检测当前日期和已有日志/报告，向用户提议最合适的分析。**只提议，不自动执行**。
+检测当前日期和已有日志 / 报告，向用户提议最合适的分析。只提议，不自动执行。
 
-1. **月初 1-5 号 + 上月 ≥10 天日志 + 上月报告不存在** → 提议月度复盘
-2. **周一/周二 + 上周 ≥3 天日志 + 上周报告不存在** → 提议周度复盘
-3. **1月初 + 去年 ≥6 份月报告 + 年度报告不存在** → 提议年度回顾
-4. **≥3 天日志 + 无近期报告** → 提议教练总结
-5. **其他** → 提示可用命令
-
-用户回复 `好`/`深度`/`不用` 分别对应执行/深度执行/停止。
+1. 月初 1-5 号 + 上月 ≥10 天日志 + 上月报告不存在 → 提议月度复盘
+2. 周一 / 周二 + 上周 ≥3 天日志 + 上周报告不存在 → 提议周度复盘
+3. 1 月初 + 去年 ≥6 份月报 + 年度报告不存在 → 提议年度回顾
+4. ≥3 天日志 + 近期无报告 → 提议教练总结
+5. 其他 → 提示可用命令
 
 ### 3. 执行路由
 
-- **daily-analyzer**: Task 工具, subagent_type: daily-analyzer
-- **weekly-review**: `Workflow({ name: "weekly-review", args: { week: "YYYY-Www" } })`（自动计算日期范围）
-- **monthly-review**: `Workflow({ name: "monthly-review", args: { month: "YYYY-MM", mode: "standard|fast|full" } })`，默认 standard
+- **daily-analyzer**: Task 工具，subagent_type: daily-analyzer
+- **weekly-review**: `Workflow({ name: "weekly-review", args: { week: "YYYY-Www" } })`
+- **monthly-review**: `Workflow({ name: "monthly-review", args: { month: "YYYY-MM", mode: "standard|fast|full" } })`
+- **project-review**: `Workflow({ name: "project-review", args: { project: "项目主题", mode: "standard|full" } })`
 - **yearly-review**: `Workflow({ name: "yearly-review", args: { year: "YYYY" } })`
 - **journal-coach**: Task 并行 daily-analyzer + 汇总，默认 7 天
 
@@ -60,12 +60,13 @@ allowed-tools:
 
 | 情况 | 处理 |
 |------|------|
-| 无日志 | "还没找到日志。直接粘贴日志内容即可开始。" |
-| 无法识别 | "试试：昨天 / 上周 / 六月 / 最近7天 / 2026-06" |
+| 无日志 | “还没找到日志。直接粘贴日志内容即可开始。” |
+| 无法识别 | “试试：昨天 / 上周 / 六月 / 最近几天 / 项目复盘 / 2026-06” |
 | 报告已存在 | 告知并询问是否覆盖 |
 
 ## Notes
 
 - 统一入口，`/daily-review` 等保留为进阶快捷方式
-- 智能检测只提议不静默执行
+- 智能检测只提议，不静默执行
 - 月份默认 standard 模式
+- 项目复盘默认 standard，可用 `--full` 提升深度
