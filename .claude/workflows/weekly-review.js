@@ -55,7 +55,7 @@ var synthResult = await agent(
     summaryShape: '3个关键发现+1个调整建议',
     successfulCount: successful.length,
     combinedAnalyses: formatAnalyses(PERSPECTIVES, analyses),
-    extraInstruction: '周度报告是月度报告的轻量版。可以直接阅读日志原文补充细节，但最终只写唯一一份中文周度复盘报告。',
+    extraInstruction: '周度报告是月度报告的轻量版。默认先消费每日反馈、verified-patterns、current 与下方视角分析；只有引用缺失、证据冲突或关键判断需要补证时，才抽查原始日志。最终只写唯一一份中文周度复盘报告。',
   }),
   { label: '周度综合', phase: 'Synthesize', agentType: 'weekly-synthesis' }
 )

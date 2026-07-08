@@ -22,6 +22,7 @@ allowed_tools: Read, Glob, Write
 1. 先读取 `.claude/shared/paths.md`，所有输入输出路径以它为准。
 2. 读取 `.claude/shared/prompt-rules.md`，遵守证据规则、路径规则和输出契约。
 3. 读取 `docs/analysis-standards.md`，尤其是事实基础、洞察深度、可执行改进、可讨论标准。
+4. 默认走分层快路径：先读日反馈、周/月/年复盘与长期上下文，再决定是否需要抽样或深读原始日志；不要一开始就把整段日志历史当作默认主输入。
 
 ## 核心原则
 
@@ -57,19 +58,26 @@ allowed_tools: Read, Glob, Write
 
 | 模式 | 默认读取范围 |
 |------|-------------|
-| `quick` | 最近 30 天日志、最近 7 条日反馈、最近 1 份月报 |
-| `standard` | 最近 90 天日志、最近 14 条日反馈、最近 1-3 份周/月复盘 |
+| `quick` | 最近 7 条日反馈、最近 1 份月报、`context.current`、`context.core_profile`、`context.verified_patterns`；只抽样最近 30 天日志用于锚定关键证据 |
+| `standard` | 最近 14 条日反馈、最近 1-3 份周/月复盘、`context.current`、`context.core_profile`、`context.verified_patterns`；只在综合材料不足时抽查最近 90 天日志 |
 | `full` | 最近 180 天日志、最近 30 条日反馈、最近 3-6 份月报、年度报告 |
-| `odyssey` | 标准范围，额外聚焦长期选择、工作观、人生观、能量证据 |
+| `odyssey` | 标准范围，额外聚焦长期选择、工作观、人生观、能量证据；必要时深读支持三个原型的关键日志 |
 
-始终尝试读取：
+始终优先尝试读取：
 
-- `context.core_profile`
 - `context.current`
+- `context.core_profile`
+- `context.verified_patterns`
+- 最近的周 / 月 / 年复盘（若存在）
+- `input.daily_feedback`
 - `output.monthly_report`
 - `output.yearly_report`（若存在）
-- `input.daily_feedback`
-- `input.journal_dir`
+
+只有在以下情况才扩大到原始日志目录：
+
+1. 复盘与日反馈不足以支撑关键判断。
+2. 某个长期冲突需要日志原文做反证或时间线核验。
+3. `full` / `odyssey` 模式下，需要为能量地图或奥德赛原型补齐一手证据。
 
 材料缺失时，在报告中写明边界，不补造结论。
 

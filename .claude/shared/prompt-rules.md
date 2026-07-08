@@ -47,21 +47,29 @@ purpose: Shared prompt constraints for runtime agents
 2. 不额外创建中间文件，不把完整报告回读给主代理，除非该 agent 的输出契约明确要求。
 3. 用户可见内容使用简体中文；配置字段、文件名、内部 key 保持英文。
 
-## 六、质量门槛
+## 六、复盘快路径
+
+1. `/daily-review`、`/weekly-review`、`/monthly-review`、`/project-review`、`/yearly-review`、`/life-design` 与 `log` skill 默认走“运行快路径”。
+2. 运行快路径只读取完成当前任务所需的最小充分材料：路径约定、对应任务契约、当前任务输入、必要上下文和已生成的沉淀物 / 证据包。
+3. 运行快路径默认不读取开发治理上下文：`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`README.md`、`AGENTS.md` / `CLAUDE.md`、git 状态与提交流程。
+4. 只有当任务本身是在修改产品文件、命令、agent、workflow、公开文档、版本或发布状态时，才进入开发治理流程。
+5. 对复盘综合任务，读取顺序默认是：沉淀物 -> 证据包 -> 原始日志抽查；只有引用缺失、证据冲突或关键判断需要补证时，才回查原始日志。
+
+## 七、质量门槛
 
 1. 日反馈遵守 `.claude/shared/contracts/daily-feedback.md` 的 D0-D6 轻量质量门。
 2. 周/月/项目复盘综合遵守 `.claude/shared/contracts/review-synthesis.md` 的六问、方向锚点和主题综合契约。
 3. 证据与验证沉淀遵守 `.claude/shared/contracts/evidence-and-verification.md`；没有证据时标注“证据不足”，不要补全故事。
 4. 月度、周度、年度摘要仍遵守 `docs/analysis-standards.md` 的聊天摘要质量门和禁用模糊语。
 
-## 七、禁用词同步规则
+## 八、禁用词同步规则
 
 1. 人类可读权威说明：`docs/analysis-standards.md` 的「聊天摘要质量门」。
 2. 机器可读镜像：`.claude/shared/banned-phrases.json`，保留 `common` 与 `yearly_extra` 两个数组供提交前验证和外部工具读取。
 3. workflow 运行时统一从 `.claude/shared/runtime-contracts.js` 的 `BANNED_PHRASE_GROUPS` 读取禁用词；修改禁用词时必须同步 JSON 镜像与 runtime mirror，并由 `/提交` 的提交前验证拦截漂移。
 4. agent 不要在自身提示词里另写一份禁用词列表；只引用质量门或 JSON 镜像。
 
-## 八、减法边界
+## 九、减法边界
 
 1. 优化提示词时不得改变命令入口、参数格式、输出路径、输出文件名、报告章节结构或 workflow 编排。
 2. 可以删除重复解释、历史背景、旧路径叙述和跨 agent 复制的规则。

@@ -43,6 +43,8 @@ description: 用户粘贴日志内容时自动触发。检测"幸福日志""开�
 
 单日日志反馈必须和 `/daily-review` 走同一套输出契约：默认只保留一个核心洞察，不展开成长报告式解释。
 
+这里的“快路径”含义是：只读取单日日志分析真正需要的材料，不引入 `PROJECT_STATUS.md`、`CHANGELOG.md`、`README.md`、版本校验或 git 检查。由于用户刚刚追加了新日志，单日粘贴入口始终重跑 `daily-analyzer`，不复用旧反馈文件。
+
 1. 完成存档后，用 Task 启动 `daily-analyzer`：
    ```text
    Analyze YYYY-MM-DD

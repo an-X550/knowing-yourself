@@ -50,7 +50,7 @@ Workflow({ name: "monthly-review", args: { month: "YYYY-MM", mode: "standard|fas
 Workflow 负责：
 - 按模式解析视角列表（fast: 3核心 / standard: 6生活 / full: 9全视角）
 - 并行运行视角代理（复用 `monthly-processor`），生成各视角证据包
-- 运行 `monthly-synthesis` 综合引擎，按主题归并这些证据包
+- 运行 `monthly-synthesis` 综合引擎，优先消费这些证据包与验证沉淀，再按主题归并；原始日志只在关键证据冲突时抽查
 - 输出 `paths.md` 的 `output.monthly_report`
 
 **也支持自定义视角**：`args: { month: "YYYY-MM", perspectives: ["therapist", "coach"] }`
@@ -82,5 +82,5 @@ Workflow 会自动报告进度和最终结果。
 
 - 此命令编排已有代理——不直接处理日志
 - monthly-processor 代理负责为每个视角生成月度证据包
-- monthly-synthesis 代理负责将这些证据包压缩为最终主题报告
+- monthly-synthesis 代理负责将这些证据包压缩为最终主题报告，并默认避免重复回读整月日志
 - 所有视角分析文件均保留供将来参考，不会在命令层被当作最终月报读回

@@ -23,21 +23,35 @@ allowed-tools:
 - `today` / `今天` — 分析今天
 - `yesterday` / `昨天` — 分析昨天
 
+若参数中包含“重新分析”或“刷新”，视为强制重跑，不走已有反馈复用。
+
 ## 执行步骤
 
 ### 1. 确定目标日期
 
 解析参数为 `YYYY-MM-DD`。无参数时使用昨天日期。
 
-### 2. 确认日志存在
+### 2. 快路径检查
 
-读取 `.claude/shared/paths.md`，按其中的日志路径约定查找目标日志：
+读取 `.claude/shared/paths.md`，定位 `output.daily_feedback` 对应日期的反馈文件。
+
+如果该文件已存在，且用户没有明确要求“重新分析 / 刷新”：
+
+1. 直接读取并展示已有反馈
+2. 不重跑 `daily-analyzer`
+3. 不重复写回 `verified-patterns.md`
+
+这样单日重复查看反馈时，只走“读取已有结果”的最短闭环。
+
+### 3. 确认日志存在
+
+若未命中快路径，再按 `paths.md` 的日志路径约定查找目标日志：
 - 独立日记文件
 - 包含目标日期标题的合并月日志
 
 找不到日志时，输出错误并停止，不生成反馈。
 
-### 3. 启动反馈
+### 4. 启动反馈
 
 使用 Task 工具调用 `subagent_type: daily-analyzer`：
 ```
@@ -47,7 +61,7 @@ allowed-tools:
 
 返回内容必须符合 `.claude/shared/contracts/daily-feedback.md`：可选昨日闭环 + 一个核心盲点 + 可选的一句模式连接 + 一个原子行动和预测 + `💊` 追踪行。不得包含 D0-D6 自检文本。
 
-### 4. 保存、沉淀并展示反馈
+### 5. 保存、沉淀并展示反馈
 
 1. **写入文件**：保存到 `paths.md` 的 `output.daily_feedback`
    - 先确保 `output.daily_feedback` 的父目录存在
@@ -62,6 +76,8 @@ allowed-tools:
 3. **展示给用户**：将同一份反馈文本展示在对话中，并在末尾用一句话说明是否更新了 `verified-patterns.md`
 
 这样下一次日反馈可以读取上一条 `⚡ 明天试试` 的行动和预测，形成昨日闭环。
+
+整个流程默认只走日反馈快路径：`paths.md`、日反馈契约、验证契约、目标日志、上一条反馈与 `verified-patterns.md`。不额外读取版本、CHANGELOG、PROJECT_STATUS、README 或 git 状态。
 
 
 ## 错误处理

@@ -26,7 +26,7 @@ allowed_tools: Read, Glob, Write
 1. 先读取 `.claude/shared/paths.md`，所有输入输出路径以它为准。
 2. 读取 `.claude/shared/contracts/review-synthesis.md`，遵守复盘六问、方向锚点缺席检查和周报深度契约。
 3. 读取 `.claude/shared/contracts/evidence-and-verification.md`，遵守证据规则和验证沉淀消费规则。
-4. 按需读取 `docs/analysis-standards.md`、`docs/methodology-review.md` 和核心画像。
+4. 默认走分层快路径：先消费每日反馈、`context.verified_patterns`、`context.current` 与传入的视角分析；只有引用缺失、证据冲突或方向锚点来源不足时，才按需读取原始日志、核心画像、`docs/analysis-standards.md` 或 `docs/methodology-review.md`。
 
 ## 执行步骤
 
@@ -36,13 +36,14 @@ allowed_tools: Read, Glob, Write
 
 ### 2. 加载补充材料
 
-读取：
+按以下优先级读取：
 
-- 本周每日反馈文件，提取行动建议、昨日闭环和 `💊` 追踪行
-- `context.verified_patterns`，提取已确认、已证伪和待验证的行为假说
-- 目标周的原始日志，用于核验视角分析中的引用和补充遗漏
-- 当月月度报告中的“下月验证假说”（如存在），判断本周是否提供支持或反证
-- `context.current` 与核心画像，提取当前阶段 `1-3` 条方向锚点
+1. 本周每日反馈文件，提取行动建议、昨日闭环和 `💊` 追踪行
+2. `context.verified_patterns`，提取已确认、已证伪和待验证的行为假说
+3. `context.current`，提取当前阶段 `1-3` 条方向锚点
+4. 当月月度报告中的“下月验证假说”（如存在），判断本周是否提供支持或反证
+5. 核心画像，仅在 `context.current` 与上周 / 当月材料无法补齐方向锚点时读取
+6. 目标周的原始日志，仅在视角分析引用缺失、证据冲突或关键判断需要补证时抽查；不要把原始日志当作默认主输入
 
 若每日反馈少于 3 天，标注“数据不足”，不计算执行率。
 
@@ -91,6 +92,7 @@ allowed_tools: Read, Glob, Write
 2. 原因分析只做 3Why，不深挖到月度级信念层。
 3. `下周规划` 必须包含至少“目标 + 手段 + 检查方式”。
 4. 优先把本周日反馈中的行动验证、证伪和连续没做项沉淀为下周最小实验。
+5. 如果传入的视角分析已经给出足够日期证据，不要为了“更完整”而重读整周日志。
 
 ## 错误处理
 

@@ -49,7 +49,7 @@ Workflow({ name: "weekly-review", args: { week: "YYYY-Www" } })
 
 Workflow 负责：
 - 并行运行3个核心生活视角代理（实际发生的事 + 目标与时间 + 情绪与心理）
-- 代理复用 `monthly-processor`，传入周标识（含日期范围）
+- 代理复用 `monthly-processor` 的周度模式，传入周标识（含日期范围），只提取该周证据，不扩展到整月
 - 运行 `weekly-synthesis` 综合引擎
 - 输出 `paths.md` 的 `output.weekly_report`（标题含日期范围）
 
@@ -86,6 +86,6 @@ Workflow 负责：
 ## Notes
 
 - 周度固定使用3个核心生活视角，无需用户选择模式
-- 报告是月志的简化版——同框架、同质量标准、更轻更快
+- 报告是月志的简化版——同框架、同质量标准、更轻更快；综合阶段默认先消费日反馈、方向锚点和视角证据包，原始日志只在证据冲突时抽查
 - 4份周志报告自然累积为月志综合的素材
 - 唯一输出：`paths.md` 的 `output.weekly_report`

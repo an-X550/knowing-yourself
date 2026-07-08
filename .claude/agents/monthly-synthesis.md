@@ -20,7 +20,7 @@ allowed_tools: Read, Glob, Write
 1. 先读取 `.claude/shared/paths.md`，所有输入输出路径以它为准。
 2. 读取 `.claude/shared/contracts/review-synthesis.md`，遵守复盘六问、方向锚点缺席检查和月报深度契约。
 3. 读取 `.claude/shared/contracts/evidence-and-verification.md`，遵守证据规则和验证沉淀消费规则。
-4. 按需读取 `docs/analysis-standards.md`、`docs/methodology-review.md` 和核心画像。
+4. 默认把 workflow 传入的视角分析当作主输入；只有视角证据冲突、上月假说需要补证或关键引用缺失时，才按需抽查原始日志、`docs/analysis-standards.md`、`docs/methodology-review.md` 或核心画像。
 
 ## 执行步骤
 
@@ -37,12 +37,15 @@ allowed_tools: Read, Glob, Write
 
 若部分文件缺失，记录缺失项，并使用已有分析继续。
 
-### 3. 读取上下文
+### 3. 读取必要上下文
 
-读取核心画像。若 `paths.md` 中列出废弃路径，只作兼容说明，不在正文强调。
+按以下顺序读取：
 
-同时读取 `context.current`，提取当前阶段 `1-3` 条方向锚点。方向锚点用于判断本月是否偏离用户真正想推进的人生 / 工作主线。
-同时读取 `context.verified_patterns`，用于判断本月哪些日反馈假说已经被验证、证伪、连续没做或仍待验证。
+1. `context.current`，提取当前阶段 `1-3` 条方向锚点
+2. `context.verified_patterns`，用于判断本月哪些日反馈假说已经被验证、证伪、连续没做或仍待验证
+3. 核心画像，仅在 `context.current`、上月报告与本月视角分析都不足以支撑方向锚点时读取
+
+若 `paths.md` 中列出废弃路径，只作兼容说明，不在正文强调。
 
 方向锚点来源优先级：
 
@@ -62,6 +65,8 @@ allowed_tools: Read, Glob, Write
 - 提取“下月验证假说”，并用本月日志和日反馈判断：成立 / 不成立 / 证据不足
 
 若上月报告不存在，则跳过上月追踪。
+
+除上述基线外，不要默认重读整月原始日志；只有出现视角冲突、关键日期缺失或上月假说需要日志级反证时，才回查日志原文。
 
 ### 5. 先做主题归并
 
@@ -108,6 +113,7 @@ allowed_tools: Read, Glob, Write
 3. 每个主题都要写出反例、限制条件或“证据不足”。
 4. `下月规划` 必须包含“目标 + 手段 + 检查点 + 假说”。
 5. 如果本月材料显示长期方向冲突、重复卡点、工作观 / 人生观冲突，或下月规划只能做局部修补，必须在 `## 六、下月规划` 中增加 `.claude/shared/contracts/review-synthesis.md` 规定的 life-design 升级提醒；不要自动生成 life-design 报告。
+6. 如果视角分析已经覆盖关键证据，不要为了“更稳”而重复通读原始日志。
 
 ## 错误处理
 

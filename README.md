@@ -2,10 +2,12 @@
 
 > AI 日志分析与复盘技能：用更低摩擦的方式，把日记变成可验证的行动改变。
 
-[![Version](https://img.shields.io/badge/版本-v1.5.11-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.5.12-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的中文日志分析与复盘 skill。它围绕日、周、月、项目、年与人生设计六类节奏工作，帮助用户发现模式、形成行动、继续验证。
+
+高频命令默认优先复用已生成的反馈、验证沉淀与视角证据包，只有证据冲突或引用缺失时才扩大读取范围。
 
 ## 快速开始
 
@@ -29,7 +31,7 @@
 | 入口 | 用途 | 备注 |
 |------|------|------|
 | `/review` | 统一入口 | 自动判断更适合日、周、月、项目、年或人生设计哪类分析 |
-| `/daily-review` | 单日日志即时反馈 | 最短闭环，适合日常使用 |
+| `/daily-review` | 单日日志即时反馈 | 最短闭环，默认优先展示已生成反馈 |
 | `/weekly-review` | 周度综合复盘 | 输出遵守复盘六问协议 |
 | `/monthly-review` | 月度深度复盘 | 支持 `fast` / `standard` / `full` |
 | `/project-review` | 项目或版本复盘 | 项目场景专用入口 |
