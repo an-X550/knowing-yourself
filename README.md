@@ -2,7 +2,7 @@
 
 > AI 日志分析与复盘技能：用更低摩擦的方式，把日记变成可验证的行动改变。
 
-[![Version](https://img.shields.io/badge/版本-v1.5.8-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.5.9-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的中文日志分析与复盘 skill。它围绕日、周、月、项目、年与人生设计六类节奏工作，帮助用户发现模式、形成行动、继续验证。
@@ -36,11 +36,20 @@
 | `/life-design` | 低频方向校准 | 用于重大迷茫、长期冲突或方向异常 |
 | `/journal-coach` | 多日趋势反馈 | 适合观察最近几天的连续模式 |
 
+## 模型建议
+
+- 本项目核心 agent 默认继承调用方模型，因此不同模型会直接影响输出风格与稳定性。
+- 想要最稳的最终质量：优先使用 Claude 系模型，尤其是 `/monthly-review`、`/yearly-review`、`/life-design`。
+- 想要结构清晰、项目表达更利落：`/project-review`、`/weekly-review`、`/monthly-review` 也很适合 GPT-5.5。
+- 想要低成本高频跑：DeepSeek V4 Pro 可以承担 `/daily-review`、`/journal-coach` 或草稿版复盘，但不建议直接承担高要求的最终版月报、年报和 life-design。
+- 完整的模型差异说明、各功能推荐与 A/B/C 对比方法见 [`docs/model-selection.md`](docs/model-selection.md)。
+
 ## 文档地图
 
 - 使用与初始化：[`SETUP.md`](SETUP.md)
 - 当前版本、进度、待办与已知问题：[`PROJECT_STATUS.md`](PROJECT_STATUS.md)
 - 发布级改动记录：[`CHANGELOG.md`](CHANGELOG.md)
+- 模型差异与功能调用建议：[`docs/model-selection.md`](docs/model-selection.md)
 - 方法论与质量标准：[`docs/`](docs/)
 - 视角说明：[`perspectives/README.md`](perspectives/README.md)
 - 开发规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
