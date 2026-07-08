@@ -7,6 +7,11 @@ last_updated: 2026-07-08
 
 > 倒序时间线。完整历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
+## [2026-07-08 11:32] [文档] 重写未来优化路线图，突出阶段判断与升级门槛 (v1.3.24 → v1.3.25)
+
+- **受影响文件**: `docs/specs/evolution-roadmap.md`, `docs/superpowers/specs/2026-07-08-evolution-roadmap-design.md`, `docs/superpowers/plans/2026-07-08-evolution-roadmap-rewrite.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将未来优化方向文档从“三路径平铺”改为“战略摘要 → 当前判断 → 升级门槛 → 近 12 周动作 → A/B/C 附录展开”的双层结构，修正过期版本与阶段表述，强化“先验证闭环，再扩形态”的路线判断；同时补写本轮设计文档与实施计划，并同步 README 徽章、项目状态与版本号至 v1.3.25。
+
 ## [2026-07-08 11:10] [文档] 清理 CHANGELOG 历史格式并复审低优先级待办 (v1.3.23 → v1.3.24)
 
 - **受影响文件**: `CHANGELOG.md`, `PROJECT_STATUS.md`, `README.md`, `VERSION`
