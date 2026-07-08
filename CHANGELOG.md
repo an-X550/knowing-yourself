@@ -6,6 +6,10 @@ last_updated: 2026-07-08
 # CHANGELOG — 改动记录
 
 > 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
+## [2026-07-08 16:21] [文档] 新增目录边界收口 spec 与 plan (v1.5.3 → v1.5.4)
+
+- **受影响文件**: `docs/specs/directory-boundary-tightening.md`, `docs/superpowers/plans/2026-07-08-directory-boundary-tightening.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将“减少重复权威来源，明确 `.claude/` 与 `docs/` 的职责边界，降低后续维护成本”固化为正式 spec 与执行 plan，明确 shared 契约、入口职责、文档分层与归档策略，并同步版本与项目状态入口，方便后续按阶段落地。
 
 ## [2026-07-08 16:00] [文档] 拆分第一性原理提醒与 AI 运行原则 (v1.5.2 → v1.5.3)
 

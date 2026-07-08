@@ -5,7 +5,7 @@ last_updated: 2026-07-08
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.5.3
+**当前版本**：1.5.4
 
 ## 项目概述
 
@@ -109,6 +109,7 @@ last_updated: 2026-07-08
 - [ ] 运行 `/project-review` 做一次真实项目验收回归
 - [ ] 运行 `/journal-coach` 对最近 7 天做完整测试
 - [ ] 连续运行至少 5 次 `/daily-review`，验证 `verified-patterns.md` 能沉淀至少 1 条待验证 / 已确认 / 已证伪假说
+- [ ] 按 [`docs/specs/directory-boundary-tightening.md`](docs/specs/directory-boundary-tightening.md) 执行目录边界收口，优先消除 shared 契约与 workflow/skill 的重复权威
 
 ### 中优先级（验证与样本）
 
@@ -167,3 +168,4 @@ last_updated: 2026-07-08
 | 2026-07-08 | 周/月复盘新增方向锚点缺席检查 | 防止重要但本周期缺席的长期目标从复盘中自然消失，让回应复盘承担方向校准而不是只回应 AI 总结 |
 | 2026-07-08 | 日反馈链路升级为验证闭环入口 | 让 `/daily-review` 和日志粘贴入口默认检查上一条行动，并把验证结果沉淀到 `verified-patterns.md`，优先验证行为改变而不是继续增加报告数量 |
 | 2026-07-08 | 第一性原理文档改回人类提醒，AI 默认上下文迁至共享运行原则 | 避免 `docs/first-principles.md` 同时承担项目宣言、用户提醒和 AI 操作手册职责，让 AI 默认读取更短、更可执行的运行契约 |
+| 2026-07-08 | 目录边界优化先收紧权威来源与文档分层，再分阶段落地实现 | 先把 `.claude/` 与 `docs/` 的职责、single source of truth 和归档规则钉死，避免边改边继续长出重复真相 |
