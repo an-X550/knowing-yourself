@@ -7,6 +7,11 @@ last_updated: 2026-07-08
 
 > 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
+## [2026-07-08 14:45] [功能] 增强人生设计盲点触发与第三方提醒机制 (v1.4.0 → v1.5.0)
+
+- **受影响文件**: `.claude/agents/review-readiness-checker.md`, `.claude/commands/review.md`, `.claude/commands/journal-coach.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将 `/life-design` 触发从“主动调用 + 月/年复盘提醒”升级为“主动调用 + 周期升级提醒 + 盲点探测提醒”；增强 `/review` 无参数智能检测和 `/journal-coach` 近 7 天方向信号提醒，并要求月报 / 年报输出基于证据的 `/life-design --quick` 升级提示。
+
 ## [2026-07-08 14:30] [功能] 新增人生设计专项命令与低频方向校准链路 (v1.3.27 → v1.4.0)
 
 - **受影响文件**: `.claude/commands/life-design.md`, `.claude/agents/life-design-synthesis.md`, `.claude/shared/paths.md`, `.claude/commands/review.md`, `.claude/agents/monthly-synthesis.md`, `.claude/agents/yearly-synthesis.md`, `docs/superpowers/plans/2026-07-08-life-design-command.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `人生设计skill.md`
