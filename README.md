@@ -2,7 +2,7 @@
 
 > AI 日志分析与复盘技能：用更低摩擦的方式，把日记变成可验证的行动改变。
 
-[![Version](https://img.shields.io/badge/版本-v1.5.9-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.5.10-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的中文日志分析与复盘 skill。它围绕日、周、月、项目、年与人生设计六类节奏工作，帮助用户发现模式、形成行动、继续验证。
@@ -39,9 +39,10 @@
 ## 模型建议
 
 - 本项目核心 agent 默认继承调用方模型，因此不同模型会直接影响输出风格与稳定性。
-- 想要最稳的最终质量：优先使用 Claude 系模型，尤其是 `/monthly-review`、`/yearly-review`、`/life-design`。
-- 想要结构清晰、项目表达更利落：`/project-review`、`/weekly-review`、`/monthly-review` 也很适合 GPT-5.5。
-- 想要低成本高频跑：DeepSeek V4 Pro 可以承担 `/daily-review`、`/journal-coach` 或草稿版复盘，但不建议直接承担高要求的最终版月报、年报和 life-design。
+- `Claude`：更适合 `/monthly-review`、`/yearly-review`、`/life-design` 这类最终留档任务。
+- `GPT`：更适合 `/project-review`、`/weekly-review`、`/monthly-review` 这类结构化复盘任务。
+- `DeepSeek`：更适合 `/daily-review`、`/journal-coach` 或草稿版复盘这类高频任务。
+- `Kimi`、`GLM`、`Gemini` 等其他模型也可以接入，建议先用同一批日志做一次对比测试，再决定是否作为默认模型。
 - 完整的模型差异说明、各功能推荐与 A/B/C 对比方法见 [`docs/model-selection.md`](docs/model-selection.md)。
 
 ## 文档地图
