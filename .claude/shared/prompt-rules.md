@@ -11,9 +11,10 @@ purpose: Shared prompt constraints for runtime agents
 ## 一、共享文件读取顺序
 
 1. 需要路径时，先读 `.claude/shared/paths.md`，并引用其中的命名 key。
-2. 需要跨 agent 行为约束时，读本文件；不要把本文件整段复制到 agent。
-3. 需要聊天摘要禁用词时，读 `.claude/shared/banned-phrases.json`；workflow 运行时镜像只允许放在 `.claude/shared/runtime-contracts.js`；人类说明以 `docs/analysis-standards.md` 为准。
-4. 具体任务步骤、参数解析、错误处理、输出模板仍由各 agent/command 自己维护。
+2. 需要跨 agent 全局行为约束时，读本文件；不要把本文件整段复制到 agent。
+3. 需要任务型输出契约时，按「任务契约索引」读取 `.claude/shared/contracts/` 下的对应短契约。
+4. 需要聊天摘要禁用词时，读 `.claude/shared/banned-phrases.json`；workflow 运行时镜像只允许放在 `.claude/shared/runtime-contracts.js`；人类说明以 `docs/analysis-standards.md` 为准。
+5. 具体任务步骤、参数解析、错误处理、输出模板仍由各 agent/command 自己维护。
 
 ## 二、路径规则
 
@@ -26,15 +27,19 @@ purpose: Shared prompt constraints for runtime agents
 
 1. `.claude/settings.json` 只做 hook 路由：匹配日志关键词后调用 `skill log`，Stop hook 只提醒未提交改动。
 2. `Stop` hook 已在当前 Windows 环境验证：裸 `bash` 会优先命中 `System32\bash.exe` 并退化到 WSL launcher，因此默认实现改为 PowerShell 原生命令；后续若要增强 hook，优先收敛路由和提示，不继续把分析逻辑塞进 `settings.json`。
-3. 日志识别语义由 `.claude/skills/log.md` 和本文件的「日反馈输出契约」维护；不要在 `settings.json` 里扩展分析流程。
+3. 日志识别语义由 `.claude/skills/log.md` 和 `.claude/shared/contracts/daily-feedback.md` 维护；不要在 `settings.json` 里扩展分析流程。
 4. `UserPromptSubmit.matcher` 只保留高召回触发词：`幸福日志`、`开心的事情`、`充实的事情`、`待改进`、`感谢的人`、`思考...改进`、`todolist`。新增日志模板字段时，同步更新 `log.md` 的日期/字段识别说明。
-5. 命令入口（`/daily-review`、`/weekly-review`、`/monthly-review` 等）只负责参数解析和编排，分析格式由对应 agent 与共享契约决定。
+5. 命令入口（`/daily-review`、`/weekly-review`、`/monthly-review` 等）只负责参数解析和编排，分析格式由对应 agent 与任务契约决定。
 
-## 四、证据规则
+## 四、任务契约索引
 
-1. 重要结论必须有日志日期、原文引用、已有报告或视角分析作为证据。
-2. 没有证据时标注“证据不足”，不要补全、猜测或编造。
-3. 发现要写成可被用户反驳的观察，不写成权威诊断。
+| 场景 | 必读契约 |
+|------|----------|
+| 日反馈 | `.claude/shared/contracts/daily-feedback.md` + `.claude/shared/contracts/evidence-and-verification.md` |
+| 周/月/项目复盘综合 | `.claude/shared/contracts/review-synthesis.md` + `.claude/shared/contracts/evidence-and-verification.md` |
+| 证据、验证沉淀、周/月消费 | `.claude/shared/contracts/evidence-and-verification.md` |
+
+任务契约只承载运行时必需的输出和质量规则；agent 仍保留自己的输入、执行步骤、错误处理和最终输出责任。
 
 ## 五、输出契约
 
@@ -44,10 +49,10 @@ purpose: Shared prompt constraints for runtime agents
 
 ## 六、质量门槛
 
-1. 月度、周度、年度综合遵守 `docs/analysis-standards.md` 中的相关质量标准和禁用模糊语。
-2. 日分析遵守 `docs/analysis-standards.md` 的 D0-D6：昨日闭环、原文支撑、指出盲点、模式连接、一个动作、原子粒度、预测可验证。
-3. 建议必须具体到行为和检查方式；避免“注意作息”“继续努力”“加强学习”等空泛表达。
-4. 自检必须诚实。证据不足、数据不足、无昨日反馈时，用警告或 N/A 标记，不强行标满。
+1. 日反馈遵守 `.claude/shared/contracts/daily-feedback.md` 的 D0-D6 轻量质量门。
+2. 周/月/项目复盘综合遵守 `.claude/shared/contracts/review-synthesis.md` 的六问、方向锚点和主题综合契约。
+3. 证据与验证沉淀遵守 `.claude/shared/contracts/evidence-and-verification.md`；没有证据时标注“证据不足”，不要补全故事。
+4. 月度、周度、年度摘要仍遵守 `docs/analysis-standards.md` 的聊天摘要质量门和禁用模糊语。
 
 ## 七、禁用词同步规则
 
@@ -56,34 +61,7 @@ purpose: Shared prompt constraints for runtime agents
 3. workflow 运行时统一从 `.claude/shared/runtime-contracts.js` 的 `BANNED_PHRASE_GROUPS` 读取禁用词；修改禁用词时必须同步 JSON 镜像与 runtime mirror，并由 `/提交` 的提交前验证拦截漂移。
 4. agent 不要在自身提示词里另写一份禁用词列表；只引用质量门或 JSON 镜像。
 
-## 八、日反馈输出契约
-
-日反馈是项目最短闭环。`daily-analyzer`、`/daily-review` 和 `log` skill 必须共享同一契约：
-
-1. **同一入口**：单日日志反馈统一由 `daily-analyzer` 生成。`/daily-review` 和 `log` skill 只负责确定日期、存档、调用 agent、保存反馈、展示反馈。
-2. **同一格式**：用户可见输出只包含：标题、可选昨日闭环、盲点、可选模式连接、一个明天动作、`💊` 追踪行。不要输出 D0-D6 自检行；默认只围绕一个核心洞察展开。
-3. **昨日闭环**：有上一条反馈时，必须同时提取上一条 `⚡ 明天试试` 的行动、预测和 `💊` 行中的新认知，并用今天日志证据判断 `✅ 做到了` / `❌ 没做` / `⚠️ 证据不足`。对上一条新认知的说明只保留一句，不额外展开成独立分析段。无上一条反馈时，不显示昨日闭环段。
-4. **原文支撑**：`🔍 你没注意到的` 至少引用一句当天日志原文，引用用 `「」` 标记；优先只引用最关键的一句。
-5. **一个动作**：`⚡ 明天试试` 只能有一个动作，必须小于 5 分钟，且第一步不需要用户再拆解。
-6. **可验证预测**：预测必须能在 24 小时内通过下一篇日志判断，禁止“会更好”“更稳定”这类模糊结果；不得把“明天”误写成“明年”等日期口误。
-7. **长度上限**：常规输出控制在 260 中文字以内；只有昨日闭环证据复杂时可放宽到 320 字。
-8. **禁止重复解释**：同一判断不得跨 `⏮️`、`🔍`、`🔗` 三段换说法重复；如果 `🔗` 不能补充新证据或改变明天动作，直接删除该段。
-
-## 九、验证沉淀契约
-
-`关于我/verified-patterns.md` 是“预测 -> 实验 -> 验证”循环的沉淀文件。日反馈调用方负责写回，`daily-analyzer` 只负责返回证据化判断。
-
-1. **写回时机**：`/daily-review` 和 `log` skill 在保存 `output.daily_feedback` 后，读取 `context.verified_patterns` 并更新。
-2. **写回来源**：以上一条日反馈的 `💊 新认知`、`⚡ 明天试试` 和本次 `⏮️` 验证判断为依据。
-3. **状态规则**：
-   - `✅ 做到了`：若是假说第一次成立，写入“待验证的假说”；同一假说累计 2 次成立，移入“已确认的模式”。
-   - `❌ 没做`：写入或更新“待验证的假说”，标记为“行动未执行”；同一行动连续 3 次没做，要求后续反馈降低行动门槛。
-   - `⚠️ 证据不足`：保留为待验证，不升级、不证伪。
-   - 明确反例推翻预测时，写入“已证伪的假说”。
-4. **不硬凑成功**：没有日志证据时必须写“证据不足”，不能为了让 `verified-patterns.md` 变好看而判定成立。
-5. **周/月消费**：周报和月报读取 `context.verified_patterns`，优先总结哪些假说被验证、证伪、连续没做或仍待验证。
-
-## 九、减法边界
+## 八、减法边界
 
 1. 优化提示词时不得改变命令入口、参数格式、输出路径、输出文件名、报告章节结构或 workflow 编排。
 2. 可以删除重复解释、历史背景、旧路径叙述和跨 agent 复制的规则。

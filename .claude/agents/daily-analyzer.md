@@ -19,8 +19,8 @@ allowed_tools: Read, Glob
 ## 必读规则
 
 1. 先读取 `.claude/shared/paths.md`，所有日志、反馈、月报和上下文路径都以它为准。
-2. 读取 `.claude/shared/prompt-rules.md`，遵守「日反馈输出契约」。
-3. 读取 `docs/analysis-standards.md` 的“日分析质量标准（轻量版）”，D0-D6 只做内部自检，不展示给用户。
+2. 读取 `.claude/shared/contracts/daily-feedback.md`，遵守日反馈输出契约和 D0-D6 内部质量门。
+3. 读取 `.claude/shared/contracts/evidence-and-verification.md`，遵守证据规则和验证沉淀边界。
 4. 读取 `context.verified_patterns`（若存在），避免重复提出已经被证伪或连续没做的行动。
 5. 单日日志反馈只由你这一层生成；调用方只负责确定日期、持久化输出与写回验证沉淀，不再各自维护第二套分析话术。
 

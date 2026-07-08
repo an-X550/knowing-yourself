@@ -45,14 +45,14 @@ allowed-tools:
 ```
 
 
-返回内容必须符合 `.claude/shared/prompt-rules.md` 的「日反馈输出契约」：可选昨日闭环 + 一个核心盲点 + 可选的一句模式连接 + 一个原子行动和预测 + `💊` 追踪行。不得包含 D0-D6 自检文本。
+返回内容必须符合 `.claude/shared/contracts/daily-feedback.md`：可选昨日闭环 + 一个核心盲点 + 可选的一句模式连接 + 一个原子行动和预测 + `💊` 追踪行。不得包含 D0-D6 自检文本。
 
 ### 4. 保存、沉淀并展示反馈
 
 1. **写入文件**：保存到 `paths.md` 的 `output.daily_feedback`
    - 先确保 `output.daily_feedback` 的父目录存在
    - 用 Write 写入文件（内容原样保存，不添加额外说明或自检行）
-2. **更新验证沉淀**：读取 `paths.md` 的 `context.verified_patterns`
+2. **更新验证沉淀**：读取 `paths.md` 的 `context.verified_patterns`，按 `.claude/shared/contracts/evidence-and-verification.md` 写回
    - 若文件不存在，按 `关于我/verified-patterns.md` 的标准三段表格模板创建。
    - 若本次反馈包含 `⏮️` 昨日闭环判断，把上一条反馈的 `💊 新认知` / `⚡ 明天试试` 与本次判断写入模式库。
    - `✅ 做到了`：第一次成立写入“待验证的假说”；同一假说累计 2 次成立，移入“已确认的模式”。
