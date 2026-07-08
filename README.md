@@ -2,7 +2,7 @@
 
 > AI 日志分析教练：用更低摩擦的方式，把日志变成可行动的复盘。
 [![Blog](https://img.shields.io/badge/博客-阅读全文-blue)](https://vystrcil.com/blog/ai-journaling/)
-[![Version](https://img.shields.io/badge/版本-v1.5.2-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.5.3-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的日志分析与复盘 Skill。它围绕日、周、月、项目、年与低频人生设计六类节奏工作，用多视角分析、统一复盘协议和方向校准帮助用户识别模式、形成行动、持续闭环。
@@ -81,7 +81,8 @@
 
 ## 方法论与质量标准
 
-- 产品哲学与行动原则：[`docs/first-principles.md`](docs/first-principles.md)
+- 产品哲学与人类提醒：[`docs/first-principles.md`](docs/first-principles.md)
+- AI 运行原则：[`.claude/shared/ai-operating-principles.md`](.claude/shared/ai-operating-principles.md)
 - 日志写法：[`docs/methodology-journal.md`](docs/methodology-journal.md)
 - 复盘写法（含方向锚点与回应复盘）：[`docs/methodology-review.md`](docs/methodology-review.md)
 - 分析质量标准：[`docs/analysis-standards.md`](docs/analysis-standards.md)

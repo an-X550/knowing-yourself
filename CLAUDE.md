@@ -38,10 +38,12 @@
 
 每次对话默认按以下顺序读取：
 
-0. `docs/first-principles.md`
+0. `.claude/shared/ai-operating-principles.md`
 1. `PROJECT_STATUS.md`
 2. `CHANGELOG.md` 最近 5 条
 3. `README.md` 仅在对外说明、目录结构、命令表、安装使用、版本徽章受影响时读取
+
+`docs/first-principles.md` 是给开发者和用户看的提醒文档，不作为 AI 默认长上下文；当讨论项目初心、开发者纪律或用户纪律时再读取。
 
 若文件不存在，先根据仓库现状补建，再执行用户任务。
 

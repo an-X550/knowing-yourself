@@ -7,6 +7,11 @@ last_updated: 2026-07-08
 
 > 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
 
+## [2026-07-08 16:00] [文档] 拆分第一性原理提醒与 AI 运行原则 (v1.5.2 → v1.5.3)
+
+- **受影响文件**: `docs/first-principles.md`, `.claude/shared/ai-operating-principles.md`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `docs/superpowers/plans/2026-07-08-first-principles-split.md`
+- **改动摘要**: 将 `docs/first-principles.md` 压缩回面向开发者和用户的提醒文档，新增 `.claude/shared/ai-operating-principles.md` 作为 AI 默认读取的精简运行原则；同步 AGENTS/CLAUDE 的最小上下文加载规则、README 方法论入口、项目状态与版本号，避免第一性原理文档继续承担 AI 操作手册职责。
+
 ## [2026-07-08 15:45] [修复] 日反馈链路升级为验证闭环入口 (v1.5.1 → v1.5.2)
 
 - **受影响文件**: `.claude/agents/daily-analyzer.md`, `.claude/commands/daily-review.md`, `.claude/skills/log.md`, `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/agents/weekly-synthesis.md`, `.claude/agents/monthly-synthesis.md`, `docs/first-principles.md`, `docs/superpowers/specs/2026-07-08-verification-loop-design.md`, `docs/superpowers/plans/2026-07-08-verification-loop.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
