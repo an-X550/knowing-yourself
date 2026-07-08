@@ -5,7 +5,7 @@ last_updated: 2026-07-08
 
 # PROJECT_STATUS — 知己
 
-**当前版本**：1.5.5
+**当前版本**：1.5.6
 
 ## 项目概述
 
@@ -117,7 +117,7 @@ last_updated: 2026-07-08
 - [ ] 运行 `/project-review` 做一次真实项目验收回归
 - [ ] 运行 `/journal-coach` 对最近 7 天做完整测试
 - [ ] 连续运行至少 5 次 `/daily-review`，验证 `verified-patterns.md` 能沉淀至少 1 条待验证 / 已确认 / 已证伪假说
-- [ ] 按 [`docs/specs/directory-boundary-tightening.md`](docs/specs/directory-boundary-tightening.md) 继续执行目录边界收口尾项，重点补齐 hook 兼容性验证与历史文档归档节奏
+- [ ] 按 [`docs/specs/directory-boundary-tightening.md`](docs/specs/directory-boundary-tightening.md) 继续执行目录边界收口尾项，重点补齐历史文档归档节奏与剩余运行验证
 
 ### 中优先级（验证与样本）
 
@@ -178,3 +178,4 @@ last_updated: 2026-07-08
 | 2026-07-08 | 第一性原理文档改回人类提醒，AI 默认上下文迁至共享运行原则 | 避免 `docs/first-principles.md` 同时承担项目宣言、用户提醒和 AI 操作手册职责，让 AI 默认读取更短、更可执行的运行契约 |
 | 2026-07-08 | 目录边界优化先收紧权威来源与文档分层，再分阶段落地实现 | 先把 `.claude/` 与 `docs/` 的职责、single source of truth 和归档规则钉死，避免边改边继续长出重复真相 |
 | 2026-07-08 | workflow 运行时镜像集中到 `runtime-contracts.js`，`log` skill 收紧为入口编排器 | 把路径模板与禁用词镜像从 workflow 与 skill 文案里抽离，减少 shared 契约漂移和日志入口分叉 |
+| 2026-07-08 | `Stop` hook 默认实现切换为 PowerShell 原生命令 | 已验证当前 Windows 环境下裸 `bash` 会优先命中 WSL launcher，不适合作为稳定基础设施假设 |

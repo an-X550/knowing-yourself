@@ -6,6 +6,11 @@ last_updated: 2026-07-08
 # CHANGELOG — 改动记录
 
 > 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
+## [2026-07-08 17:20] [修复] 将 Stop hook 切换为 PowerShell 原生命令 (v1.5.5 → v1.5.6)
+
+- **受影响文件**: `.claude/settings.json`, `.claude/shared/prompt-rules.md`, `docs/specs/directory-boundary-tightening.md`, `PROJECT_STATUS.md`, `README.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 基于当前 Windows 环境的实测结果，确认裸 `bash` 会优先命中 `C:\Windows\System32\bash.exe` 并退化到 WSL launcher，因此将 `Stop` hook 的默认实现从 `bash -c` 切换为 PowerShell 原生命令；同时把兼容性说明从“已知风险”升级为“已验证结论”，同步更新状态、版本与决策记录。
+
 ## [2026-07-08 16:55] [重构] 落地目录边界收口与共享契约去重 (v1.5.4 → v1.5.5)
 
 - **受影响文件**: `.claude/shared/runtime-contracts.js`, `.claude/workflows/shared.js`, `.claude/workflows/weekly-review.js`, `.claude/workflows/monthly-review.js`, `.claude/workflows/project-review.js`, `.claude/workflows/yearly-review.js`, `.claude/shared/paths.md`, `.claude/shared/prompt-rules.md`, `.claude/shared/banned-phrases.json`, `.claude/commands/commit.md`, `.claude/skills/log.md`, `.claude/agents/daily-analyzer.md`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `docs/specs/_TEMPLATE.md`, `docs/first-principles.md`, `docs/archive/README.md`, `CHANGELOG.md`, `VERSION`

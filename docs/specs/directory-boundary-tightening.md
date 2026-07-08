@@ -155,7 +155,7 @@ status: 已采纳
 
 不向其中继续扩展分析流程、路径逻辑或复杂分支。
 
-针对 Windows 兼容性，`Stop` hook 使用 `bash -c` 属于已知风险点，应被明确记录为“兼容性债务”，而不是默认稳定基础设施。
+已于 2026-07-08 在当前 Windows 环境实测：裸 `bash` 会优先解析到 `C:\Windows\System32\bash.exe`（WSL launcher），因此 `Stop` hook 不应继续依赖 `bash -c`。默认实现改为 PowerShell 原生命令；若未来回到 shell 包装方案，必须重新做兼容性验证，而不是假设跨环境稳定。
 
 # 文档分层规则
 

@@ -25,7 +25,7 @@ purpose: Shared prompt constraints for runtime agents
 ## 三、Hook 与入口规则
 
 1. `.claude/settings.json` 只做 hook 路由：匹配日志关键词后调用 `skill log`，Stop hook 只提醒未提交改动。
-2. `Stop` hook 当前使用 `bash -c`，在 Windows 语境下属于兼容性风险点；后续若要增强 hook，优先收敛路由和提示，不继续把分析逻辑塞进 `settings.json`。
+2. `Stop` hook 已在当前 Windows 环境验证：裸 `bash` 会优先命中 `System32\bash.exe` 并退化到 WSL launcher，因此默认实现改为 PowerShell 原生命令；后续若要增强 hook，优先收敛路由和提示，不继续把分析逻辑塞进 `settings.json`。
 3. 日志识别语义由 `.claude/skills/log.md` 和本文件的「日反馈输出契约」维护；不要在 `settings.json` 里扩展分析流程。
 4. `UserPromptSubmit.matcher` 只保留高召回触发词：`幸福日志`、`开心的事情`、`充实的事情`、`待改进`、`感谢的人`、`思考...改进`、`todolist`。新增日志模板字段时，同步更新 `log.md` 的日期/字段识别说明。
 5. 命令入口（`/daily-review`、`/weekly-review`、`/monthly-review` 等）只负责参数解析和编排，分析格式由对应 agent 与共享契约决定。
