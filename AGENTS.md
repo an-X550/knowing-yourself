@@ -216,6 +216,7 @@
 | `src/` | 源代码 | 纳入 |
 | `docs/` | 文档、方法论、模板、spec | 纳入 |
 | `examples/` | 脱敏示例 | 纳入 |
+| `zhiji-user/` | 用户版分发包，用于小范围内测 | 纳入 |
 | `tests/` | 测试代码 | 纳入 |
 | `.github/` | Issue/PR 模板、CI | 纳入 |
 | `data/` | 个人数据、原始输入 | gitignore |

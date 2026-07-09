@@ -7,6 +7,11 @@ last_updated: 2026-07-09
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-09 14:38] [功能] 新增用户版分发包目录 (v1.5.18 -> v1.5.19)
+
+- **受影响文件**: `zhiji-user/`, `README.md`, `PROJECT_STATUS.md`, `AGENTS.md`, `CLAUDE.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 新增 `zhiji-user/` 作为面向 3-5 人小范围内测的用户版分发包，只保留运行所需的 `.claude/` 子集、必要分析文档、示例、用户版 README/SETUP 与许可证；移除提交、导入、开发态 `grill-me`、治理文档和个人数据入口，让内测用户可以直接按使用说明试跑日志分析而不接触开发仓库结构。
+
 ## [2026-07-09 13:38] [文档] 新增外部内测行动方案并收紧试用判断 (v1.5.17 -> v1.5.18)
 
 - **受影响文件**: `docs/superpowers/plans/2026-07-09-beta-pilot-plan.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
