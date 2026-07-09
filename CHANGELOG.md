@@ -7,6 +7,11 @@ last_updated: 2026-07-09
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-09 12:05] [修复] 固化 grill-me 的开发态路由边界 (v1.5.15 -> v1.5.16)
+
+- **受影响文件**: `.claude/settings.json`, `.claude/shared/prompt-rules.md`, `.claude/shared/contracts/developer-skill-routing.md`, `.claude/skills/grill-me/SKILL.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将 `grill-me` 明确收敛为当前仓库的开发辅助 skill：显式点名时通过 hook 必触发，命中高置信开发语义时允许自动路由，并要求触发后说明“这是开发态需求校准”；同时补上共享契约与公开边界说明，避免该模式泄漏到面向用户的运行时入口。
+
 ## [2026-07-09 11:13] [文档] 在第一性原理提醒中加入开发前闸门 (v1.5.14 -> v1.5.15)
 
 - **受影响文件**: `docs/first-principles.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

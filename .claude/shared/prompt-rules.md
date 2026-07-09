@@ -25,11 +25,12 @@ purpose: Shared prompt constraints for runtime agents
 
 ## 三、Hook 与入口规则
 
-1. `.claude/settings.json` 只做 hook 路由：匹配日志关键词后调用 `skill log`，Stop hook 只提醒未提交改动。
+1. `.claude/settings.json` 只做 hook 路由：日志关键词调用 `skill log`；开发态需求校准允许高置信路由到 `skill grill-me`；Stop hook 只提醒未提交改动。
 2. `Stop` hook 已在当前 Windows 环境验证：裸 `bash` 会优先命中 `System32\bash.exe` 并退化到 WSL launcher，因此默认实现改为 PowerShell 原生命令；后续若要增强 hook，优先收敛路由和提示，不继续把分析逻辑塞进 `settings.json`。
-3. 日志识别语义由 `.claude/skills/log.md` 和 `.claude/shared/contracts/daily-feedback.md` 维护；不要在 `settings.json` 里扩展分析流程。
-4. `UserPromptSubmit.matcher` 只保留高召回触发词：`幸福日志`、`开心的事情`、`充实的事情`、`待改进`、`感谢的人`、`思考...改进`、`todolist`。新增日志模板字段时，同步更新 `log.md` 的日期/字段识别说明。
-5. 命令入口（`/daily-review`、`/weekly-review`、`/monthly-review` 等）只负责参数解析和编排，分析格式由对应 agent 与任务契约决定。
+3. 日志识别语义由 `.claude/skills/log.md` 和 `.claude/shared/contracts/daily-feedback.md` 维护；不要在 `settings.json` 里扩展日志分析流程。
+4. `grill-me` 只作为开发辅助 skill：显式点名时必触发；未点名时只有命中 `.claude/shared/contracts/developer-skill-routing.md` 定义的 `developer_mode` 高置信组合才允许自动触发，并且必须说明“这是开发态需求校准，不属于用户运行时能力”。
+5. `UserPromptSubmit.matcher` 的高召回运行时触发词只保留给日志入口：`幸福日志`、`开心的事情`、`充实的事情`、`待改进`、`感谢的人`、`思考...改进`、`todolist`。新增日志模板字段时，同步更新 `log.md` 的日期/字段识别说明。
+6. 命令入口（`/daily-review`、`/weekly-review`、`/monthly-review` 等）只负责参数解析和编排，分析格式由对应 agent 与任务契约决定。
 
 ## 四、任务契约索引
 
@@ -38,6 +39,7 @@ purpose: Shared prompt constraints for runtime agents
 | 日反馈 | `.claude/shared/contracts/daily-feedback.md` + `.claude/shared/contracts/evidence-and-verification.md` |
 | 周/月/项目复盘综合 | `.claude/shared/contracts/review-synthesis.md` + `.claude/shared/contracts/evidence-and-verification.md` |
 | 证据、验证沉淀、周/月消费 | `.claude/shared/contracts/evidence-and-verification.md` |
+| 开发态需求校准 / 方案压力测试 | `.claude/shared/contracts/developer-skill-routing.md` |
 
 任务契约只承载运行时必需的输出和质量规则；agent 仍保留自己的输入、执行步骤、错误处理和最终输出责任。
 
@@ -52,11 +54,12 @@ purpose: Shared prompt constraints for runtime agents
 1. `/daily-review`、`/weekly-review`、`/monthly-review`、`/project-review`、`/yearly-review`、`/life-design` 与 `log` skill 默认走“运行快路径”。
 2. 运行快路径只读取完成当前任务所需的最小充分材料：路径约定、对应任务契约、当前任务输入、必要上下文和已生成的沉淀物 / 证据包。
 3. 运行快路径默认不读取开发治理上下文：`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`README.md`、`AGENTS.md` / `CLAUDE.md`、git 状态与提交流程。
-4. 只有当任务本身是在修改产品文件、命令、agent、workflow、公开文档、版本或发布状态时，才进入开发治理流程。
-5. 对复盘综合任务，读取顺序默认是：沉淀物 -> 证据包 -> 原始日志抽查；只有引用缺失、证据冲突或关键判断需要补证时，才回查原始日志。
-6. 快路径任务开始前必须先做执行前检查：确认当前任务属于“运行分析 / 复盘”而不是“开发治理”；确认本次允许读取的最小材料集合；确认是否存在“已有结果优先展示”的复用分支。
-7. 若执行过程中发现自己开始读取开发治理文件、整批原始日志或方法论文档，但又不满足触发条件，必须立即停止扩读，回退到最小材料集合，继续按快路径完成任务。
-8. 验收说明只用于检查“本次是否按快路径执行到位”，不是新的默认输入源；执行时仍以前述读取范围、复用分支和条件触发规则为准。
+4. `grill-me` 不属于运行快路径；它只服务于开发治理场景下的需求 / 方案压力测试，不得替代用户运行时入口。
+5. 只有当任务本身是在修改产品文件、命令、agent、workflow、公开文档、版本或发布状态时，才进入开发治理流程。
+6. 对复盘综合任务，读取顺序默认是：沉淀物 -> 证据包 -> 原始日志抽查；只有引用缺失、证据冲突或关键判断需要补证时，才回查原始日志。
+7. 快路径任务开始前必须先做执行前检查：确认当前任务属于“运行分析 / 复盘”而不是“开发治理”；确认本次允许读取的最小材料集合；确认是否存在“已有结果优先展示”的复用分支。
+8. 若执行过程中发现自己开始读取开发治理文件、整批原始日志或方法论文档，但又不满足触发条件，必须立即停止扩读，回退到最小材料集合，继续按快路径完成任务。
+9. 验收说明只用于检查“本次是否按快路径执行到位”，不是新的默认输入源；执行时仍以前述读取范围、复用分支和条件触发规则为准。
 
 ## 七、质量门槛
 

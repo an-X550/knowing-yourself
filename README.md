@@ -2,7 +2,7 @@
 
 > AI 日志分析与复盘技能：用更低摩擦的方式，把日记变成可验证的行动改变。
 
-[![Version](https://img.shields.io/badge/版本-v1.5.15-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.5.16-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 **知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的中文日志分析与复盘 skill。它围绕日、周、月、项目、年与人生设计六类节奏工作，帮助用户发现模式、形成行动、继续验证。
@@ -57,6 +57,7 @@
 - 方法论与质量标准：[`docs/`](docs/)
 - 视角说明：[`perspectives/README.md`](perspectives/README.md)
 - 开发规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
+- 开发态本地 skill 路由契约：[`.claude/shared/contracts/developer-skill-routing.md`](.claude/shared/contracts/developer-skill-routing.md)
 
 ## 项目结构
 
@@ -83,3 +84,4 @@
 - `.claude/` 是唯一运行真相；产品逻辑只维护在这里。
 - `README.md` 只保留项目入口信息；更细规则以 `AGENTS.md` / `CLAUDE.md`、`.claude/shared/` 与 `.claude/shared/contracts/` 共享契约为准。
 - `PROJECT_STATUS.md` 是当前事实面板；`CHANGELOG.md` 是发布级变化历史。
+- `.claude/skills/grill-me/` 是开发期需求校准工具，不属于面向用户的运行时入口。

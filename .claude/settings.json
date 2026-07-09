@@ -2,6 +2,15 @@
   "hooks": {
     "UserPromptSubmit": [
       {
+        "matcher": "[Gg]rill[ -]?me|调用\\s*grill-me|使用\\s*grill-me|启用\\s*grill-me|((作为开发|开发态|开发者|本项目|这个项目|当前项目|知己).{0,40}(skill|skills|命令|commands|workflow|workflows|hook|hooks|settings|settings\\.json|分发|路由|设计|方案|需求).{0,30}(第一性原理|真正的需求|压力测试|拷问|挑战假设|不要顺着我说|验证))",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "skill grill-me"
+          }
+        ]
+      },
+      {
         "matcher": "幸福日志|开心的事情|充实的事情|待改进|感谢的人|思考.{0,20}改进|[Tt]o[Dd]o[Ll]ist",
         "hooks": [
           {
