@@ -193,6 +193,7 @@
 
 - **核心治理文档**必须使用 YAML frontmatter：`PROJECT_STATUS.md`、`CHANGELOG.md`
 - 中文内容文件用中文；配置字段和文件名用英文
+- 中文 Markdown、治理文档与共享契约统一使用 UTF-8 编码保存；在 PowerShell 或脚本中读取中文文件时，必须显式使用 UTF-8 方式（如 `Get-Content -Encoding utf8` 或 Python `encoding='utf-8'`），不能仅凭终端乱码现象判断源文件损坏
 - 文件路径使用相对于项目根目录的路径
 - 文件名与目录名默认使用英文 kebab-case
 - gitignored 个人数据目录可使用中文命名，以直观可读优先
@@ -206,7 +207,7 @@
 
 根目录仅保留以下核心文件与仓库元数据：
 
-`README.md`、`LICENSE`、`AGENTS.md`、`CLAUDE.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`.gitignore`、`.gitattributes`、`SETUP.md`
+`README.md`、`LICENSE`、`AGENTS.md`、`CLAUDE.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`.gitignore`、`.gitattributes`、`.editorconfig`、`SETUP.md`
 
 其他文件按类型归入子目录：
 
