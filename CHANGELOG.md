@@ -7,6 +7,11 @@ last_updated: 2026-07-09
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-09 13:38] [文档] 新增外部内测行动方案并收紧试用判断 (v1.5.17 -> v1.5.18)
+
+- **受影响文件**: `docs/superpowers/plans/2026-07-09-beta-pilot-plan.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将基于第一性原理与 `grill-me` 连续追问得出的结论固化为一份可执行的 3-5 人内测行动方案，明确第一轮试用优先验证“今天日志”入口的准确性、有用性与后续验证痕迹，并同步公开文档与项目状态，避免继续把“分发形式”误当成当前主问题。
+
 ## [2026-07-09 12:32] [修复] 为中文治理文档补齐 UTF-8 开发护栏 (v1.5.16 -> v1.5.17)
 
 - **受影响文件**: `.editorconfig`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
