@@ -1,0 +1,34 @@
+﻿{
+  "targetRoot": "zhiji-user",
+  "syncTasks": [
+    { "kind": "mirrorDir", "source": "packaging/zhiji-user-overlay/.claude", "target": ".claude" },
+    { "kind": "mirrorDir", "source": "packaging/zhiji-user-overlay/.codex", "target": ".codex" },
+    { "kind": "mirrorDir", "source": "packaging/zhiji-user-overlay/docs", "target": "docs" },
+    { "kind": "mirrorDir", "source": "packaging/zhiji-user-overlay/examples", "target": "examples" },
+    { "kind": "mirrorDir", "source": "packaging/zhiji-user-overlay/perspectives", "target": "perspectives" },
+    { "kind": "mirrorDir", "source": "packaging/zhiji-user-overlay/scripts", "target": "scripts" },
+
+    { "kind": "overwriteFile", "source": "LICENSE", "target": "LICENSE" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/README.md", "target": "README.md" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/.gitignore", "target": ".gitignore" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/.zhiji-user-sync.json", "target": ".zhiji-user-sync.json" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/关于我/.gitkeep", "target": "关于我/.gitkeep" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/关于我/Analysis/.gitkeep", "target": "关于我/Analysis/.gitkeep" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/关于我/README.md", "target": "关于我/README.md" },
+    { "kind": "mirrorDir", "source": "packaging/zhiji-user-overlay/关于我/templates", "target": "关于我/templates" },
+
+    { "kind": "seedFile", "source": "packaging/zhiji-user-overlay/关于我/career-projects.md", "target": "关于我/career-projects.md" },
+    { "kind": "seedFile", "source": "packaging/zhiji-user-overlay/关于我/core-profile.md", "target": "关于我/core-profile.md" },
+    { "kind": "seedFile", "source": "packaging/zhiji-user-overlay/关于我/current.md", "target": "关于我/current.md" },
+    { "kind": "seedFile", "source": "packaging/zhiji-user-overlay/关于我/health-habits.md", "target": "关于我/health-habits.md" },
+    { "kind": "seedFile", "source": "packaging/zhiji-user-overlay/关于我/relationships.md", "target": "关于我/relationships.md" },
+    { "kind": "seedFile", "source": "packaging/zhiji-user-overlay/关于我/verified-patterns.md", "target": "关于我/verified-patterns.md" },
+
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/日志/.gitkeep", "target": "日志/.gitkeep" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/人生设计/.gitkeep", "target": "复盘/人生设计/.gitkeep" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/每周复盘/.gitkeep", "target": "复盘/每周复盘/.gitkeep" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/每日反馈/.gitkeep", "target": "复盘/每日反馈/.gitkeep" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/每月复盘/.gitkeep", "target": "复盘/每月复盘/.gitkeep" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/项目复盘/.gitkeep", "target": "复盘/项目复盘/.gitkeep" }
+  ]
+}

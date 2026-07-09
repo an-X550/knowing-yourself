@@ -1,4 +1,4 @@
-# 知己
+﻿# 知己
 
 > AI 日志分析与复盘技能：用更低摩擦的方式，把日记变成可验证的行动改变。
 
@@ -55,7 +55,7 @@
 - 模型差异与功能调用建议：[`docs/model-selection.md`](docs/model-selection.md)
 - 快路径验收与执行保险丝：[`docs/daily-review-fast-path-acceptance.md`](docs/daily-review-fast-path-acceptance.md)、[`docs/review-fast-path-acceptance.md`](docs/review-fast-path-acceptance.md)
 - 当前内测行动方案：[`docs/superpowers/plans/2026-07-09-beta-pilot-plan.md`](docs/superpowers/plans/2026-07-09-beta-pilot-plan.md)
-- 用户版分发包：[`zhiji-user/`](zhiji-user/)
+- 用户版分发包：[`zhiji-user/`](zhiji-user/)；导出与同步流程见 [`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md) 与 [`scripts/export-zhiji-user.ps1`](scripts/export-zhiji-user.ps1)
 - 方法论与质量标准：[`docs/`](docs/)
 - 视角说明：[`perspectives/README.md`](perspectives/README.md)
 - 开发规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
@@ -86,7 +86,9 @@
 ## 边界说明
 
 - `.claude/` 是唯一运行真相；产品逻辑只维护在这里。
-- `zhiji-user/` 是从运行真相裁剪出的用户版分发包，用于小范围内测，不承载主开发流程。
+- `zhiji-user/` 是从运行真相裁剪出的用户版分发包，用于小范围内测，不承载主开发流程。当前用户版定义集中维护在 `packaging/zhiji-user-overlay/`，通过导出脚本刷新到子仓库。
 - `README.md` 只保留项目入口信息；更细规则以 `AGENTS.md` / `CLAUDE.md`、`.claude/shared/` 与 `.claude/shared/contracts/` 共享契约为准。
 - `PROJECT_STATUS.md` 是当前事实面板；`CHANGELOG.md` 是发布级变化历史。
 - `.claude/skills/grill-me/` 是开发期需求校准工具，不属于面向用户的运行时入口。
+
+
