@@ -56,6 +56,12 @@
 - 快路径验收与执行保险丝：[`docs/daily-review-fast-path-acceptance.md`](docs/daily-review-fast-path-acceptance.md)、[`docs/review-fast-path-acceptance.md`](docs/review-fast-path-acceptance.md)
 - 当前内测行动方案：[`docs/superpowers/plans/2026-07-09-beta-pilot-plan.md`](docs/superpowers/plans/2026-07-09-beta-pilot-plan.md)
 - 用户版分发包：[`zhiji-user/`](zhiji-user/)；导出与同步流程见 [`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md) 与 [`scripts/export-zhiji-user.ps1`](scripts/export-zhiji-user.ps1)
+
+刷新 `zhiji-user/` 分发包时，在上级仓库根目录执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
+```
 - 方法论与质量标准：[`docs/`](docs/)
 - 视角说明：[`perspectives/README.md`](perspectives/README.md)
 - 开发规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
@@ -90,5 +96,6 @@
 - `README.md` 只保留项目入口信息；更细规则以 `AGENTS.md` / `CLAUDE.md`、`.claude/shared/` 与 `.claude/shared/contracts/` 共享契约为准。
 - `PROJECT_STATUS.md` 是当前事实面板；`CHANGELOG.md` 是发布级变化历史。
 - `.claude/skills/grill-me/` 是开发期需求校准工具，不属于面向用户的运行时入口。
+
 
 
