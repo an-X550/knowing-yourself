@@ -1,11 +1,16 @@
 ---
 created: 2026-07-05
-last_updated: 2026-07-08
+last_updated: 2026-07-09
 ---
 
 # CHANGELOG - 改动记录
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
+
+## [2026-07-09 10:36] [修复] 将 grill-me skill 迁移到运行真相目录并补齐可发现描述 (v1.5.12 -> v1.5.13)
+
+- **受影响文件**: `.claude/skills/grill-me/SKILL.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将新增的 `grill-me` skill 从仓库根目录迁移到 `.claude/skills/` 运行真相目录，确保运行时可按既有边界加载；同时把 skill 的描述改为符合发现规范的 `Use when...` 触发式写法，降低后续检索遗漏风险。
 
 ## [2026-07-08 22:59] [重构] 复盘类命令默认切换到运行快路径 (v1.5.11 -> v1.5.12)
 
