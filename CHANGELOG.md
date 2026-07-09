@@ -7,6 +7,11 @@ last_updated: 2026-07-09
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-09 10:57] [修复] 为复盘快路径补齐验收说明与执行保险丝 (v1.5.13 -> v1.5.14)
+
+- **受影响文件**: `.claude/shared/prompt-rules.md`, `.claude/skills/log.md`, `.claude/commands/daily-review.md`, `.claude/commands/weekly-review.md`, `.claude/commands/monthly-review.md`, `.claude/commands/life-design.md`, `docs/daily-review-fast-path-acceptance.md`, `docs/review-fast-path-acceptance.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 新增日分析与周/月/life-design 的快路径验收说明，并把“执行前检查”“偏离后回退到最小读取集合”的规则写进共享提示词和命令入口，降低优化方案已存在但实际执行时没有命中的漂移风险。
+
 ## [2026-07-09 10:36] [修复] 将 grill-me skill 迁移到运行真相目录并补齐可发现描述 (v1.5.12 -> v1.5.13)
 
 - **受影响文件**: `.claude/skills/grill-me/SKILL.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

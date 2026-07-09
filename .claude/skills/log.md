@@ -44,6 +44,10 @@ description: 用户粘贴日志内容时自动触发。检测"幸福日志""开�
 单日日志反馈必须和 `/daily-review` 走同一套输出契约：默认只保留一个核心洞察，不展开成长报告式解释。
 
 这里的“快路径”含义是：只读取单日日志分析真正需要的材料，不引入 `PROJECT_STATUS.md`、`CHANGELOG.md`、`README.md`、版本校验或 git 检查。由于用户刚刚追加了新日志，单日粘贴入口始终重跑 `daily-analyzer`，不复用旧反馈文件。
+开始分析前先做一次执行前检查：
+1. 确认当前任务是“单日日志运行分析”，不是“修改产品文件 / 文档 / 规范”。
+2. 本次只允许读取：`paths.md`、日反馈契约、验证契约、刚追加的目标日志、必要时的上一条反馈与 `verified-patterns.md`。
+3. 若分析过程中想去读 `PROJECT_STATUS.md`、`CHANGELOG.md`、`README.md`、`AGENTS.md` / `CLAUDE.md` 或整批历史日志，必须先判断是否真的发生了证据缺口；没有缺口就回到上述最小集合。
 
 1. 完成存档后，用 Task 启动 `daily-analyzer`：
    ```text

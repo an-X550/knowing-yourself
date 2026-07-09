@@ -32,6 +32,11 @@ Week identifier from: `$ARGUMENTS`
 
 ### 2. 验证日志存在
 
+先做执行前检查：
+1. 本命令属于运行型周复盘，不进入开发治理流程；不要读取 `PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`README.md`、`AGENTS.md` / `CLAUDE.md` 或 git 状态。
+2. 默认读取顺序是：每日反馈 / `context.verified_patterns` / `context.current` / 视角分析 -> 原始日志抽查。
+3. 如果已有沉淀物和视角分析足够支撑六问，就不要为了“更稳”而默认扩读原始日志。
+
 扫描7天的日志文件。至少需要3天日志。
 按 `.claude/shared/paths.md` 检查：
 1. `input.daily_journal`

@@ -31,6 +31,11 @@ allowed-tools:
 
 ### 2. 验证日志存在
 
+先做执行前检查：
+1. 本命令属于运行型月复盘，不进入开发治理流程；不要读取 `PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`README.md`、`AGENTS.md` / `CLAUDE.md` 或 git 状态。
+2. 默认把 workflow 传入的视角分析当作主输入，`context.current`、`context.verified_patterns` 与上月月报作为补充材料。
+3. 只有视角证据冲突、上月假说需要补证或关键引用缺失时，才回查原始日志。
+
 使用 `.claude/shared/paths.md` 的 `input.monthly_journal_glob_cn` / `input.monthly_journal_glob_iso` 检查目标月份日志文件。
 
 如果未找到日志：报告错误并停止。

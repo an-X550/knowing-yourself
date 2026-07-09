@@ -33,6 +33,11 @@ allowed-tools:
 
 ### 2. 快路径检查
 
+先做执行前检查：
+1. 这是运行型日反馈，不是开发治理任务；不要读取 `PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`README.md`、`AGENTS.md` / `CLAUDE.md` 或 git 状态。
+2. 先判断本次属于哪一条分支：`已有反馈直接展示`、`用户要求重跑`、`首次生成反馈`。
+3. 只有未命中“已有反馈直接展示”时，才继续读取目标日志、上一条反馈与 `verified-patterns.md`。
+
 读取 `.claude/shared/paths.md`，定位 `output.daily_feedback` 对应日期的反馈文件。
 
 如果该文件已存在，且用户没有明确要求“重新分析 / 刷新”：

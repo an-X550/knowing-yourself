@@ -46,6 +46,11 @@ allowed-tools:
 - `standard`：先读日反馈、周/月复盘、`current`、画像与验证沉淀；原始日志仅在综合材料不足时抽查
 - `full` / `odyssey`：允许更深的原始日志阅读，因为目标就是长期校准
 
+在启动 agent 前先做执行前检查：
+1. 本命令属于运行型人生设计，不进入开发治理流程；不要读取 `PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、`README.md`、`AGENTS.md` / `CLAUDE.md` 或 git 状态。
+2. `quick` 与 `standard` 默认优先消费日反馈、周/月复盘和长期上下文；不要一开始就通读整段日志历史。
+3. 只有 `full` / `odyssey`，或关键判断证据不足时，才扩大到更长周期的原始日志。
+
 ### 2. 启动 agent
 
 调用 Task 工具：
