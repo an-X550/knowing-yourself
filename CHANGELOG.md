@@ -7,6 +7,11 @@ last_updated: 2026-07-09
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-09 22:06] [文档] 明确主项目与用户版的使用分工 (v1.5.20 -> v1.5.21)
+
+- **受影响文件**: `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `packaging/zhiji-user-overlay/README.md`, `zhiji-user/README.md`
+- **改动摘要**: 明确“维护者自己的日常真实使用留在主项目，`zhiji-user/` 主要用于分发前 smoke test 与用户视角验收”的分工，减少把用户版误当成主工作台带来的边界混淆。
+
 ## [2026-07-09 21:57] [功能] 建立用户版导出与同步单一来源 (v1.5.19 -> v1.5.20)
 
 - **受影响文件**: `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `docs/zhiji-user-sync-workflow.md`, `packaging/zhiji-user-manifest.json`, `packaging/zhiji-user-overlay/`, `scripts/export-zhiji-user.ps1`, `zhiji-user/`
