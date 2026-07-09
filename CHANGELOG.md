@@ -7,6 +7,11 @@ last_updated: 2026-07-09
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-09 21:57] [功能] 建立用户版导出与同步单一来源 (v1.5.19 -> v1.5.20)
+
+- **受影响文件**: `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`, `docs/zhiji-user-sync-workflow.md`, `packaging/zhiji-user-manifest.json`, `packaging/zhiji-user-overlay/`, `scripts/export-zhiji-user.ps1`, `zhiji-user/`
+- **改动摘要**: 为 `zhiji-user/` 建立由 `packaging/zhiji-user-overlay/`、manifest 与导出脚本组成的单点维护链路，同时补充同步流程说明、用户版 smoke check 与更完整的用户 README/示例/隐私保护脚本，避免主仓库与用户版双向手改后持续漂移。
+
 ## [2026-07-09 14:38] [功能] 新增用户版分发包目录 (v1.5.18 -> v1.5.19)
 
 - **受影响文件**: `zhiji-user/`, `README.md`, `PROJECT_STATUS.md`, `AGENTS.md`, `CLAUDE.md`, `CHANGELOG.md`, `VERSION`
