@@ -5,7 +5,7 @@ last_updated: 2026-07-11
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.5.23
+**当前版本**：1.5.24
 
 ## 项目概述
 
@@ -62,11 +62,14 @@ last_updated: 2026-07-11
 | 外部内测行动方案 | 已完成 | 已形成 3-5 人小范围试用计划，第一轮优先验证“今天日志”入口的准确性、有用性与后续验证痕迹 |
 | 用户版分发包 | 已完成 | 已新增 `zhiji-user/`，保留运行所需文件与用户说明，移除开发治理、提交、grill-me 与个人数据入口 |
 | 用户版导出与同步链路 | 已完成 | 已新增 `packaging/zhiji-user-overlay/`、manifest、导出脚本与同步说明，主仓库可单点维护用户版变体并刷新到 `zhiji-user/` |
+| 主项目与用户版运行完整性审查 | 已完成 | 已补齐 Codex 日志路由、Windows Stop Hook、年度输出目录、可迁移文档链接与 manifest 源跟踪校验 |
 | 治理文档职责收口 | 进行中 | 正在把 README / STATUS / CHANGELOG / AGENTS 分工压实 |
 | 年度链路端到端验证 | 进行中 | 依赖更多月报样本与真实使用数据 |
 | 示例与自动化测试 | 进行中 | 周报、项目复盘与年度链路样本仍不足 |
 
 ## 待办事项
+
+当前仍有引用价值的实现规格：[`audit-cleanup`](docs/specs/audit-cleanup.md)、[`directory-boundary-tightening`](docs/specs/directory-boundary-tightening.md)、[`evolution-roadmap`](docs/specs/evolution-roadmap.md)、[`git-commit-escalation-flow`](docs/specs/git-commit-escalation-flow.md)、[`monthly-perspective-audit`](docs/specs/monthly-perspective-audit-2026-07-08.md)、[`monthly-processor-evidence-packets`](docs/specs/monthly-processor-evidence-packets.md)、[`monthly-synthesis-theme-compression`](docs/specs/monthly-synthesis-theme-compression.md)。
 
 ### 高优先级
 

@@ -5,7 +5,7 @@ last_updated: 2026-07-08
 
 # CHANGELOG — 改动记录
 
-> 倒序时间线。更早历史见 [docs/archive/changelog-archive.md](docs/archive/changelog-archive.md)。
+> 倒序时间线。更早历史见 [changelog-archive.md](changelog-archive.md)。
 ## [2026-07-08 17:20] [修复] 将 Stop hook 切换为 PowerShell 原生命令 (v1.5.5 → v1.5.6)
 
 - **受影响文件**: `.claude/settings.json`, `.claude/shared/prompt-rules.md`, `docs/specs/directory-boundary-tightening.md`, `PROJECT_STATUS.md`, `README.md`, `CHANGELOG.md`, `VERSION`

@@ -45,13 +45,20 @@ manifest 中的同步任务分为三种：
    - 只属于用户版分发体验的内容 → 直接改 `packaging/zhiji-user-overlay/`。
    - 真实日志、复盘、画像 → 只作为验证材料，不进入导出源。
 3. 运行导出脚本刷新 `zhiji-user/`。
-4. 在 `zhiji-user/` 内做 smoke check。
-5. 分别提交上级仓库与用户版仓库。
+4. 运行 `tests/project-integrity.tests.ps1`，确认 manifest 源受主仓库跟踪、受控文件无漂移、Hook 与目录契约完整。
+5. 在 `zhiji-user/` 内做 smoke check。
+6. 分别提交上级仓库与用户版仓库。
 
 ## 常用命令
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
+```
+
+导出后执行完整性回归：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tests/project-integrity.tests.ps1
 ```
 
 如需在一个全新目标目录中补齐运行时占位文件，可加：

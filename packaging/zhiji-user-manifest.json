@@ -29,6 +29,7 @@
     { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/每周复盘/.gitkeep", "target": "复盘/每周复盘/.gitkeep" },
     { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/每日反馈/.gitkeep", "target": "复盘/每日反馈/.gitkeep" },
     { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/每月复盘/.gitkeep", "target": "复盘/每月复盘/.gitkeep" },
-    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/项目复盘/.gitkeep", "target": "复盘/项目复盘/.gitkeep" }
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/项目复盘/.gitkeep", "target": "复盘/项目复盘/.gitkeep" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/复盘/年度回顾/.gitkeep", "target": "复盘/年度回顾/.gitkeep" }
   ]
 }

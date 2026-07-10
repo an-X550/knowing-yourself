@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 03:01] [修复] 修复主项目与用户版运行及分发冲突 (v1.5.23 -> v1.5.24)
+
+- **受影响文件**: `.codex/hooks.json`, `.gitignore`, `packaging/zhiji-user-manifest.json`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/project-integrity.tests.ps1`, `docs/zhiji-user-sync-workflow.md`, `docs/archive/changelog-detailed-2026-07-08.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 对主项目和用户版执行运行完整性审查，修复 Windows 下 Codex Stop Hook 依赖不可用 bash、用户版 Codex 自由日志路由落后于 Claude matcher、分发文档包含维护者绝对路径、年度输出目录缺失、画像隐私说明不准确，以及根 `.gitignore` 误吞用户版变体源的问题；新增完整性回归测试，确保 manifest 源受主仓库跟踪、导出结果无漂移且新环境目录与 Hook 契约完整。
+
 ## [2026-07-11] [配置] 新增功能必要性闸门 (v1.5.22 -> v1.5.23)
 
 - **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `PROJECT_STATUS.md`, `README.md`, `VERSION`, `docs/superpowers/specs/2026-07-11-feature-necessity-gate-design.md`, `docs/superpowers/plans/2026-07-11-feature-necessity-gate.md`

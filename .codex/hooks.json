@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'STATUS=$(git status --porcelain 2>/dev/null); if [ -n \"$STATUS\" ]; then echo; echo \"⚠️ 提醒：仍有未提交改动。自动提交可能未完成，请运行 /提交 本地提交；提交后运行 git push 推送。\"; echo; fi'"
+            "command": "powershell -NoProfile -Command '& { $status = git status --porcelain 2>$null; if ($status) { Write-Output ''''; Write-Output ''⚠️ 提醒：仍有未提交改动。自动提交可能未完成，请运行 /提交 本地提交；提交后运行 git push 推送。''; Write-Output '''' } }'"
           }
         ]
       }
