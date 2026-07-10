@@ -1,0 +1,66 @@
+[
+  {
+    "id": "template-a",
+    "format": "template",
+    "expected_level": "A",
+    "content": "幸福日志 7.8\n充实的事情：完成了30道题，正确率80%。\n感受：看到进步很开心。\n思考：先复习错题让我进入状态更快。\n待改进：明天开刷前先看一道错题。",
+    "evidence_present": ["date", "facts", "states", "interpretations", "intentions"],
+    "expected_behavior": "完整日反馈；允许证据化模式连接"
+  },
+  {
+    "id": "freeform-a",
+    "format": "freeform",
+    "expected_level": "A",
+    "content": "日志：2026/7/8。下午开会时方案被否了，我一开始很沮丧，但重新问了验收标准后发现对方不是反对方向，而是担心上线风险。我决定明天先写三行风险清单再继续改。",
+    "evidence_present": ["date", "facts", "states", "interpretations", "intentions"],
+    "expected_behavior": "不要求改写成模板；完整日反馈"
+  },
+  {
+    "id": "bullets-b",
+    "format": "bullets",
+    "expected_level": "B",
+    "content": "记录一下：\n- 今天完成报告初稿\n- 交付前一直想继续加内容\n- 可能是怕别人觉得不专业",
+    "evidence_present": ["facts", "interpretations"],
+    "expected_behavior": "一个核心洞察；跨日模式标为待验证"
+  },
+  {
+    "id": "freeform-b",
+    "format": "freeform",
+    "expected_level": "B",
+    "content": "日记：今天和同事对齐需求后轻松了很多，上午反复返工的烦躁也下去了。",
+    "evidence_present": ["date", "facts", "states"],
+    "expected_behavior": "一个核心洞察；不补写行动意图"
+  },
+  {
+    "id": "template-c",
+    "format": "template",
+    "expected_level": "C",
+    "content": "幸福日志 7.8\n今天很累。",
+    "evidence_present": ["date", "states"],
+    "expected_behavior": "镜像反射和维护闭环动作；不推断根因"
+  },
+  {
+    "id": "bullets-c",
+    "format": "bullets",
+    "expected_level": "C",
+    "content": "日志：\n- 下午交了作业\n- 晚上没做别的",
+    "evidence_present": ["facts"],
+    "expected_behavior": "只使用明确事实；不连接长期模式"
+  },
+  {
+    "id": "ambiguous-d",
+    "format": "ambiguous",
+    "expected_level": "D",
+    "content": "他说今天终于轻松了一点，也许事情快结束了。",
+    "evidence_present": [],
+    "expected_behavior": "先确认是否为用户本人经历及日期"
+  },
+  {
+    "id": "freeform-d",
+    "format": "freeform",
+    "expected_level": "D",
+    "content": "日志：最近就是那样。",
+    "evidence_present": [],
+    "expected_behavior": "只问一个补齐具体事件与日期的问题"
+  }
+]

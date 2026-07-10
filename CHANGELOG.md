@@ -1,11 +1,16 @@
 ---
 created: 2026-07-05
-last_updated: 2026-07-09
+last_updated: 2026-07-10
 ---
 
 # CHANGELOG - 改动记录
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
+
+## [2026-07-10 10:31] [功能] 支持非模板日志并按证据等级收敛日反馈 (v1.5.21 -> v1.5.22)
+
+- **受影响文件**: `.claude/settings.json`, `.claude/shared/contracts/`, `.claude/shared/prompt-rules.md`, `.claude/skills/log.md`, `.claude/agents/daily-analyzer.md`, `.claude/agents/journal-quality-coach.md`, `.claude/commands/daily-review.md`, `.claude/commands/journal-coach.md`, `perspectives/journal-quality.md`, `tests/journal-input-contract.tests.ps1`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 自由叙事现在可通过“日志 / 日记 / 记录一下”等自然语言入口稳定进入存档与日反馈链路，并新增证据卡、A-D 输入等级和降级输出规则；同时收紧心理归因与验证写回，把单次干预失败从行为模式证伪中分离，并修复主项目日志教练误用日分析代理的问题。
 
 ## [2026-07-09 22:06] [文档] 明确主项目与用户版的使用分工 (v1.5.20 -> v1.5.21)
 
