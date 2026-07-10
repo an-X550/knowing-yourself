@@ -88,7 +88,7 @@ scope: 新功能必要性闸门
 - 修改 `AGENTS.md`。
 - 将同样内容逐字同步到 `CLAUDE.md`。
 - 更新 `VERSION`、`PROJECT_STATUS.md` 和 `CHANGELOG.md`。
-- 不修改 README、运行时 `.claude/`、用户版 overlay 或 `zhiji-user/`。
+- README 只同步版本徽章；不新增功能说明，也不修改运行时 `.claude/`、用户版 overlay 或 `zhiji-user/`。
 
 ## 验证标准
 
