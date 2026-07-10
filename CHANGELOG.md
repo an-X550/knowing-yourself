@@ -1,11 +1,16 @@
 ---
 created: 2026-07-05
-last_updated: 2026-07-10
+last_updated: 2026-07-11
 ---
 
 # CHANGELOG - 改动记录
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
+
+## [2026-07-11] [配置] 新增功能必要性闸门 (v1.5.22 -> v1.5.23)
+
+- **受影响文件**: `AGENTS.md`, `CLAUDE.md`, `PROJECT_STATUS.md`, `README.md`, `VERSION`, `docs/superpowers/specs/2026-07-11-feature-necessity-gate-design.md`, `docs/superpowers/plans/2026-07-11-feature-necessity-gate.md`
+- **改动摘要**: 新增能力在进入 spec、plan 和代码前必须先通过当前问题证据、核心目标、最简方案和即时验证四项判断；任一项不成立时先停止实施、说明机会成本并劝阻，用户知情后再次坚持才允许继续。规则直接收敛在现有治理规范中，不新增 hook、agent、skill 或运行时契约。
 
 ## [2026-07-10 10:31] [功能] 支持非模板日志并按证据等级收敛日反馈 (v1.5.21 -> v1.5.22)
 
