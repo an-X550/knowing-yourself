@@ -60,7 +60,7 @@ Add these escaped patterns to the `Assert-ContainsAll $path` array for every con
 Run:
 
 ```powershell
-pwsh -NoProfile -File tests/topic-thinking-contract.tests.ps1
+powershell -NoProfile -File tests/topic-thinking-contract.tests.ps1
 ```
 
 Expected: `FAIL: topic thinking contract checks` reporting missing six-question headings and new quality-rule patterns.
@@ -129,7 +129,7 @@ Keep the existing frontmatter, then use:
 Run:
 
 ```powershell
-pwsh -NoProfile -File scripts/export-zhiji-user.ps1
+powershell -NoProfile -File scripts/export-zhiji-user.ps1
 ```
 
 Expected: export completes successfully and mirrors the source contract/template into `zhiji-user/`.
@@ -139,7 +139,7 @@ Expected: export completes successfully and mirrors the source contract/template
 Run:
 
 ```powershell
-pwsh -NoProfile -File tests/topic-thinking-contract.tests.ps1
+powershell -NoProfile -File tests/topic-thinking-contract.tests.ps1
 ```
 
 Expected: `PASS: topic thinking contract checks`.
@@ -237,9 +237,9 @@ Then add one topmost `CHANGELOG.md` entry using that generated timestamp:
 Run:
 
 ```powershell
-pwsh -NoProfile -File tests/topic-thinking-contract.tests.ps1
-pwsh -NoProfile -File tests/distribution-boundary.tests.ps1
-pwsh -NoProfile -File tests/project-integrity.tests.ps1
+powershell -NoProfile -File tests/topic-thinking-contract.tests.ps1
+powershell -NoProfile -File tests/distribution-boundary.tests.ps1
+powershell -NoProfile -File tests/project-integrity.tests.ps1
 ```
 
 Expected: all scripts exit `0` and print their respective `PASS` messages.
@@ -260,7 +260,7 @@ Expected: version is `1.6.9`, metadata contains the release description, no whit
 Commit:
 
 ```powershell
-git add -- .claude/shared/contracts/topic-thinking.md packaging/zhiji-user-overlay zhiji-user tests/topic-thinking-contract.tests.ps1 VERSION PROJECT_STATUS.md CHANGELOG.md README.md 关于我/思考/信息过载、最优解幻觉与不确定性.md
+git add -- .claude/shared/contracts/topic-thinking.md packaging/zhiji-user-overlay zhiji-user tests/topic-thinking-contract.tests.ps1 VERSION PROJECT_STATUS.md CHANGELOG.md README.md
 git commit -m "feat: refine topic thinking action loop"
 ```
 

@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 22:20] [功能] 收敛主题思考为六问行动闭环 (v1.6.8 -> v1.6.9)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 主题思考改用“困扰、理解、审查、保留、尝试、演化”六个用户问题，要求事实/推断/建议区分和有依据的反例审查，并将行动收敛为单一进行中实验，帮助用户保留思考痕迹并将其转化为可验证改变。
+
 ## [2026-07-11 20:20] [文档] 同步用户版说明与项目复盘 (v1.6.7 -> v1.6.8)
 
 - **受影响文件**: `packaging/zhiji-user-overlay/README.md`, `zhiji-user/README.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

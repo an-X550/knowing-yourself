@@ -71,7 +71,11 @@ foreach ($path in $contractPaths) {
     '\u4e0d\u5f97.*\u9759\u9ed8\u8986\u76d6',
     '\u6700\u591a.*2.*\u4e3b\u9898',
     '\u660e\u786e\u544a\u77e5\u7528\u6237.*\u4e3b\u9898',
-    '\u5f53\u524d\u8868\u8fbe.*\u4f18\u5148'
+    '\u5f53\u524d\u8868\u8fbe.*\u4f18\u5148',
+    '\u4e8b\u5b9e.*\u63a8\u65ad.*\u5efa\u8bae',
+    '\u8bc1\u636e\u7f3a\u53e3|\u53cd\u4f8b|\u63a8\u7406\u8df3\u8dc3|\u4ef7\u503c\u51b2\u7a81|\u66ff\u4ee3\u89e3\u91ca',
+    '\u4e00\u4e2a.*\u8fdb\u884c\u4e2d.*\u884c\u52a8\u5b9e\u9a8c',
+    '\u5b9e\u8d28\u53d8\u5316.*\u89c2\u70b9\u6f14\u5316'
   )
 }
 
@@ -98,7 +102,14 @@ $relationshipBoundaryTopic = -join @(
   [char]0x4e2d, [char]0x7684, [char]0x8fb9, [char]0x754c
 )
 $topicTemplate = Read-Utf8 "packaging/zhiji-user-overlay/$aboutMe/templates/thinking-topic.template.md"
-foreach ($requiredHeading in @('## \u5f53\u524d\u8ba4\u8bc6', '## \u5f62\u6210\u4f9d\u636e', '## \u9650\u5236\u4e0e\u53cd\u4f8b', '## \u672a\u51b3\u95ee\u9898', '## \u89c2\u70b9\u6f14\u5316')) {
+foreach ($requiredHeading in @(
+  '## \u6211\u5728\u56f0\u6270\u4ec0\u4e48\uff1f',
+  '## \u6211\u76ee\u524d\u600e\u4e48\u7406\u89e3\uff1f',
+  '## \u6211\u51ed\u4ec0\u4e48\u8fd9\u6837\u60f3\uff0c\u54ea\u91cc\u53ef\u80fd\u9519\uff1f',
+  '## \u4ec0\u4e48\u503c\u5f97\u7ee7\u7eed\u4fdd\u7559\uff1f',
+  '## \u63a5\u4e0b\u6765\u600e\u4e48\u8bd5\uff1f',
+  '## \u6211\u7684\u770b\u6cd5\u600e\u4e48\u53d8\u4e86\uff1f'
+)) {
   if ($topicTemplate -notmatch $requiredHeading) { Add-Failure "topic template missing pattern: $requiredHeading" }
 }
 if ($topicTemplate -match '\u4fe1\u606f\u8f93\u5165\u4e0e\u6ce8\u610f\u529b|\u5de5\u4f5c\u4e0e\u5065\u5eb7|\u804c\u4e1a\u9009\u62e9') {
