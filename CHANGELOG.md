@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 16:59] [文档] 建立质量基线验收矩阵 (v1.6.1 -> v1.6.2)
+
+- **受影响文件**: `docs/quality-baseline-matrix.md`, `tests/quality-baseline.tests.ps1`, `tests/project-integrity.tests.ps1`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将四阶段优化方案的第一阶段落成可测试质量基线，覆盖日反馈、周/月复盘、项目复盘、年度复盘、人生设计和用户版分发的关键组件边界；项目完整性检查现在会同步执行质量基线测试，确保后续回抽共享能力或删除重复提示词前，入口、路径、摘要、降级和用户版边界保持不变。
+
 ## [2026-07-11 14:08] [修复] 收敛主题思考隐私与运行契约 (v1.6.0 -> v1.6.1)
 
 - **受影响文件**: `.claude/agents/`, `.claude/workflows/shared.js`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `tests/review-workflow-contract.tests.ps1`, `tests/distribution-boundary.tests.ps1`, `tests/project-integrity.tests.ps1`, `docs/topic-thinking-acceptance.md`, `docs/zhiji-user-sync-workflow.md`, `packaging/zhiji-user-boundaries.json`, `README.md`, `PROJECT_STATUS.md`, `VERSION`

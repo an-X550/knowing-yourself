@@ -151,6 +151,11 @@ if ($LASTEXITCODE -ne 0) {
   Add-Failure 'distribution boundary checks failed'
 }
 
+& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repoRoot 'tests/quality-baseline.tests.ps1')
+if ($LASTEXITCODE -ne 0) {
+  Add-Failure 'quality baseline checks failed'
+}
+
 if ($failures.Count -gt 0) {
   Write-Host "FAIL: project integrity checks ($($failures.Count))" -ForegroundColor Red
   $failures | ForEach-Object { Write-Host "- $_" -ForegroundColor Red }
