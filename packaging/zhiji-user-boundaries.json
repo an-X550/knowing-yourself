@@ -8,6 +8,8 @@
     ".claude/shared/contracts/journal-input.md",
     ".claude/shared/contracts/review-synthesis.md",
     ".claude/shared/contracts/topic-thinking.md",
+    ".claude/shared/runtime-contracts.js",
+    ".claude/workflows/shared.js",
     "docs/methodology-review.md",
     "perspectives/journal-quality.md"
   ],
@@ -109,10 +111,6 @@
       "reason": "User package prompt rules include standalone entry and privacy guidance."
     },
     {
-      "path": ".claude/shared/runtime-contracts.js",
-      "reason": "User package keeps a standalone runtime-contract mirror for exported workflows."
-    },
-    {
       "path": ".claude/skills/log.md",
       "reason": "User package log skill is adapted to beta-user paths and privacy expectations."
     },
@@ -123,10 +121,6 @@
     {
       "path": ".claude/workflows/project-review.js",
       "reason": "User package workflow wrapper is adapted to exported-package paths and prompts."
-    },
-    {
-      "path": ".claude/workflows/shared.js",
-      "reason": "Current helper behavior is aligned but byte identity is not yet enforced across distribution line endings."
     },
     {
       "path": ".claude/workflows/weekly-review.js",
