@@ -28,11 +28,39 @@ function Assert-ContainsAll {
   }
 }
 
+function Assert-GitIgnored {
+  param([string]$RepositoryRoot, [string]$RelativePath)
+
+  git -C (Join-Path $repoRoot $RepositoryRoot) check-ignore --quiet -- $RelativePath
+  if ($LASTEXITCODE -ne 0) {
+    Add-Failure "$RepositoryRoot does not ignore private runtime path: $RelativePath"
+  }
+}
+
+function Assert-SameFile {
+  param([string]$ExpectedRelativePath, [string]$ActualRelativePath)
+
+  $expected = Join-Path $repoRoot $ExpectedRelativePath
+  $actual = Join-Path $repoRoot $ActualRelativePath
+  if (-not (Test-Path -LiteralPath $expected) -or -not (Test-Path -LiteralPath $actual)) {
+    Add-Failure "cannot compare missing files: $ExpectedRelativePath -> $ActualRelativePath"
+    return
+  }
+
+  if ((Get-FileHash -LiteralPath $expected -Algorithm SHA256).Hash -ne
+      (Get-FileHash -LiteralPath $actual -Algorithm SHA256).Hash) {
+    Add-Failure "shared topic-thinking file drift: $ExpectedRelativePath != $ActualRelativePath"
+  }
+}
+
 $contractPaths = @(
   '.claude/shared/contracts/topic-thinking.md',
   'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md',
   'zhiji-user/.claude/shared/contracts/topic-thinking.md'
 )
+
+Assert-SameFile '.claude/shared/contracts/topic-thinking.md' 'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md'
+Assert-SameFile 'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md' 'zhiji-user/.claude/shared/contracts/topic-thinking.md'
 
 foreach ($path in $contractPaths) {
   Assert-ContainsAll $path @(
@@ -64,12 +92,33 @@ $userClaude = Read-Utf8 'packaging/zhiji-user-overlay/CLAUDE.md'
 if ($userAgents -cne $userClaude) { Add-Failure 'user AGENTS.md and CLAUDE.md are not byte-for-byte identical' }
 
 $aboutMe = -join @([char]0x5173, [char]0x4e8e, [char]0x6211)
+$thinkingDir = -join @([char]0x601d, [char]0x8003)
+$relationshipBoundaryTopic = -join @(
+  [char]0x4eb2, [char]0x5bc6, [char]0x5173, [char]0x7cfb,
+  [char]0x4e2d, [char]0x7684, [char]0x8fb9, [char]0x754c
+)
 $topicTemplate = Read-Utf8 "packaging/zhiji-user-overlay/$aboutMe/templates/thinking-topic.template.md"
 foreach ($requiredHeading in @('## \u5f53\u524d\u8ba4\u8bc6', '## \u5f62\u6210\u4f9d\u636e', '## \u9650\u5236\u4e0e\u53cd\u4f8b', '## \u672a\u51b3\u95ee\u9898', '## \u89c2\u70b9\u6f14\u5316')) {
   if ($topicTemplate -notmatch $requiredHeading) { Add-Failure "topic template missing pattern: $requiredHeading" }
 }
 if ($topicTemplate -match '\u4fe1\u606f\u8f93\u5165\u4e0e\u6ce8\u610f\u529b|\u5de5\u4f5c\u4e0e\u5065\u5eb7|\u804c\u4e1a\u9009\u62e9') {
   Add-Failure 'generic topic template contains a fixed example topic'
+}
+
+$indexTemplate = Read-Utf8 "packaging/zhiji-user-overlay/$aboutMe/templates/thinking-index.template.md"
+if ($indexTemplate -notmatch '\|\s*\u4e3b\u9898\s*\|\s*\u522b\u540d/\u5173\u952e\u8bcd\s*\|\s*\u5f53\u524d\u6838\u5fc3\u95ee\u9898\s*\|\s*\u6700\u8fd1\u66f4\u65b0\s*\|') {
+  Add-Failure 'thinking index template does not contain the routing table'
+}
+if ($indexTemplate -match '\u4fe1\u606f\u8f93\u5165\u4e0e\u6ce8\u610f\u529b|\u5de5\u4f5c\u4e0e\u5065\u5eb7|\u804c\u4e1a\u9009\u62e9|\u4eb2\u5bc6\u5173\u7cfb') {
+  Add-Failure 'generic index template contains a concrete user topic'
+}
+
+Assert-GitIgnored 'zhiji-user' "$aboutMe/$thinkingDir/index.md"
+Assert-GitIgnored 'zhiji-user' "$aboutMe/$thinkingDir/$relationshipBoundaryTopic.md"
+
+git -C (Join-Path $repoRoot 'zhiji-user') check-ignore --quiet -- "$aboutMe/templates/thinking-topic.template.md"
+if ($LASTEXITCODE -eq 0) {
+  Add-Failure 'zhiji-user incorrectly ignores the tracked generic thinking template'
 }
 
 $manifest = Read-Utf8 'packaging/zhiji-user-manifest.json' | ConvertFrom-Json

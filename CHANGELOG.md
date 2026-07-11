@@ -7,6 +7,31 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 17:28] [修复] 补充历史观点新鲜度规则 (v1.6.4 -> v1.6.5)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `.claude/shared/contracts/evidence-and-verification.md`, `packaging/zhiji-user-overlay/.claude/shared/contracts/`, `zhiji-user/.claude/shared/contracts/`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将“最近三个月优先”收敛为运行契约：历史主题召回按当前表达、最近 90 天证据、已验证长期模式和 90 天前未复核观点排序；旧观点进入复查状态而非自动失效，长期模式则结合最近支持、反例和情境变化判断是否仍适用。
+
+## [2026-07-11 17:19] [重构] 批量收敛等价共享文件 (v1.6.3 -> v1.6.4)
+
+- **受影响文件**: `packaging/zhiji-user-boundaries.json`, `packaging/zhiji-user-overlay/.claude/agents/`, `packaging/zhiji-user-overlay/.claude/commands/`, `packaging/zhiji-user-overlay/.claude/workflows/`, `packaging/zhiji-user-overlay/docs/methodology-journal.md`, `packaging/zhiji-user-overlay/examples/demo/sample-journal.md`, `packaging/zhiji-user-overlay/perspectives/README.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 在质量基线和分发边界测试保护下，将忽略行尾后已等价的一批低风险文件从 `override` 收敛为 byte-identical `shared`，包括部分 agent、command、workflow、方法论文档、示例与视角索引；这降低了用户版与主项目的双维护成本，不改变任何入口、参数、报告路径或报告结构。
+
+## [2026-07-11 17:10] [重构] 回抽纯运行辅助共享文件 (v1.6.2 -> v1.6.3)
+
+- **受影响文件**: `packaging/zhiji-user-boundaries.json`, `packaging/zhiji-user-overlay/.claude/shared/runtime-contracts.js`, `packaging/zhiji-user-overlay/.claude/workflows/shared.js`, `zhiji-user/.claude/shared/runtime-contracts.js`, `zhiji-user/.claude/workflows/shared.js`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将主项目与用户版行为已经一致的 `runtime-contracts.js` 和 workflow `shared.js` 从有理由 override 收敛为 byte-identical shared 文件，由边界测试自动保证后续不再分叉，降低摘要解析与运行镜像的双维护成本；不改变任何命令入口、参数、报告路径或输出结构。
+
+## [2026-07-11 16:59] [文档] 建立质量基线验收矩阵 (v1.6.1 -> v1.6.2)
+
+- **受影响文件**: `docs/quality-baseline-matrix.md`, `tests/quality-baseline.tests.ps1`, `tests/project-integrity.tests.ps1`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将四阶段优化方案的第一阶段落成可测试质量基线，覆盖日反馈、周/月复盘、项目复盘、年度复盘、人生设计和用户版分发的关键组件边界；项目完整性检查现在会同步执行质量基线测试，确保后续回抽共享能力或删除重复提示词前，入口、路径、摘要、降级和用户版边界保持不变。
+
+## [2026-07-11 14:08] [修复] 收敛主题思考隐私与运行契约 (v1.6.0 -> v1.6.1)
+
+- **受影响文件**: `.claude/agents/`, `.claude/workflows/shared.js`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `tests/review-workflow-contract.tests.ps1`, `tests/distribution-boundary.tests.ps1`, `tests/project-integrity.tests.ps1`, `docs/topic-thinking-acceptance.md`, `docs/zhiji-user-sync-workflow.md`, `packaging/zhiji-user-boundaries.json`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 修复用户版主题思考库动态目录未显式忽略的隐私风险，补充主题思考静态契约与非个人内容 walkthrough 记录；同时修复周/月/项目/年综合代理只返回“已创建”导致 workflow 无法提取聊天摘要的问题，并新增用户版分发边界清单与回归测试，明确 shared / override / user_only 的维护责任。
+
 ## [2026-07-11 13:14] [功能] 新增轻量主题思考库 (v1.5.26 -> v1.6.0)
 
 - **受影响文件**: `.claude/shared/`, `AGENTS.md`, `CLAUDE.md`, `packaging/zhiji-user-overlay/`, `packaging/zhiji-user-manifest.json`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
