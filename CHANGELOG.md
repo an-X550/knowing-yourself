@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-12 01:01] [修复] 区分主题思考短期入口与长期行动 (v1.6.12 -> v1.6.13)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 修正主题思考行动卡默认按一周反馈设计的问题；现在行动卡只保留短期动作、长期锚点、触发场景和停止线，“值得保留的行动”统一为长期动作表，帮助主题文件在非定期查看场景下更容易阅读和执行。
+
 ## [2026-07-12 00:38] [修复] 为主题思考补齐编号化排版 (v1.6.11 -> v1.6.12)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
