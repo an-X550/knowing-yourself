@@ -37,11 +37,30 @@ function Assert-GitIgnored {
   }
 }
 
+function Assert-SameFile {
+  param([string]$ExpectedRelativePath, [string]$ActualRelativePath)
+
+  $expected = Join-Path $repoRoot $ExpectedRelativePath
+  $actual = Join-Path $repoRoot $ActualRelativePath
+  if (-not (Test-Path -LiteralPath $expected) -or -not (Test-Path -LiteralPath $actual)) {
+    Add-Failure "cannot compare missing files: $ExpectedRelativePath -> $ActualRelativePath"
+    return
+  }
+
+  if ((Get-FileHash -LiteralPath $expected -Algorithm SHA256).Hash -ne
+      (Get-FileHash -LiteralPath $actual -Algorithm SHA256).Hash) {
+    Add-Failure "shared topic-thinking file drift: $ExpectedRelativePath != $ActualRelativePath"
+  }
+}
+
 $contractPaths = @(
   '.claude/shared/contracts/topic-thinking.md',
   'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md',
   'zhiji-user/.claude/shared/contracts/topic-thinking.md'
 )
+
+Assert-SameFile '.claude/shared/contracts/topic-thinking.md' 'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md'
+Assert-SameFile 'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md' 'zhiji-user/.claude/shared/contracts/topic-thinking.md'
 
 foreach ($path in $contractPaths) {
   Assert-ContainsAll $path @(
@@ -84,6 +103,14 @@ foreach ($requiredHeading in @('## \u5f53\u524d\u8ba4\u8bc6', '## \u5f62\u6210\u
 }
 if ($topicTemplate -match '\u4fe1\u606f\u8f93\u5165\u4e0e\u6ce8\u610f\u529b|\u5de5\u4f5c\u4e0e\u5065\u5eb7|\u804c\u4e1a\u9009\u62e9') {
   Add-Failure 'generic topic template contains a fixed example topic'
+}
+
+$indexTemplate = Read-Utf8 "packaging/zhiji-user-overlay/$aboutMe/templates/thinking-index.template.md"
+if ($indexTemplate -notmatch '\|\s*\u4e3b\u9898\s*\|\s*\u522b\u540d/\u5173\u952e\u8bcd\s*\|\s*\u5f53\u524d\u6838\u5fc3\u95ee\u9898\s*\|\s*\u6700\u8fd1\u66f4\u65b0\s*\|') {
+  Add-Failure 'thinking index template does not contain the routing table'
+}
+if ($indexTemplate -match '\u4fe1\u606f\u8f93\u5165\u4e0e\u6ce8\u610f\u529b|\u5de5\u4f5c\u4e0e\u5065\u5eb7|\u804c\u4e1a\u9009\u62e9|\u4eb2\u5bc6\u5173\u7cfb') {
+  Add-Failure 'generic index template contains a concrete user topic'
 }
 
 Assert-GitIgnored 'zhiji-user' "$aboutMe/$thinkingDir/index.md"

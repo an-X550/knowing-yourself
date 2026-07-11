@@ -1,0 +1,241 @@
+{
+  "shared": [
+    ".claude/agents/daily-analyzer.md",
+    ".claude/agents/journal-quality-coach.md",
+    ".claude/commands/daily-review.md",
+    ".claude/shared/contracts/daily-feedback.md",
+    ".claude/shared/contracts/evidence-and-verification.md",
+    ".claude/shared/contracts/journal-input.md",
+    ".claude/shared/contracts/review-synthesis.md",
+    ".claude/shared/contracts/topic-thinking.md",
+    "docs/methodology-review.md",
+    "perspectives/journal-quality.md"
+  ],
+  "override": [
+    {
+      "path": ".gitignore",
+      "reason": "User package protects runtime journal, review, profile, and topic-thinking data while keeping generic templates tracked."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "User package entry governance omits developer-only release and local source maintenance rules."
+    },
+    {
+      "path": "CLAUDE.md",
+      "reason": "User package entry governance mirrors user AGENTS.md and omits developer-only release and source maintenance rules."
+    },
+    {
+      "path": "README.md",
+      "reason": "User package README is standalone installation and beta-user guidance, not the developer workspace entry."
+    },
+    {
+      "path": ".claude/settings.json",
+      "reason": "User package omits developer-only routing and commit reminder behavior."
+    },
+    {
+      "path": ".claude/agents/life-design-synthesis.md",
+      "reason": "User package text is tuned for standalone users while preserving the life-design report behavior."
+    },
+    {
+      "path": ".claude/agents/monthly-processor.md",
+      "reason": "User package wording is adapted to exported paths and standalone usage."
+    },
+    {
+      "path": ".claude/agents/monthly-synthesis.md",
+      "reason": "Current file is behavior-aligned but not byte-identical; retained as an explicit distribution override until line-ending and prompt text are converged."
+    },
+    {
+      "path": ".claude/agents/project-synthesis.md",
+      "reason": "Current file is behavior-aligned but not byte-identical; retained as an explicit distribution override until line-ending and prompt text are converged."
+    },
+    {
+      "path": ".claude/agents/review-readiness-checker.md",
+      "reason": "User package readiness checks target exported-package paths and beta-user setup."
+    },
+    {
+      "path": ".claude/agents/weekly-synthesis.md",
+      "reason": "Current file is behavior-aligned but not byte-identical; retained as an explicit distribution override until line-ending and prompt text are converged."
+    },
+    {
+      "path": ".claude/agents/yearly-synthesis.md",
+      "reason": "Current file is behavior-aligned but not byte-identical; retained as an explicit distribution override until line-ending and prompt text are converged."
+    },
+    {
+      "path": ".claude/commands/interview.md",
+      "reason": "User package command text is standalone and omits developer workspace assumptions."
+    },
+    {
+      "path": ".claude/commands/journal-coach.md",
+      "reason": "User package command text is standalone and uses exported-package paths."
+    },
+    {
+      "path": ".claude/commands/life-design.md",
+      "reason": "User package command text is standalone and uses exported-package paths."
+    },
+    {
+      "path": ".claude/commands/monthly-review.md",
+      "reason": "User package command text is standalone and uses exported-package paths."
+    },
+    {
+      "path": ".claude/commands/project-review.md",
+      "reason": "User package command text is standalone and uses exported-package paths."
+    },
+    {
+      "path": ".claude/commands/review.md",
+      "reason": "User package command text is standalone and uses exported-package paths."
+    },
+    {
+      "path": ".claude/commands/weekly-review.md",
+      "reason": "User package command text is standalone and uses exported-package paths."
+    },
+    {
+      "path": ".claude/commands/yearly-review.md",
+      "reason": "User package command text is standalone and uses exported-package paths."
+    },
+    {
+      "path": ".claude/shared/ai-operating-principles.md",
+      "reason": "User package version removes developer-only operating instructions while preserving runtime principles."
+    },
+    {
+      "path": ".claude/shared/banned-phrases.json",
+      "reason": "User package keeps a standalone copy until shared runtime data is line-ending normalized."
+    },
+    {
+      "path": ".claude/shared/paths.md",
+      "reason": "User package paths point at exported runtime directories and privacy boundaries."
+    },
+    {
+      "path": ".claude/shared/prompt-rules.md",
+      "reason": "User package prompt rules include standalone entry and privacy guidance."
+    },
+    {
+      "path": ".claude/shared/runtime-contracts.js",
+      "reason": "User package keeps a standalone runtime-contract mirror for exported workflows."
+    },
+    {
+      "path": ".claude/skills/log.md",
+      "reason": "User package log skill is adapted to beta-user paths and privacy expectations."
+    },
+    {
+      "path": ".claude/workflows/monthly-review.js",
+      "reason": "User package workflow wrapper is adapted to exported-package paths and prompts."
+    },
+    {
+      "path": ".claude/workflows/project-review.js",
+      "reason": "User package workflow wrapper is adapted to exported-package paths and prompts."
+    },
+    {
+      "path": ".claude/workflows/shared.js",
+      "reason": "Current helper behavior is aligned but byte identity is not yet enforced across distribution line endings."
+    },
+    {
+      "path": ".claude/workflows/weekly-review.js",
+      "reason": "User package workflow wrapper is adapted to exported-package paths and prompts."
+    },
+    {
+      "path": ".claude/workflows/yearly-review.js",
+      "reason": "User package workflow wrapper is adapted to exported-package paths and prompts."
+    },
+    {
+      "path": ".codex/hooks.json",
+      "reason": "User package hooks route beta-user journal input and omit developer workspace hooks."
+    },
+    {
+      "path": "docs/analysis-standards.md",
+      "reason": "User package copy is retained for standalone runtime docs and may lag developer-only framing."
+    },
+    {
+      "path": "docs/methodology-journal.md",
+      "reason": "User package copy is retained for standalone runtime docs and may lag developer-only framing."
+    },
+    {
+      "path": "docs/model-selection.md",
+      "reason": "User package copy is retained for standalone runtime docs and may lag developer-only framing."
+    },
+    {
+      "path": "examples/demo/sample-journal.md",
+      "reason": "User package example is tuned for beta-user onboarding."
+    },
+    {
+      "path": "perspectives/chronicle.md",
+      "reason": "User package perspective prompt is retained as an exported standalone variant."
+    },
+    {
+      "path": "perspectives/coach.md",
+      "reason": "User package perspective prompt is retained as an exported standalone variant."
+    },
+    {
+      "path": "perspectives/growth-dimensions.md",
+      "reason": "User package perspective prompt is retained as an exported standalone variant."
+    },
+    {
+      "path": "perspectives/README.md",
+      "reason": "User package perspective index is written for standalone users."
+    },
+    {
+      "path": "perspectives/relationships.md",
+      "reason": "User package perspective prompt is retained as an exported standalone variant."
+    },
+    {
+      "path": "perspectives/review-coach.md",
+      "reason": "User package perspective prompt is retained as an exported standalone variant."
+    },
+    {
+      "path": "perspectives/strengths.md",
+      "reason": "User package perspective prompt is retained as an exported standalone variant."
+    },
+    {
+      "path": "perspectives/therapist.md",
+      "reason": "User package perspective prompt is retained as an exported standalone variant."
+    },
+    {
+      "path": "perspectives/values-meaning.md",
+      "reason": "User package perspective prompt is retained as an exported standalone variant."
+    },
+    {
+      "path": "关于我/core-profile.md",
+      "reason": "User package keeps a seed/runtime profile file while main workspace treats profile data as local private context."
+    },
+    {
+      "path": "关于我/current.md",
+      "reason": "User package keeps a seed/runtime current-context file while main workspace treats profile data as local private context."
+    },
+    {
+      "path": "关于我/verified-patterns.md",
+      "reason": "User package keeps a seed/runtime verification file while main workspace treats profile data as local private context."
+    }
+  ],
+  "user_only": [
+    ".zhiji-user-sync.json",
+    "docs/release-acceptance-2026-07-09.md",
+    "docs/release-checklist.md",
+    "docs/user-smoke-test-checklist.md",
+    "examples/beta/life-design-topic.md",
+    "examples/beta/logs/2026-07月日志.md",
+    "examples/beta/project-review-brief.md",
+    "examples/beta/README.md",
+    "scripts/protect-private-data.ps1",
+    "scripts/unprotect-private-data.ps1",
+    "关于我/.gitkeep",
+    "关于我/Analysis/.gitkeep",
+    "关于我/career-projects.md",
+    "关于我/health-habits.md",
+    "关于我/README.md",
+    "关于我/relationships.md",
+    "关于我/templates/career-projects.template.md",
+    "关于我/templates/core-profile.template.md",
+    "关于我/templates/current.template.md",
+    "关于我/templates/health-habits.template.md",
+    "关于我/templates/relationships.template.md",
+    "关于我/templates/thinking-index.template.md",
+    "关于我/templates/thinking-topic.template.md",
+    "关于我/templates/verified-patterns.template.md",
+    "复盘/人生设计/.gitkeep",
+    "复盘/年度回顾/.gitkeep",
+    "复盘/每周复盘/.gitkeep",
+    "复盘/每日反馈/.gitkeep",
+    "复盘/每月复盘/.gitkeep",
+    "复盘/项目复盘/.gitkeep",
+    "日志/.gitkeep"
+  ]
+}

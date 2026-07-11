@@ -17,6 +17,7 @@
 ## 当前机制
 
 - manifest：`packaging/zhiji-user-manifest.json`
+- 边界清单：`packaging/zhiji-user-boundaries.json`
 - 用户版变体源：`packaging/zhiji-user-overlay/`
 - 导出脚本：`scripts/export-zhiji-user.ps1`
 - 目标仓库：`zhiji-user/`
@@ -26,6 +27,12 @@ manifest 中的同步任务分为三种：
 - `mirrorDir`：镜像用户版受控目录，目标目录会被覆盖重建。
 - `overwriteFile`：覆盖单个受控文件。
 - `seedFile`：只在目标文件缺失时补种子，默认保留现有运行时文件。
+
+边界清单把 overlay 文件分为三种：
+
+- `shared`：主产品与用户版必须逐字节一致，主产品是权威来源。
+- `override`：用户版有稳定的分发边界理由，必须写明 reason。
+- `user_only`：只存在于分发包中的安装、内测、模板、占位或隐私保护文件。
 
 ## 为什么这样设计
 
@@ -45,9 +52,10 @@ manifest 中的同步任务分为三种：
    - 只属于用户版分发体验的内容 → 直接改 `packaging/zhiji-user-overlay/`。
    - 真实日志、复盘、画像 → 只作为验证材料，不进入导出源。
 3. 运行导出脚本刷新 `zhiji-user/`。
-4. 运行 `tests/project-integrity.tests.ps1`，确认 manifest 源受主仓库跟踪、受控文件无漂移、Hook 与目录契约完整。
+4. 运行 `tests/project-integrity.tests.ps1`，确认 manifest 源受主仓库跟踪、受控文件无漂移、Hook、目录契约与边界清单完整。
 5. 在 `zhiji-user/` 内做 smoke check。
-6. 分别提交上级仓库与用户版仓库。
+6. 检查 `git -C zhiji-user status --short`。导出成功不等于发布成功；只有用户版仓库也完成本地提交并恢复干净，release 才算闭环。
+7. 分别提交上级仓库与用户版仓库。
 
 ## 常用命令
 
@@ -61,6 +69,18 @@ powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
 powershell -ExecutionPolicy Bypass -File tests/project-integrity.tests.ps1
 ```
 
+如需单独检查用户版边界：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tests/distribution-boundary.tests.ps1
+```
+
+发布前还要加上用户版仓库干净检查：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tests/distribution-boundary.tests.ps1 -RequireCleanUserRepo
+```
+
 如需在一个全新目标目录中补齐运行时占位文件，可加：
 
 ```powershell
@@ -71,5 +91,7 @@ powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1 -ForceSee
 
 - 不要直接把上级仓库完整 `.claude/` 全量复制到用户版。
 - 共享能力的长期目标是回抽，但在真正抽离前，用户版变体先集中维护在 `packaging/zhiji-user-overlay/`。
+- 不要把运行时个人数据纳入导出验证；`日志/`、`复盘/`、`关于我/思考/` 和画像文件的真实内容都属于用户环境。
+- 新增或修改 overlay 文件时，必须同步更新 `packaging/zhiji-user-boundaries.json`，不能让差异停留在“当前碰巧如此”。
 - `关于我/current.md`、`verified-patterns.md` 等运行文件默认保留现状；如果你想刷新种子，请显式使用 `-ForceSeedFiles`。
 - `日志/`、`复盘/`、`关于我/Analysis/` 属于真实使用产物，导出流程永不清空。
