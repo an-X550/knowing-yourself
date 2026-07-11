@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11] [修复] 恢复主 README 版本徽章同步 (v1.5.25 -> v1.5.26)
+
+- **受影响文件**: `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 修复 README 第一性原理重构时误删版本与许可证徽章的问题，恢复公开版本入口，并重新确保 README 徽章、项目状态与版本文件保持一致。
+
 ## [2026-07-11 11:58] [文档] 以第一性原理重构主项目与用户版说明 (v1.5.24 -> v1.5.25)
 
 - **受影响文件**: `README.md`, `packaging/zhiji-user-overlay/README.md`, `zhiji-user/README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
