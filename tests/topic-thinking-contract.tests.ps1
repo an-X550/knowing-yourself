@@ -1,0 +1,89 @@
+$ErrorActionPreference = 'Stop'
+
+$repoRoot = Split-Path -Parent $PSScriptRoot
+$failures = New-Object System.Collections.Generic.List[string]
+
+function Add-Failure {
+  param([string]$Message)
+  $failures.Add($Message) | Out-Null
+}
+
+function Read-Utf8 {
+  param([string]$RelativePath)
+  $path = Join-Path $repoRoot $RelativePath
+  if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+    Add-Failure "missing file: $RelativePath"
+    return ''
+  }
+  Get-Content -LiteralPath $path -Raw -Encoding UTF8
+}
+
+function Assert-ContainsAll {
+  param([string]$RelativePath, [string[]]$Patterns)
+  $content = Read-Utf8 $RelativePath
+  foreach ($pattern in $Patterns) {
+    if ($content -notmatch $pattern) {
+      Add-Failure "$RelativePath missing contract pattern: $pattern"
+    }
+  }
+}
+
+$contractPaths = @(
+  '.claude/shared/contracts/topic-thinking.md',
+  'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md',
+  'zhiji-user/.claude/shared/contracts/topic-thinking.md'
+)
+
+foreach ($path in $contractPaths) {
+  Assert-ContainsAll $path @(
+    '\u672a\u7ecf\u7528\u6237\u786e\u8ba4\u4e0d\u5f97(?:\u521b\u5efa|\u5199\u5165|\u66f4\u65b0)',
+    '\u4e0d\u4ece\u65e5\u5fd7.*\u81ea\u52a8\u6458\u5f55',
+    '\u4efb\u610f\u65b0\u4e3b\u9898',
+    '\u8def\u5f84\u5206\u9694\u7b26',
+    '\u4e0d\u5f97.*\u9759\u9ed8\u8986\u76d6',
+    '\u6700\u591a.*2.*\u4e3b\u9898',
+    '\u660e\u786e\u544a\u77e5\u7528\u6237.*\u4e3b\u9898',
+    '\u5f53\u524d\u8868\u8fbe.*\u4f18\u5148'
+  )
+}
+
+foreach ($path in @('.claude/shared/paths.md', 'packaging/zhiji-user-overlay/.claude/shared/paths.md', 'zhiji-user/.claude/shared/paths.md')) {
+  Assert-ContainsAll $path @('context\.thinking_dir', 'context\.thinking_index', 'context\.thinking_topic')
+}
+
+foreach ($path in @('AGENTS.md', 'CLAUDE.md', 'packaging/zhiji-user-overlay/AGENTS.md', 'packaging/zhiji-user-overlay/CLAUDE.md', 'zhiji-user/AGENTS.md', 'zhiji-user/CLAUDE.md')) {
+  Assert-ContainsAll $path @('topic-thinking\.md', 'thinking_index', '\u6ca1\u6709\u660e\u663e\u5339\u914d.*\u4e0d\u8bfb\u53d6')
+}
+
+$mainAgents = Read-Utf8 'AGENTS.md'
+$mainClaude = Read-Utf8 'CLAUDE.md'
+if ($mainAgents -cne $mainClaude) { Add-Failure 'AGENTS.md and CLAUDE.md are not byte-for-byte identical' }
+
+$userAgents = Read-Utf8 'packaging/zhiji-user-overlay/AGENTS.md'
+$userClaude = Read-Utf8 'packaging/zhiji-user-overlay/CLAUDE.md'
+if ($userAgents -cne $userClaude) { Add-Failure 'user AGENTS.md and CLAUDE.md are not byte-for-byte identical' }
+
+$aboutMe = -join @([char]0x5173, [char]0x4e8e, [char]0x6211)
+$topicTemplate = Read-Utf8 "packaging/zhiji-user-overlay/$aboutMe/templates/thinking-topic.template.md"
+foreach ($requiredHeading in @('## \u5f53\u524d\u8ba4\u8bc6', '## \u5f62\u6210\u4f9d\u636e', '## \u9650\u5236\u4e0e\u53cd\u4f8b', '## \u672a\u51b3\u95ee\u9898', '## \u89c2\u70b9\u6f14\u5316')) {
+  if ($topicTemplate -notmatch $requiredHeading) { Add-Failure "topic template missing pattern: $requiredHeading" }
+}
+if ($topicTemplate -match '\u4fe1\u606f\u8f93\u5165\u4e0e\u6ce8\u610f\u529b|\u5de5\u4f5c\u4e0e\u5065\u5eb7|\u804c\u4e1a\u9009\u62e9') {
+  Add-Failure 'generic topic template contains a fixed example topic'
+}
+
+$manifest = Read-Utf8 'packaging/zhiji-user-manifest.json' | ConvertFrom-Json
+foreach ($target in @('AGENTS.md', 'CLAUDE.md')) {
+  if (-not ($manifest.syncTasks | Where-Object { $_.target -eq $target -and $_.kind -eq 'overwriteFile' })) {
+    Add-Failure "manifest does not overwrite user runtime entry: $target"
+  }
+}
+
+if ($failures.Count -gt 0) {
+  Write-Host "FAIL: topic thinking contract checks ($($failures.Count))" -ForegroundColor Red
+  $failures | ForEach-Object { Write-Host "- $_" -ForegroundColor Red }
+  exit 1
+}
+
+Write-Host 'PASS: topic thinking contract checks' -ForegroundColor Green
+exit 0
