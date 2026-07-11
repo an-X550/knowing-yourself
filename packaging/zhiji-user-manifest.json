@@ -9,6 +9,8 @@
     { "kind": "mirrorDir", "source": "packaging/zhiji-user-overlay/scripts", "target": "scripts" },
 
     { "kind": "overwriteFile", "source": "LICENSE", "target": "LICENSE" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/AGENTS.md", "target": "AGENTS.md" },
+    { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/CLAUDE.md", "target": "CLAUDE.md" },
     { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/README.md", "target": "README.md" },
     { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/.gitignore", "target": ".gitignore" },
     { "kind": "overwriteFile", "source": "packaging/zhiji-user-overlay/.zhiji-user-sync.json", "target": ".zhiji-user-sync.json" },
