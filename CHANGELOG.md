@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-12 00:24] [修复] 优化主题思考阅读结构与执行入口 (v1.6.10 -> v1.6.11)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将主题思考从反问式六问改为“当前行动卡 + 六个陈述式板块”，包括当前问题、当前判断、依据来源与思考校正、值得保留的行动、下一次怎么做和我的观点演化路径；执行信息前置，减少长主题文件的阅读压力，并让行动层内容更容易直接使用。
+
 ## [2026-07-11 22:37] [修复] 按实际需要展开主题思考六问 (v1.6.9 -> v1.6.10)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
