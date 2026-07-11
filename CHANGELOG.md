@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 13:14] [功能] 新增轻量主题思考库 (v1.5.26 -> v1.6.0)
+
+- **受影响文件**: `.claude/shared/`, `AGENTS.md`, `CLAUDE.md`, `packaging/zhiji-user-overlay/`, `packaging/zhiji-user-manifest.json`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
+- **改动摘要**: 用户现在可以主动与 AI 探讨任意长期问题，在确认归纳后按主题动态沉淀当前认识、依据、反例、未决问题与观点演化；后续相关提问通过轻量索引按需召回并透明说明来源，同时保持日志不自动摘录、未经确认不写入和当前表达优先等边界。
+
 ## [2026-07-11] [修复] 恢复主 README 版本徽章同步 (v1.5.25 -> v1.5.26)
 
 - **受影响文件**: `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
