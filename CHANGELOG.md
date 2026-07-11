@@ -7,6 +7,16 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 20:20] [文档] 同步用户版说明与项目复盘 (v1.6.7 -> v1.6.8)
+
+- **受影响文件**: `packaging/zhiji-user-overlay/README.md`, `zhiji-user/README.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 在用户版手册中补充当前版本、已通过的自动边界检查和仍需真实素材验证的质量边界；同步更新本地“知己项目”复盘，不改变产品行为。
+
+## [2026-07-11 20:00] [文档] 同步最新功能的验收状态 (v1.6.6 -> v1.6.7)
+
+- **受影响文件**: `PROJECT_STATUS.md`, `docs/quality-baseline-matrix.md`, `README.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 修正质量基线矩阵中已完成的自动测试仍被列为待办的状态漂移，并在项目状态中补齐月复盘与 life-design 的真实素材验收项，为现有质量基线和主题思考验收文档补充导航入口；不改变产品行为。
+
 ## [2026-07-11 17:33] [修复] 修正分析标准维护契约并收紧分发边界 (v1.6.5 -> v1.6.6)
 
 - **受影响文件**: `docs/analysis-standards.md`, `packaging/zhiji-user-boundaries.json`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
