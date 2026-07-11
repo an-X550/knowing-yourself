@@ -78,6 +78,8 @@ foreach ($path in $contractPaths) {
     '\u5b9e\u8d28\u53d8\u5316.*\u89c2\u70b9\u6f14\u5316',
     '\u5f53\u524d\u884c\u52a8\u5361',
     '\u516d\u4e2a\u9648\u8ff0\u5f0f\u677f\u5757',
+    '0\..*6\..*\u7f16\u53f7\u6807\u9898',
+    '\u8868\u683c|\u7b49\u4ef7\u6e05\u5355',
     '\u4e0d\u8981\u6c42.*\u7bc7\u5e45\u76f8\u7b49',
     '\u8bc1\u636e.*\u95ee\u9898\u590d\u6742\u5ea6.*\u884c\u52a8\u9700\u8981',
     '\u6267\u884c\u4fe1\u606f\u524d\u7f6e|\u8bfb\u8005\u4e0d\u5fc5\u8bfb\u5b8c\u6574\u7bc7'
@@ -108,15 +110,25 @@ $relationshipBoundaryTopic = -join @(
 )
 $topicTemplate = Read-Utf8 "packaging/zhiji-user-overlay/$aboutMe/templates/thinking-topic.template.md"
 foreach ($requiredHeading in @(
-  '## \u5f53\u524d\u884c\u52a8\u5361',
-  '## \u5f53\u524d\u95ee\u9898',
-  '## \u5f53\u524d\u5224\u65ad',
-  '## \u4f9d\u636e\u6765\u6e90\u4e0e\u601d\u8003\u6821\u6b63',
-  '## \u503c\u5f97\u4fdd\u7559\u7684\u884c\u52a8',
-  '## \u4e0b\u4e00\u6b21\u600e\u4e48\u505a',
-  '## \u6211\u7684\u89c2\u70b9\u6f14\u5316\u8def\u5f84'
+  '## 0\. \u5f53\u524d\u884c\u52a8\u5361',
+  '## 1\. \u5f53\u524d\u95ee\u9898',
+  '## 2\. \u5f53\u524d\u5224\u65ad',
+  '## 3\. \u4f9d\u636e\u6765\u6e90\u4e0e\u601d\u8003\u6821\u6b63',
+  '## 4\. \u503c\u5f97\u4fdd\u7559\u7684\u884c\u52a8',
+  '## 5\. \u4e0b\u4e00\u6b21\u600e\u4e48\u505a',
+  '## 6\. \u6211\u7684\u89c2\u70b9\u6f14\u5316\u8def\u5f84'
 )) {
   if ($topicTemplate -notmatch $requiredHeading) { Add-Failure "topic template missing pattern: $requiredHeading" }
+}
+foreach ($requiredPattern in @(
+  '\|\s*\u9879\u76ee\s*\|\s*\u5185\u5bb9\s*\|',
+  '\|\s*\u8fdb\u884c\u4e2d\u7684\u5b9e\u9a8c\s*\|',
+  '1\.\s*\u89e6\u53d1\u6761\u4ef6',
+  '2\.\s*\u6700\u5c0f\u52a8\u4f5c',
+  '3\.\s*\u9884\u671f\u89c2\u5bdf',
+  '4\.\s*\u9a8c\u8bc1\u65f6\u95f4'
+)) {
+  if ($topicTemplate -notmatch $requiredPattern) { Add-Failure "topic template missing layout pattern: $requiredPattern" }
 }
 if ($topicTemplate -notmatch '\u4e0d\u8981\u6c42\u6bcf\u4e00\u8282\u7b49\u957f') {
   Add-Failure 'topic template does not state that sections may have unequal length'

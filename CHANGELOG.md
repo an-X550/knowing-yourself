@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-12 00:38] [修复] 为主题思考补齐编号化排版 (v1.6.11 -> v1.6.12)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将主题思考文件进一步固定为 0-6 编号阅读路径，要求行动卡优先用表格呈现，下一步优先用编号步骤呈现；修复“只有 Markdown 标题但仍不够方便阅读和执行”的问题。
+
 ## [2026-07-12 00:24] [修复] 优化主题思考阅读结构与执行入口 (v1.6.10 -> v1.6.11)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
