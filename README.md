@@ -2,7 +2,7 @@
 
 > 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.6.6-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.6.7-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 知己是一个面向中文个人日志场景的 AI 复盘系统。它不以“生成更多报告”为目标，而是帮助人完成一条更短、更可靠的改变链路：
@@ -217,6 +217,8 @@ powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
 - 开发与维护规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
 - 第一性原理提醒：[`docs/first-principles.md`](docs/first-principles.md)
 - 模型选择：[`docs/model-selection.md`](docs/model-selection.md)
+- 质量基线与待验收项：[`docs/quality-baseline-matrix.md`](docs/quality-baseline-matrix.md)
+- 主题思考端到端验收：[`docs/topic-thinking-acceptance.md`](docs/topic-thinking-acceptance.md)
 - 视角说明：[`perspectives/README.md`](perspectives/README.md)
 - 用户分发版：[`zhiji-user/`](zhiji-user/)
 - 用户版同步流程：[`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)

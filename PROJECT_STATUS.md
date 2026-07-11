@@ -5,7 +5,7 @@ last_updated: 2026-07-11
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.6.6
+**当前版本**：1.6.7
 
 ## 项目概述
 
@@ -79,8 +79,9 @@ last_updated: 2026-07-11
 ### 高优先级
 
 - [ ] 连续运行至少 5 次真实 `/daily-review`，验证 `verified-patterns.md` 的写回质量
-- [ ] 用真实素材跑完一次 `/weekly-review`
+- [ ] 用真实素材各跑完一次 `/weekly-review` 与 `/monthly-review`
 - [ ] 用真实素材跑完一次 `/project-review`
+- [ ] 用真实长期卡点跑完一次 `/life-design --quick`
 - [ ] 用 `zhiji-user/` 完成一次用户视角干运行，并发给 3-5 位目标用户试用
 - [ ] 完成治理文档职责收口后的剩余自检与归档
 - [ ] 基于 `packaging/zhiji-user-boundaries.json` 继续把可共享 override 逐步收敛为 byte-identical shared 文件
