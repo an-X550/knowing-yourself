@@ -75,7 +75,9 @@ foreach ($path in $contractPaths) {
     '\u4e8b\u5b9e.*\u63a8\u65ad.*\u5efa\u8bae',
     '\u8bc1\u636e\u7f3a\u53e3|\u53cd\u4f8b|\u63a8\u7406\u8df3\u8dc3|\u4ef7\u503c\u51b2\u7a81|\u66ff\u4ee3\u89e3\u91ca',
     '\u4e00\u4e2a.*\u8fdb\u884c\u4e2d.*\u884c\u52a8\u5b9e\u9a8c',
-    '\u5b9e\u8d28\u53d8\u5316.*\u89c2\u70b9\u6f14\u5316'
+    '\u5b9e\u8d28\u53d8\u5316.*\u89c2\u70b9\u6f14\u5316',
+    '\u4e0d\u8981\u6c42.*\u7bc7\u5e45\u76f8\u7b49',
+    '\u8bc1\u636e.*\u95ee\u9898\u590d\u6742\u5ea6.*\u884c\u52a8\u9700\u8981'
   )
 }
 
@@ -111,6 +113,9 @@ foreach ($requiredHeading in @(
   '## \u6211\u7684\u770b\u6cd5\u600e\u4e48\u53d8\u4e86\uff1f'
 )) {
   if ($topicTemplate -notmatch $requiredHeading) { Add-Failure "topic template missing pattern: $requiredHeading" }
+}
+if ($topicTemplate -notmatch '\u4e0d\u8981\u6c42\u6bcf\u4e00\u8282\u7b49\u957f') {
+  Add-Failure 'topic template does not state that sections may have unequal length'
 }
 if ($topicTemplate -match '\u4fe1\u606f\u8f93\u5165\u4e0e\u6ce8\u610f\u529b|\u5de5\u4f5c\u4e0e\u5065\u5eb7|\u804c\u4e1a\u9009\u62e9') {
   Add-Failure 'generic topic template contains a fixed example topic'

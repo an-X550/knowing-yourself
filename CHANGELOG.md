@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 22:37] [修复] 按实际需要展开主题思考六问 (v1.6.9 -> v1.6.10)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 修复主题思考被误写为六个平均长度栏目的问题；现在各部分按证据、问题复杂度和行动需要决定篇幅，并要求“保留”给出具体对象/条件/做法、“尝试”写到用户可直接执行，避免形式整齐却无法指导行动。
+
 ## [2026-07-11 22:20] [功能] 收敛主题思考为六问行动闭环 (v1.6.8 -> v1.6.9)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
