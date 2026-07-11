@@ -605,4 +605,3 @@ git commit -m "[功能] 新增轻量主题思考库 (v1.5.26 -> v1.6.0)"
 ```
 
 Do not push. The user performs `git push` manually.
-
