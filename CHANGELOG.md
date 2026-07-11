@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 11:58] [文档] 以第一性原理重构主项目与用户版说明 (v1.5.24 -> v1.5.25)
+
+- **受影响文件**: `README.md`, `packaging/zhiji-user-overlay/README.md`, `zhiji-user/README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 重新以“发现模式、形成行动、后续验证”为主线组织项目说明；主 README 补齐产品全景、行为假说与干预实验、人机角色契约和维护导航，用户版 README 则收敛为纯最终用户手册，完整说明功能、首次使用、验证闭环、隐私与常见问题，并移除测试和分发维护内容。
+
 ## [2026-07-11 03:01] [修复] 修复主项目与用户版运行及分发冲突 (v1.5.23 -> v1.5.24)
 
 - **受影响文件**: `.codex/hooks.json`, `.gitignore`, `packaging/zhiji-user-manifest.json`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/project-integrity.tests.ps1`, `docs/zhiji-user-sync-workflow.md`, `docs/archive/changelog-detailed-2026-07-08.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`

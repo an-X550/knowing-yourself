@@ -5,7 +5,7 @@ last_updated: 2026-07-11
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.5.24
+**当前版本**：1.5.25
 
 ## 项目概述
 
@@ -63,7 +63,8 @@ last_updated: 2026-07-11
 | 用户版分发包 | 已完成 | 已新增 `zhiji-user/`，保留运行所需文件与用户说明，移除开发治理、提交、grill-me 与个人数据入口 |
 | 用户版导出与同步链路 | 已完成 | 已新增 `packaging/zhiji-user-overlay/`、manifest、导出脚本与同步说明，主仓库可单点维护用户版变体并刷新到 `zhiji-user/` |
 | 主项目与用户版运行完整性审查 | 已完成 | 已补齐 Codex 日志路由、Windows Stop Hook、年度输出目录、可迁移文档链接与 manifest 源跟踪校验 |
-| 治理文档职责收口 | 进行中 | 正在把 README / STATUS / CHANGELOG / AGENTS 分工压实 |
+| README 职责收口 | 已完成 | 主 README 已收敛为产品全景与维护导航，用户版 README 已收敛为不含测试和分发维护内容的最终用户手册 |
+| 其余治理文档职责收口 | 进行中 | 继续压实 PROJECT_STATUS / CHANGELOG / AGENTS 的事实、发布与执行规范边界 |
 | 年度链路端到端验证 | 进行中 | 依赖更多月报样本与真实使用数据 |
 | 示例与自动化测试 | 进行中 | 周报、项目复盘与年度链路样本仍不足 |
 

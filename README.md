@@ -1,110 +1,210 @@
-﻿# 知己
+# 知己
 
-> AI 日志分析与复盘技能：用更低摩擦的方式，把日记变成可验证的行动改变。
+> 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.5.24-green)](VERSION)
-[![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
+知己是一个面向中文个人日志场景的 AI 复盘系统。它不以“生成更多报告”为目标，而是帮助人完成一条更短、更可靠的改变链路：
 
-**知己** 是一个基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的中文日志分析与复盘 skill。它围绕日、周、月、项目、年与人生设计六类节奏工作，帮助用户发现模式、形成行动、继续验证。
+```text
+记录 → 发现模式 → 形成行动 → 后续验证 → 沉淀认识
+```
 
-高频命令默认优先复用已生成的反馈、验证沉淀与视角证据包，只有证据冲突或引用缺失时才扩大读取范围。
+最小成功不是写出一份漂亮分析，而是：
+
+```text
+至少有一条用户自己不容易发现的洞察，
+并且它促成了一个可验证的行为改变。
+```
+
+## 为什么需要知己
+
+人很难只靠当下反思看清自己，主要受三个限制影响：
+
+| 限制 | 常见表现 | 知己的作用 |
+|------|----------|------------|
+| 跨时间盲区 | 能感觉“最近不对”，却看不见几周内反复出现的触发条件 | 连接多日证据，寻找重复、转折和反例 |
+| 遗忘 | 今天的深刻认识，半个月后已经没有进入决策 | 把反馈、行动与结果持续沉淀 |
+| 自我叙事偏差 | 容易用“我不自律”等结论覆盖真实情境 | 区分事实、推断与建议，用实验检查解释 |
+
+项目遵循一个简单的价值公式：
+
+```text
+价值 =（洞察质量 × 可行动性 × 闭环速度）/ 使用摩擦
+```
+
+因此，知己优先缩短“写日志—读反馈—做行动—记结果”的距离，而不是无限增加分析维度。
+
+## 核心机制：假说、实验与验证
+
+AI 从日志中发现的模式不是事实判决，而是等待验证的**行为假说**；为改变现状采取的一次具体行动，则是**干预实验**。二者不能混为一谈。
+
+```text
+观察：近三次拖延都发生在任务边界模糊时。
+行为假说：任务边界不清会显著提高启动阻力。
+干预实验：明天只写出第一步，并执行 10 分钟。
+实验结果：仍然没有启动。
+当前结论：这次干预没有奏效；继续检查精力、环境或任务价值，
+          不能据此直接宣布行为假说已被证伪。
+```
+
+后续日志会继续提供支持证据、反例或新的解释。知己据此把长期认识区分为待验证、有支持证据、出现反例或已证伪，逐步形成验证沉淀，而不是用一次成败讲完一个故事。
+
+## 人机角色契约
+
+| 角色 | 负责什么 | 不应越过的边界 |
+|------|----------|----------------|
+| AI | 提取事实与跨时间模式；区分事实、推断和建议；提出行为假说与低成本实验；追踪后续证据；证据不足时降低结论强度 | 不诊断心理或医疗问题；不把单篇日志的推断写成确定事实；不替用户决定价值与人生方向 |
+| 用户 | 提供尽量真实的记录；决定采纳、修改或拒绝建议；执行或不执行实验并如实记录；提供反例和感受 | 不需要迎合模板或 AI；不必把分析当权威答案 |
+| 系统 | 保存日志、反馈、复盘与验证状态，让不同时间尺度的分析消费同一批证据 | 不用更多报告掩盖没有行动、没有验证的问题 |
+
+AI 是证据整理者和假说生成器；人始终保留对自身经历、价值选择和重大决定的最终解释权。
+
+## 功能地图
+
+| 功能 | 适合什么时候使用 | 主要产出 |
+|------|------------------|----------|
+| 自然语言日志录入 | 刚写完一段记录，希望立刻存档并得到反馈 | 原始日志、单个关键洞察、一个可验证动作 |
+| `/review` | 不确定该做哪种复盘 | 根据材料与时间范围路由到合适入口 |
+| `/daily-review` | 想完成当天最短闭环 | 单日反馈、昨日行动验证、次日实验 |
+| `/journal-coach` | 想改善连续几天的记录质量 | 分析就绪度、六步法习惯、优先改进项 |
+| `/weekly-review` | 想检查一周趋势与行动结果 | 基于复盘六问的周度综合复盘 |
+| `/monthly-review` | 想识别更稳定的主题、节奏和反例 | 月度证据包、主题归并、验证沉淀复盘 |
+| `/project-review` | 完成一个项目、版本或阶段后 | 目标、结果、正负原因、重来演练与后续规划 |
+| `/yearly-review` | 已积累足够月报，希望回看全年 | 年度轨迹、关键转折、持续挑战与下一年方向 |
+| `/life-design` | 长期方向、目标或生活结构出现冲突 | 方向校准、能量地图、人生原型与 7 天实验 |
+
+周、月、项目复盘采用统一的“复盘六问”骨架，降低不同报告之间的认知切换。日反馈则默认收敛为“单洞察 + 单动作”，优先保证闭环速度。
+
+日志不必套模板。自由叙事可以用 `日志：`、`日记：` 或 `记录一下：` 开头。系统会根据证据充分度调整分析深度：信息不足时明确说证据不足、减少归因和建议，而不是补完故事。
 
 ## 快速开始
 
-1. 写日志，可以自由叙事，也可以选用六步法：回忆事实、筛选重点、评估结果、洞察思考、行为改进、分享讨论。
-2. 将日志粘贴到 Claude Code；自由文本以 `日志：`、`日记：` 或 `记录一下：` 开头可保证进入日志链路。
-3. 运行命令获取反馈：
+详细初始化步骤见 [`SETUP.md`](SETUP.md)。如果运行环境已经能打开项目目录并读取项目指令，最短体验只需：
 
-```bash
-/daily-review
-/weekly-review
-/monthly-review
-/project-review
-/life-design
-/review
+1. 打开知己项目目录。
+2. 粘贴一段真实日志，或打开 [`examples/demo/sample-journal.md`](examples/demo/sample-journal.md)。
+3. 输入 `分析这篇日志`，也可以使用 `/review`。
+4. 阅读一个最关键的洞察，选择一个足够小的行动。
+5. 在后续日志中记录做了什么、发生了什么以及是否支持原假说。
+
+例如：
+
+```text
+日志：今天本来要写方案，但我反复整理资料，直到晚上也没开始正文。
+请找出一个我可能没看到的模式，并给我一个明天可以验证的小实验。
 ```
 
-没有现成日志时，可先使用 [`examples/demo/sample-journal.md`](examples/demo/sample-journal.md) 试跑；安装与初始化说明见 [`SETUP.md`](SETUP.md)。
+## 入口选择
 
-## 主要入口
+| 想做的事 | 自然语言 | 命令 |
+|----------|----------|------|
+| 不确定从哪里开始 | 帮我判断现在最适合做哪种复盘 | `/review` |
+| 分析今天 | 帮我做今天的日志反馈 | `/daily-review today` |
+| 改进日志质量 | 看看我最近几天的日志怎么写得更有分析价值 | `/journal-coach` |
+| 回顾本周 | 基于最近几天的日志做周复盘 | `/weekly-review` |
+| 回顾本月 | 基于这个月的日志做月复盘 | `/monthly-review` |
+| 回顾项目 | 帮我复盘这个项目阶段 | `/project-review` |
+| 回顾全年 | 帮我生成年度成长回顾 | `/yearly-review` |
+| 校准长期方向 | 我想重新检查最近的生活方向 | `/life-design --quick` |
 
-| 入口 | 用途 | 备注 |
-|------|------|------|
-| `/review` | 统一入口 | 自动判断更适合日、周、月、项目、年或人生设计哪类分析 |
-| `/daily-review` | 单日日志即时反馈 | 最短闭环，默认优先展示已生成反馈 |
-| `/weekly-review` | 周度综合复盘 | 输出遵守复盘六问协议 |
-| `/monthly-review` | 月度深度复盘 | 支持 `fast` / `standard` / `full` |
-| `/project-review` | 项目或版本复盘 | 项目场景专用入口 |
-| `/life-design` | 低频方向校准 | 用于重大迷茫、长期冲突或方向异常 |
-| `/journal-coach` | 多日趋势反馈 | 适合观察最近几天的连续模式 |
+## 系统如何工作
 
-## 模型建议
+```text
+自然语言 / Slash Command
+          ↓
+命令层：判断任务、时间范围和运行路径
+          ↓
+代理层：读取最小充分证据，执行分析与综合
+          ↓
+视角层：提供分析框架、评分标准和输出边界
+          ↓
+日志 / 日反馈 / 周月项目年复盘 / 验证沉淀
+```
 
-- 本项目核心 agent 默认继承调用方模型，因此不同模型会直接影响输出风格与稳定性。
-- `Claude`：更适合 `/monthly-review`、`/yearly-review`、`/life-design` 这类最终留档任务。
-- `GPT`：更适合 `/project-review`、`/weekly-review`、`/monthly-review` 这类结构化复盘任务。
-- `DeepSeek`：更适合 `/daily-review`、`/journal-coach` 或草稿版复盘这类高频任务。
-- `Kimi`、`GLM`、`Gemini` 等其他模型也可以接入，建议先用同一批日志做一次对比测试，再决定是否作为默认模型。
-- 完整的模型差异说明、各功能推荐与 A/B/C 对比方法见 [`docs/model-selection.md`](docs/model-selection.md)。
+项目采用三层分工：
 
-## 文档地图
+- 命令层负责用户入口和流程编排；
+- 代理层负责证据读取、分析执行和综合输出；
+- 视角层负责“从什么角度看”和“什么算合格结论”。
 
-- 使用与初始化：[`SETUP.md`](SETUP.md)
-- 当前版本、进度、待办与已知问题：[`PROJECT_STATUS.md`](PROJECT_STATUS.md)
-- 发布级改动记录：[`CHANGELOG.md`](CHANGELOG.md)
-- 模型差异与功能调用建议：[`docs/model-selection.md`](docs/model-selection.md)
-- 快路径验收与执行保险丝：[`docs/daily-review-fast-path-acceptance.md`](docs/daily-review-fast-path-acceptance.md)、[`docs/review-fast-path-acceptance.md`](docs/review-fast-path-acceptance.md)
-- 当前内测行动方案：[`docs/superpowers/plans/2026-07-09-beta-pilot-plan.md`](docs/superpowers/plans/2026-07-09-beta-pilot-plan.md)
-- 用户版分发包：[`zhiji-user/`](zhiji-user/)；导出与同步流程见 [`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md) 与 [`scripts/export-zhiji-user.ps1`](scripts/export-zhiji-user.ps1)
+路径、证据、提示词和任务协议集中在 `.claude/shared/`，避免不同入口各说一套话。
 
-刷新 `zhiji-user/` 分发包时，在上级仓库根目录执行：
+## 主项目与用户版
+
+- `.claude/` 是唯一运行真相，产品逻辑只在这里维护。
+- `README.md` 面向维护者、潜在贡献者和希望了解完整产品的人。
+- `packaging/zhiji-user-overlay/` 保存只属于用户分发体验的变体源。
+- `zhiji-user/` 是从主运行真相裁剪出的最终用户分发包，不承担主开发流程。
+
+维护者自己的长期真实使用默认留在主项目。刷新用户分发包时，在项目根目录执行：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
 ```
-- 方法论与质量标准：[`docs/`](docs/)
-- 视角说明：[`perspectives/README.md`](perspectives/README.md)
-- 开发规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
-- 开发态本地 skill 路由契约：[`.claude/shared/contracts/developer-skill-routing.md`](.claude/shared/contracts/developer-skill-routing.md)
 
-## 使用分工
+导出与同步边界见 [`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)。
 
-- 你自己作为维护者的日常真实使用，默认放在主项目 `知己` 里。
-- `zhiji-user/` 主要用于分发前 smoke test、用户视角验收和内测说明校对。
-- 只有当你要验证“终端用户拿到这一版会怎么用”时，才切到 `zhiji-user/` 重跑关键入口。
+## 开发原则
+
+开发优先级始终是：
+
+```text
+用优先于建
+日反馈优先于新增报告
+闭环速度优先于分析全面性
+被验证的改变优先于好看的故事
+```
+
+新增 command、agent、workflow、skill、hook、配置行为、报告形态或用户入口前，必须同时回答：
+
+1. 是否有当前、具体的问题证据？
+2. 是否直接服务核心目标或明确的面试叙事目标？
+3. 是否无法通过现有能力、流程调整或删除复杂度更简单地解决？
+4. 实现后是否能立即验证问题有没有被解决？
+
+任一项不成立，就先停止新增。完整规范见 [`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)，长期原则见 [`docs/first-principles.md`](docs/first-principles.md)。
+
+## 模型建议
+
+核心代理默认继承调用方模型，不同模型会影响分析风格与稳定性：
+
+- Claude 更适合月度、年度和人生设计等最终留档任务；
+- GPT 更适合项目、周度和月度等结构化复盘；
+- DeepSeek 更适合高频日反馈、日志教练和复盘草稿；
+- 其他模型建议用同一批日志做对比，再决定默认选择。
+
+完整差异和 A/B/C 对比方法见 [`docs/model-selection.md`](docs/model-selection.md)。
 
 ## 项目结构
 
 ```text
 .
-|-- .claude/
-|-- .codex/
-|-- docs/
-|-- packaging/
-|-- perspectives/
-|-- examples/
-|-- scripts/
-|-- zhiji-user/
-|-- .github/
+|-- .claude/       # 唯一运行真相：commands、agents、skills、workflows、shared
+|-- .codex/        # Codex 开发辅助配置
+|-- docs/          # 方法论、说明、spec 与计划
+|-- examples/      # 脱敏示例
+|-- packaging/     # 用户版变体源、manifest 与同步说明
+|-- perspectives/  # 分析视角定义
+|-- scripts/       # 导出与维护脚本
+|-- tests/         # 完整性与契约检查
+|-- zhiji-user/    # 最终用户分发包
 |-- README.md
-|-- AGENTS.md
-|-- CLAUDE.md
 |-- PROJECT_STATUS.md
 |-- CHANGELOG.md
-|-- .editorconfig
+|-- AGENTS.md
+|-- CLAUDE.md
 |-- SETUP.md
 |-- VERSION
 `-- LICENSE
 ```
 
-## 边界说明
+## 文档导航
 
-- `.claude/` 是唯一运行真相；产品逻辑只维护在这里。
-- `zhiji-user/` 是从运行真相裁剪出的用户版分发包，用于小范围内测，不承载主开发流程。当前用户版定义集中维护在 `packaging/zhiji-user-overlay/`，通过导出脚本刷新到子仓库。
-- 维护者自己的真实日志、复盘与迭代验证默认留在主项目中；`zhiji-user/` 更适合作为“这版给用户会怎样”的验收环境。
-- `README.md` 只保留项目入口信息；更细规则以 `AGENTS.md` / `CLAUDE.md`、`.claude/shared/` 与 `.claude/shared/contracts/` 共享契约为准。
-- `PROJECT_STATUS.md` 是当前事实面板；`CHANGELOG.md` 是发布级变化历史。
-- `.claude/skills/grill-me/` 是开发期需求校准工具，不属于面向用户的运行时入口。
-
-
-
+- 安装与初始化：[`SETUP.md`](SETUP.md)
+- 当前版本、进度、待办和已知问题：[`PROJECT_STATUS.md`](PROJECT_STATUS.md)
+- 发布级变化：[`CHANGELOG.md`](CHANGELOG.md)
+- 开发与维护规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
+- 第一性原理提醒：[`docs/first-principles.md`](docs/first-principles.md)
+- 模型选择：[`docs/model-selection.md`](docs/model-selection.md)
+- 视角说明：[`perspectives/README.md`](perspectives/README.md)
+- 用户分发版：[`zhiji-user/`](zhiji-user/)
+- 用户版同步流程：[`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)
