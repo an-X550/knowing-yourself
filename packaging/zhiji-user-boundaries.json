@@ -21,6 +21,7 @@
     ".claude/workflows/shared.js",
     ".claude/workflows/weekly-review.js",
     ".claude/workflows/yearly-review.js",
+    "docs/analysis-standards.md",
     "docs/methodology-journal.md",
     "docs/methodology-review.md",
     "examples/demo/sample-journal.md",
@@ -103,10 +104,6 @@
     {
       "path": ".codex/hooks.json",
       "reason": "User package hooks route beta-user journal input and omit developer workspace hooks."
-    },
-    {
-      "path": "docs/analysis-standards.md",
-      "reason": "User package copy is retained for standalone runtime docs and may lag developer-only framing."
     },
     {
       "path": "docs/model-selection.md",
