@@ -5,7 +5,7 @@ last_updated: 2026-07-11
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.6.3
+**当前版本**：1.6.4
 
 ## 项目概述
 
@@ -66,7 +66,7 @@ last_updated: 2026-07-11
 | README 职责收口 | 已完成 | 主 README 已收敛为产品全景与维护导航，用户版 README 已收敛为不含测试和分发维护内容的最终用户手册 |
 | 轻量主题思考库 | 已完成 | 用户可主动探讨任意长期问题，确认后按主题动态沉淀认识、依据、反例与演化；动态 `关于我/思考/` 已在用户版中受 `.gitignore` 保护，且有静态契约检查与一次非个人内容 walkthrough 记录 |
 | 复盘摘要运行契约 | 已完成 | 周/月/项目/年综合代理已改为返回完整报告全文，workflow 可稳定提取 `聊天摘要` 并展示 |
-| 用户版分发边界治理 | 已完成 | 已新增 `packaging/zhiji-user-boundaries.json` 与 `tests/distribution-boundary.tests.ps1`，把 shared / override / user_only 差异显式化并纳入完整性检查；纯运行辅助文件 `runtime-contracts.js` 与 workflow `shared.js` 已收敛为 byte-identical shared |
+| 用户版分发边界治理 | 已完成 | 已新增 `packaging/zhiji-user-boundaries.json` 与 `tests/distribution-boundary.tests.ps1`，把 shared / override / user_only 差异显式化并纳入完整性检查；运行辅助、部分 agent/command/workflow、方法论与示例文件已批量收敛为 byte-identical shared |
 | 质量基线验收矩阵 | 已完成 | 已新增 `docs/quality-baseline-matrix.md` 与 `tests/quality-baseline.tests.ps1`，覆盖日反馈、周/月复盘、项目复盘、年度复盘、人生设计和用户版的关键组件边界 |
 | 其余治理文档职责收口 | 进行中 | 继续压实 PROJECT_STATUS / CHANGELOG / AGENTS 的事实、发布与执行规范边界 |
 | 年度链路端到端验证 | 进行中 | 已有静态质量基线，仍依赖更多月报样本与真实使用数据 |
@@ -111,6 +111,7 @@ last_updated: 2026-07-11
 
 | 日期 | 决策 | 理由 |
 |------|------|------|
+| 2026-07-11 | 按风险批次收敛 shared 文件 | 已有质量基线和边界测试后，可把忽略行尾后等价的低风险文件批量收敛，减少一文件一提交的摩擦 |
 | 2026-07-11 | 纯运行辅助文件优先收敛为 shared | `runtime-contracts.js` 和 workflow `shared.js` 不应按用户版变体双维护；统一为逐字节 shared 可降低摘要解析与运行镜像漂移风险 |
 | 2026-07-11 | 质量基线先覆盖组件边界，再进入文本去重 | 防止优化阶段把“少文本”误当成“质量更高”；先证明入口、路径、摘要、降级、用户版边界不变 |
 | 2026-07-11 | 用户版差异必须进入边界清单并接受测试 | 共享文件逐字节一致，用户版 override 必须有稳定理由，避免“看起来能用但不知道为什么不同”的维护债 |

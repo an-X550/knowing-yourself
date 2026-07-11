@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 17:19] [重构] 批量收敛等价共享文件 (v1.6.3 -> v1.6.4)
+
+- **受影响文件**: `packaging/zhiji-user-boundaries.json`, `packaging/zhiji-user-overlay/.claude/agents/`, `packaging/zhiji-user-overlay/.claude/commands/`, `packaging/zhiji-user-overlay/.claude/workflows/`, `packaging/zhiji-user-overlay/docs/methodology-journal.md`, `packaging/zhiji-user-overlay/examples/demo/sample-journal.md`, `packaging/zhiji-user-overlay/perspectives/README.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 在质量基线和分发边界测试保护下，将忽略行尾后已等价的一批低风险文件从 `override` 收敛为 byte-identical `shared`，包括部分 agent、command、workflow、方法论文档、示例与视角索引；这降低了用户版与主项目的双维护成本，不改变任何入口、参数、报告路径或报告结构。
+
 ## [2026-07-11 17:10] [重构] 回抽纯运行辅助共享文件 (v1.6.2 -> v1.6.3)
 
 - **受影响文件**: `packaging/zhiji-user-boundaries.json`, `packaging/zhiji-user-overlay/.claude/shared/runtime-contracts.js`, `packaging/zhiji-user-overlay/.claude/workflows/shared.js`, `zhiji-user/.claude/shared/runtime-contracts.js`, `zhiji-user/.claude/workflows/shared.js`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
