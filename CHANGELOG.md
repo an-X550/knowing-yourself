@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-11 17:33] [修复] 修正分析标准维护契约并收紧分发边界 (v1.6.5 -> v1.6.6)
+
+- **受影响文件**: `docs/analysis-standards.md`, `packaging/zhiji-user-boundaries.json`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 修正分析标准中已过期的禁用词运行常量说明，并将分析质量标准纳入用户版 shared 边界检查；本次主动停止视角 prompt 的逐字同步，避免为低收益一致性增加维护成本，不改变任何命令入口、参数、报告路径或报告结构。
+
 ## [2026-07-11 17:28] [修复] 补充历史观点新鲜度规则 (v1.6.4 -> v1.6.5)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `.claude/shared/contracts/evidence-and-verification.md`, `packaging/zhiji-user-overlay/.claude/shared/contracts/`, `zhiji-user/.claude/shared/contracts/`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
