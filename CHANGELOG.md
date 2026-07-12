@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-13 00:00] [修复] 恢复周复盘用户回应入口 (v1.6.14 -> v1.6.15)
+
+- **受影响文件**: `.claude/agents/weekly-synthesis.md`, `.claude/commands/weekly-review.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `docs/quality-baseline-matrix.md`, `tests/review-workflow-contract.tests.ps1`, `tests/quality-baseline.tests.ps1`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 周报现在会在质量自检后固定保留 `## 用户回应区` 空模板，承接用户补充 AI 没提到的重要内容、偏差判断和下周硬约束；同时补充静态契约检查，避免“用户回应 AI 复盘”的机制只停留在方法论文档里。
+
 ## [2026-07-12 13:27] [文档] 明确用户版双仓库提交流程 (v1.6.13 -> v1.6.14)
 
 - **受影响文件**: `docs/zhiji-user-sync-workflow.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

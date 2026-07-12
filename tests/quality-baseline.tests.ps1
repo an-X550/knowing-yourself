@@ -63,6 +63,7 @@ foreach ($target in @(
   'mode-parameters',
   'evidence-scope',
   'seven-day-experiment',
+  'user-response-section',
   'shared-capability-equivalence',
   'developer-capability-removal'
 )) {
@@ -85,6 +86,8 @@ foreach ($workflow in @('.claude/workflows/weekly-review.js', '.claude/workflows
 Assert-Contains '.claude/shared/contracts/review-synthesis.md' 'YAML frontmatter'
 Assert-Contains '.claude/workflows/weekly-review.js' 'output.weekly_report'
 Assert-Contains '.claude/workflows/monthly-review.js' 'output.monthly_report'
+Assert-Contains '.claude/agents/weekly-synthesis.md' '## 用户回应区'
+Assert-Contains '.claude/commands/weekly-review.md' '用户回应区'
 
 Assert-Contains '.claude/workflows/project-review.js' 'sanitizeProjectSlug'
 Assert-Contains '.claude/workflows/project-review.js' 'output.project_report'

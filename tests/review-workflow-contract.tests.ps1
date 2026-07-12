@@ -41,6 +41,28 @@ foreach ($agentPath in $agentPaths) {
   }
 }
 
+$weeklySynthesis = Read-Utf8 '.claude/agents/weekly-synthesis.md'
+foreach ($pattern in @(
+  '##\s*\u7528\u6237\u56de\u5e94\u533a',
+  'AI\s*\u6ca1\u63d0\uff0c\u4f46\u6211\u8ba4\u4e3a\u91cd\u8981\u7684\u4e8b',
+  '\u4e0b\u5468\u4e0d\u53ef\u4e22\u7684\u786c\u7ea6\u675f',
+  '\u4e0d\u8981\u66ff\u7528\u6237\u586b\u5199'
+)) {
+  if ($weeklySynthesis -notmatch $pattern) {
+    Add-Failure ".claude/agents/weekly-synthesis.md missing user response contract: $pattern"
+  }
+}
+
+$weeklyCommand = Read-Utf8 '.claude/commands/weekly-review.md'
+foreach ($pattern in @(
+  '\u7528\u6237\u56de\u5e94\u533a',
+  '\u7528\u6237\u5728\u56de\u5e94\u533a\u590d\u76d8\u65b9\u5411\u3001\u53d6\u820d\u548c\u9057\u6f0f'
+)) {
+  if ($weeklyCommand -notmatch $pattern) {
+    Add-Failure ".claude/commands/weekly-review.md missing user response entry: $pattern"
+  }
+}
+
 $nodeScript = Join-Path ([System.IO.Path]::GetTempPath()) ('zhiji-review-contract-' + [System.Guid]::NewGuid().ToString('N') + '.mjs')
 $sharedPath = (Join-Path $repoRoot '.claude/workflows/shared.js').Replace('\', '/')
 $scriptTemplate = @'
