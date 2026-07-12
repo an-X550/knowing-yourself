@@ -57,6 +57,38 @@ manifest 中的同步任务分为三种：
 6. 检查 `git -C zhiji-user status --short`。导出成功不等于发布成功；只有用户版仓库也完成本地提交并恢复干净，release 才算闭环。
 7. 分别提交上级仓库与用户版仓库。
 
+## 最小双仓库提交流程
+
+主仓库 `knowing-yourself` 和用户版分发仓库 `knowing-yourself-zhiji-user` 是两个独立 Git 仓库。主仓库提交和推送只更新开发 / 自用真相；`zhiji-user/` 内层仓库提交和推送才会更新 GitHub 分发版。
+
+主项目提交推送：
+
+```powershell
+git status
+git add <主项目需要提交的文件>
+git commit -m "<提交信息>"
+git push origin main
+```
+
+用户版分发提交推送：
+
+```powershell
+cd zhiji-user
+git status
+git add <用户版需要同步的文件>
+git commit -m "<提交信息>"
+git push origin main
+```
+
+分发前最小检查：
+
+```powershell
+git -C zhiji-user ls-files '日志/*.md' '复盘/**/*.md' '.workbuddy/**'
+git -C zhiji-user status --short --branch
+```
+
+第一条命令应无输出；否则说明真实日志、复盘或本地工具数据已经进入分发仓库跟踪范围。第二条命令应确认用户版仓库没有未推送提交。
+
 ## 常用命令
 
 ```powershell

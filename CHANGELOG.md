@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-12 13:27] [文档] 明确用户版双仓库提交流程 (v1.6.13 -> v1.6.14)
+
+- **受影响文件**: `docs/zhiji-user-sync-workflow.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 在用户版同步文档中补充主仓库与 `zhiji-user/` 分发仓库的最小提交、推送和分发前检查流程，明确主项目 push 不会自动更新 GitHub 用户分发仓库，减少后续发布遗漏。
+
 ## [2026-07-12 01:01] [修复] 区分主题思考短期入口与长期行动 (v1.6.12 -> v1.6.13)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `tests/topic-thinking-contract.tests.ps1`, `关于我/思考/信息过载、最优解幻觉与不确定性.md`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
