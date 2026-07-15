@@ -5,7 +5,7 @@ last_updated: 2026-07-15
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.6.18
+**当前版本**：1.6.19
 
 ## 项目概述
 
@@ -70,6 +70,7 @@ last_updated: 2026-07-15
 | 用户版分发边界治理 | 已完成 | 已新增 `packaging/zhiji-user-boundaries.json` 与 `tests/distribution-boundary.tests.ps1`，把 shared / override / user_only 差异显式化并纳入完整性检查；运行辅助、部分 agent/command/workflow、分析标准、方法论与示例文件已批量收敛为 byte-identical shared |
 | 质量基线验收矩阵 | 已完成 | 已新增 `docs/quality-baseline-matrix.md` 与 `tests/quality-baseline.tests.ps1`，覆盖日反馈、周/月复盘、项目复盘、年度复盘、人生设计和用户版的关键组件边界 |
 | 第一性原理复核与表达质量契约 | 已完成 | 用户可显式要求“依据第一性原理分析”以复核或压缩既有结论；日反馈、复盘与主题思考保持原有结构、证据和写入边界，主项目与用户版已同步并纳入静态回归 |
+| 收藏吃灰库自然语言收录 | 已完成 | 用户明确说“收录到收藏吃灰库/某主题”时，系统按标题、摘要、关键词、原文/摘录全文、原文链接五段式保存；主项目与用户版均有触发路由和回归检查 |
 | 其余治理文档职责收口 | 进行中 | 继续压实 PROJECT_STATUS / CHANGELOG / AGENTS 的事实、发布与执行规范边界 |
 | 年度链路端到端验证 | 进行中 | 已有静态质量基线，仍依赖更多月报样本与真实使用数据 |
 | 示例与自动化测试 | 进行中 | 已补组件边界基线；周报、项目复盘与年度链路真实样本仍不足 |

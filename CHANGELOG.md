@@ -7,6 +7,11 @@ last_updated: 2026-07-15
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-15 17:40] [功能] 支持自然语言收录收藏吃灰库 (v1.6.18 -> v1.6.19)
+
+- **受影响文件**: `.claude/skills/collection.md`, `.claude/settings.json`, `.claude/shared/paths.md`, 用户版 overlay 与分发包, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 用户明确说“收录到收藏吃灰库/某主题”并提供可提炼内容时，系统会按固定五段式保存个人收藏；普通聊天不会触发写入，链接不可读取时会要求提供原文或摘录。
+
 ## [2026-07-15 00:00] [修复] 同步 README 版本徽章 (v1.6.17 -> v1.6.18)
 
 - **受影响文件**: `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

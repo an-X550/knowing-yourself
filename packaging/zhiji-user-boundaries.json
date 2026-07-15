@@ -22,6 +22,7 @@
     ".claude/workflows/shared.js",
     ".claude/workflows/weekly-review.js",
     ".claude/workflows/yearly-review.js",
+    ".claude/skills/collection.md",
     "docs/analysis-standards.md",
     "docs/methodology-journal.md",
     "docs/methodology-review.md",
