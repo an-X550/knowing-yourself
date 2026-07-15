@@ -1,11 +1,16 @@
 ---
 created: 2026-07-05
-last_updated: 2026-07-11
+last_updated: 2026-07-15
 ---
 
 # CHANGELOG - 改动记录
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
+
+## [2026-07-15 00:00] [修复] 同步 README 版本徽章 (v1.6.17 -> v1.6.18)
+
+- **受影响文件**: `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 修正 README 仍显示 v1.6.16 的发布信息漂移，使公开版本徽章与当前发布状态一致。
 
 ## [2026-07-15 00:00] [修复] 强化第一性原理复核与输出质量边界 (v1.6.16 -> v1.6.17)
 
