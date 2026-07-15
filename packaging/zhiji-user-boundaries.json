@@ -152,6 +152,10 @@
     {
       "path": "关于我/verified-patterns.md",
       "reason": "User package keeps a seed/runtime verification file while main workspace treats profile data as local private context."
+    },
+    {
+      "path": "关于我/README.md",
+      "reason": "Both packages keep a README at this path, but the main workspace documents its live personal knowledge base while the user package documents privacy-safe runtime templates."
     }
   ],
   "user_only": [
@@ -169,7 +173,6 @@
     "关于我/Analysis/.gitkeep",
     "关于我/career-projects.md",
     "关于我/health-habits.md",
-    "关于我/README.md",
     "关于我/relationships.md",
     "关于我/templates/career-projects.template.md",
     "关于我/templates/core-profile.template.md",

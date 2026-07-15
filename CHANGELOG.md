@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-15 00:00] [修复] 修正用户版“关于我”文档边界 (v1.6.15 -> v1.6.16)
+
+- **受影响文件**: `packaging/zhiji-user-boundaries.json`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
+- **改动摘要**: 将主项目与用户版都需要保留、但用途不同的 `关于我/README.md` 明确登记为有理由的 override，恢复分发边界完整性检查，同时不改变任何运行时文件。
+
 ## [2026-07-13 00:00] [修复] 恢复周复盘用户回应入口 (v1.6.14 -> v1.6.15)
 
 - **受影响文件**: `.claude/agents/weekly-synthesis.md`, `.claude/commands/weekly-review.md`, `packaging/zhiji-user-overlay/`, `zhiji-user/`, `docs/quality-baseline-matrix.md`, `tests/review-workflow-contract.tests.ps1`, `tests/quality-baseline.tests.ps1`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`
