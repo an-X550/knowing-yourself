@@ -7,6 +7,11 @@ last_updated: 2026-07-11
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-15 00:00] [修复] 强化第一性原理复核与输出质量边界 (v1.6.16 -> v1.6.17)
+
+- **受影响文件**: `.claude/shared/contracts/first-principles-analysis.md`, 日反馈/复盘/主题思考契约, `AGENTS.md`, `CLAUDE.md`, 用户版 overlay 与分发边界测试
+- **改动摘要**: 用户现在可明确要求“依据第一性原理分析”来复核或压缩既有内容；系统会区分事实、假设、约束与价值取舍，给出更直接的判断或最小验证，同时保持原有命令、路径、报告结构、隐私与确认写入边界不变。
+
 ## [2026-07-15 00:00] [修复] 修正用户版“关于我”文档边界 (v1.6.15 -> v1.6.16)
 
 - **受影响文件**: `packaging/zhiji-user-boundaries.json`, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

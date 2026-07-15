@@ -12,6 +12,13 @@
 
 > ⚠️ **Superpowers 例外**：若当前环境实际提供 superpowers 技能，仍按「六、工作流控制」评估是否触发；若不可用，回退到本文件内置流程，不阻塞任务。
 
+### 沟通与决策
+
+- 默认结论先行；随后只给支撑结论所需的证据、用户影响和下一步。
+- 不以无证据的赞美或附和替代判断。方案有问题时，直接说明问题、证据、用户影响和更简单的替代方案。
+- 技术或流程决策必须说明要解决的真实问题、最小可行路径，以及对使用摩擦和验证闭环的影响。
+- 用户明确要求“依据第一性原理分析”、复核或压缩既有结论时，读取 `.claude/shared/contracts/first-principles-analysis.md`。第一性原理复核用于提高决策质量，不能替代新功能必要性闸门、证据边界或写入确认。
+
 ### 维护边界
 
 - **唯一运行真相**：`.claude/`。产品逻辑只维护 `.claude/agents/`、`.claude/commands/`、`.claude/workflows/`、`.claude/skills/`、`.claude/settings.json` 与 `.claude/shared/`。

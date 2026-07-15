@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $failures = New-Object System.Collections.Generic.List[string]
@@ -63,6 +63,7 @@ foreach ($target in @(
   'mode-parameters',
   'evidence-scope',
   'seven-day-experiment',
+  'first-principles-recheck',
   'user-response-section',
   'shared-capability-equivalence',
   'developer-capability-removal'
@@ -74,8 +75,24 @@ Assert-Contains '.claude/shared/paths.md' 'output.daily_feedback'
 Assert-Contains '.claude/shared/contracts/journal-input.md' 'previous_action_evidence'
 Assert-Contains '.claude/shared/contracts/daily-feedback.md' 'D4.'
 Assert-Contains '.claude/shared/contracts/daily-feedback.md' 'D5.'
+Assert-Contains '.claude/shared/contracts/first-principles-analysis.md' '显式触发'
+Assert-Contains '.claude/shared/contracts/daily-feedback.md' 'first-principles-analysis.md'
+Assert-Contains '.claude/shared/contracts/review-synthesis.md' 'first-principles-analysis.md'
+Assert-Contains '.claude/shared/contracts/topic-thinking.md' 'first-principles-analysis.md'
+Assert-Contains '.claude/shared/prompt-rules.md' '第一性原理复核'
 Assert-Contains '.claude/shared/contracts/evidence-and-verification.md' 'context.verified_patterns'
 Assert-Contains 'tests/journal-input-contract.tests.ps1' 'expected_level'
+
+if ((Get-FileHash AGENTS.md -Algorithm SHA256).Hash -ne (Get-FileHash CLAUDE.md -Algorithm SHA256).Hash) {
+  Add-Failure 'main AGENTS.md and CLAUDE.md are not byte-identical'
+}
+if ((Get-FileHash 'packaging/zhiji-user-overlay/AGENTS.md' -Algorithm SHA256).Hash -ne (Get-FileHash 'packaging/zhiji-user-overlay/CLAUDE.md' -Algorithm SHA256).Hash) {
+  Add-Failure 'user overlay AGENTS.md and CLAUDE.md are not byte-identical'
+}
+Assert-Contains 'AGENTS.md' '第一性原理复核'
+Assert-Contains '.claude/shared/ai-operating-principles.md' '沟通与决策'
+Assert-Contains 'packaging/zhiji-user-overlay/AGENTS.md' '第一性原理复核'
+Assert-Contains 'packaging/zhiji-user-overlay/.claude/shared/ai-operating-principles.md' '沟通与决策'
 
 foreach ($workflow in @('.claude/workflows/weekly-review.js', '.claude/workflows/monthly-review.js')) {
   Assert-Contains $workflow 'parallel(agentTasks)'

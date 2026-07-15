@@ -38,6 +38,10 @@ $override = @($boundary.override)
 $overridePaths = @($override | ForEach-Object { [string]$_.path })
 $userOnly = @($boundary.user_only | ForEach-Object { [string]$_ })
 
+if ($shared -notcontains '.claude/shared/contracts/first-principles-analysis.md') {
+  Add-Failure 'explicit first-principles contract is not declared shared'
+}
+
 $overlayRoot = Join-Path $repoRoot 'packaging/zhiji-user-overlay'
 $overlayFiles = Get-ChildItem -LiteralPath $overlayRoot -Recurse -File -Force | ForEach-Object {
   Normalize-Path $_.FullName.Substring($overlayRoot.Length + 1)
