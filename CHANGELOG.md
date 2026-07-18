@@ -7,6 +7,11 @@ last_updated: 2026-07-15
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-19 00:00] [修复] 主题思考改为自适应质量边界 (v1.6.19 -> v1.6.20)
+
+- **受影响文件**: 主题思考共享契约、用户版主题模板、静态契约测试、`关于我/思考/` 私有主题文件、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 主题内容现在仅在影响判断、行动或验证时展开；行动没有固定数量，只有直接回应问题、用户可控、具备触发与可观察结果时才保留。无合格行动可明确不行动；现有 24 份主题的行动层已逐篇压缩为最小可验证入口。
+
 ## [2026-07-15 17:40] [功能] 支持自然语言收录收藏吃灰库 (v1.6.18 -> v1.6.19)
 
 - **受影响文件**: `.claude/skills/collection.md`, `.claude/settings.json`, `.claude/shared/paths.md`, 用户版 overlay 与分发包, `README.md`, `PROJECT_STATUS.md`, `CHANGELOG.md`, `VERSION`

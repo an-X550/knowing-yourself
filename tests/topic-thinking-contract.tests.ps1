@@ -87,6 +87,13 @@ foreach ($path in $contractPaths) {
     '\u4e0d\u8981\u6c42.*\u7bc7\u5e45\u76f8\u7b49',
     '\u8bc1\u636e.*\u95ee\u9898\u590d\u6742\u5ea6.*\u884c\u52a8\u9700\u8981',
     '\u6267\u884c\u4fe1\u606f\u524d\u7f6e|\u8bfb\u8005\u4e0d\u5fc5\u8bfb\u5b8c\u6574\u7bc7'
+    , '\u4e0d\u8bbe\u7f6e.*\u6700\u4f4e\u6570\u91cf'
+    , '\u5f53\u524d\u4e0d\u884c\u52a8'
+    , '\u76f4\u63a5\u56de\u5e94.*\u5173\u952e\u7ea6\u675f'
+    , '\u7528\u6237\u53ef\u63a7\u8303\u56f4'
+    , '\u89e6\u53d1\u6761\u4ef6.*\u6700\u5c0f\u52a8\u4f5c'
+    , '\u53ef\u89c2\u5bdf.*\u7ee7\u7eed.*\u8c03\u6574.*\u505c\u6b62'
+    , '\u5224\u65ad.*\u884c\u52a8.*\u9a8c\u8bc1'
   )
 }
 
@@ -125,18 +132,18 @@ foreach ($requiredHeading in @(
   if ($topicTemplate -notmatch $requiredHeading) { Add-Failure "topic template missing pattern: $requiredHeading" }
 }
 foreach ($requiredPattern in @(
-  '\|\s*\u9879\u76ee\s*\|\s*\u5185\u5bb9\s*\|',
-  '\|\s*\u77ed\u671f\u53ef\u6267\u884c\u52a8\u4f5c\s*\|',
-  '\|\s*\u957f\u671f\u575a\u6301\u52a8\u4f5c\s*\|',
-  '\|\s*\u89e6\u53d1\u573a\u666f\s*\|',
-  '\|\s*\u4e0b\u6b21\u590d\u67e5\u6761\u4ef6\s*\|',
-  '\|\s*\u957f\u671f\u52a8\u4f5c\s*\|\s*\u89e3\u51b3\u7684\u95ee\u9898\s*\|\s*\u5177\u4f53\u505a\u6cd5\s*\|\s*\u4f7f\u7528\u8fb9\u754c\s*\|',
-  '1\.\s*\u89e6\u53d1\u6761\u4ef6',
-  '2\.\s*\u6700\u5c0f\u52a8\u4f5c',
-  '3\.\s*\u9884\u671f\u89c2\u5bdf',
-  '4\.\s*\u9a8c\u8bc1\u65f6\u95f4'
+  '\u6309\u9700\u589e\u51cf',
+  '\u5f53\u524d\u4e0d\u884c\u52a8',
+  '\u4e0d\u8865\u7a7a\u884c'
 )) {
   if ($topicTemplate -notmatch $requiredPattern) { Add-Failure "topic template missing layout pattern: $requiredPattern" }
+}
+foreach ($forbiddenPattern in @(
+  '\|\s*\u77ed\u671f\u53ef\u6267\u884c\u52a8\u4f5c\s*\|',
+  '\|\s*\u957f\u671f\u575a\u6301\u52a8\u4f5c\s*\|',
+  '^1\.\s*\u89e6\u53d1\u6761\u4ef6'
+)) {
+  if ($topicTemplate -match $forbiddenPattern) { Add-Failure "topic template still contains fixed action layout: $forbiddenPattern" }
 }
 if ($topicTemplate -notmatch '\u4e0d\u8981\u6c42\u6bcf\u4e00\u8282\u7b49\u957f') {
   Add-Failure 'topic template does not state that sections may have unequal length'
