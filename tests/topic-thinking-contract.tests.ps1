@@ -94,6 +94,11 @@ foreach ($path in $contractPaths) {
     , '\u89e6\u53d1\u6761\u4ef6.*\u6700\u5c0f\u52a8\u4f5c'
     , '\u53ef\u89c2\u5bdf.*\u7ee7\u7eed.*\u8c03\u6574.*\u505c\u6b62'
     , '\u5224\u65ad.*\u884c\u52a8.*\u9a8c\u8bc1'
+    , '\u521b\u5efa\u548c\u66f4\u65b0.*\u9ed8\u8ba4'
+    , '\u4fdd\u7559.*\u4fee\u6b63.*\u66ff\u6362.*\u5408\u5e76.*\u5f52\u6863.*\u4e0d\u5199\u5165'
+    , '\u5b8c\u6210\u6216\u505c\u6b62'
+    , '\u4e0d\u5f97.*\u8ffd\u52a0'
+    , '\u6765\u6e90.*\u5165\u53e3'
   )
   if ((Read-Utf8 $path) -match '\u77ed\u671f\u53ef\u6267\u884c\u52a8\u4f5c\u3001\u957f\u671f\u575a\u6301\u52a8\u4f5c\u3001\u89e6\u53d1\u573a\u666f\u3001\u505c\u6b62\u7ebf\u548c\u4e0b\u6b21\u590d\u67e5\u6761\u4ef6') {
     Add-Failure "$path contains obsolete fixed action-card fields"
@@ -137,7 +142,9 @@ foreach ($requiredHeading in @(
 foreach ($requiredPattern in @(
   '\u6309\u9700\u589e\u51cf',
   '\u5f53\u524d\u4e0d\u884c\u52a8',
-  '\u4e0d\u8865\u7a7a\u884c'
+  '\u4e0d\u8865\u7a7a\u884c',
+  '\u5f53\u524d\u4ecd\u6709\u6548',
+  '\u53d8\u66f4\u6458\u8981'
 )) {
   if ($topicTemplate -notmatch $requiredPattern) { Add-Failure "topic template missing layout pattern: $requiredPattern" }
 }
