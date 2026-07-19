@@ -7,6 +7,11 @@ last_updated: 2026-07-19
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-19 00:00] [修复] 同步主题第 5 节的行动验证契约 (v1.7.2 -> v1.7.3)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约副本、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
+- **改动摘要**: 第 5 节统一为“行动验证与复查”：进行中实验保留步骤和期限，已结束实验只保留验证、停止和转向条件，避免正文与运行契约冲突。
+
 ## [2026-07-19 00:00] [修复] 修正主题思考全量优化的状态表述 (v1.7.1 -> v1.7.2)
 
 - **受影响文件**: `PROJECT_STATUS.md`、`README.md`、`VERSION`
