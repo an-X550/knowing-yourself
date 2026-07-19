@@ -7,6 +7,11 @@ last_updated: 2026-07-19
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-19 00:00] [功能] 主题思考支持受控的自定义结构 (v1.7.6 -> v1.8.0)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约与主题模板副本、`README.md`、`docs/topic-thinking-acceptance.md`、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 主题默认仍使用 0–6 闭环结构；仅在标准结构会制造重复或遮蔽调用入口、替代结构能更直接服务判断/行动/验证且用户明确确认时，允许采用带 `format` 和 `semantic_role` 标识的自定义结构，同时保留范围转向、证据校正与验证边界。
+
 ## [2026-07-19 00:00] [修复] 修正主题契约与新主题模板的结构漂移 (v1.7.5 -> v1.7.6)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约与主题模板副本、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
