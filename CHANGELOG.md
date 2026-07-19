@@ -7,6 +7,11 @@ last_updated: 2026-07-19
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-19 00:00] [修复] 明确主题语义审查的交付边界 (v1.7.3 -> v1.7.4)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约副本、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
+- **改动摘要**: 明确行动卡、实验周期和格式整理不能代替语义审查；全量交付必须包含逐篇问题与决策、正文修改、主从映射及压缩后复核。
+
 ## [2026-07-19 00:00] [修复] 同步主题第 5 节的行动验证契约 (v1.7.2 -> v1.7.3)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约副本、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
