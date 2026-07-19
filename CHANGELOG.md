@@ -7,6 +7,11 @@ last_updated: 2026-07-19
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-19 00:00] [修复] 增加全量主题语义审查验收模板 (v1.7.4 -> v1.7.5)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约副本、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
+- **改动摘要**: 全量审查必须按统一模板证明范围、逐篇六维问题与正文位置、决策和文件修改、跨主题映射及压缩后复核，缺项不得宣称完成。
+
 ## [2026-07-19 00:00] [修复] 明确主题语义审查的交付边界 (v1.7.3 -> v1.7.4)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约副本、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
