@@ -116,7 +116,11 @@ foreach ($path in $contractPaths) {
     , '\u5168\u91cf\u8bed\u4e49\u5ba1\u67e5\u9a8c\u6536\u6a21\u677f'
     , '\u4efb\u4e00\u9879\u7f3a\u5931.*\u4e0d\u5f97\u5ba3\u79f0'
     , '\u516d\u7ef4\u95ee\u9898\u4e0e\u6b63\u6587\u4f4d\u7f6e'
+    , '\u5f53\u524d\u65e0\u957f\u671f\u884c\u52a8'
   )
+  if ((Read-Utf8 $path) -match '5\. \u4e0b\u4e00\u6b21\u600e\u4e48\u505a') {
+    Add-Failure "$path contains obsolete section-5 heading"
+  }
   if ((Read-Utf8 $path) -match '\u77ed\u671f\u53ef\u6267\u884c\u52a8\u4f5c\u3001\u957f\u671f\u575a\u6301\u52a8\u4f5c\u3001\u89e6\u53d1\u573a\u666f\u3001\u505c\u6b62\u7ebf\u548c\u4e0b\u6b21\u590d\u67e5\u6761\u4ef6') {
     Add-Failure "$path contains obsolete fixed action-card fields"
   }
@@ -144,6 +148,7 @@ $relationshipBoundaryTopic = -join @(
   [char]0x4eb2, [char]0x5bc6, [char]0x5173, [char]0x7cfb,
   [char]0x4e2d, [char]0x7684, [char]0x8fb9, [char]0x754c
 )
+Assert-SameFile "packaging/zhiji-user-overlay/$aboutMe/templates/thinking-topic.template.md" "zhiji-user/$aboutMe/templates/thinking-topic.template.md"
 $topicTemplate = Read-Utf8 "packaging/zhiji-user-overlay/$aboutMe/templates/thinking-topic.template.md"
 foreach ($requiredHeading in @(
   '## 0\. \u5f53\u524d\u884c\u52a8\u5361',
@@ -151,7 +156,7 @@ foreach ($requiredHeading in @(
   '## 2\. \u5f53\u524d\u5224\u65ad',
   '## 3\. \u4f9d\u636e\u6765\u6e90\u4e0e\u601d\u8003\u6821\u6b63',
   '## 4\. \u503c\u5f97\u4fdd\u7559\u7684\u884c\u52a8',
-  '## 5\. \u4e0b\u4e00\u6b21\u600e\u4e48\u505a',
+  '## 5\. \u884c\u52a8\u9a8c\u8bc1\u4e0e\u590d\u67e5',
   '## 6\. \u6211\u7684\u89c2\u70b9\u6f14\u5316\u8def\u5f84'
 )) {
   if ($topicTemplate -notmatch $requiredHeading) { Add-Failure "topic template missing pattern: $requiredHeading" }
@@ -161,6 +166,7 @@ foreach ($requiredPattern in @(
   '\u5f53\u524d\u4e0d\u884c\u52a8',
   '\u4e0d\u8865\u7a7a\u884c',
   '\u5f53\u524d\u4ecd\u6709\u6548',
+  '\u5f53\u524d\u65e0\u957f\u671f\u884c\u52a8',
   '\u53d8\u66f4\u6458\u8981'
 )) {
   if ($topicTemplate -notmatch $requiredPattern) { Add-Failure "topic template missing layout pattern: $requiredPattern" }

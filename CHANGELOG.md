@@ -7,6 +7,11 @@ last_updated: 2026-07-19
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-19 00:00] [修复] 修正主题契约与新主题模板的结构漂移 (v1.7.5 -> v1.7.6)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约与主题模板副本、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
+- **改动摘要**: 统一第 5 节名称，允许无长期行动时声明等待条件而非虚构表格，并让测试验证契约、模板与用户版副本一致。
+
 ## [2026-07-19 00:00] [修复] 增加全量主题语义审查验收模板 (v1.7.4 -> v1.7.5)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约副本、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
