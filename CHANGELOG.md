@@ -7,6 +7,11 @@ last_updated: 2026-07-19
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
 
+## [2026-07-21 00:00] [修复] 为用户版补充 WorkBuddy 技能识别入口 (v1.8.0 -> v1.8.1)
+
+- **受影响文件**: `packaging/zhiji-user-overlay/SKILL.md`、`packaging/zhiji-user-manifest.json`、`packaging/zhiji-user-boundaries.json`、`zhiji-user/SKILL.md`、`tests/distribution-boundary.tests.ps1`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 用户版根目录现在包含供 WorkBuddy 识别的 `SKILL.md`；该文件只提供技能元信息、触发范围和运行导航，不改变既有知己入口或运行逻辑，且会随用户版导出稳定保留。
+
 ## [2026-07-19 00:00] [功能] 主题思考支持受控的自定义结构 (v1.7.6 -> v1.8.0)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、用户版契约与主题模板副本、`README.md`、`docs/topic-thinking-acceptance.md`、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`VERSION`

@@ -92,6 +92,19 @@ foreach ($relativePath in $userOnly) {
 }
 
 $manifest = Read-Utf8 'packaging/zhiji-user-manifest.json' | ConvertFrom-Json
+$skillSource = 'packaging/zhiji-user-overlay/SKILL.md'
+$skillTasks = @($manifest.syncTasks | Where-Object {
+  $_.source -eq $skillSource -and $_.target -eq 'SKILL.md' -and $_.kind -eq 'overwriteFile'
+})
+if ($skillTasks.Count -ne 1) {
+  Add-Failure 'user package must export exactly one root SKILL.md compatibility entry'
+}
+
+$skillText = Read-Utf8 $skillSource
+if ($skillText -notmatch '(?ms)^---\s*\r?\nname:\s*knowing-yourself-zhiji\s*\r?\ndescription:\s*.+?\r?\n---') {
+  Add-Failure 'user package SKILL.md must contain WorkBuddy-compatible name and description frontmatter'
+}
+
 $trackedFiles = @(git -c core.quotepath=false -C $repoRoot ls-files | ForEach-Object { Normalize-Path $_ })
 foreach ($task in $manifest.syncTasks) {
   $source = Join-Path $repoRoot $task.source
