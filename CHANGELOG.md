@@ -1,16 +1,11 @@
 ---
 created: 2026-07-05
-last_updated: 2026-07-24
+last_updated: 2026-07-19
 ---
 
 # CHANGELOG - 改动记录
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
-
-## [2026-07-24 00:00] [文档] 重写有限精力主题为关切优先级地图 (v1.8.1 -> v1.8.2)
-
-- **受影响文件**: `关于我/思考/有限精力、选择性投入与不亏欠感.md`、`docs/superpowers/specs/2026-07-23-attention-allocation-topic-design.md`、`docs/superpowers/plans/2026-07-24-attention-allocation-topic-rewrite.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`
-- **改动摘要**: 该主题已按用户确认改为以 Nozomi 原文为核心的关切优先级地图，帮助用户以长期选择权、不可替代性、不可逆性和累积效应判断何事值得挂念，同时保留对健康、承诺与长期复利的边界校正。
 
 ## [2026-07-21 00:00] [修复] 为用户版补充 WorkBuddy 技能识别入口 (v1.8.0 -> v1.8.1)
 
