@@ -43,10 +43,9 @@ function Assert-DoesNotMatch {
 }
 
 function Get-Path-Mapping {
-  param([string]$Key)
-  $pathsText = Read-Utf8 '.claude/shared/paths.md'
+  param([string]$Key, [string]$PathsText)
   $escapedKey = [regex]::Escape($Key)
-  $match = [regex]::Match($pathsText, "(?m)^\\|\\s*`?$escapedKey`?\\s*\\|\\s*`?([^`|]+)`?\\s*\\|")
+  $match = [regex]::Match($PathsText, "(?m)^\|\s*`?$escapedKey`?\s*\|\s*`?([^`|]+)`?\s*\|")
   if (-not $match.Success) {
     Add-Failure "authoritative path mapping is missing: $Key"
     return ''
@@ -54,26 +53,35 @@ function Get-Path-Mapping {
   $match.Groups[1].Value.Trim()
 }
 
+function Get-Route-Blocks {
+  param([string]$Text)
+  [regex]::Matches($Text, '(?ms)^#{2,}[^\r\n]*\r?\n.*?(?=^#{2,}|\z)')
+}
+
 function Assert-Route-Block-Mapping {
-  param([string]$Trigger, [string]$OutputKey)
-  $contractText = Read-Utf8 $contract
+  param([string]$Trigger, [string]$OutputKey, [string]$ContractText, [string]$PathsText, [string]$Label)
   if (-not $contractText) { return }
 
-  $blocks = [regex]::Matches($contractText, '(?ms)^#{2,}[^\r\n]*\r?\n.*?(?=^#{2,}|\z)')
+  $blocks = Get-Route-Blocks $ContractText
   $matchingBlocks = @($blocks | Where-Object { $_.Value -match [regex]::Escape($Trigger) })
   if ($matchingBlocks.Count -ne 1) {
-    Add-Failure "routing block count for '$Trigger' is $($matchingBlocks.Count), expected 1"
+    Add-Failure "$Label routing block count for '$Trigger' is $($matchingBlocks.Count), expected 1"
     return
   }
 
   $routeBlock = $matchingBlocks[0].Value
-  $expectedPath = Get-Path-Mapping $OutputKey
+  $expectedPath = Get-Path-Mapping $OutputKey $PathsText
   if ($routeBlock -notmatch [regex]::Escape($OutputKey)) {
-    Add-Failure "routing block for '$Trigger' does not contain: $OutputKey"
+    Add-Failure "$Label routing block for '$Trigger' does not contain: $OutputKey"
   }
   if ($expectedPath -and $routeBlock -notmatch [regex]::Escape($expectedPath)) {
-    Add-Failure "routing block for '$Trigger' does not contain authoritative path: $expectedPath"
+    Add-Failure "$Label routing block for '$Trigger' does not contain authoritative path: $expectedPath"
   }
+}
+
+function Test-IsExecutable-Claude-Dispatch {
+  param([string]$Text)
+  [regex]::IsMatch($Text, $claudeDispatchPattern)
 }
 
 function Assert-Hash-Matches {
@@ -89,32 +97,51 @@ function Assert-Hash-Matches {
   }
 }
 
-$contract = '.claude/shared/contracts/codex-natural-language-routing.md'
-$expectedContractPhrases = @(
-  (ConvertFrom-Utf8Base64 '55Sf5oiQIDIwMjYtVzI4IOWRqOaKpQ=='),
-  (ConvertFrom-Utf8Base64 '55Sf5oiQIDIwMjYg5bm0IDYg5pyI5pyI5oql'),
-  (ConvertFrom-Utf8Base64 '5a+5IFgg5YGa6aG555uu5aSN55uY'),
-  (ConvertFrom-Utf8Base64 '5LiN6LCD55So5LiN5a2Y5Zyo55qEIENsYXVkZSBgV29ya2Zsb3dgIC8gYFRhc2tgIOW3peWFtw==')
-)
-foreach ($expected in $expectedContractPhrases) {
-  Assert-Contains $contract $expected
-}
-
-foreach ($key in @('output.weekly_report', 'output.monthly_report', 'output.project_report')) {
-  Assert-Contains $contract $key
-}
-
-foreach ($route in @(
+$routeDefinitions = @(
   @{ trigger = ConvertFrom-Utf8Base64 '55Sf5oiQIDIwMjYtVzI4IOWRqOaKpQ=='; output = 'output.weekly_report' },
   @{ trigger = ConvertFrom-Utf8Base64 '55Sf5oiQIDIwMjYg5bm0IDYg5pyI5pyI5oql'; output = 'output.monthly_report' },
   @{ trigger = ConvertFrom-Utf8Base64 '5a+5IFgg5YGa6aG555uu5aSN55uY'; output = 'output.project_report' }
-)) {
-  Assert-Route-Block-Mapping $route.trigger $route.output
-}
+)
 
 $dispatchVerb = ConvertFrom-Utf8Base64 '6LCD55SofOiwg+W6pnzmiafooYx85L2/55SofOWnlOa0vue7mXzkuqTnu5l86YCa6L+H'
-$dispatchPrefix = '(?:\\|\\s*)?(?:(?:[-*+]|\\d+[.)])\\s*)?'
-$claudeDispatchPattern = "(?im)^\\s*$dispatchPrefix(?:$dispatchVerb|call|invoke|run|execute|dispatch|use).{0,80}(?:Claude\\s*)?`?(?:Workflow|Task)`?\\b"
+$dispatchPrefix = '(?:\|\s*)?(?:(?:[-*+]|\d+[.)])\s*)?'
+$claudeDispatchPattern = "(?im)^\s*$dispatchPrefix(?:$dispatchVerb|call|invoke|run|execute|dispatch|use).{0,80}(?:Claude\s*)?`?(?:Workflow|Task)`?\b"
+
+$fixturePaths = @(
+  '| output.weekly_report | weekly-path |',
+  '| output.monthly_report | monthly-path |',
+  '| output.project_report | project-path |'
+) -join "`n"
+$fixtureRoutes = @(
+  '## weekly', $routeDefinitions[0].trigger, 'output.weekly_report', 'weekly-path',
+  '## monthly', $routeDefinitions[1].trigger, 'output.monthly_report', 'monthly-path',
+  '## project', $routeDefinitions[2].trigger, 'output.project_report', 'project-path'
+) -join "`n"
+foreach ($route in $routeDefinitions) {
+  Assert-Route-Block-Mapping $route.trigger $route.output $fixtureRoutes $fixturePaths 'fixture'
+}
+foreach ($dispatchFixture in @(
+  (ConvertFrom-Utf8Base64 'MS4g6LCD55SoIFRhc2sgcnVu'),
+  (ConvertFrom-Utf8Base64 'fCDlp5TmtL7nu5kgV29ya2Zsb3cgfA=='),
+  (ConvertFrom-Utf8Base64 '6YCa6L+HIFRhc2sg5omn6KGM')
+)) {
+  if (-not (Test-IsExecutable-Claude-Dispatch $dispatchFixture)) {
+    Add-Failure "fixture did not detect executable Claude dispatch: $dispatchFixture"
+  }
+}
+if (Test-IsExecutable-Claude-Dispatch (ConvertFrom-Utf8Base64 '5LiN6LCD55So5LiN5a2Y5Zyo55qEIENsYXVkZSBgV29ya2Zsb3dgIC8gYFRhc2tgIOW3peWFtw==')) {
+  Add-Failure 'fixture misclassified the required prohibition as executable Claude dispatch'
+}
+
+$contract = '.claude/shared/contracts/codex-natural-language-routing.md'
+$expectedContractPhrases = @($routeDefinitions.trigger) + (ConvertFrom-Utf8Base64 '5LiN6LCD55So5LiN5a2Y5Zyo55qEIENsYXVkZSBgV29ya2Zsb3dgIC8gYFRhc2tgIOW3peWFtw==')
+foreach ($expected in $expectedContractPhrases) { Assert-Contains $contract $expected }
+foreach ($key in $routeDefinitions.output) { Assert-Contains $contract $key }
+
+$pathsText = Read-Utf8 '.claude/shared/paths.md'
+foreach ($route in $routeDefinitions) {
+  Assert-Route-Block-Mapping $route.trigger $route.output (Read-Utf8 $contract) $pathsText 'contract'
+}
 Assert-DoesNotMatch $contract $claudeDispatchPattern 'contains executable Claude Workflow/Task dispatch instructions'
 
 Assert-Contains 'AGENTS.md' (ConvertFrom-Utf8Base64 'Q29kZXgg6Ieq54S26K+t6KiA5aSN55uY5YWl5Y+j')
