@@ -42,6 +42,10 @@ if ($shared -notcontains '.claude/shared/contracts/first-principles-analysis.md'
   Add-Failure 'explicit first-principles contract is not declared shared'
 }
 
+if ($shared -notcontains '.claude/shared/contracts/codex-natural-language-routing.md') {
+  Add-Failure 'Codex natural-language routing contract is not declared shared'
+}
+
 $overlayRoot = Join-Path $repoRoot 'packaging/zhiji-user-overlay'
 $overlayFiles = Get-ChildItem -LiteralPath $overlayRoot -Recurse -File -Force | ForEach-Object {
   Normalize-Path $_.FullName.Substring($overlayRoot.Length + 1)
