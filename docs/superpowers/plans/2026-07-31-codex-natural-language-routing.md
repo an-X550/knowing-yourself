@@ -57,6 +57,7 @@ Expected: FAIL，只因路由契约和入口尚未存在。
 - Modify: `AGENTS.md`
 - Modify: `CLAUDE.md`
 - Modify: `README.md`
+- Modify: `packaging/zhiji-user-boundaries.json`
 
 **Interfaces:**
 - Consumes: `.claude/shared/paths.md`、`.claude/shared/contracts/review-synthesis.md`、既有命令与综合代理说明。
@@ -82,11 +83,15 @@ Expected: FAIL，只因路由契约和入口尚未存在。
 
 在 `AGENTS.md` 的“日志粘贴处理”之后加入 `### Codex 自然语言复盘入口`，只引用新契约并声明 `.claude/` 为唯一运行真相。将同一文本同步到 `CLAUDE.md`，不得手工产生差异。
 
-- [ ] **Step 3: 更新公开使用导航**
+- [ ] **Step 3: 声明共享边界**
+
+将 `.claude/shared/contracts/codex-natural-language-routing.md` 加入 `packaging/zhiji-user-boundaries.json` 的 `shared` 数组。此声明与新契约同时提交，使 Task 1 的路由测试在 Task 2 完成后能够转绿。
+
+- [ ] **Step 4: 更新公开使用导航**
 
 将 `README.md` 的周/月/项目复盘入口示例改为自然语言示例，并明确 Claude slash command 是兼容入口，不是 Codex 的前置条件。保留报告类型、输出位置和证据边界说明。
 
-- [ ] **Step 4: 运行路由测试转绿**
+- [ ] **Step 5: 运行路由测试转绿**
 
 Run: `powershell -ExecutionPolicy Bypass -File tests/codex-routing-contract.tests.ps1`  
 Expected: PASS。
@@ -94,7 +99,6 @@ Expected: PASS。
 ### Task 3: 同步用户版与分发边界
 
 **Files:**
-- Modify: `packaging/zhiji-user-boundaries.json`
 - Create: `packaging/zhiji-user-overlay/.claude/shared/contracts/codex-natural-language-routing.md`
 - Modify: `packaging/zhiji-user-overlay/AGENTS.md`
 - Modify: `packaging/zhiji-user-overlay/CLAUDE.md`
@@ -105,9 +109,10 @@ Expected: PASS。
 - Consumes: Task 2 的共享契约与主入口文本。
 - Produces: 用户版可使用相同自然语言入口，且 shared 契约逐字一致。
 
-- [ ] **Step 1: 声明共享边界并建立相同契约文件**
 
-将 `.claude/shared/contracts/codex-natural-language-routing.md` 加入 `packaging/zhiji-user-boundaries.json` 的 `shared` 数组。用户版 overlay 中同路径文件必须与主项目逐字一致。
+- [ ] **Step 1: 建立相同契约文件**
+
+用户版 overlay 中同路径路由契约必须与主项目逐字一致；shared 边界声明已在 Task 2 建立。
 
 - [ ] **Step 2: 以用户版边界同步入口与文档**
 
