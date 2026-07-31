@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 00:00] [文档] 重建用户版 README 的选择链路 (v1.9.7 -> v1.9.8)
+
+- **受影响文件**: 用户版 README 源与分发包、`README.md`、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
+- **改动摘要**: 用户版说明现按“当前情境→适合能力→预期结果→直接请求”组织，并解释日反馈、行动与验证的因果关系，使首次用户能理解可用功能、当前选择与后续记录的原因。
+
 ## [2026-08-01 00:00] [文档] 用户版 README 前置首次闭环 (v1.9.6 -> v1.9.7)
 
 - **受影响文件**: 用户版 README 源与分发包、`README.md`、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`

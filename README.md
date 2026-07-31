@@ -2,7 +2,7 @@
 
 > 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.9.7-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.9.8-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 这是什么
