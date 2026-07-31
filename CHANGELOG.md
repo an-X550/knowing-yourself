@@ -5,6 +5,11 @@ last_updated: 2026-07-31
 
 # CHANGELOG - 改动记录
 
+## [2026-07-31 00:00] [文档] 同步日反馈与主题思考的当前运行边界 (v1.8.8 -> v1.8.9)
+
+- **受影响文件**: `README.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`、日反馈优化归档
+- **改动摘要**: README 现与运行契约一致：日反馈动作不超过 5 分钟；主题首次讨论先形成可确认主线，确认沉淀后才按用途选择 0–6 或短结构。日反馈真实运行验证也统一为连续 5 次。
+
 ## [2026-07-31 00:00] [修复] 消除日反馈预测模板与契约的矛盾 (v1.8.7 -> v1.8.8)
 
 - **受影响文件**: `.claude/shared/contracts/daily-feedback.md`、`.claude/agents/daily-analyzer.md`、用户版镜像、日反馈回归测试、`README.md`、`PROJECT_STATUS.md`、`VERSION`
