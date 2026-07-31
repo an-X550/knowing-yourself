@@ -5,6 +5,11 @@ last_updated: 2026-07-31
 
 # CHANGELOG - 改动记录
 
+## [2026-07-31 00:00] [修复] 收紧日反馈预测对象并限定篇幅伸缩 (v1.8.6 -> v1.8.7)
+
+- **受影响文件**: `.claude/shared/contracts/daily-feedback.md`、`.claude/agents/daily-analyzer.md`、用户版镜像、日反馈回归测试、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 日反馈现在以真实行为、结果或情境变化验证预测，日志文字仅作为证据；只有昨日闭环复杂或存在直接证据冲突时，才可在既有 320 字上限内增加必要说明，避免简短反馈退化为长篇分析。
+
 ## [2026-07-31 00:00] [修复] 纳入用户版技能识别入口 (v1.8.5 -> v1.8.6)
 
 - **受影响文件**: `zhiji-user/SKILL.md`、`README.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`
