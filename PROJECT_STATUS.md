@@ -85,8 +85,7 @@ last_updated: 2026-07-31
 ### 高优先级
 
 - [ ] 连续运行至少 5 次真实 `/daily-review`，验证 `verified-patterns.md` 的写回质量
-- [ ] 用真实素材各跑完一次 `/weekly-review` 与 `/monthly-review`
-- [ ] 用真实素材跑完一次 `/project-review`
+- [ ] 继续以真实使用样本观察周/月/项目复盘质量；仅在出现可复现的重复、证据缺口或行动不可检查问题时修复
 - [ ] 用真实长期卡点跑完一次 `/life-design --quick`
 - [ ] 用 `zhiji-user/` 完成一次用户视角干运行，并发给 3-5 位目标用户试用
 - [ ] 完成治理文档职责收口后的剩余自检与归档
