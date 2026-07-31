@@ -54,11 +54,25 @@ function Get-Path-Mapping {
   $match.Groups[1].Value.Trim()
 }
 
-function Assert-Output-Key-Resolves {
-  param([string]$Key)
-  $expectedPath = Get-Path-Mapping $Key
-  if ($expectedPath) {
-    Assert-Contains $contract $expectedPath
+function Assert-Route-Block-Mapping {
+  param([string]$Trigger, [string]$OutputKey)
+  $contractText = Read-Utf8 $contract
+  if (-not $contractText) { return }
+
+  $blocks = [regex]::Matches($contractText, '(?ms)^#{2,}[^\r\n]*\r?\n.*?(?=^#{2,}|\z)')
+  $matchingBlocks = @($blocks | Where-Object { $_.Value -match [regex]::Escape($Trigger) })
+  if ($matchingBlocks.Count -ne 1) {
+    Add-Failure "routing block count for '$Trigger' is $($matchingBlocks.Count), expected 1"
+    return
+  }
+
+  $routeBlock = $matchingBlocks[0].Value
+  $expectedPath = Get-Path-Mapping $OutputKey
+  if ($routeBlock -notmatch [regex]::Escape($OutputKey)) {
+    Add-Failure "routing block for '$Trigger' does not contain: $OutputKey"
+  }
+  if ($expectedPath -and $routeBlock -notmatch [regex]::Escape($expectedPath)) {
+    Add-Failure "routing block for '$Trigger' does not contain authoritative path: $expectedPath"
   }
 }
 
@@ -88,11 +102,19 @@ foreach ($expected in $expectedContractPhrases) {
 
 foreach ($key in @('output.weekly_report', 'output.monthly_report', 'output.project_report')) {
   Assert-Contains $contract $key
-  Assert-Output-Key-Resolves $key
 }
 
-$dispatchVerb = ConvertFrom-Utf8Base64 '6LCD55SofOiwg+W6pnzmiafooYx85L2/55So'
-$claudeDispatchPattern = "(?im)^\\s*(?:[-*]\\s*)?(?:$dispatchVerb).{0,80}(?:Claude\\s*)?`?(?:Workflow|Task)`?\\b"
+foreach ($route in @(
+  @{ trigger = ConvertFrom-Utf8Base64 '55Sf5oiQIDIwMjYtVzI4IOWRqOaKpQ=='; output = 'output.weekly_report' },
+  @{ trigger = ConvertFrom-Utf8Base64 '55Sf5oiQIDIwMjYg5bm0IDYg5pyI5pyI5oql'; output = 'output.monthly_report' },
+  @{ trigger = ConvertFrom-Utf8Base64 '5a+5IFgg5YGa6aG555uu5aSN55uY'; output = 'output.project_report' }
+)) {
+  Assert-Route-Block-Mapping $route.trigger $route.output
+}
+
+$dispatchVerb = ConvertFrom-Utf8Base64 '6LCD55SofOiwg+W6pnzmiafooYx85L2/55SofOWnlOa0vue7mXzkuqTnu5l86YCa6L+H'
+$dispatchPrefix = '(?:\\|\\s*)?(?:(?:[-*+]|\\d+[.)])\\s*)?'
+$claudeDispatchPattern = "(?im)^\\s*$dispatchPrefix(?:$dispatchVerb|call|invoke|run|execute|dispatch|use).{0,80}(?:Claude\\s*)?`?(?:Workflow|Task)`?\\b"
 Assert-DoesNotMatch $contract $claudeDispatchPattern 'contains executable Claude Workflow/Task dispatch instructions'
 
 Assert-Contains 'AGENTS.md' (ConvertFrom-Utf8Base64 'Q29kZXgg6Ieq54S26K+t6KiA5aSN55uY5YWl5Y+j')
