@@ -139,7 +139,7 @@ source: PROJECT_STATUS.md
 状态文件的“关键决策记录”前加入：
 
 ```markdown
-2026-07-15 之前的历史决策见 [`project-status-decisions-through-2026-07-15.md`](docs/archive/project-status-decisions-through-2026-07-15.md)。
+2026-07-15 之前的历史决策见 [`project-status-decisions-through-2026-07-15.md`](../../archive/project-status-decisions-through-2026-07-15.md)。
 ```
 
 - [ ] **Step 2: 合并重复的已完成进度**
