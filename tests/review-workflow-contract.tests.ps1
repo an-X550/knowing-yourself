@@ -18,6 +18,14 @@ function Read-Utf8 {
   Get-Content -LiteralPath $path -Raw -Encoding UTF8
 }
 
+function Assert-Matches {
+  param([string]$RelativePath, [string]$Pattern)
+  $content = Read-Utf8 $RelativePath
+  if ($content -notmatch $Pattern) {
+    Add-Failure "$RelativePath missing expected pattern: $Pattern"
+  }
+}
+
 $agentPaths = @(
   '.claude/agents/weekly-synthesis.md',
   '.claude/agents/monthly-synthesis.md',
@@ -52,6 +60,19 @@ foreach ($pattern in @(
     Add-Failure ".claude/agents/weekly-synthesis.md missing user response contract: $pattern"
   }
 }
+
+foreach ($relativePath in @(
+  '.claude/shared/contracts/review-synthesis.md',
+  '.claude/agents/weekly-synthesis.md',
+  '.claude/agents/monthly-synthesis.md',
+  '.claude/agents/project-synthesis.md'
+)) {
+  Assert-Matches $relativePath '\u5224\u65ad\u9a71\u52a8\u5c55\u5f00'
+  Assert-Matches $relativePath '\u65e0\u65b0\u589e\u5224\u65ad'
+}
+Assert-Matches '.claude/agents/weekly-synthesis.md' '1\u20133\s*\u4e2a\u5f71\u54cd\u4e0b\u5468\u51b3\u7b56\u7684\u5224\u65ad'
+Assert-Matches '.claude/agents/monthly-synthesis.md' '2\u20133\s*\u4e2a\u5f71\u54cd\u4e0b\u6708\u51b3\u7b56\u7684\u5224\u65ad'
+Assert-Matches '.claude/agents/project-synthesis.md' '\u7531\u9879\u76ee\u590d\u6742\u5ea6\u51b3\u5b9a'
 
 $weeklyCommand = Read-Utf8 '.claude/commands/weekly-review.md'
 foreach ($pattern in @(
