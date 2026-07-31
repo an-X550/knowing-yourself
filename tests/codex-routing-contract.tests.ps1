@@ -45,7 +45,8 @@ function Assert-DoesNotMatch {
 function Get-Path-Mapping {
   param([string]$Key, [string]$PathsText)
   $escapedKey = [regex]::Escape($Key)
-  $match = [regex]::Match($PathsText, "(?m)^\|\s*`?$escapedKey`?\s*\|\s*`?([^`|]+)`?\s*\|")
+  $matchPattern = '(?m)^\|\s*`?' + $escapedKey + '`?\s*\|\s*`?([^`|]+)`?\s*\|'
+  $match = [regex]::Match($PathsText, $matchPattern)
   if (-not $match.Success) {
     Add-Failure "authoritative path mapping is missing: $Key"
     return ''
