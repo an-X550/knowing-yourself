@@ -41,6 +41,7 @@ foreach ($rowId in @(
   'project-review',
   'yearly-review',
   'life-design',
+  'codex-natural-language-routing',
   'user-package'
 )) {
   Assert-Contains $matrixPath $rowId
@@ -103,6 +104,10 @@ foreach ($workflow in @('.claude/workflows/weekly-review.js', '.claude/workflows
 Assert-Contains '.claude/shared/contracts/review-synthesis.md' 'YAML frontmatter'
 Assert-Contains '.claude/shared/contracts/review-synthesis.md' '判断驱动展开'
 Assert-Contains '.claude/shared/contracts/review-synthesis.md' '不为覆盖清单而重复正文'
+Assert-Contains '.claude/shared/contracts/review-synthesis.md' '硬质量门'
+Assert-Contains '.claude/shared/contracts/review-synthesis.md' '稳定导航'
+Assert-Contains '.claude/shared/contracts/review-synthesis.md' '判断插槽'
+Assert-Contains '.claude/shared/contracts/review-synthesis.md' '异常披露'
 Assert-Contains 'docs/quality-baseline-matrix.md' 'adaptive-depth'
 Assert-Contains '.claude/workflows/weekly-review.js' 'output.weekly_report'
 Assert-Contains '.claude/workflows/monthly-review.js' 'output.monthly_report'

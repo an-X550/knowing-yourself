@@ -10,6 +10,7 @@
 | yearly-review | 年度复盘 | monthly-report-reading, insufficient-material-degradation, annual-summary, chat-summary, output-path | `tests/quality-baseline.tests.ps1` 检查 12/6 月报阈值、无月报降级、年度摘要与 `yearly_extra` 摘要质量门 | 准备足够月报样本后跑一次 `/yearly-review` |
 | life-design | 人生设计 | mode-parameters, evidence-scope, seven-day-experiment, output-path | `tests/quality-baseline.tests.ps1` 检查 quick/standard/full/odyssey、90 天默认范围、人生设计输出路径和 7 天实验契约 | 用真实长期卡点跑一次 `/life-design --quick` |
 | first-principles-recheck | 显式第一性原理复核 | explicit-trigger, evidence-boundary, stable-structure, concise-reassessment, value-tradeoff | `tests/quality-baseline.tests.ps1` 检查共享复核契约及其日反馈、复盘、主题思考引用；`tests/distribution-boundary.tests.ps1` 检查用户版逐字节共享 | 用真实日志、复盘和价值选择材料分别追加“请依据第一性原理分析”，确认复核更直接而不扩写 |
+| codex-natural-language-routing | Codex 周/月/项目复盘入口 | intent-routing, authoritative-output-path, no-claude-runtime-dependency, partial-review-degradation | `tests/codex-routing-contract.tests.ps1` 检查三条自然语言意图、读取顺序、输出 key 与 Claude-only 调度禁令；`tests/distribution-boundary.tests.ps1` 检查用户版共享契约 | 已用 2026-W28、2026-06 和“复盘生成质量优化”完成本地真实运行验收，记录见 `output/codex-routing-acceptance-2026-07-31.md` |
 | user-package | 用户版 | shared-capability-equivalence, developer-capability-removal, export-drift, clean-release-state | `tests/distribution-boundary.tests.ps1` 检查 shared/override/user_only、导出漂移、manifest 源跟踪和 `zhiji-user` clean gate | 用 `zhiji-user/` 做一次用户视角干运行 |
 
 ## 不变约束

@@ -72,11 +72,17 @@ Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u91cd\u8981\u7ed
 Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u5173\u952e\u5224\u65ad\u7684\u53cd\u4f8b\u6216\u9650\u5236'
 Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u65b9\u5411\u951a\u70b9\u7f3a\u5e2d\u68c0\u67e5'
 Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u53ef\u68c0\u67e5\u884c\u52a8'
+Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u786c\u8d28\u91cf\u95e8'
+Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u7a33\u5b9a\u5bfc\u822a'
+Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u5224\u65ad\u63d2\u69fd'
+Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u5f02\u5e38\u62ab\u9732'
 Assert-Matches '.claude/agents/weekly-synthesis.md' '3Why'
 Assert-Matches '.claude/agents/weekly-synthesis.md' '\u76ee\u6807\s*\+\s*\u624b\u6bb5\s*\+\s*\u68c0\u67e5\u65b9\u5f0f'
 Assert-Matches '.claude/agents/monthly-synthesis.md' '2[-\u2013]3\s*\u4e2a\u5f71\u54cd\u4e0b\u6708\u51b3\u7b56\u7684\u5224\u65ad'
 Assert-Matches '.claude/agents/monthly-synthesis.md' '\u76ee\u6807\s*\+\s*\u624b\u6bb5\s*\+\s*\u68c0\u67e5\u70b9\s*\+\s*\u5047\u8bf4'
-Assert-Matches '.claude/agents/project-synthesis.md' '\u65b9\u5411\u951a\u70b9\u6765\u6e90'
+Assert-Matches '.claude/agents/project-synthesis.md' '\u9879\u76ee\u951a\u70b9'
+Assert-Matches '.claude/agents/project-synthesis.md' '\u660e\u786e\u5173\u8054'
+Assert-Matches '.claude/agents/project-synthesis.md' '\u9879\u76ee\u951a\u70b9\u4e0d\u8db3'
 foreach ($pattern in @(
   '\u6709\u63a8\u8fdb',
   '\u7f3a\u5e2d-\u672a\u6267\u884c',
