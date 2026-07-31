@@ -41,6 +41,10 @@
 3. 将分析结果写入 `复盘/每日反馈/YYYY-MM-DD.md`
 4. 对话中展示与文件一致的反馈内容
 
+### Codex 自然语言复盘入口
+
+当用户以自然语言请求周报、月报或项目复盘时，读取并执行 `.claude/shared/contracts/codex-natural-language-routing.md`。`.claude/` 仍是唯一运行真相；Codex 不以 Claude slash command、`Workflow` 或 `Task` 为运行前置条件。
+
 ### 主题思考入口
 
 普通提问涉及用户既有观点、长期困惑或价值判断时，先读取 `.claude/shared/contracts/topic-thinking.md`，按契约检查 `context.thinking_index`；没有明显匹配则不读取详细主题。用户主动探讨形成可沉淀认识时，必须先展示归纳并获得确认，不能从日志自动摘录。
