@@ -5,6 +5,11 @@ last_updated: 2026-07-31
 
 # CHANGELOG - 改动记录
 
+## [2026-07-31 00:00] [修复] 消除日反馈预测模板与契约的矛盾 (v1.8.7 -> v1.8.8)
+
+- **受影响文件**: `.claude/shared/contracts/daily-feedback.md`、`.claude/agents/daily-analyzer.md`、用户版镜像、日反馈回归测试、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 输出模板不再将“下一篇日志出现什么”当作预测结果，统一为观察真实行为、结果或情境变化；新增负向回归会拦截旧模板回流，并确认主项目与用户版副本一致。
+
 ## [2026-07-31 00:00] [修复] 收紧日反馈预测对象并限定篇幅伸缩 (v1.8.6 -> v1.8.7)
 
 - **受影响文件**: `.claude/shared/contracts/daily-feedback.md`、`.claude/agents/daily-analyzer.md`、用户版镜像、日反馈回归测试、`README.md`、`PROJECT_STATUS.md`、`VERSION`

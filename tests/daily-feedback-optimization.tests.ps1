@@ -25,6 +25,13 @@ function Assert-Contains {
   }
 }
 
+function Assert-NotContains {
+  param([string]$RelativePath, [string]$Unexpected)
+  if ((Read-Utf8 $RelativePath) -match [regex]::Escape($Unexpected)) {
+    Add-Failure "$RelativePath still contains: $Unexpected"
+  }
+}
+
 function Assert-SameFile {
   param([string]$ExpectedRelativePath, [string]$ActualRelativePath)
   $expectedPath = Join-Path $repoRoot $ExpectedRelativePath
@@ -52,12 +59,16 @@ foreach ($path in $contracts) {
   Assert-Contains $path '只有昨日闭环证据复杂或当天材料存在直接证据冲突时，才可增加必要说明。'
   Assert-Contains $path '普通情况仍控制在 260 中文字以内；例外也不得超过 320 中文字。'
   Assert-Contains $path '不得借此加入第二个洞察、第二个行动或长篇心理分析。'
+  Assert-Contains $path '预测：[明天可观察到的真实行为、结果或情境变化]'
+  Assert-NotContains $path '预测：[如果做到了，下一篇日志里应能观察到的具体现象]'
 }
 
 foreach ($path in $analyzers) {
   Assert-Contains $path '预测的判断对象必须是明天可观察的真实行为、结果或情境变化。'
   Assert-Contains $path '日志内容只能作为验证证据，不能是行动有效性的唯一结果。'
   Assert-Contains $path '只有昨日闭环证据复杂或当天材料存在直接证据冲突时，才可为澄清同一个判断增加必要说明。'
+  Assert-Contains $path '预测：[明天可观察到的真实行为、结果或情境变化]'
+  Assert-NotContains $path '预测：[如果做到了，下一篇日志里应能观察到的具体现象]'
 }
 
 Assert-SameFile $contracts[0] $contracts[1]
