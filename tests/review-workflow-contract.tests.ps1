@@ -62,17 +62,22 @@ foreach ($pattern in @(
 }
 
 foreach ($relativePath in @(
-  '.claude/shared/contracts/review-synthesis.md',
   '.claude/agents/weekly-synthesis.md',
   '.claude/agents/monthly-synthesis.md',
   '.claude/agents/project-synthesis.md'
 )) {
-  Assert-Matches $relativePath '\u5224\u65ad\u9a71\u52a8\u5c55\u5f00'
-  Assert-Matches $relativePath '\u65e0\u65b0\u589e\u5224\u65ad'
+  Assert-Matches $relativePath 'review-synthesis\.md'
 }
-Assert-Matches '.claude/agents/weekly-synthesis.md' '1\u20133\s*\u4e2a\u5f71\u54cd\u4e0b\u5468\u51b3\u7b56\u7684\u5224\u65ad'
-Assert-Matches '.claude/agents/monthly-synthesis.md' '2\u20133\s*\u4e2a\u5f71\u54cd\u4e0b\u6708\u51b3\u7b56\u7684\u5224\u65ad'
-Assert-Matches '.claude/agents/project-synthesis.md' '\u7531\u9879\u76ee\u590d\u6742\u5ea6\u51b3\u5b9a'
+Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u91cd\u8981\u7ed3\u8bba\u7684\u8bc1\u636e\u6216\u964d\u7ea7'
+Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u5173\u952e\u5224\u65ad\u7684\u53cd\u4f8b\u6216\u9650\u5236'
+Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u65b9\u5411\u951a\u70b9\u7f3a\u5e2d\u68c0\u67e5'
+Assert-Matches '.claude/shared/contracts/review-synthesis.md' '\u53ef\u68c0\u67e5\u884c\u52a8'
+Assert-Matches '.claude/agents/weekly-synthesis.md' '3Why'
+Assert-Matches '.claude/agents/weekly-synthesis.md' '\u76ee\u6807\s*\+\s*\u624b\u6bb5\s*\+\s*\u68c0\u67e5\u65b9\u5f0f'
+Assert-Matches '.claude/agents/monthly-synthesis.md' '2[-\u2013]3\s*\u4e2a\u5f71\u54cd\u4e0b\u6708\u51b3\u7b56\u7684\u5224\u65ad'
+Assert-Matches '.claude/agents/monthly-synthesis.md' '\u76ee\u6807\s*\+\s*\u624b\u6bb5\s*\+\s*\u68c0\u67e5\u70b9\s*\+\s*\u5047\u8bf4'
+Assert-Matches '.claude/agents/project-synthesis.md' '\u65b9\u5411\u951a\u70b9\u6765\u6e90'
+Assert-Matches '.claude/agents/project-synthesis.md' '\u7f3a\u5e2d-\u672a\u6267\u884c'
 
 $weeklyCommand = Read-Utf8 '.claude/commands/weekly-review.md'
 foreach ($pattern in @(

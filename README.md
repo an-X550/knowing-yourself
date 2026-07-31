@@ -2,7 +2,7 @@
 
 > 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.8.10-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.8.11-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 知己是一个面向中文个人日志场景的 AI 复盘系统。它不以“生成更多报告”为目标，而是帮助人完成一条更短、更可靠的改变链路：
