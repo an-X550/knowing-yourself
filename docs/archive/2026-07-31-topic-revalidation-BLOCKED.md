@@ -5,6 +5,12 @@ last_updated: 2026-07-31
 
 # 主题思考首稿再验证：阻塞记录
 
+- 2026-07-31（已解除）：用户确认不运行全量导出，改为仅验证 overlay 与用户版中本轮两份文件的 SHA256 一致；四个哈希均一致，未触碰 dirty persistence，允许完成发布与提交。
+
+- 2026-07-31：本任务的发布止损已触发。`packaging/zhiji-user-manifest.json` 以 `mirrorDir` 将 `packaging/zhiji-user-overlay/.claude` 覆盖到 `zhiji-user/.claude`；目标目录含未提交的 `zhiji-user/.claude/shared/contracts/topic-thinking-persistence.md` 改动。导出会覆盖该受保护改动，因此未执行导出、版本升级、PROJECT_STATUS/CHANGELOG 更新、暂存或本地提交。
+- 已完成且不受阻塞影响：恢复首次/沉淀两份读取路由；三份首稿契约恢复为 30 行并仅保留答案闭环规则；persistence 文件零改动。反向删除闭环规则后主题契约测试红灯（3 个缺失断言），立即还原后主题契约、分发边界、质量基线与 `git diff --check` 全部通过。
+- 三例固定脱敏输入及五项核对已存在于 audit，但仓库没有可调用的首稿生成命令或可复现模型入口；为避免把既有文本伪称为本次新生成的“原样输出”，未改写 audit，也不以它作为新的发布依据。
+
 - 2026-07-31：版本一致性检查发现 `README.md` 徽章仍为 v1.8.0；该文件不在本轮白名单，且该漂移早于本轮改动，未越界修正。
 
 - 2026-07-31：重新取证的隔离生成任务 `/root/audit_baseline_value` 在多个执行窗口未返回原始首稿。无法满足“原样保存生成输出、canonical task ID、时间并交由独立 reviewer”的最低条件；停止 1.8.4 发布相关操作。

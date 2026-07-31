@@ -53,16 +53,41 @@ function Assert-SameFile {
   }
 }
 
-$contractPaths = @(
+$firstContractPaths = @(
   '.claude/shared/contracts/topic-thinking.md',
   'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md',
   'zhiji-user/.claude/shared/contracts/topic-thinking.md'
 )
 
+$persistenceContractPaths = @(
+  '.claude/shared/contracts/topic-thinking-persistence.md',
+  'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking-persistence.md',
+  'zhiji-user/.claude/shared/contracts/topic-thinking-persistence.md'
+)
+
 Assert-SameFile '.claude/shared/contracts/topic-thinking.md' 'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md'
 Assert-SameFile 'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md' 'zhiji-user/.claude/shared/contracts/topic-thinking.md'
+Assert-SameFile '.claude/shared/contracts/topic-thinking-persistence.md' 'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking-persistence.md'
+Assert-SameFile 'packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking-persistence.md' 'zhiji-user/.claude/shared/contracts/topic-thinking-persistence.md'
 
-foreach ($path in $contractPaths) {
+foreach ($path in $firstContractPaths) {
+  Assert-ContainsAll $path @(
+    '\u9996\u6b21\u8ba8\u8bba.*\u53ea\u8bfb.*\u672c\u6587\u4ef6',
+    '\u4e0d\u8bfb\u53d6.*topic-thinking-persistence',
+    '\u95ee\u9898.*\u4e8b\u5b9e.*\u7ea6\u675f.*\u5224\u65ad.*\u9a8c\u8bc1',
+    '\u9996\u7a3f.*\u4e0d.*\u5f3a\u5236.*0.?6',
+    '\u6807\u9898.*\u5224\u65ad\u6027.*\u63a8\u8fdb',
+    '\u6bcf\u6bb5.*\u524d\u4e00\u8282.*\u4e0b\u4e00\u8282',
+    '\u9996\u7a3f.*\u5df2\u7ecf\u7ed9\u51fa.*\u5230\u6b64\u7ed3\u675f.*\u4e0d\u5f97.*\u8865\u80cc\u666f.*\u518d\u6765\u4e00\u8f6e',
+    '\u7528\u6237\u660e\u786e\u786e\u8ba4.*topic-thinking-persistence'
+  )
+  $firstContent = Read-Utf8 $path
+  if ($firstContent -match '## \u884c\u52a8\u578b 0|## \u66f4\u65b0\u4e0e\u5168\u91cf\u5ba1\u67e5') {
+    Add-Failure "$path still embeds persistence maintenance rules"
+  }
+}
+
+foreach ($path in $persistenceContractPaths) {
   Assert-ContainsAll $path @(
     '\u672a\u7ecf\u7528\u6237\u786e\u8ba4\u4e0d\u5f97(?:\u521b\u5efa|\u5199\u5165|\u66f4\u65b0)',
     '\u4e0d\u4ece\u65e5\u5fd7.*\u81ea\u52a8\u6458\u5f55',
@@ -123,16 +148,6 @@ foreach ($path in $contractPaths) {
     , '\u4efb\u4e00\u9879\u7f3a\u5931.*\u4e0d\u5f97\u5ba3\u79f0'
     , '\u516d\u7ef4\u95ee\u9898\u4e0e\u6b63\u6587\u4f4d\u7f6e'
     , '\u5f53\u524d\u65e0\u957f\u671f\u884c\u52a8'
-    , '\u9996\u6b21\u8ba8\u8bba.*\u95ee\u9898.*\u4e8b\u5b9e.*\u7ea6\u675f.*\u5224\u65ad.*\u4e0b\u4e00\u6b65'
-    , '\u9996\u7a3f.*\u4e0d.*\u5f3a\u5236.*0.?6'
-    , '\u9996\u7a3f.*\u5230\u6b64\u7ed3\u675f.*\u4e0d\u5f97.*\u8865\u5145\u80cc\u666f.*\u518d\u6765\u4e00\u8f6e'
-    , '\u6807\u9898.*\u5224\u65ad\u6027.*\u63a8\u8fdb'
-    , '\u6bcf\u6bb5.*\u524d\u4e00\u8282.*\u4e0b\u4e00\u8282'
-    , '\u5f53\u524d\u4e0d\u884c\u52a8.*\u7b49\u5f85.*\u8bc1\u636e.*\u6761\u4ef6'
-    , '\u552f\u4e00\u7528\u9014.*\u8c03\u7528\u5165\u53e3'
-    , '\u884c\u52a8\u578b.*0.?6'
-    , '\u5730\u56fe.*\u51c6\u5219.*\u5bf9\u7167.*\u8fb9\u754c'
-    , '## 2\. \u5f53\u524d\u5224\u65ad\uff1a'
   )
   if ((Read-Utf8 $path) -match '5\. \u4e0b\u4e00\u6b21\u600e\u4e48\u505a') {
     Add-Failure "$path contains obsolete section-5 heading"
