@@ -22,7 +22,6 @@
 
 **Files:**
 - Create: `tests/codex-routing-contract.tests.ps1`
-- Modify: `tests/quality-baseline.tests.ps1`
 - Modify: `tests/distribution-boundary.tests.ps1`
 
 **Interfaces:**
@@ -50,10 +49,6 @@ Assert-Contains 'AGENTS.md' 'Codex 自然语言复盘入口'
 
 Run: `powershell -ExecutionPolicy Bypass -File tests/codex-routing-contract.tests.ps1`  
 Expected: FAIL，只因路由契约和入口尚未存在。
-
-- [ ] **Step 3: 将新测试纳入质量基线**
-
-在 `tests/quality-baseline.tests.ps1` 的矩阵 id 列表中加入 `codex-natural-language-routing`，并断言矩阵包含 `codex-natural-language-routing`。在 `docs/quality-baseline-matrix.md` 新增对应行，真实验收列写明同材料周/月/项目对照。
 
 ### Task 2: 实现唯一的 Codex 自然语言路由契约
 
@@ -167,6 +162,7 @@ Expected: 导出完成，两个测试均为 PASS。
 **Files:**
 - Modify when Task 4 passes: `VERSION`, `PROJECT_STATUS.md`, `CHANGELOG.md`
 - Modify when Task 4 passes: `README.md`, 用户版 README 与路由相关测试
+- Modify when Task 4 passes: `tests/quality-baseline.tests.ps1`, `docs/quality-baseline-matrix.md`
 
 **Interfaces:**
 - Consumes: Task 4 的验收结论。
@@ -188,7 +184,7 @@ Expected: 全部 PASS 且无 diff whitespace error。
 
 - [ ] **Step 2: 仅在验收通过时更新发布事实**
 
-将 `VERSION` 从当前版本递增一个修订号；用同一版本更新 `PROJECT_STATUS.md` 的当前版本、Codex 自然语言入口状态和关键决策；在 `CHANGELOG.md` 顶部写一条 `[功能]` 记录，说明 Codex 已成为自然语言入口、Claude 命令保留兼容。
+将 `VERSION` 从当前版本递增一个修订号；用同一版本更新 `PROJECT_STATUS.md` 的当前版本、Codex 自然语言入口状态和关键决策；在 `CHANGELOG.md` 顶部写一条 `[功能]` 记录，说明 Codex 已成为自然语言入口、Claude 命令保留兼容。在 `tests/quality-baseline.tests.ps1` 的矩阵 id 列表中加入 `codex-natural-language-routing`，并在 `docs/quality-baseline-matrix.md` 新增同材料周/月/项目对照行。
 
 - [ ] **Step 3: 最终验证与本地提交**
 
