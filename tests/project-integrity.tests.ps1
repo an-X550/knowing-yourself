@@ -143,6 +143,14 @@ if ($profileReadme -match '运行时私有文件默认已被 Git 忽略') {
   Add-Failure 'profile README claims tracked profile seed files are ignored by Git'
 }
 
+$governance = Read-Utf8 'docs/development-governance.md'
+if (-not $governance.Contains('# 开发治理细则')) {
+  Add-Failure 'development governance document is missing its title'
+}
+if ((Read-Utf8 'AGENTS.md') -notmatch [regex]::Escape('docs/development-governance.md')) {
+  Add-Failure 'AGENTS.md does not route file changes to development governance'
+}
+
 Assert-ManagedExportMatches
 Assert-ManifestSourcesTracked
 
