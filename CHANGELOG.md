@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 00:00] [文档] 用户版 README 前置首次闭环 (v1.9.6 -> v1.9.7)
+
+- **受影响文件**: 用户版 README 源与分发包、`README.md`、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
+- **改动摘要**: 最终用户现在可在说明开头直接完成一次日志、洞察、小实验与后续记录的闭环；低频能力、命令和安全边界改为按需阅读，减少首次使用的信息负担。
+
 ## [2026-08-01 00:00] [文档] 根 README 聚焦维护者入口 (v1.9.5 -> v1.9.6)
 
 - **受影响文件**: `README.md`、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
