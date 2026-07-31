@@ -56,8 +56,8 @@ foreach ($relativePath in $overlayFiles) {
     if (-not $classified) {
       Add-Failure "same-path pair is unclassified: $relativePath"
     }
-  } elseif ($userOnly -notcontains $relativePath) {
-    Add-Failure "overlay-only file is not declared user_only: $relativePath"
+  } elseif (($userOnly -notcontains $relativePath) -and ($overridePaths -notcontains $relativePath)) {
+    Add-Failure "overlay-only file is neither declared user_only nor an allowed private override: $relativePath"
   }
 }
 
