@@ -5,6 +5,11 @@ last_updated: 2026-07-31
 
 # CHANGELOG - 改动记录
 
+## [2026-07-31 00:00] [修复] 纳入用户版技能识别入口 (v1.8.5 -> v1.8.6)
+
+- **受影响文件**: `zhiji-user/SKILL.md`、`README.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`
+- **改动摘要**: 将 manifest 已声明、但此前未被仓库跟踪的用户版 `SKILL.md` 纳入分发包，确保安装环境能够识别知己的使用范围与入口。
+
 ## [2026-07-31 00:00] [文档] 同步主题替代结构的验收边界 (v1.8.4 -> v1.8.5)
 
 - **受影响文件**: `docs/topic-thinking-acceptance.md`、`README.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`
