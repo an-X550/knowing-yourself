@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 00:00] [文档] 根 README 聚焦维护者入口 (v1.9.5 -> v1.9.6)
+
+- **受影响文件**: `README.md`、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
+- **改动摘要**: 根 README 现明确分流维护者与最终用户：维护者可直接定位运行真相、分发流程和治理文档，完整使用教程统一以 `zhiji-user/README.md` 为准，减少双 README 的重复维护与说明漂移。
+
 ## [2026-08-01 00:00] [修复] 校正主题思考说明与运行边界 (v1.9.4 -> v1.9.5)
 
 - **受影响文件**: 主/用户版 README、overlay、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
