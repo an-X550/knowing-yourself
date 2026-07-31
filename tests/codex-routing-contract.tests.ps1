@@ -34,6 +34,34 @@ function Assert-Contains {
   }
 }
 
+function Assert-DoesNotMatch {
+  param([string]$Path, [string]$Pattern, [string]$Message)
+  $content = Read-Utf8 $Path
+  if ($content -match $Pattern) {
+    Add-Failure "$Path $Message"
+  }
+}
+
+function Get-Path-Mapping {
+  param([string]$Key)
+  $pathsText = Read-Utf8 '.claude/shared/paths.md'
+  $escapedKey = [regex]::Escape($Key)
+  $match = [regex]::Match($pathsText, "(?m)^\\|\\s*`?$escapedKey`?\\s*\\|\\s*`?([^`|]+)`?\\s*\\|")
+  if (-not $match.Success) {
+    Add-Failure "authoritative path mapping is missing: $Key"
+    return ''
+  }
+  $match.Groups[1].Value.Trim()
+}
+
+function Assert-Output-Key-Resolves {
+  param([string]$Key)
+  $expectedPath = Get-Path-Mapping $Key
+  if ($expectedPath) {
+    Assert-Contains $contract $expectedPath
+  }
+}
+
 function Assert-Hash-Matches {
   param([string]$FirstPath, [string]$SecondPath)
   $first = Join-Path $repoRoot $FirstPath
@@ -52,14 +80,20 @@ $expectedContractPhrases = @(
   (ConvertFrom-Utf8Base64 '55Sf5oiQIDIwMjYtVzI4IOWRqOaKpQ=='),
   (ConvertFrom-Utf8Base64 '55Sf5oiQIDIwMjYg5bm0IDYg5pyI5pyI5oql'),
   (ConvertFrom-Utf8Base64 '5a+5IFgg5YGa6aG555uu5aSN55uY'),
-  'output.weekly_report',
-  'output.monthly_report',
-  'output.project_report',
   (ConvertFrom-Utf8Base64 '5LiN6LCD55So5LiN5a2Y5Zyo55qEIENsYXVkZSBgV29ya2Zsb3dgIC8gYFRhc2tgIOW3peWFtw==')
 )
 foreach ($expected in $expectedContractPhrases) {
   Assert-Contains $contract $expected
 }
+
+foreach ($key in @('output.weekly_report', 'output.monthly_report', 'output.project_report')) {
+  Assert-Contains $contract $key
+  Assert-Output-Key-Resolves $key
+}
+
+$dispatchVerb = ConvertFrom-Utf8Base64 '6LCD55SofOiwg+W6pnzmiafooYx85L2/55So'
+$claudeDispatchPattern = "(?im)^\\s*(?:[-*]\\s*)?(?:$dispatchVerb).{0,80}(?:Claude\\s*)?`?(?:Workflow|Task)`?\\b"
+Assert-DoesNotMatch $contract $claudeDispatchPattern 'contains executable Claude Workflow/Task dispatch instructions'
 
 Assert-Contains 'AGENTS.md' (ConvertFrom-Utf8Base64 'Q29kZXgg6Ieq54S26K+t6KiA5aSN55uY5YWl5Y+j')
 Assert-Hash-Matches 'AGENTS.md' 'CLAUDE.md'
