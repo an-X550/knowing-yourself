@@ -1,11 +1,16 @@
 ---
 created: 2026-07-05
-last_updated: 2026-07-19
+last_updated: 2026-07-31
 ---
 
 # CHANGELOG - 改动记录
 
 > 发布视角。这里只保留对用户或协作者重要的变化；详细过程记录已归档到 [docs/archive/changelog-detailed-2026-07-08.md](docs/archive/changelog-detailed-2026-07-08.md)。
+
+## [2026-07-31 00:00] [修复] 主题首次讨论改为逻辑链，确认后再选沉淀结构 (v1.8.1 -> v1.8.2)
+
+- **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、`packaging/zhiji-user-overlay/.claude/shared/contracts/topic-thinking.md`、主题模板、用户版生成副本、`tests/topic-thinking-contract.tests.ps1`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 首次讨论现在先输出“问题→事实/约束→判断→下一步”的标题与正文链，不再预填 0–6；用户确认后按主题用途选择行动型 0–6 或地图、准则、对照、边界等短结构。写入确认、证据降级、路径安全和行动验证边界保持不变。
 
 ## [2026-07-21 00:00] [修复] 为用户版补充 WorkBuddy 技能识别入口 (v1.8.0 -> v1.8.1)
 
