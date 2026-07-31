@@ -77,7 +77,17 @@ Assert-Matches '.claude/agents/weekly-synthesis.md' '\u76ee\u6807\s*\+\s*\u624b\
 Assert-Matches '.claude/agents/monthly-synthesis.md' '2[-\u2013]3\s*\u4e2a\u5f71\u54cd\u4e0b\u6708\u51b3\u7b56\u7684\u5224\u65ad'
 Assert-Matches '.claude/agents/monthly-synthesis.md' '\u76ee\u6807\s*\+\s*\u624b\u6bb5\s*\+\s*\u68c0\u67e5\u70b9\s*\+\s*\u5047\u8bf4'
 Assert-Matches '.claude/agents/project-synthesis.md' '\u65b9\u5411\u951a\u70b9\u6765\u6e90'
-Assert-Matches '.claude/agents/project-synthesis.md' '\u7f3a\u5e2d-\u672a\u6267\u884c'
+foreach ($pattern in @(
+  '\u6709\u63a8\u8fdb',
+  '\u7f3a\u5e2d-\u672a\u6267\u884c',
+  '\u7f3a\u5e2d-\u672a\u8bb0\u5f55',
+  '\u76ee\u6807\u53d8\u5316',
+  '\u8bc1\u636e\u4e0d\u8db3',
+  '\u8bc4\u4f30\u7ed3\u679c',
+  '\u540e\u7eed\u89c4\u5212'
+)) {
+  Assert-Matches '.claude/agents/project-synthesis.md' $pattern
+}
 
 $weeklyCommand = Read-Utf8 '.claude/commands/weekly-review.md'
 foreach ($pattern in @(
