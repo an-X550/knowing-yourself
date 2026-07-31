@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 00:00] [修复] 校正主题思考说明与运行边界 (v1.9.4 -> v1.9.5)
+
+- **受影响文件**: 主/用户版 README、overlay、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
+- **改动摘要**: README 现在准确区分首次讨论与确认后结构，并移除行动卡固定字段，避免用户误以为首次必走 0–6 或每次必须填满动作模板。
+
 ## [2026-08-01 00:00] [修复] 同步用户版主题更新说明 (v1.9.3 -> v1.9.4)
 
 - **受影响文件**: 用户版 README、overlay README、`VERSION`、`PROJECT_STATUS.md`、主 README、`CHANGELOG.md`
