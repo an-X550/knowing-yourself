@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 00:00] [文档] 补全用户版 README 的产品认知链路 (v1.9.8 -> v1.9.9)
+
+- **受影响文件**: 用户版 README 源与分发包、`README.md`、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
+- **改动摘要**: 用户版说明现先解释知己是什么、适合谁、与普通总结的区别及为何采用“假说—行动—验证”闭环，再进入功能选择和首次使用，降低首次用户的理解门槛。
+
 ## [2026-08-01 00:00] [文档] 重建用户版 README 的选择链路 (v1.9.7 -> v1.9.8)
 
 - **受影响文件**: 用户版 README 源与分发包、`README.md`、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
