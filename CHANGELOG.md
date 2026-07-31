@@ -5,6 +5,11 @@ last_updated: 2026-07-31
 
 # CHANGELOG - 改动记录
 
+## [2026-07-31 00:00] [文档] 同步主题替代结构的验收边界 (v1.8.4 -> v1.8.5)
+
+- **受影响文件**: `docs/topic-thinking-acceptance.md`、`README.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、`VERSION`
+- **改动摘要**: 验收矩阵现在与确认沉淀契约一致：地图、准则、对照和边界主题在用户确认后可直接采用更短结构，仍必须保留证据校正与行动验证或等待条件。
+
 ## [2026-07-31 00:00] [修复] 恢复主题首稿与沉淀的轻量边界 (v1.8.3 -> v1.8.4)
 
 - **受影响文件**: `.claude/shared/contracts/topic-thinking.md`、`topic-thinking-persistence.md` 路由、用户版镜像、主题契约测试与首稿回放记录
