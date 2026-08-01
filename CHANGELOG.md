@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 00:00] [功能] 接入手动复盘时机检查 (v1.9.10 -> v1.10.0)
+
+- **受影响文件**: `.claude/commands/review.md`、`.claude/agents/review-readiness-checker.md`、Codex 自然语言路由契约、用户版 overlay 与导出包、回归测试、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 现在可直接用自然语言询问当前是否有该补齐、更新或复盘的下一步，或使用无参数 `/review`；系统只返回一条最高优先级建议，不生成报告、不写入文件、不创建后台提醒。明确日期、周期、项目或人生设计请求仍直达原有分析入口。
+
 ## [2026-08-01 00:00] [文档] 补全双 README 的读者行动路径 (v1.9.9 -> v1.9.10)
 
 - **受影响文件**: 主/用户版 README、用户版 overlay、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`

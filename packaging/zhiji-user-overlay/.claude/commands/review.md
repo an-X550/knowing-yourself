@@ -1,5 +1,8 @@
 ---
-description: Smart review command - one entry point for all journal analysis. Auto-detects scope or routes based on natural language input.
+description: Manual review entry that routes explicit requests or checks what one follow-up action is most valuable.
+manual_no_argument_dispatch: review-readiness-checker
+manual_readiness_writes: false
+manual_readiness_reports: false
 allowed-tools:
   - Task
   - Glob
@@ -41,9 +44,9 @@ allowed-tools:
 
 **自然语言查询**（无法匹配时）：用户可能在问具体问题，直接读日志做针对性分析。
 
-### 2. 智能检测（无参数时）
+### 2. 手动复盘前检查（无参数）
 
-检测当前日期、已有日志 / 报告和近期方向性信号，向用户提议最合适的分析。只提议，不自动执行。
+调用 `review-readiness-checker` 检测当前日期、已有日志 / 报告和近期方向性信号。只输出优先级最高的一条建议；无建议时不输出内容。不生成报告、不写入文件、不自动执行。
 
 如果当前消息本身已经包含日志内容：
 
