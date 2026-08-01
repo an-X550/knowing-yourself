@@ -53,6 +53,7 @@
 1. 输出内容符合 `.claude/shared/contracts/daily-feedback.md`。
 2. 反馈写入 `output.daily_feedback` 对应文件。
 3. 按 `.claude/shared/contracts/evidence-and-verification.md` 更新 `verified-patterns.md`，或明确说明这次没有写回。
+4. 仅在首次成功保存正式日反馈并完成验证沉淀后，才可调用 `review-readiness-checker` 的 `delivery` 模式；其非空返回只能作为日反馈后的独立提醒行，不得写入或改变 `output.daily_feedback`、`verified-patterns.md`。快路径、D 级输入、无日志和分析失败不得调用该模式。
 
 ### D. 无额外扩读
 

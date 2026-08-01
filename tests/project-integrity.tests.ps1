@@ -136,6 +136,10 @@ Assert-Path 'zhiji-user/复盘/年度回顾/.gitkeep'
 
 $userReadme = Read-Utf8 'packaging/zhiji-user-overlay/README.md'
 $profileReadme = Read-Utf8 'packaging/zhiji-user-overlay/关于我/README.md'
+$currentVersion = (Read-Utf8 'VERSION').Trim()
+if ($userReadme -notmatch [regex]::Escape("当前用户版对应 ``v$currentVersion``")) {
+  Add-Failure 'user README version does not match VERSION'
+}
 if ($userReadme -match '画像类私有内容默认会被 Git 忽略') {
   Add-Failure 'user README claims tracked profile seed files are ignored by Git'
 }
