@@ -37,6 +37,8 @@ function Assert-NotContains {
 $command = ".claude/commands/review.md"
 $agent = ".claude/agents/review-readiness-checker.md"
 $contract = ".claude/shared/contracts/codex-natural-language-routing.md"
+$agentsRules = "AGENTS.md"
+$claudeRules = "CLAUDE.md"
 
 Assert-Contains $command "review-readiness-checker"
 Assert-Contains $command "manual_no_argument_dispatch: review-readiness-checker"
@@ -53,6 +55,13 @@ Assert-Contains $contract "manual_readiness_max_recommendations: 1"
 Assert-Contains $contract "manual_readiness_writes: false"
 Assert-Contains $contract "manual_readiness_reports: false"
 Assert-NotContains $contract "manual_readiness_intents:"
+Assert-Contains $agentsRules "当用户以自然语言询问下一步、遗漏、该更新什么或是否该复盘时"
+Assert-Contains $agentsRules "执行闭环缺口检查"
+Assert-Contains $claudeRules "当用户以自然语言询问下一步、遗漏、该更新什么或是否该复盘时"
+Assert-Contains $claudeRules "执行闭环缺口检查"
+if ((Read-Utf8 $agentsRules) -cne (Read-Utf8 $claudeRules)) {
+  Add-Failure "AGENTS.md and CLAUDE.md must remain byte-identical"
+}
 
 # Runtime behavior must be expressed in the Markdown body, not only YAML metadata.
 Assert-Contains $contract "## 手动复盘前检查"
@@ -71,8 +80,9 @@ Assert-NotContains $command "1. 月初 1-5 号"
 Assert-Contains $agent "只输出优先级最高的一条建议"
 Assert-Contains $agent "不生成报告、不写入文件"
 Assert-Contains $agent "最近 7 天至少有 3 篇日志，且至少 2 篇没有对应日反馈"
-Assert-Contains $agent "current.md 更新后 14 天内新增至少 3 篇日反馈"
+Assert-Contains $agent "最近 14 天内，至少有 3 篇日期晚于 current.md 的 last_updated 的日反馈"
 Assert-Contains $agent "至少一篇明确含当前焦点、待决事项、健康/关系或方向变化"
+Assert-NotContains $agent "current.md 更新后 14 天内新增至少 3 篇日反馈"
 Assert-Contains $agent "上次教练报告后新增至少 7 篇日志，且已间隔至少 14 天"
 Assert-Contains $agent "不得仅凭文件修改时间"
 Assert-Contains $agent "从第一个满足项开始，立刻停止"

@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 00:00] [修复] 接通闭环缺口检查的自然语言入口 (v1.11.0 -> v1.11.1)
+
+- **受影响文件**: `AGENTS.md`、`CLAUDE.md`、闭环检查器、用户版 overlay 与导出包、回归测试、`VERSION`、`PROJECT_STATUS.md`、`README.md`
+- **改动摘要**: “下一步、遗漏、该更新什么、是否该复盘”等自然语言现在明确进入闭环缺口检查；`current.md` 仅在最近 14 天出现足够且晚于其 `last_updated` 的实质新反馈时提醒更新，不再因文件本身较旧而催办。
+
 ## [2026-08-01 00:00] [功能] 建立证据驱动的闭环缺口检查 (v1.10.0 -> v1.11.0)
 
 - **受影响文件**: 复盘路由与检查器、用户版 overlay 与导出包、契约测试、`VERSION`、`PROJECT_STATUS.md`、`README.md`、`CHANGELOG.md`
