@@ -2,7 +2,7 @@
 
 > 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.9.9-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.9.10-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 这是什么
@@ -25,14 +25,22 @@
 - **维护者**：先阅读 [`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)，再结合 [`PROJECT_STATUS.md`](PROJECT_STATUS.md) 确认当前事实、待验收项和已知问题。
 - **产品逻辑**：只在 `.claude/` 维护；`zhiji-user/` 是从运行真相裁剪出的用户分发包，不承载主开发流程。
 
-## 能力概览
+## 维护者的 5 分钟路径
+
+1. 阅读 [`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)，了解边界、版本与验证规则。
+2. 产品行为、路径和提示词只改 `.claude/`；用户可见说明改 [`packaging/zhiji-user-overlay/`](packaging/zhiji-user-overlay/)。
+3. 为改动运行相关 `tests/*.tests.ps1`；公开文档变更同步 `VERSION`、`PROJECT_STATUS.md` 与 `CHANGELOG.md`。
+4. 修改用户版源后运行 `scripts/export-zhiji-user.ps1`，再检查分发边界。
+5. 提交前检查工作区与链接；分发与治理细节见 [`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)。
+
+## 能力与运行源
 
 | 能力 | 目的 | 权威使用说明 |
 |------|------|--------------|
-| 日志记录与日反馈 | 从当日记录中形成单个关键洞察和可验证行动 | [`zhiji-user/README.md`](zhiji-user/README.md) |
-| 周、月、项目与年度复盘 | 基于沉淀证据校准更长时间尺度的趋势与选择 | [`zhiji-user/README.md`](zhiji-user/README.md) |
-| 日志教练与人生设计 | 改进记录质量，或在长期方向冲突时做校准 | [`zhiji-user/README.md`](zhiji-user/README.md) |
-| 主题思考与收藏吃灰库 | 经用户确认后沉淀可继续修正的认识和资料 | [`zhiji-user/README.md`](zhiji-user/README.md) |
+| 日志记录与日反馈 | 从当日记录中形成单个关键洞察和可验证行动 | [`.claude/commands/daily-review.md`](.claude/commands/daily-review.md) |
+| 周、月、项目与年度复盘 | 基于沉淀证据校准更长时间尺度的趋势与选择 | [`.claude/commands/`](.claude/commands/) |
+| 日志教练与人生设计 | 改进记录质量，或在长期方向冲突时做校准 | [`.claude/commands/journal-coach.md`](.claude/commands/journal-coach.md) / [`.claude/commands/life-design.md`](.claude/commands/life-design.md) |
+| 主题思考与收藏吃灰库 | 经用户确认后沉淀可继续修正的认识和资料 | [`.claude/shared/contracts/topic-thinking.md`](.claude/shared/contracts/topic-thinking.md) / [`.claude/skills/collection.md`](.claude/skills/collection.md) |
 
 共同边界是：AI 提供证据整理、假说与低成本实验；用户保留对自身经历、价值选择和重大决定的最终解释权。证据不足时，系统必须降低结论强度，而不是补完故事。
 

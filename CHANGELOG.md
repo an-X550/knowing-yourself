@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 00:00] [文档] 补全双 README 的读者行动路径 (v1.9.9 -> v1.9.10)
+
+- **受影响文件**: 主/用户版 README、用户版 overlay、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
+- **改动摘要**: 主 README 现提供维护者的源文件、验证与分发路径；用户版补齐完整目录获取与打开步骤，明确首次应从日反馈开始，并修正版本事实。
+
 ## [2026-08-01 00:00] [文档] 补全用户版 README 的产品认知链路 (v1.9.8 -> v1.9.9)
 
 - **受影响文件**: 用户版 README 源与分发包、`README.md`、`VERSION`、`PROJECT_STATUS.md`、`CHANGELOG.md`
