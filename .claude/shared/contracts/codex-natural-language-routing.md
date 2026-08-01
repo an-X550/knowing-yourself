@@ -1,6 +1,5 @@
 ---
 type: shared_runtime_contract
-manual_readiness_intents: ["检查我现在该更新什么", "我该做什么复盘"]
 manual_readiness_route: ".claude/commands/review.md -> .claude/agents/review-readiness-checker.md"
 manual_readiness_max_recommendations: 1
 manual_readiness_writes: false
@@ -41,7 +40,7 @@ last_updated: 2026-07-31
 
 当用户不是要求生成某一份明确报告，而是在询问当前记录、验证沉淀或复盘是否有该补齐的下一步时，读取 `.claude/commands/review.md`，再调用 `.claude/agents/review-readiness-checker.md`。
 
-这不是固定口令。`最近有什么该补？`、`我有遗漏吗？`、`是不是该复盘了？`、`我的记录需要整理吗？`等同类意图都进入同一检查；无参数 `/review` 也是该检查的备用入口。
+这不是固定口令。`最近有什么该补？`、`我有遗漏吗？`、`是不是该复盘了？`、`我的记录需要整理吗？`只是非穷尽示例；同类意图都进入同一检查。无参数 `/review` 也是该检查的备用入口。
 
 明确指定日期、周期、项目或人生设计的请求，直接按本契约已有对应路由执行，不先做时机检查。普通闲聊、泛泛建议或单次情绪表达不触发该检查。
 

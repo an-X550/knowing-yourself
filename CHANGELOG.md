@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 00:00] [功能] 建立证据驱动的闭环缺口检查 (v1.10.0 -> v1.11.0)
+
+- **受影响文件**: 复盘路由与检查器、用户版 overlay 与导出包、契约测试、`VERSION`、`PROJECT_STATUS.md`、`README.md`、`CHANGELOG.md`
+- **改动摘要**: 手动复盘检查现统一以新增证据与下游沉淀缺口判断日反馈、周期复盘、当前上下文、日志质量和人生设计的下一步；不再依赖固定口令或单纯文件年龄，每次仅返回一条手动建议，不自动写内容或创建后台提醒。
+
 ## [2026-08-01 00:00] [功能] 接入手动复盘时机检查 (v1.9.10 -> v1.10.0)
 
 - **受影响文件**: `.claude/commands/review.md`、`.claude/agents/review-readiness-checker.md`、Codex 自然语言路由契约、用户版 overlay 与导出包、回归测试、`VERSION`、`PROJECT_STATUS.md`
