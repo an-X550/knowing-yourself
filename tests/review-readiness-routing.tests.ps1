@@ -37,6 +37,9 @@ function Assert-NotContains {
 $command = ".claude/commands/review.md"
 $agent = ".claude/agents/review-readiness-checker.md"
 $contract = ".claude/shared/contracts/codex-natural-language-routing.md"
+$deliveryContract = ".claude/shared/contracts/readiness-delivery.md"
+$dailyReview = ".claude/commands/daily-review.md"
+$logSkill = ".claude/skills/log.md"
 $agentsRules = "AGENTS.md"
 $claudeRules = "CLAUDE.md"
 
@@ -86,6 +89,28 @@ Assert-NotContains $agent "current.md 更新后 14 天内新增至少 3 篇日�
 Assert-Contains $agent "上次教练报告后新增至少 7 篇日志，且已间隔至少 14 天"
 Assert-Contains $agent "不得仅凭文件修改时间"
 Assert-Contains $agent "从第一个满足项开始，立刻停止"
+Assert-Contains ".claude/shared/paths.md" "output.readiness_delivery_state"
+Assert-Contains ".claude/shared/paths.md" "复盘/.readiness-delivery-state.md"
+Assert-Contains $deliveryContract "candidate"
+Assert-Contains $deliveryContract "signature"
+Assert-Contains $deliveryContract "notified_on"
+Assert-Contains $deliveryContract "7 天"
+Assert-Contains $deliveryContract "同类签名记录且距 notified_on 少于 7 天"
+Assert-Contains $deliveryContract "签名改变"
+Assert-Contains $deliveryContract "删除该候选旧记录"
+Assert-Contains $agent "delivery 模式"
+Assert-Contains $agent "仅在 delivery 模式下写入"
+Assert-Contains $agent "🔔 提醒："
+Assert-Contains $dailyReview "仅在首次生成正式日反馈并完成验证沉淀后"
+Assert-Contains $dailyReview "review-readiness-checker"
+Assert-Contains $dailyReview "delivery"
+Assert-Contains $dailyReview "快路径、D 级输入、无日志或分析失败不调用提醒投递"
+Assert-Contains $dailyReview "不写入 output.daily_feedback"
+Assert-Contains $logSkill "仅在成功保存新的正式日反馈并完成验证沉淀后"
+Assert-Contains $logSkill "review-readiness-checker"
+Assert-Contains $logSkill "delivery"
+Assert-Contains $logSkill "D 级输入、日期未确认或分析失败不调用提醒投递"
+Assert-Contains $logSkill "不写入 output.daily_feedback"
 
 foreach ($relativePath in @(
   "packaging/zhiji-user-overlay/.claude/commands/review.md",
@@ -101,7 +126,11 @@ foreach ($relativePath in @(
 foreach ($pair in @(
   @('packaging/zhiji-user-overlay/.claude/commands/review.md', 'zhiji-user/.claude/commands/review.md'),
   @('packaging/zhiji-user-overlay/.claude/agents/review-readiness-checker.md', 'zhiji-user/.claude/agents/review-readiness-checker.md'),
-  @('packaging/zhiji-user-overlay/.claude/shared/contracts/codex-natural-language-routing.md', 'zhiji-user/.claude/shared/contracts/codex-natural-language-routing.md')
+  @('packaging/zhiji-user-overlay/.claude/shared/contracts/codex-natural-language-routing.md', 'zhiji-user/.claude/shared/contracts/codex-natural-language-routing.md'),
+  @('packaging/zhiji-user-overlay/.claude/shared/contracts/readiness-delivery.md', 'zhiji-user/.claude/shared/contracts/readiness-delivery.md'),
+  @('packaging/zhiji-user-overlay/.claude/shared/paths.md', 'zhiji-user/.claude/shared/paths.md'),
+  @('packaging/zhiji-user-overlay/.claude/commands/daily-review.md', 'zhiji-user/.claude/commands/daily-review.md'),
+  @('packaging/zhiji-user-overlay/.claude/skills/log.md', 'zhiji-user/.claude/skills/log.md')
 )) {
   if ((Read-Utf8 $pair[0]) -cne (Read-Utf8 $pair[1])) {
     Add-Failure "generated package differs from overlay: $($pair[1])"

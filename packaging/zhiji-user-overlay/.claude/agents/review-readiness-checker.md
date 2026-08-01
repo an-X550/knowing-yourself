@@ -5,7 +5,7 @@ manual_readiness_writes: false
 manual_readiness_reports: false
 description: Lightweight agent that checks if conditions are right to suggest a review or life-design calibration.
 model: inherit
-allowed_tools: Read, Glob
+allowed_tools: Read, Glob, Write
 ---
 
 # 复盘时机检测器
@@ -14,7 +14,9 @@ allowed_tools: Read, Glob
 
 ## Input
 
-无需输入。根据当前日期（从系统信息中获取）扫描文件系统。
+默认无需输入，根据当前日期（从系统信息中获取）扫描文件系统。调用方可显式传入 `delivery`，但只能在成功生成新的日反馈并完成验证沉淀后传入。
+
+普通检查模式只读取材料并返回建议，不写入任何文件。delivery 模式才读取 `.claude/shared/contracts/readiness-delivery.md`，并仅在 delivery 模式下写入 `output.readiness_delivery_state`；不得写入日志、日反馈、current.md、报告、画像或验证沉淀。
 
 ## 检测逻辑
 
@@ -84,7 +86,7 @@ Glob 检查以下报告是否已存在：
 
 ## Output
 
-输出一段简短的中文提示（不超过 80 字），直接可用于向用户显示：
+普通检查模式输出一段简短的中文提示（不超过 80 字），直接可用于向用户显示：
 
 - 月度：`📅 新的一月。上月有 {N} 天日志，要不要做个月度复盘？（约 5-8 分钟）`
 - 周度：`📅 新的一周。上周有 {N} 天日志，花 3 分钟看看上周的发现？`
@@ -98,3 +100,13 @@ Glob 检查以下报告是否已存在：
 - 无需：输出空字符串（不做建议）
 
 **只输出提示文本本身，不加任何前缀、说明或分析。**
+
+### Delivery 模式
+
+仅当输入为 `delivery` 时：
+
+1. 读取 `output.readiness_delivery_state` 和 `.claude/shared/contracts/readiness-delivery.md`。
+2. 对唯一最高优先级候选生成该契约规定的稳定 `candidate` 与 `signature`。
+3. 按契约比较 `notified_on`，决定投递、抑制、更新或删除状态记录。
+4. 若应投递，写入状态后只输出：`🔔 提醒：{对应的唯一建议}`。
+5. 若应抑制、没有建议或状态损坏后无法恢复，输出空字符串；状态损坏时按契约重建为空状态，不能中断日反馈。
