@@ -2,7 +2,7 @@
 
 > 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.12.1-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.12.2-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 这是什么
@@ -38,7 +38,7 @@
 | 能力 | 目的 | 权威使用说明 |
 |------|------|--------------|
 | 日志记录与日反馈 | 从当日记录中形成单个关键洞察和可验证行动 | [`.claude/commands/daily-review.md`](.claude/commands/daily-review.md) |
-| 闭环缺口检查与低噪声提醒 | 在新增证据出现时，只提示一项最优先、需要你手动完成的日反馈、复盘或上下文沉淀 | [`.claude/agents/review-readiness-checker.md`](.claude/agents/review-readiness-checker.md) / [提醒契约](.claude/shared/contracts/readiness-delivery.md) |
+| 闭环缺口检查与低噪声提醒 | 可通过自然语言手动检查；成功新日反馈完成验证沉淀后也会检查一次。它不是后台定时任务，只提示一项最优先、需要你手动完成的日反馈、复盘或上下文沉淀 | [`.claude/agents/review-readiness-checker.md`](.claude/agents/review-readiness-checker.md) / [提醒契约](.claude/shared/contracts/readiness-delivery.md) |
 | 周、月、项目与年度复盘 | 基于沉淀证据校准更长时间尺度的趋势与选择 | [`.claude/commands/`](.claude/commands/) |
 | 日志教练与人生设计 | 改进记录质量，或在长期方向冲突时做校准 | [`.claude/commands/journal-coach.md`](.claude/commands/journal-coach.md) / [`.claude/commands/life-design.md`](.claude/commands/life-design.md) |
 | 主题思考与收藏吃灰库 | 经用户确认后沉淀可继续修正的认识和资料 | [`.claude/shared/contracts/topic-thinking.md`](.claude/shared/contracts/topic-thinking.md) / [`.claude/skills/collection.md`](.claude/skills/collection.md) |

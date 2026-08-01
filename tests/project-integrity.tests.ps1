@@ -137,6 +137,19 @@ Assert-Path 'zhiji-user/复盘/年度回顾/.gitkeep'
 $userReadme = Read-Utf8 'packaging/zhiji-user-overlay/README.md'
 $profileReadme = Read-Utf8 'packaging/zhiji-user-overlay/关于我/README.md'
 $currentVersion = (Read-Utf8 'VERSION').Trim()
+$mainReadme = Read-Utf8 'README.md'
+if ($mainReadme -notmatch [regex]::Escape('自然语言手动检查')) {
+  Add-Failure 'main README does not describe the manual natural-language readiness check'
+}
+if ($mainReadme -notmatch [regex]::Escape('不是后台定时任务')) {
+  Add-Failure 'main README does not state the no-background boundary'
+}
+if ($userReadme -notmatch [regex]::Escape('最近有什么该补？')) {
+  Add-Failure 'user README does not expose a natural-language readiness example'
+}
+if ($userReadme -notmatch [regex]::Escape('不会后台弹窗')) {
+  Add-Failure 'user README does not state the no-background boundary'
+}
 if ($userReadme -notmatch [regex]::Escape("当前用户版对应 ``v$currentVersion``")) {
   Add-Failure 'user README version does not match VERSION'
 }

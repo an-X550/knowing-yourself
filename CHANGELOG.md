@@ -5,6 +5,11 @@ last_updated: 2026-08-01
 
 # CHANGELOG - 改动记录
 
+## [2026-08-01 13:26] [文档] 明确闭环提醒的触发与边界 (v1.12.1 -> v1.12.2)
+
+- **受影响文件**: `README.md`, `zhiji-user/README.md`, `tests/project-integrity.tests.ps1`
+- **改动摘要**: 明确自然语言手动检查、日反馈后单次检查和无后台催办边界，减少对提醒时机的错误预期。
+
 ## [2026-08-01 13:09] [文档] 同步闭环提醒的用户入口说明 (v1.12.0 -> v1.12.1)
 
 - **受影响文件**: `README.md`, `zhiji-user/README.md`, `docs/daily-review-fast-path-acceptance.md`
