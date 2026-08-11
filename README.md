@@ -45,6 +45,8 @@
 
 共同边界是：AI 提供证据整理、假说与低成本实验；用户保留对自身经历、价值选择和重大决定的最终解释权。证据不足时，系统必须降低结论强度，而不是补完故事。
 
+可选的飞书/滴答结果分发默认关闭；离线验收通过后，按 [`docs/result-distribution-setup.md`](docs/result-distribution-setup.md) 通过官方 CLI 与官方 MCP 完成设置。未配置时不改变原有本地报告路径和输出。
+
 ## 维护与分发
 
 - `.claude/` 是唯一运行真相，包含 commands、agents、skills、workflows 与 shared 契约。

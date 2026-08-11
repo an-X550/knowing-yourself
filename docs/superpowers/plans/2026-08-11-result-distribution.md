@@ -39,15 +39,15 @@
 - Allowed sources: `output.daily_feedback`, `output.weekly_report`, `output.monthly_report`, `output.project_report`, `output.yearly_report`, `output.life_design_report`, and confirmed `context.thinking_topic`.
 - Forbidden sources: `input.*`, `context.core_profile`, `context.current`, `context.verified_patterns`, `analysis.*`, config, and state.
 
-- [ ] **Step 1: Write failing path and privacy assertions**
+- [x] **Step 1: Write failing path and privacy assertions**
 
 Require `output.result_distribution_config` at `复盘/.result-distribution-config.json` and `output.result_distribution_state` at `复盘/.result-distribution-state.json`. Require a shared `result-distribution.md` contract, an example config, explicit allowed/forbidden source lists, local-write-first semantics, two independent channel results, and secrets-outside-project language.
 
-- [ ] **Step 2: Write failing behavior assertions**
+- [x] **Step 2: Write failing behavior assertions**
 
 Require the contract to distinguish `success`, `failed`, `skipped_not_configured`, `skipped_duplicate`, `skipped_no_action`, and `changed_after_delivery`; require SHA-256 idempotency; require Feishu failure not to suppress TickTick and the reverse; require no TickTick read/completion behavior.
 
-- [ ] **Step 3: Run the focused test and verify RED**
+- [x] **Step 3: Run the focused test and verify RED**
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tests/result-distribution-contract.tests.ps1
@@ -72,15 +72,15 @@ Expected: non-zero exit naming the missing paths, contract, and example config.
 - Config keys: `enabled`, `feishu.enabled`, `feishu.folder_token`, `ticktick.enabled`, `ticktick.region`, `ticktick.list_name`, and per-result-type channel switches.
 - State schema version: `1`; each source path stores `sha256`, `written_at`, and separate `feishu` / `ticktick` status objects.
 
-- [ ] **Step 1: Add the two runtime path keys**
+- [x] **Step 1: Add the two runtime path keys**
 
 Add identical semantic keys to both main and overlay `paths.md`. Keep concrete paths inside ignored `复盘/`; do not put credentials under `.claude/`.
 
-- [ ] **Step 2: Add a disabled-by-default example config**
+- [x] **Step 2: Add a disabled-by-default example config**
 
 Use valid JSON with every channel and result-type switch `false`, `ticktick.region` limited to `dida365` or `ticktick`, and no real folder token. Document that the runtime file is copied to `output.result_distribution_config` and remains ignored.
 
-- [ ] **Step 3: Write the minimum shared contract**
+- [x] **Step 3: Write the minimum shared contract**
 
 Define this order exactly:
 
@@ -94,11 +94,11 @@ Define this order exactly:
 
 On damaged state, rename it to `.result-distribution-state.corrupt-YYYYMMDD-HHmmss.json`, create clean state, and never alter remote resources.
 
-- [ ] **Step 4: Register shared package files and mirror them**
+- [x] **Step 4: Register shared package files and mirror them**
 
 Add the new contract and example JSON to `packaging/zhiji-user-boundaries.json` as shared files. Keep `paths.md` as an override and make its two new keys behavior-equivalent.
 
-- [ ] **Step 5: Run the focused test and verify GREEN**
+- [x] **Step 5: Run the focused test and verify GREEN**
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tests/result-distribution-contract.tests.ps1
@@ -119,15 +119,15 @@ Expected: `PASS: result distribution contract checks`.
 - Write command: `lark-cli drive +import --file <absolute-md-path> --type docx --folder-token <folder-token> --name <title> --as bot`.
 - Output record: `status`, `document_token`, `url`, `ticket`, `attempted_at`, and normalized `error_code`; no secret fields.
 
-- [ ] **Step 1: Extend the test with failing Feishu assertions**
+- [x] **Step 1: Extend the test with failing Feishu assertions**
 
 Require official CLI usage, `--type docx`, explicit `--folder-token`, explicit `--name`, `--as bot`, same-folder serialization, async `next_command` handling, a maximum of three retries only for documented concurrent-import codes, and zero retries for permission/not-found/missing-scope errors.
 
-- [ ] **Step 2: Run the focused test and verify RED**
+- [x] **Step 2: Run the focused test and verify RED**
 
 Expected: failure naming the missing Feishu adapter contract.
 
-- [ ] **Step 3: Add the Feishu adapter contract**
+- [x] **Step 3: Add the Feishu adapter contract**
 
 Derive titles without reading report content beyond frontmatter/title:
 
@@ -138,11 +138,11 @@ Derive titles without reading report content beyond frontmatter/title:
 
 Treat `ready=false` plus a ticket as pending, execute only the CLI-provided `next_command`, and mark success only after a final token/URL is returned. Never transfer owner automatically.
 
-- [ ] **Step 4: Run offline Feishu command-construction tests**
+- [x] **Step 4: Run offline Feishu command-construction tests**
 
 Use the fixture path containing Chinese characters and assert correct quoting, absolute-path resolution, title, folder token placement, and absence of secret values. Do not call Feishu during this test.
 
-- [ ] **Step 5: Run the focused test and verify GREEN**
+- [x] **Step 5: Run the focused test and verify GREEN**
 
 Expected: PASS.
 
@@ -160,27 +160,27 @@ Expected: PASS.
 - Capability: discover exactly one authenticated operation whose schema creates a task. Never bind list/get/search/update/complete operations.
 - Task fields: action title, source-path and check-condition description, configured list name, and a due date only when derivable by contract.
 
-- [ ] **Step 1: Add failing source-extraction assertions**
+- [x] **Step 1: Add failing source-extraction assertions**
 
 Require exactly one daily task from `⚡ 明天试试` → `行动：`; at most three weekly/monthly/project actions from their planning section; at most three explicit near-term experiments for yearly/life-design; and at most three items from confirmed topic thinking `0. 当前行动卡`. Require `skipped_no_action` when no atomic, controllable, checkable action exists.
 
-- [ ] **Step 2: Add failing date and anti-invention assertions**
+- [x] **Step 2: Add failing date and anti-invention assertions**
 
 Daily due date is the next local calendar day. Weekly defaults to the next ISO week Sunday and monthly to the next calendar month end, but an explicit report date wins. Project/yearly/life-design/thinking actions have no due date unless the source states one. Require the contract to reject broad directions, analysis statements, upgrade reminders, and invented tasks.
 
-- [ ] **Step 3: Add failing MCP boundary assertions**
+- [x] **Step 3: Add failing MCP boundary assertions**
 
 Require semantic capability discovery, exactly-one-candidate selection, auth and region gates, create-only calls, per-task result IDs, and no task reads. Require deterministic action keys from source path plus normalized title so a retry cannot duplicate a successful task.
 
-- [ ] **Step 4: Run the focused test and verify RED**
+- [x] **Step 4: Run the focused test and verify RED**
 
 Expected: failure naming missing extraction, date, and MCP boundaries.
 
-- [ ] **Step 5: Add the TickTick adapter contract and fixtures**
+- [x] **Step 5: Add the TickTick adapter contract and fixtures**
 
 Write explicit extraction tables and skip rules into both contracts. The weekly fixture contains two valid actions and one broad direction that must be rejected; the no-action fixture must produce zero task candidates.
 
-- [ ] **Step 6: Run the focused test and verify GREEN**
+- [x] **Step 6: Run the focused test and verify GREEN**
 
 Expected: PASS.
 
@@ -206,11 +206,11 @@ Expected: PASS.
 - Trigger input: `distribute <path-key> <resolved-local-path>` after verified write.
 - Skip inputs: cache hit/read-only display, D-grade daily input, missing source, analysis failure, unconfirmed topic thinking, or changed-after-delivery without confirmation.
 
-- [ ] **Step 1: Create failing routing tests**
+- [x] **Step 1: Create failing routing tests**
 
 Assert every supported entry reads the shared distribution contract and invokes it only after a new successful write. Assert daily cache-hit and error branches skip it; topic thinking invokes it only after existing user confirmation; Codex natural-language routes use the same contract without requiring Claude `Task`/`Workflow`.
 
-- [ ] **Step 2: Run routing tests and verify RED**
+- [x] **Step 2: Run routing tests and verify RED**
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tests/result-distribution-routing.tests.ps1
@@ -218,15 +218,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tests/result-distribution-ro
 
 Expected: non-zero exit naming missing post-write routes.
 
-- [ ] **Step 3: Add the command and Codex routes**
+- [x] **Step 3: Add the command and Codex routes**
 
 After each caller has written and re-read its output, execute the shared contract and append its local-first summary to chat. Do not place distribution status inside the report file. Preserve all existing reminder/readiness behavior.
 
-- [ ] **Step 4: Add workflow completion handoff**
+- [x] **Step 4: Add workflow completion handoff**
 
 Extend the workflow completion phase to hand the resolved `reportPath` to the shared distribution contract after synthesis success. The workflow must still return `synthesis: 'complete'` when distribution partially fails, and add a separate `distribution` result object rather than changing report status.
 
-- [ ] **Step 5: Mirror runtime routes and run tests**
+- [x] **Step 5: Mirror runtime routes and run tests**
 
 Run both focused suites. Expected: both PASS.
 
@@ -244,11 +244,11 @@ Run both focused suites. Expected: both PASS.
 - TickTick setup statuses: `mcp_missing`, `wrong_region`, `auth_required`, `create_capability_ambiguous`, `ready`.
 - No setup command accepts secrets as positional arguments in recorded project instructions.
 
-- [ ] **Step 1: Write failing setup-document assertions**
+- [x] **Step 1: Write failing setup-document assertions**
 
 Require a user checklist, privacy warning, Feishu official installation/config/status commands, application-identity explanation, target-folder test, TickTick region/auth/create-only checks, disabled-by-default behavior, and exact rollback instructions.
 
-- [ ] **Step 2: Write the setup guide**
+- [x] **Step 2: Write the setup guide**
 
 Document this Feishu sequence:
 
@@ -262,11 +262,11 @@ Explain that routine imports use `--as bot`; user login is only used during setu
 
 For TickTick, document selecting the account-region official MCP, completing its official authorization UI, discovering the create-task schema, and creating one disposable task in the configured list. Do not document or test task-reading calls.
 
-- [ ] **Step 3: Add a short README entry and mirror docs**
+- [x] **Step 3: Add a short README entry and mirror docs**
 
 Link the setup guide from the usage/integration section. Keep the root README concise and keep standalone-user wording in the overlay README.
 
-- [ ] **Step 4: Run setup tests and verify GREEN**
+- [x] **Step 4: Run setup tests and verify GREEN**
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tests/result-distribution-setup.tests.ps1
