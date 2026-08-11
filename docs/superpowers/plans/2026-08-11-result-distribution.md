@@ -298,11 +298,11 @@ Run preflight, import the fixture once, verify the returned URL opens for the us
 
 Create one fixture action in the configured list, verify title/description/due date in the MCP response or user-visible client, then run the identical dispatch again and verify no second task is created. Do not inspect unrelated tasks.
 
-- [ ] **Step 4: Test partial failure isolation**
+- [x] **Step 4: Test partial failure isolation**
 
 Disable or invalidate only the Feishu folder setting while leaving TickTick ready. Dispatch a new fixture hash and verify local success plus Feishu failure plus TickTick success. Repeat with TickTick disabled and Feishu ready.
 
-- [ ] **Step 5: Enable only user-approved result types**
+- [x] **Step 5: Enable only user-approved result types**
 
 Copy the example config to the ignored runtime path and set only the result-type/channel switches the user explicitly approved. Do not enable every type by default.
 
