@@ -286,7 +286,7 @@ Expected: PASS.
 - Feishu app setup cooperation plus target folder access.
 - TickTick/Dida365 region, completed MCP authorization, and destination list name.
 
-- [ ] **Step 1: Stop cleanly if any channel gate is missing**
+- [x] **Step 1: Stop cleanly if any channel gate is missing**
 
 Report only the missing status. Do not ask the user to paste a secret. Leave that channel disabled and continue testing the other configured channel.
 
