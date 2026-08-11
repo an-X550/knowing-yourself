@@ -327,7 +327,7 @@ Use the Codex automation tool. The prompt must be reminder-only and must not req
 
 Confirm the reminder arrives at the intended time and the user still explicitly starts the review. Only then create additional schedules supplied by the user.
 
-Pending: wait for the first real reminder at 2026-08-16 19:00 Asia/Shanghai before acceptance; do not create additional reminders yet.
+Pending: the 2026-08-12 controlled delivery test was stopped at the user's request before delivery evidence existed. Keep the formal reminder at 2026-08-16 19:00 Asia/Shanghai and do not create additional reminders until a later delivery check.
 
 ### Task 9: Package, release, and verify
 
@@ -341,7 +341,7 @@ Pending: wait for the first real reminder at 2026-08-16 19:00 Asia/Shanghai befo
 - Test: `tests/project-integrity.tests.ps1`
 - Test: all `tests/*.tests.ps1`
 
-- [ ] **Step 1: Export the standalone package**
+- [x] **Step 1: Export the standalone package**
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
@@ -349,11 +349,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps
 
 Expected: generated package matches overlay and shared-boundary rules.
 
-- [ ] **Step 2: Update release facts**
+- [x] **Step 2: Update release facts**
 
 After offline tests and the two live channel smoke tests pass, increment the minor version for the new opt-in integration capability. Add one top CHANGELOG entry, update `PROJECT_STATUS.md` with the enabled boundaries and remaining real-use observation gate, and update the README badge if present. Keep `AGENTS.md` and `CLAUDE.md` byte-identical if either is touched; this plan should not require touching them.
 
-- [ ] **Step 3: Run focused checks**
+- [x] **Step 3: Run focused checks**
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tests/result-distribution-contract.tests.ps1
@@ -365,7 +365,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tests/project-integrity.test
 
 Expected: every script exits `0`.
 
-- [ ] **Step 4: Run the full PowerShell suite**
+- [x] **Step 4: Run the full PowerShell suite**
 
 ```powershell
 $testFiles = Get-ChildItem -LiteralPath tests -Filter '*.tests.ps1' | Sort-Object Name
@@ -377,11 +377,11 @@ foreach ($testFile in $testFiles) {
 
 Expected: every script exits `0`.
 
-- [ ] **Step 5: Audit the final diff**
+- [x] **Step 5: Audit the final diff**
 
 Confirm there is no secret, `.env`, raw token, personal journal/review content, TickTick read operation, Feishu messaging behavior, scheduler-driven analysis, daemon, or database. Confirm local reports still complete when config is absent and partial distribution failures are represented separately.
 
-- [ ] **Step 6: Commit locally**
+- [x] **Step 6: Commit locally**
 
 Use the project local commit flow after verification. Do not push.
 
