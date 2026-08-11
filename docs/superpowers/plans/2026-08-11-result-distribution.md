@@ -294,7 +294,7 @@ Report only the missing status. Do not ask the user to paste a secret. Leave tha
 
 Run preflight, import the fixture once, verify the returned URL opens for the user and appears in the specified folder, then run the identical dispatch again and verify no second document is created.
 
-- [ ] **Step 3: Test TickTick with one disposable action**
+- [x] **Step 3: Test TickTick with one disposable action**
 
 Create one fixture action in the configured list, verify title/description/due date in the MCP response or user-visible client, then run the identical dispatch again and verify no second task is created. Do not inspect unrelated tasks.
 
