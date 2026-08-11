@@ -203,7 +203,7 @@ foreach ($path in @($mainContract, $overlayContract)) {
     'lark-cli auth status',
     'application identity',
     'lark-cli drive +import',
-    '--file "<absolute-md-path>"',
+    '--file "<workspace-relative-md-path>"',
     '--type docx',
     '--folder-token "<folder-token>"',
     '--name "<document-title>"',
@@ -234,25 +234,33 @@ foreach ($path in @($mainContract, $overlayContract)) {
     '控制字符',
     '不得自动转移 owner'
   )
+  Assert-Contains $path @(
+    '仓库 cwd',
+    '拒绝逃出 cwd 的 `..`'
+  )
+  Assert-NotContains $path @(
+    '[System.IO.Path]::GetFullPath()',
+    '<absolute-md-path>'
+  )
 }
 
 $fixturePath = Join-Path $repoRoot $dailyFixture
 if (-not (Test-Path -LiteralPath $fixturePath -PathType Leaf)) {
   Add-Failure "missing file: $dailyFixture"
 } else {
-  $absoluteFixturePath = [System.IO.Path]::GetFullPath($fixturePath)
-  if (-not [System.IO.Path]::IsPathRooted($absoluteFixturePath)) {
-    Add-Failure 'Feishu fixture path did not resolve to an absolute path'
+  $workspaceRelativeFixturePath = $dailyFixture.Replace('\', '/')
+  if ([System.IO.Path]::IsPathRooted($workspaceRelativeFixturePath)) {
+    Add-Failure 'Feishu fixture path must remain relative to the repository cwd'
   }
-  if ($absoluteFixturePath -notmatch '[\u4e00-\u9fff]') {
-    Add-Failure 'Feishu fixture absolute path must exercise Chinese path handling'
+  if (@($workspaceRelativeFixturePath -split '[\\/]') -contains '..') {
+    Add-Failure 'Feishu fixture path must not escape the repository cwd'
   }
   $templateMatch = [regex]::Match($contractText, '(?m)^lark-cli drive \+import .+$')
   if (-not $templateMatch.Success) {
     Add-Failure 'production Feishu command template is missing'
   } else {
     $constructedCommand = $templateMatch.Value.
-      Replace('<absolute-md-path>', $absoluteFixturePath).
+      Replace('<workspace-relative-md-path>', $workspaceRelativeFixturePath).
       Replace('<folder-token>', 'folder-token-placeholder').
       Replace('<document-title>', '知己·每日反馈·2026-08-11')
     $argvMatch = [regex]::Match(
@@ -260,7 +268,7 @@ if (-not (Test-Path -LiteralPath $fixturePath -PathType Leaf)) {
       '^lark-cli drive \+import --file "(?<file>[^"]+)" --type (?<type>\S+) --folder-token "(?<folder>[^"]+)" --name "(?<name>[^"]+)" --as (?<identity>\S+)$'
     )
     if (-not $argvMatch.Success -or
-        $argvMatch.Groups['file'].Value -ne $absoluteFixturePath -or
+        $argvMatch.Groups['file'].Value -ne $workspaceRelativeFixturePath -or
         $argvMatch.Groups['type'].Value -ne 'docx' -or
         $argvMatch.Groups['folder'].Value -ne 'folder-token-placeholder' -or
         $argvMatch.Groups['name'].Value -ne '知己·每日反馈·2026-08-11' -or

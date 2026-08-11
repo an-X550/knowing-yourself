@@ -290,7 +290,7 @@ Expected: PASS.
 
 Report only the missing status. Do not ask the user to paste a secret. Leave that channel disabled and continue testing the other configured channel.
 
-- [ ] **Step 2: Test Feishu with disposable content**
+- [x] **Step 2: Test Feishu with disposable content**
 
 Run preflight, import the fixture once, verify the returned URL opens for the user and appears in the specified folder, then run the identical dispatch again and verify no second document is created.
 

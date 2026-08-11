@@ -107,15 +107,15 @@ App Secret、access token、refresh token、tenant token、device code、MCP tok
 
 ### 预检与命令构造
 
-只使用飞书官方 `lark-cli`。未来真实接入时依次检查 `lark-cli --version`、`lark-cli auth status`、已配置的 application identity 和目标 `folder_token` 可访问性；任一项不满足只让飞书渠道失败，不影响 TickTick 或本地结果。本轮离线实现不运行这些命令。
+只使用飞书官方 `lark-cli`。执行真实分发时依次检查 `lark-cli --version`、`lark-cli auth status`、已配置的 application identity 和目标 `folder_token` 可访问性；任一项不满足只让飞书渠道失败，不影响 TickTick 或本地结果。
 
-先用 `[System.IO.Path]::GetFullPath()` 把已校验的本地 Markdown 路径解析为绝对路径，再构造参数化 argv；不得拼接后交给 shell 重新解析。规范命令形态为：
+先以仓库 cwd 为基准，把已校验的本地 Markdown 路径规范化为使用 `/` 的仓库相对路径。路径必须非空、不得是绝对路径，并拒绝逃出 cwd 的 `..` 路径段；从仓库 cwd 解析后还必须指向 cwd 内的现有文件。随后构造参数化 argv，不得拼接后交给 shell 重新解析。规范命令形态为：
 
 ```powershell
-lark-cli drive +import --file "<absolute-md-path>" --type docx --folder-token "<folder-token>" --name "<document-title>" --as bot
+lark-cli drive +import --file "<workspace-relative-md-path>" --type docx --folder-token "<folder-token>" --name "<document-title>" --as bot
 ```
 
-argv 顺序固定为 `drive`, `+import`, `--file`, absolute path, `--type`, `docx`, `--folder-token`, folder token, `--name`, title, `--as`, `bot`。路径、folder token 和标题各作为单独参数传入，因此中文路径、空格或标点不会被二次解释。argv 不得包含 App Secret、access token、tenant token 或其他凭证；`folder_token` 是非敏感目标标识，只从忽略的本地配置读取。
+argv 顺序固定为 `drive`, `+import`, `--file`, workspace-relative path, `--type`, `docx`, `--folder-token`, folder token, `--name`, title, `--as`, `bot`。命令必须从仓库 cwd 执行；路径、folder token 和标题各作为单独参数传入，因此中文路径、空格或标点不会被二次解释。argv 不得包含 App Secret、access token、tenant token 或其他凭证；`folder_token` 是非敏感目标标识，只从忽略的本地配置读取。
 
 ### 标题
 
