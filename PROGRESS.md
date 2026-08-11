@@ -1,10 +1,10 @@
-# distribute 飞书幂等闭环进度
-目标：同一开发样本首次 success、再次 skipped_duplicate，远端严格 N→N+1→N+1。
-顺序：任务 0 基线 → 路径契约 RED/GREEN → 临时启用 → 两次 distribute → 恢复/提交。
-任务 0：main，HEAD 081cdf6；仅有无关未跟踪教程文件，保持不触碰。
-基线：13/13 测试通过；lark-cli 1.0.85；bot/user 均 ready。
-远端：N=1；现有标题“知己·一次性测试”。
-任务 1：路径断言先 RED（11 项、exit 1）后 GREEN（exit 0）；相对 fixture dry-run exit 0。
-任务 2：样本与状态均被忽略；SHA-256 已写状态；仅顶层/飞书/daily_feedback.feishu 临时为 true。
-任务 3：首次 success；第二次调用前命中相同 SHA 并 skipped_duplicate；远端最终 1→2→2。
-任务 4：配置原样恢复且全部开关 false；13/13 测试通过；Task 7 Step 2 已满足并勾选。
+# 每周复盘提醒实施进度
+目标：创建并验收唯一的“知己｜每周复盘提醒”，仅提醒用户手动开始复盘。
+顺序：核对现状 → 创建/更新 heartbeat → 工具回读验收 → 勾选 Task 8 Step 1/2 → 仅提交指定文件。
+任务 0：已读 AGENTS.md 与 Task 8；自动化工具可用；目录中无 automation.toml，未发现同名自动化。
+工作区基线：PROGRESS.md 有既存修改；一个教程文件未跟踪，均不得误提交教程文件。
+最大风险：重复创建或 prompt 越界；必须复用同名 ID（如存在）并以工具回读字段验收。
+任务 1：已创建并更新唯一 automation-2；kind=heartbeat，status=ACTIVE，target_thread_id=当前任务。
+任务 2：工具已回读；同名数量=1；时区=Asia/Shanghai；下次触发=2026-08-16 19:00（周日）。
+验收：prompt 仅提醒手动打开并开始复盘，明确禁止读取文件、自动生成复盘及飞书/滴答分发。
+当前：Task 8 Step 1/2 已完成；Step 3 未完成，等待首次真实提醒后验收。

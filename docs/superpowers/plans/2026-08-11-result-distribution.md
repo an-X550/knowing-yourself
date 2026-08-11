@@ -315,17 +315,19 @@ Copy the example config to the ignored runtime path and set only the result-type
 - Required input per reminder: name, schedule, timezone, and reminder text.
 - Reminder text must say to open/start the relevant Zhiji review and must explicitly prohibit automatic review execution.
 
-- [ ] **Step 1: Validate the supplied reminder schedule**
+- [x] **Step 1: Validate the supplied reminder schedule**
 
 If name, recurrence, exact local time, or timezone is missing, stop with `reminder_schedule_missing`. Do not infer a schedule from examples.
 
-- [ ] **Step 2: Create one pilot reminder**
+- [x] **Step 2: Create one pilot reminder**
 
 Use the Codex automation tool. The prompt must be reminder-only and must not request reading the repository, generating a report, or invoking either distributor.
 
 - [ ] **Step 3: Verify one delivery and then add remaining reminders**
 
 Confirm the reminder arrives at the intended time and the user still explicitly starts the review. Only then create additional schedules supplied by the user.
+
+Pending: wait for the first real reminder at 2026-08-16 19:00 Asia/Shanghai before acceptance; do not create additional reminders yet.
 
 ### Task 9: Package, release, and verify
 
