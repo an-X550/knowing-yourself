@@ -135,6 +135,9 @@ foreach ($path in @($mainContract, $overlayContract)) {
     '先说本地事实',
     '按来源和 TickTick 所处阶段返回',
     '不得宣称本地与外部“整体失败”'
+    '直接纯提醒'
+    '周期性纯提醒默认直接创建为滴答任务'
+    '创建接口成功不等于通知已经送达'
   )
   Assert-NotContains $path @(
     'distribution: local_only',
@@ -335,6 +338,8 @@ foreach ($path in @($mainContract, $overlayContract)) {
     '`output.monthly_report`',
     '`context.thinking_topic`',
     '只传任务标题、截止日期或时间以及目标清单',
+    '`project_id`',
+    '正式分发只使用已保存的 `project_id`',
     '不传 description',
     '⚡ 明天试试',
     '行动：',

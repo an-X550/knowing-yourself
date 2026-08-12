@@ -2,7 +2,7 @@
 
 > 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.15.0-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.15.3-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 这是什么
@@ -46,6 +46,10 @@
 共同边界是：AI 提供证据整理、假说与低成本实验；用户保留对自身经历、价值选择和重大决定的最终解释权。证据不足时，系统必须降低结论强度，而不是补完故事。
 
 可选结果分发默认关闭。启用后，飞书可把新生成的正式复盘、人生设计、已确认主题思考和明确收录的收藏及附件沉淀到固定“知己”目录；滴答只接收每日反馈、周复盘、月复盘和已确认主题思考中的合格行动，任务只含 SMART 化标题与截止时间。日反馈自动创建，周/月及主题经过对应确认；完成判断仍只读取后续日志。本地文件始终权威。若本次只想保存到电脑，在生成请求中直接说“仅本地”，本轮同时跳过飞书和滴答且不留下永久标记；设置方法见 [`docs/result-distribution-setup.md`](docs/result-distribution-setup.md)。
+
+一次性或周期性的纯提醒默认使用滴答清单原生通知；Codex 定时任务只在用户明确指定时例外。提醒只通知用户手动开始，不会自动读取文件或生成复盘。
+
+个人验证期可使用[本地飞书每日反馈入口](docs/local-feishu-daily-feedback-entry.md)：电脑保持在线且不休眠时，在手机私聊机器人发送 `日志：<原文>`，复用现有知己日反馈与结果分发；它不是全天候云服务。
 
 ## 维护与分发
 
@@ -91,6 +95,7 @@ powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
 - 开发与维护规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
 - 用户版完整指南：[`zhiji-user/README.md`](zhiji-user/README.md)
 - 用户版同步流程：[`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)
+- 本地飞书每日反馈入口：[`docs/local-feishu-daily-feedback-entry.md`](docs/local-feishu-daily-feedback-entry.md)
 - 第一性原理提醒：[`docs/first-principles.md`](docs/first-principles.md)
 - 质量基线与待验收项：[`docs/quality-baseline-matrix.md`](docs/quality-baseline-matrix.md)
 - 模型选择与 A/B/C 对比：[`docs/model-selection.md`](docs/model-selection.md)

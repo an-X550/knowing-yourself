@@ -1,0 +1,103 @@
+{
+  "cases": [
+    {
+      "name": "daily-auto-create-1",
+      "source": "daily",
+      "new_write": true,
+      "eligible_actions": 1,
+      "remote_write": false,
+      "expected": "create:1"
+    },
+    {
+      "name": "daily-auto-create-2",
+      "source": "daily",
+      "new_write": true,
+      "eligible_actions": 1,
+      "remote_write": false,
+      "expected": "create:1"
+    },
+    {
+      "name": "daily-auto-create-3",
+      "source": "daily",
+      "new_write": true,
+      "eligible_actions": 2,
+      "remote_write": false,
+      "expected": "create:1"
+    },
+    {
+      "name": "weekly-confirmation-gate",
+      "source": "weekly",
+      "new_write": true,
+      "confirmed": false,
+      "eligible_actions": 2,
+      "remote_write": false,
+      "expected": "candidate:2"
+    },
+    {
+      "name": "monthly-confirmation-gate",
+      "source": "monthly",
+      "new_write": true,
+      "confirmed": true,
+      "eligible_actions": 4,
+      "remote_write": false,
+      "expected": "create:3"
+    },
+    {
+      "name": "topic-save-and-create",
+      "source": "topic",
+      "new_write": true,
+      "confirmed": true,
+      "eligible_actions": 1,
+      "remote_write": false,
+      "expected": "create:1"
+    },
+    {
+      "name": "local-only",
+      "source": "weekly",
+      "new_write": true,
+      "local_only": true,
+      "eligible_actions": 2,
+      "remote_write": false,
+      "expected": "skipped_local_only"
+    },
+    {
+      "name": "exact-deduplication",
+      "source": "monthly",
+      "new_write": true,
+      "confirmed": true,
+      "existing_exact_action": true,
+      "eligible_actions": 1,
+      "remote_write": false,
+      "expected": "skipped_duplicate"
+    },
+    {
+      "name": "legacy-state",
+      "source": "weekly",
+      "new_write": true,
+      "confirmed": false,
+      "legacy_action_without_exact_fields": true,
+      "eligible_actions": 1,
+      "remote_write": false,
+      "expected": "candidate:1"
+    },
+    {
+      "name": "partial-failure-retry",
+      "source": "monthly",
+      "new_write": true,
+      "confirmed": true,
+      "retry_requested": true,
+      "eligible_actions": 2,
+      "remote_write": false,
+      "expected": "retry_failed_once"
+    },
+    {
+      "name": "journal-only-completion",
+      "source": "daily",
+      "new_write": true,
+      "completion_signal": "ticktick",
+      "eligible_actions": 1,
+      "remote_write": false,
+      "expected": "ignored_for_completion"
+    }
+  ]
+}

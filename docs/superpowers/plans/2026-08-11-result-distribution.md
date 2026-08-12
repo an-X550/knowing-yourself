@@ -306,10 +306,10 @@ Disable or invalidate only the Feishu folder setting while leaving TickTick read
 
 Copy the example config to the ignored runtime path and set only the result-type/channel switches the user explicitly approved. Do not enable every type by default.
 
-### Task 8: Create reminder-only Codex automations
+### Task 8: Route reminder-only schedules to a reliable channel
 
 **Files:**
-- No repository files. Use Codex scheduled-task configuration only.
+- Reminder configuration plus the current routing contract.
 
 **Interfaces:**
 - Required input per reminder: name, schedule, timezone, and reminder text.
@@ -323,11 +323,11 @@ If name, recurrence, exact local time, or timezone is missing, stop with `remind
 
 Use the Codex automation tool. The prompt must be reminder-only and must not request reading the repository, generating a report, or invoking either distributor.
 
-- [ ] **Step 3: Verify one delivery and then add remaining reminders**
+- [ ] **Step 3: Verify one TickTick delivery and then add remaining reminders**
 
 Confirm the reminder arrives at the intended time and the user still explicitly starts the review. Only then create additional schedules supplied by the user.
 
-Pending: the 2026-08-12 controlled delivery test was stopped at the user's request before delivery evidence existed. Keep the formal reminder at 2026-08-16 19:00 Asia/Shanghai and do not create additional reminders until a later delivery check.
+Superseded on 2026-08-12: the Codex pilot did not deliver in repeated controlled windows, including after a full app restart, so it is not the default reminder channel. The replacement TickTick task `6a7c3613e4b0615160988989` is active for Sunday 19:00 `Asia/Shanghai`; keep this step open until its first real notification on 2026-08-16. Do not add more review reminders before that evidence exists.
 
 ### Task 9: Package, release, and verify
 
