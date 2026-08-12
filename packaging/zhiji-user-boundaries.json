@@ -21,7 +21,9 @@
     ".claude/shared/contracts/topic-thinking.md",
     ".claude/shared/contracts/topic-thinking-persistence.md",
     ".claude/shared/runtime-contracts.js",
+    ".claude/shared/local-feishu-daily-feedback-config.example.json",
     ".claude/shared/result-distribution-config.example.json",
+    ".claude/workflows/local-feishu-daily-feedback.ps1",
     ".claude/workflows/monthly-review.js",
     ".claude/workflows/project-review.js",
     ".claude/workflows/shared.js",
@@ -29,7 +31,6 @@
     ".claude/workflows/yearly-review.js",
     ".claude/skills/collection.md",
     "docs/analysis-standards.md",
-    "docs/result-distribution-setup.md",
     "docs/methodology-journal.md",
     "docs/methodology-review.md",
     "examples/demo/sample-journal.md",
@@ -118,6 +119,14 @@
       "reason": "User package copy is retained for standalone runtime docs and may lag developer-only framing."
     },
     {
+      "path": "docs/result-distribution-setup.md",
+      "reason": "User package keeps the same distribution contract but links to standalone Feishu AI deployment guidance instead of the maintainer's personal environment guide."
+    },
+    {
+      "path": "docs/local-feishu-daily-feedback-entry.md",
+      "reason": "User package explains first-time standalone setup and omits the maintainer's UU Remote preference, personal runtime facts, and controlled validation identifiers."
+    },
+    {
       "path": "perspectives/chronicle.md",
       "reason": "User package perspective prompt is retained as an exported standalone variant."
     },
@@ -171,6 +180,7 @@
     ".zhiji-user-sync.json",
     "docs/release-acceptance-2026-07-09.md",
     "docs/release-checklist.md",
+    "docs/feishu-ai-deployment.md",
     "docs/user-smoke-test-checklist.md",
     "examples/beta/life-design-topic.md",
     "examples/beta/logs/2026-07月日志.md",

@@ -176,14 +176,14 @@ if ((Read-Utf8 'AGENTS.md') -notmatch [regex]::Escape('docs/development-governan
 }
 
 $boundarySpec = Read-Utf8 'docs/specs/directory-boundary-tightening.md'
-if ($boundarySpec -notmatch '(?m)^status: 已完成$' -or
+if ($boundarySpec -notmatch '(?m)^status: 已完成\r?$' -or
     $boundarySpec -match '(?m)^- \[ \]' -or
     $boundarySpec -match [regex]::Escape('待实施')) {
   Add-Failure 'directory boundary spec status drifted from its completed v1.5.5 implementation'
 }
 
 $auditSpec = Read-Utf8 'docs/specs/audit-cleanup.md'
-if ($auditSpec -notmatch '(?m)^status: 已完成$' -or
+if ($auditSpec -notmatch '(?m)^status: 已完成\r?$' -or
     $auditSpec -match [regex]::Escape('workflow 禁用词内嵌项待后续处理')) {
   Add-Failure 'audit cleanup spec still reports a completed runtime-contract migration as pending'
 }

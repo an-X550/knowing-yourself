@@ -46,6 +46,44 @@ if ($shared -notcontains '.claude/shared/contracts/codex-natural-language-routin
   Add-Failure 'Codex natural-language routing contract is not declared shared'
 }
 
+foreach ($requiredShared in @(
+  '.claude/workflows/local-feishu-daily-feedback.ps1',
+  '.claude/shared/local-feishu-daily-feedback-config.example.json'
+)) {
+  if ($shared -notcontains $requiredShared) {
+    Add-Failure "local Feishu runtime is not declared shared: $requiredShared"
+  }
+}
+
+$userDeploymentSource = 'packaging/zhiji-user-overlay/docs/feishu-ai-deployment.md'
+$userEntrySource = 'packaging/zhiji-user-overlay/docs/local-feishu-daily-feedback-entry.md'
+$userReadmeSource = 'packaging/zhiji-user-overlay/README.md'
+foreach ($requiredSource in @($userDeploymentSource, $userEntrySource)) {
+  if (-not (Test-Path -LiteralPath (Join-Path $repoRoot $requiredSource) -PathType Leaf)) {
+    Add-Failure "missing user Feishu deployment source: $requiredSource"
+  }
+}
+
+$deploymentText = Read-Utf8 $userDeploymentSource
+foreach ($requiredTerm in @('Codex', 'Claude', 'DeepSeek', 'lark-cli', 'dida365', 'API key', 'human authorization')) {
+  if ($deploymentText -notmatch [regex]::Escape($requiredTerm)) {
+    Add-Failure "user Feishu deployment guide is missing: $requiredTerm"
+  }
+}
+
+$userReadmeText = Read-Utf8 $userReadmeSource
+if ($userReadmeText -notmatch 'docs/feishu-ai-deployment\.md') {
+  Add-Failure 'user README does not link the Feishu AI deployment guide'
+}
+
+$mainFeishuWorkflow = Read-Utf8 '.claude/workflows/local-feishu-daily-feedback.ps1'
+if ($mainFeishuWorkflow -notmatch '"--model", "gpt-5\.4"') {
+  Add-Failure 'local Feishu runtime does not pin GPT-5.4'
+}
+if ($mainFeishuWorkflow -notmatch '@\("login", "status"\)' -or $mainFeishuWorkflow -match 'probePrompt') {
+  Add-Failure 'local Feishu runtime preflight must check login without generating model output'
+}
+
 $overlayRoot = Join-Path $repoRoot 'packaging/zhiji-user-overlay'
 $overlayFiles = Get-ChildItem -LiteralPath $overlayRoot -Recurse -File -Force | ForEach-Object {
   Normalize-Path $_.FullName.Substring($overlayRoot.Length + 1)
