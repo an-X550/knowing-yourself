@@ -238,7 +238,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tests/project-integrity.test
 
 Expected: 新入口测试 PASS；project-integrity 仍只允许两个已知历史规格漂移失败，不能出现新增失败。
 
-- [ ] **Step 6: 提交 Task 3**
+- [x] **Step 6: 提交 Task 3**
 
 ```powershell
 git add -- .claude/workflows/local-feishu-daily-feedback.ps1 tests/local-feishu-daily-feedback-entry.tests.ps1 docs/local-feishu-daily-feedback-entry.md README.md
@@ -262,7 +262,7 @@ git commit -m "docs: 补充本地飞书入口运行说明"
 - Consumes: Task 3 的 Preflight/Run。
 - Produces: 真实 `lark-cli` 与 Codex 预检证据、一条手机消息端到端结果、重复消息零新增副作用。
 
-- [ ] **Step 1: 安装或定位官方 CLI，不新增应用**
+- [x] **Step 1: 安装或定位官方 CLI，不新增应用**
 
 若 shell 找不到 `lark-cli`，执行官方安装：
 
@@ -274,7 +274,7 @@ lark-cli auth status --json --verify
 
 复用现有「知己 CLI」应用。若 auth status 指示缺少配置或登录，按官方返回完成 `config init` / `auth login`；若仅缺消息 scope 或事件订阅，只增加 `im:message.p2p_msg:readonly`、`im:message:send_as_bot` 和 `im.message.receive_v1` 所需最小能力，不扩大其他权限。
 
-- [ ] **Step 2: 定位可执行 Codex CLI 并做非交互预检**
+- [x] **Step 2: 定位可执行 Codex CLI 并做非交互预检**
 
 优先使用用户级独立 Codex CLI，不使用受 WindowsApps 执行限制的桌面包路径。运行：
 
@@ -285,7 +285,7 @@ codex exec --sandbox read-only --ephemeral "只读取当前项目名称并只输
 
 Expected: exit 0，最终 stdout 为 `zhiji_runtime_ready`。失败则停止，不进入真实飞书测试。
 
-- [ ] **Step 3: 创建忽略的个人配置并运行 Preflight**
+- [x] **Step 3: 创建忽略的个人配置并运行 Preflight**
 
 从示例复制配置，写入已经验证的唯一本人 `open_id` 和 CLI 绝对路径；不写 App Secret 或 token。运行：
 
@@ -299,17 +299,23 @@ Expected: `lark=ready codex=ready config=ready`。
 
 启动 `-Mode Run` 后，从手机依次验证：无前缀文本只返回使用说明；本人 `日志：<受控样本>` 进入处理；群聊或非本人消息不触发 Codex。若无法安全获得第二账号，保留单元测试证据，不制造新账号。
 
+2026-08-12 证据：本人手机 p2p 消息已真实接收并收到完整每日反馈；其他用户、群聊、非文本和无前缀分支仅有单元测试证据，因此本步骤保持未完成。
+
 - [ ] **Step 5: 完成受控端到端与防重验收**
 
 选择不存在的受控日期，消息正文包含日期、本人经历、具体事实、状态和明确意图。记录分发前后 SHA、飞书 token/URL、滴答 task_id 和入口状态。重复投递同一 `message_id` 或平台重放事件时，Codex 调用次数、报告写入、飞书文档和滴答任务新增数必须全部为 0。
 
 若平台无法人工重放同一 `message_id`，使用已捕获的脱敏事件 JSON 走同一处理函数完成防重验收，不伪造远端成功。
 
+2026-08-12 证据：受控消息完成本地日志、每日反馈、手机完整回复和同 message_id 零重分析回放；首次自动双分发失败，飞书与滴答只在显式恢复后成功，因此本步骤保持未完成，等待下一条真实新日志验证。
+
 - [ ] **Step 6: 更新版本与项目事实**
 
 只有 Preflight 和受控端到端真实通过，才把能力记为“本地验证可用，待 14 天真实使用观察”。将版本升级为 `1.16.0`，在 CHANGELOG 记录用户价值、Windows 在线约束和未云化边界；PROJECT_STATUS 增加 10/14 天观察门。若真实链路未通过，则记录“已实现但未验证”及具体缺口，不宣称可用。
 
-- [ ] **Step 7: 运行完整回归**
+本轮按用户最新决定不做项目用户版分发，也不发布版本；仅在 `PROJECT_STATUS.md` 记录受控部分验证与剩余观察门。
+
+- [x] **Step 7: 运行完整回归**
 
 逐个运行 `tests/*.tests.ps1`。Expected：除已知 `project-integrity` 两项历史规格状态漂移外全部 PASS；新入口测试必须 PASS。再运行 `git diff --check`，检查 AGENTS/CLAUDE 仍逐字一致、版本与 PROJECT_STATUS/README 一致。
 

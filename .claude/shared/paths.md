@@ -55,6 +55,7 @@ last_updated: 2026-07-11
 | `output.readiness_delivery_state` | `复盘/.readiness-delivery-state.md` | `review-readiness-checker` 的 delivery 模式 |
 | `output.local_feishu_entry_config` | `复盘/.local-feishu-daily-feedback-config.json` | 用户从示例复制后设置唯一 open_id 与可执行路径 |
 | `output.local_feishu_entry_state` | `复盘/.local-feishu-daily-feedback-state.json` | 本地飞书入口记录最小消息防重状态 |
+| `output.local_feishu_entry_runtime_log` | `复盘/.local-feishu-daily-feedback-runtime.log` | 只记录时间、阶段、规范化错误码和截断诊断，不保存日志或反馈正文 |
 | `output.perspective_analysis` | `关于我/Analysis/{视角}/YYYY-MM-{视角}.md` | `monthly-processor` |
 
 ## 上下文文件
