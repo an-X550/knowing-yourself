@@ -118,7 +118,7 @@ git commit -m "feat: 添加飞书日志入口路由"
 - Consumes: Task 1 的 `process` decision、配置对象和状态文件。
 - Produces: `Invoke-ZhijiEntryDecision -Decision -Config -CodexInvoker -ReplyInvoker`；状态条目只含 `message_id`, `received_at`, `status`, `error_code`, `journal_date`。
 
-- [ ] **Step 1: 写状态与执行失败测试**
+- [x] **Step 1: 写状态与执行失败测试**
 
 增加临时状态目录和两个注入 scriptblock，验证：首次调用按 `processing → success` 写状态且各调用一次；同一 `message_id` 再次调用不执行 Codex；Codex 失败写 `failed/runtime_unavailable` 且不调用结果回复；飞书最终回复失败写 `failed/reply_failed` 且第二次不重新分析。
 
@@ -131,13 +131,13 @@ Assert-Equal $result.status 'success' 'first request must succeed'
 Assert-Equal $calls.codex 1 'Codex must run once'
 ```
 
-- [ ] **Step 2: 运行测试并确认 RED**
+- [x] **Step 2: 运行测试并确认 RED**
 
 Run: `powershell -NoProfile -ExecutionPolicy Bypass -File tests/local-feishu-daily-feedback-entry.tests.ps1`
 
 Expected: FAIL，原因是状态和执行函数尚不存在。
 
-- [ ] **Step 3: 实现最小状态和命令适配**
+- [x] **Step 3: 实现最小状态和命令适配**
 
 实现 UTF-8 JSON 状态读写、固定 Codex prompt、`codex exec --sandbox workspace-write --ephemeral` 调用、`lark-cli im +messages-reply --message-id ... --text ... --idempotency-key ... --as bot` 调用。外部命令路径只来自已校验配置或 `Get-Command`，全部参数使用数组传入，不通过字符串重新解释。
 
@@ -166,7 +166,7 @@ Expected: FAIL，原因是状态和执行函数尚不存在。
 | `output.local_feishu_entry_state` | `复盘/.local-feishu-daily-feedback-state.json` | 本地飞书入口记录最小消息防重状态 |
 ```
 
-- [ ] **Step 4: 运行测试和现有相关回归**
+- [x] **Step 4: 运行测试和现有相关回归**
 
 Run:
 
