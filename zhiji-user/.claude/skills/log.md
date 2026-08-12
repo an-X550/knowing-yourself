@@ -62,20 +62,21 @@ description: 用户粘贴模板日志或用“日志：”“日记：”“记�
 2. 不要在 `log` skill 内手写另一套分析流程；如 Task 不可用，再按 `.claude/shared/contracts/daily-feedback.md` 和 `.claude/agents/daily-analyzer.md` 的输出格式临时回退。
 
 分析完成后：
-1. 将输出展示给用户
-2. 确保 `output.daily_feedback` 的父目录存在 → Write 保存到 `output.daily_feedback`（覆盖已有，不添加额外说明或自检行）
-3. 读取 `context.verified_patterns`，按 `.claude/shared/contracts/evidence-and-verification.md` 写回上一条行动的验证结果：
+1. 确保 `output.daily_feedback` 的父目录存在 → Write 保存到 `output.daily_feedback`（覆盖已有，不添加额外说明或自检行）。写入后立即从解析出的实际路径重新读取；只有本次 Write 明确成功、路径一致、文件存在、非空并符合日反馈最低结构，才视为本次新写入成功。
+2. 读取 `context.verified_patterns`，按 `.claude/shared/contracts/evidence-and-verification.md` 写回上一条行动的验证结果：
    - `✅ 做到了`：第一次记“部分支持”，重复成立记“多次支持”，达到契约阈值后才移入“已确认的模式”
    - `❌ 没做`：具体干预记“本次未奏效”；同类行动连续 3 次没做时降低门槛或停止重复建议
    - `⚠️ 证据不足`：保留“证据不足”，不升级、不证伪
    - 明确反例先记“出现反例”，满足证伪条件后才写入“已证伪的假说”
-4. 仅在成功保存新的正式日反馈并完成验证沉淀后，使用 Task 调用 `review-readiness-checker`：
+3. **结果分发**：若本次请求明确包含“仅本地”，完成本地反馈写入、重新读取和验证沉淀后不调用结果分发；否则读取 `.claude/shared/contracts/result-distribution.md`，仅把上一步已确认的本次新写入交给 `distribute output.daily_feedback <resolved-local-path>`。外部失败不修改本地反馈或验证沉淀；分发摘要只追加到聊天，不写入报告正文。若两个渠道均为 `skipped_not_configured`，不追加摘要。
+4. 将同一份反馈文本展示给用户，并说明验证沉淀是否更新；有实际分发结果时再追加分发摘要。
+5. 仅在成功保存新的正式日反馈并完成验证沉淀后，使用 Task 调用 `review-readiness-checker`：
    ```text
    delivery
    ```
    若返回非空文本，在日反馈展示之后单独追加该行 `🔔 提醒：...`。提醒不写入 output.daily_feedback，也不改变已保存反馈或验证沉淀。
 
-D 级输入、日期未确认或分析失败不调用提醒投递。
+D 级输入、日期未确认或分析失败不调用提醒投递，也不调用结果分发。写入或重新读取校验失败同样不调用结果分发，也不调用提醒投递。
 
 ---
 

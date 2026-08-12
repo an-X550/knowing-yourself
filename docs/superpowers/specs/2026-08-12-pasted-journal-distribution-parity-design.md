@@ -37,7 +37,7 @@
 ## 修改范围
 
 - 修改 `.claude/skills/log.md`。
-- 同步 `packaging/zhiji-user-overlay/.claude/skills/log.md`，保持运行真相与用户版来源一致。
+- 同步 `packaging/zhiji-user-overlay/.claude/skills/log.md` 的单日日志后置分发语义；保留其因不携带 `/import` 而存在的多日导入 override。
 - 在 `tests/result-distribution-routing.tests.ps1` 增加粘贴入口的分发顺序、停止条件和仅本地断言。
 - 按项目治理同步用户可见版本、`PROJECT_STATUS.md` 和 `CHANGELOG.md`。
 
@@ -46,7 +46,7 @@
 1. 新增断言在修改 `log.md` 前因缺少结果分发链路而失败。
 2. 最小实现后该测试通过。
 3. 项目全部现有测试通过。
-4. 主项目与 overlay 的 `log.md` 保持逐字一致。
+4. 主项目与 overlay 的单日日志后置分发段通过同一组断言；不要求整文件逐字一致。
 5. 不调用真实飞书或滴答；本次只验证路由契约，不制造外部副作用。
 
 ## 不做什么

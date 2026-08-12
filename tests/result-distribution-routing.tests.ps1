@@ -116,6 +116,37 @@ foreach ($path in @(
   Assert-Sequence $path @('写入文件', '重新读取', 'distribute output.daily_feedback <resolved-local-path>', '展示给用户')
 }
 
+$logRoutes = @(
+  '.claude/skills/log.md',
+  'packaging/zhiji-user-overlay/.claude/skills/log.md'
+)
+foreach ($path in $logRoutes) {
+  Assert-Contains $path @(
+    $contractPath,
+    'distribute output.daily_feedback <resolved-local-path>',
+    '本次新写入',
+    '重新读取',
+    '非空',
+    '结构',
+    'context.verified_patterns',
+    '本次请求明确包含“仅本地”',
+    '不调用结果分发',
+    'D 级输入',
+    '日期未确认',
+    '分析失败',
+    '外部失败不修改本地反馈或验证沉淀',
+    '分发摘要只追加到聊天',
+    '不写入报告正文'
+  )
+  Assert-Sequence $path @(
+    'Write 保存到 `output.daily_feedback`',
+    '重新读取',
+    'context.verified_patterns',
+    'distribute output.daily_feedback <resolved-local-path>',
+    '将同一份反馈文本展示给用户'
+  )
+}
+
 foreach ($path in @(
   '.claude/commands/weekly-review.md',
   'packaging/zhiji-user-overlay/.claude/commands/weekly-review.md',
