@@ -10,3 +10,8 @@
 /规划/
 .vscode/
 .obsidian/
+/apps/zhiji-desktop/node_modules/
+/apps/zhiji-desktop/.vite/
+/apps/zhiji-desktop/out/
+/apps/zhiji-desktop/coverage/
+/apps/zhiji-desktop/playwright-report/
