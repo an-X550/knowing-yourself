@@ -43,6 +43,8 @@ lark-cli auth status
 
 `config init --new` 是官方交互入口。应用凭证只在该交互中交给 CLI，不要改写成带 secret 的命令，也不要把交互内容复制进聊天。日常导入使用企业自建应用的 application identity 和 `--as bot`；这里的 bot 是开放平台身份，不是飞书聊天机器人。
 
+日常导入不要求每次重新执行用户授权：bot 身份负责创建，新文档的 `permission_grant.status = granted` 证明专用用户已取得 `full_access`。用户 OAuth 只用于首次识别专用用户和授权恢复，不是每次生成报告的前置条件。只有 `permission_grant.status` 为 `skipped` 或 `failed`，或专用用户实际不可见时，才检查 `lark-cli auth status --json --verify`；需要恢复时重新完成 Docs/Drive 用户授权，再用已有 document token 和官方 `drive +member-add` 补授权限。不得重新导入同一文件，也不得因此创建副本。
+
 如果只为识别当前用户并把专用文件夹授予该用户，可在设置阶段将用户授权限定为 Docs 与 Drive：
 
 ```powershell
@@ -86,6 +88,8 @@ lark-cli drive +import --file "<WORKSPACE_RELATIVE_DISPOSABLE_MD>" --type docx -
 仓库示例 `.claude/shared/result-distribution-config.example.json` 中顶层、渠道和全部 result type 都是 `"enabled": false` 或 false 开关。把它复制到 `output.result_distribution_config` 对应的忽略路径后，只启用用户明确同意且 disposable 测试已通过的渠道/结果类型。
 
 首次历史沉淀必须先生成路径与 SHA-256 清单，经用户确认后再串行导入。新生成的白名单产物可按配置自动分发；已有文件的内容更新、改名或移动仍按当前 `changed_after_delivery` 规则显式处理，不静默覆盖，也不自动删除飞书内容。
+
+当前项目的 60 项历史候选已经用户确认并完成串行导入；历史同步不计入三次真实新写入观察。非 Markdown 收藏附件只有在真实收录需求出现时才做首次验收，不为测试制造私人内容。
 
 启用前依次确认：本地报告写入与复读成功、飞书为 `ready`、对应区域 MCP 为 `ready`、相同 fixture 重跑不会重复创建。任一条件缺失就保持该渠道关闭，另一个渠道可独立设置。
 

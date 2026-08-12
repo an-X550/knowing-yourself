@@ -138,6 +138,7 @@ $userReadme = Read-Utf8 'packaging/zhiji-user-overlay/README.md'
 $profileReadme = Read-Utf8 'packaging/zhiji-user-overlay/关于我/README.md'
 $currentVersion = (Read-Utf8 'VERSION').Trim()
 $mainReadme = Read-Utf8 'README.md'
+$projectStatus = Read-Utf8 'PROJECT_STATUS.md'
 if ($mainReadme -notmatch [regex]::Escape('自然语言手动检查')) {
   Add-Failure 'main README does not describe the manual natural-language readiness check'
 }
@@ -158,6 +159,12 @@ if ($userReadme -match '画像类私有内容默认会被 Git 忽略') {
 }
 if ($profileReadme -match '运行时私有文件默认已被 Git 忽略') {
   Add-Failure 'profile README claims tracked profile seed files are ignored by Git'
+}
+if ($projectStatus -notmatch [regex]::Escape('历史 60 项已按人工确认完成同步')) {
+  Add-Failure 'PROJECT_STATUS does not record the completed 60-item Feishu history sync'
+}
+if ($projectStatus -match [regex]::Escape('历史 60 项须经人工确认后同步')) {
+  Add-Failure 'PROJECT_STATUS still claims the completed Feishu history sync is pending confirmation'
 }
 
 $governance = Read-Utf8 'docs/development-governance.md'
