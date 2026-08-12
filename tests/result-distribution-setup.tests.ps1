@@ -126,6 +126,26 @@ foreach ($path in @($mainGuide, $overlayGuide)) {
 }
 
 Assert-SameFile $mainGuide $overlayGuide
+Assert-SameFile $overlayGuide 'zhiji-user/docs/result-distribution-setup.md'
+
+foreach ($path in @($mainGuide, $overlayGuide, 'zhiji-user/docs/result-distribution-setup.md')) {
+  Assert-Contains $path @(
+    '不是解压即用',
+    '本地日志、日反馈和复盘仍可正常使用',
+    '主项目或维护者环境中的验收结果，不能替代你在自己的电脑和账号上完成首次设置',
+    '复盘/.result-distribution-config.json',
+    '复制配置示例',
+    '完成一次脱敏测试后再打开开关',
+    '## 给 AI 的执行契约',
+    '每次只要求用户完成一个动作',
+    '用户回复“继续”后从暂停点继续',
+    '不得要求用户把 App Secret、access token、OAuth token 或 MCP token 发到聊天中',
+    'folder_token',
+    '本地状态',
+    '飞书状态',
+    '滴答状态'
+  )
+}
 
 Assert-Contains 'README.md' @(
   'docs/result-distribution-setup.md',
@@ -137,8 +157,57 @@ Assert-Contains 'packaging/zhiji-user-overlay/README.md' @(
   'docs/result-distribution-setup.md',
   '结果分发',
   '默认关闭',
-  '仅本地'
+  '仅本地',
+  '不是解压即用',
+  '主项目中的验收结果不等于你的电脑和账号已经完成授权',
+  '复盘/.result-distribution-config.json',
+  '## 功能一览：你可以让 AI 做什么',
+  '年度回顾',
+  '飞书沉淀',
+  '滴答行动',
+  '普通提醒',
+  '## 可选：让 AI 帮你配置飞书和滴答',
+  '请为当前知己用户版完成首次检查和可选结果分发配置',
+  '我回复“继续”后，从暂停处接着执行',
+  '## 必须由你完成的操作',
+  'App Secret、access token、OAuth token、MCP token',
+  'folder_token',
+  'project_id',
+  '## 配好后，日常可以直接这样说',
+  '本次仅本地，不要同步飞书和滴答',
+  '只报告本地、飞书、滴答三项状态'
 )
+Assert-Contains 'zhiji-user/README.md' @(
+  'docs/result-distribution-setup.md',
+  '结果分发',
+  '默认关闭',
+  '仅本地',
+  '不是解压即用',
+  '主项目中的验收结果不等于你的电脑和账号已经完成授权',
+  '复盘/.result-distribution-config.json',
+  '## 功能一览：你可以让 AI 做什么',
+  '年度回顾',
+  '飞书沉淀',
+  '滴答行动',
+  '普通提醒',
+  '## 可选：让 AI 帮你配置飞书和滴答',
+  '请为当前知己用户版完成首次检查和可选结果分发配置',
+  '我回复“继续”后，从暂停处接着执行',
+  '## 必须由你完成的操作',
+  'App Secret、access token、OAuth token、MCP token',
+  'folder_token',
+  'project_id',
+  '## 配好后，日常可以直接这样说',
+  '本次仅本地，不要同步飞书和滴答',
+  '只报告本地、飞书、滴答三项状态'
+)
+
+foreach ($path in @('packaging/zhiji-user-overlay/.gitignore', 'zhiji-user/.gitignore')) {
+  Assert-Contains $path @(
+    '/复盘/.result-distribution-config.json',
+    '/复盘/.result-distribution-state.json'
+  )
+}
 
 if ($failures.Count -gt 0) {
   Write-Host "FAIL: result distribution setup checks ($($failures.Count))" -ForegroundColor Red

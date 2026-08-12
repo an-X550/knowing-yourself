@@ -7,6 +7,8 @@
 # Generated review outputs
 /复盘/**/*.md
 !/复盘/**/.gitkeep
+/复盘/.result-distribution-config.json
+/复盘/.result-distribution-state.json
 
 # Private runtime context files
 /关于我/*.md
