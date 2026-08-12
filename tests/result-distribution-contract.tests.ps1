@@ -132,7 +132,8 @@ foreach ($path in @($mainContract, $overlayContract)) {
     'access token',
     'MCP token',
     '凭证存储',
-    '三行',
+    '先说本地事实',
+    '按来源和 TickTick 所处阶段返回',
     '不得宣称本地与外部“整体失败”'
   )
   Assert-NotContains $path @(
@@ -188,6 +189,7 @@ if (-not [string]::IsNullOrWhiteSpace($exampleText)) {
     if ($example.enabled -ne $false) { Add-Failure 'example config enabled must default to false' }
     if ($example.feishu.enabled -ne $false) { Add-Failure 'example config feishu.enabled must default to false' }
     if ($example.ticktick.enabled -ne $false) { Add-Failure 'example config ticktick.enabled must default to false' }
+    if ($example.ticktick.list_name -ne '知己行动') { Add-Failure 'example config ticktick.list_name must default to 知己行动' }
     if ($example.feishu.folder_token -ne '') { Add-Failure 'example config must not contain a folder token' }
     foreach ($folderKey in @('daily_feedback','weekly_report','monthly_report','project_report','yearly_report','life_design_report','thinking_topic','collection_root')) {
       if (-not $example.feishu.folders.PSObject.Properties[$folderKey]) {
@@ -199,6 +201,11 @@ if (-not [string]::IsNullOrWhiteSpace($exampleText)) {
     foreach ($typeKey in @('collection_topic','collection_attachment')) {
       if (-not $example.result_types.PSObject.Properties[$typeKey]) {
         Add-Failure "example config missing result_types.$typeKey"
+      }
+    }
+    foreach ($typeKey in @('project_report','yearly_report','life_design_report','collection_topic','collection_attachment')) {
+      if ($example.result_types.$typeKey.ticktick -ne $false) {
+        Add-Failure "example config must keep unsupported TickTick source disabled: $typeKey"
       }
     }
     if (@('dida365', 'ticktick') -notcontains $example.ticktick.region) {
@@ -289,7 +296,7 @@ if (-not (Test-Path -LiteralPath $fixturePath -PathType Leaf)) {
   if (-not $templateMatch.Success) {
     Add-Failure 'production Feishu command template is missing'
   } else {
-    $constructedCommand = $templateMatch.Value.
+    $constructedCommand = $templateMatch.Value.TrimEnd("`r").
       Replace('<workspace-relative-md-path>', $workspaceRelativeFixturePath).
       Replace('<folder-token>', 'folder-token-placeholder').
       Replace('<document-title>', '知己·每日反馈·2026-08-11')
@@ -322,36 +329,47 @@ foreach ($path in @($mainContract, $overlayContract)) {
     '已授权',
     'create-task',
     'list/get/search/update/complete',
-    'action_title',
-    'source_path',
-    'check_condition',
-    'list_name',
-    'due_date',
+    '只有四类来源可以产生滴答任务',
+    '`output.daily_feedback`',
+    '`output.weekly_report`',
+    '`output.monthly_report`',
+    '`context.thinking_topic`',
+    '只传任务标题、截止日期或时间以及目标清单',
+    '不传 description',
     '⚡ 明天试试',
     '行动：',
     '最多 1 项',
     '## 六、下周规划',
     '## 六、下月规划',
-    '项目复盘',
-    '最多 3 项',
-    '年度',
-    '人生设计',
-    '近期实验',
+    '周/月同一自然日合计默认最多 3 项',
     '0. 当前行动卡',
     'skipped_no_action',
     '原子、可控、可检查',
-    '下一本地日历日',
+    '本次成功生成后的下一本地日历日',
     '下一 ISO 周的周日',
     '下一自然月末',
     '报告中的明确日期优先',
-    '没有 due_date',
+    '确认后的第 7 个本地日历日',
+    '不自动顺延',
     '宽泛方向',
     '分析陈述',
     '升级提醒',
     '不得发明',
-    'source_path + normalized_title',
+    'normalized_title + exact_due_date_or_time',
+    '飞书继续使用 `source_path + SHA-256 + channel`',
+    'TickTick 不使用报告 SHA-256 阻断新候选',
+    '等待确认不调用 create-task，也不写 TickTick `last_attempt`',
+    '摘要按来源和 TickTick 所处阶段返回',
+    '完成判断只读取后续日志',
     'task_id',
     '每项任务分别记录'
+  )
+  Assert-NotContains $path @(
+    '| 项目复盘 | 后续规划',
+    '| 年度 / 人生设计 |',
+    'source_path + normalized_title',
+    '逐项传入 `action_title`、description'
+    '返回以 `本地已保存：<source_path>` 开头的本地优先三行聊天摘要'
   )
 }
 
@@ -359,7 +377,7 @@ $dailyText = Read-Utf8 $dailyFixture
 if (-not [string]::IsNullOrWhiteSpace($dailyText)) {
   $dailyActions = [regex]::Matches($dailyText, '(?m)^行动：(?<title>\S.*)$')
   if ($dailyActions.Count -ne 1) { Add-Failure "daily extraction must return exactly 1 action, got $($dailyActions.Count)" }
-  if ($dailyActions.Count -gt 0 -and $dailyActions[0].Groups['title'].Value -ne '打开示例文件并检查第一行标题。') {
+  if ($dailyActions.Count -gt 0 -and $dailyActions[0].Groups['title'].Value.TrimEnd("`r") -ne '打开示例文件并检查第一行标题。') {
     Add-Failure 'daily extraction returned the wrong production fixture action'
   }
 }

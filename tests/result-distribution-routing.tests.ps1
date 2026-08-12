@@ -107,9 +107,28 @@ foreach ($path in @(
     'D 级输入',
     '无日志',
     '分析失败',
-    '都不调用结果分发'
+    '都不调用结果分发',
+    '自动创建',
+    '同一天',
+    '重新分析',
+    '历史补写'
   )
   Assert-Sequence $path @('写入文件', '重新读取', 'distribute output.daily_feedback <resolved-local-path>', '展示给用户')
+}
+
+foreach ($path in @(
+  '.claude/commands/weekly-review.md',
+  'packaging/zhiji-user-overlay/.claude/commands/weekly-review.md',
+  '.claude/commands/monthly-review.md',
+  'packaging/zhiji-user-overlay/.claude/commands/monthly-review.md'
+)) {
+  Assert-Contains $path @(
+    '只展示候选',
+    '最终整组',
+    '明确确认后',
+    '不创建',
+    '本次没有可直接创建的滴答任务。'
+  )
 }
 
 foreach ($path in @(
@@ -160,7 +179,10 @@ foreach ($path in $naturalRoutes) {
     '不写入报告正文',
     '保持原有聊天输出不变',
     '本次请求明确包含“仅本地”',
-    '不调用结果分发'
+    '不调用结果分发',
+    '最终整组',
+    '明确确认后',
+    '项目复盘不产生滴答候选'
   )
 }
 
@@ -178,7 +200,10 @@ foreach ($path in $topicRoutes) {
     '未经确认',
     '不调用结果分发',
     '分发摘要只追加到聊天',
-    '本次请求明确包含“仅本地”'
+    '本次请求明确包含“仅本地”',
+    '保存并创建',
+    '只保存主题',
+    '第 7 个本地日历日'
   )
 }
 

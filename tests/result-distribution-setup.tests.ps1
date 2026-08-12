@@ -93,6 +93,12 @@ foreach ($path in @($mainGuide, $overlayGuide)) {
     '官方授权页面',
     '恰好一个 create-task',
     '一次性测试任务',
+    '任务标题、截止时间和目标清单',
+    '每日反馈自动创建',
+    '周复盘和月复盘',
+    '最终整组',
+    '主题思考',
+    '完成判断只读取后续日志',
     '不读取任务',
     '"enabled": false',
     '## 回滚与停用',
@@ -110,6 +116,7 @@ foreach ($path in @($mainGuide, $overlayGuide)) {
     'get-task',
     'search-tasks',
     'complete-task'
+    '核对返回的标题、描述、清单'
   )
 }
 

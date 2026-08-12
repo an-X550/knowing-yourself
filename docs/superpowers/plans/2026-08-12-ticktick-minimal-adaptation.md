@@ -36,7 +36,7 @@
 - Consumes: 现有 `Assert-Contains`、`Assert-NotContains`、`Assert-Sequence`、`Assert-SameFile` 测试辅助函数。
 - Produces: 对四来源白名单、确认门、字段限制、日期、上限、判重、失败和仅本地语义的可执行契约断言。
 
-- [ ] **Step 1: 改写 TickTick 适配器断言**
+- [x] **Step 1: 改写 TickTick 适配器断言**
 
 在 `result-distribution-contract.tests.ps1` 中要求主契约与 overlay 契约包含：
 
@@ -63,7 +63,7 @@ Assert-NotContains $path @(
 
 同时断言默认日反馈日期按“本次成功生成后的下一本地日历日”，周/月相对日期锚定报告规划周期，主题无日期时为确认后第 7 日；过期日期不得自动顺延。
 
-- [ ] **Step 2: 增加路由确认门断言**
+- [x] **Step 2: 增加路由确认门断言**
 
 在 `result-distribution-routing.tests.ps1` 中要求：
 
@@ -76,11 +76,11 @@ Assert-Contains '.claude/shared/contracts/topic-thinking-persistence.md' @('保�
 
 对 Codex 自然语言路由添加相同周/月确认断言，并要求项目复盘 handoff 不产生 TickTick 候选。
 
-- [ ] **Step 3: 修正设置文档测试预期**
+- [x] **Step 3: 修正设置文档测试预期**
 
 要求设置文档的一次性任务只核对标题、截止时间和目标清单，明确四来源以及周/月确认门；禁止继续要求 description。
 
-- [ ] **Step 4: 运行聚焦测试确认 RED**
+- [x] **Step 4: 运行聚焦测试确认 RED**
 
 Run:
 
@@ -109,7 +109,7 @@ Expected: 三个测试至少各有一项失败，指出旧契约仍含多余来�
 - Consumes: `distribute <path-key> <resolved-local-path>` 的既有写后入口与独立 Feishu/TickTick 渠道状态。
 - Produces: `extract_ticktick_candidates(source_type, source_path, content, cycle_anchor, confirmation_context)` 语义；`create_confirmed_ticktick_tasks(candidates)` 只在来源策略允许时调用唯一 create-task 能力。
 
-- [ ] **Step 1: 重写 TickTick 契约章节**
+- [x] **Step 1: 重写 TickTick 契约章节**
 
 将共享契约的 TickTick 部分明确为：
 
@@ -122,23 +122,23 @@ all other source types -> skipped_not_supported for TickTick; Feishu behavior un
 
 任务创建只传 `title`、`due_date_or_time` 和配置目标清单；状态保存来源标识、规范化标题、精确截止时间、结果、`task_id`、`attempted_at`。定义当日周/月上限、精确判重、过期日期、部分失败一次显式重试、状态写入失败和报告后改动语义。
 
-- [ ] **Step 2: 修正日反馈路由**
+- [x] **Step 2: 修正日反馈路由**
 
 在新反馈写入、复读、验证沉淀后，按契约自动创建唯一行动。今天或昨天的反馈截止到本次成功生成后的下一本地日历日；更早历史补写只展示候选并要求新的未来日期。同日重跑相同键跳过，不同键要求替代确认，旧任务不修改。
 
-- [ ] **Step 3: 添加周/月确认门**
+- [x] **Step 3: 添加周/月确认门**
 
 保留写后 Feishu 分发；TickTick 在报告写后只提取并显示 `标题｜绝对日期`。没有候选时输出固定一句。允许自然语言修改，修改后重显最终整组；只有明确确认该整组后才创建。生成请求中的“同步到滴答”只表示意图，不算最终确认；未确认候选不入队、不催办、不写待创建状态。“仅本地”不显示候选。
 
-- [ ] **Step 4: 添加主题合并确认**
+- [x] **Step 4: 添加主题合并确认**
 
 在主题最终沉淀确认中同时展示唯一合格行动与绝对截止时间。用户确认保存即授权保存并创建；“只保存主题”只写本地/按既有 Feishu 规则分发，不创建滴答。等待条件或当前不行动时不创建。
 
-- [ ] **Step 5: 同步 Codex 路由和 overlay**
+- [x] **Step 5: 同步 Codex 路由和 overlay**
 
 Codex 自然语言周/月入口采用相同候选确认门，项目复盘仍可执行通用分发以支持 Feishu，但 TickTick 返回 `skipped_not_supported`。逐字复制被修改的共享/命令文件到 overlay 对应路径。
 
-- [ ] **Step 6: 运行聚焦测试确认 GREEN**
+- [x] **Step 6: 运行聚焦测试确认 GREEN**
 
 Run the Task 1 three commands. Expected: all PASS.
 
@@ -161,19 +161,19 @@ Run the Task 1 three commands. Expected: all PASS.
 - Consumes: schema version 1 config and existing export manifest.
 - Produces: default-off example with TickTick eligible only for four sources; local runtime enables those four source triggers in the existing “知己行动” list without invoking them immediately.
 
-- [ ] **Step 1: 更新配置语义**
+- [x] **Step 1: 更新配置语义**
 
 示例配置继续全关闭，但项目/年度/人生设计明确保持 TickTick false，只有 daily/weekly/monthly/thinking 被文档列为可启用。忽略的运行配置把这四项 `ticktick` 设为 true；这只让各来源在实际生成时可用，不会在本次开发中调用或批量创建任务。
 
-- [ ] **Step 2: 更新设置文档和 README**
+- [x] **Step 2: 更新设置文档和 README**
 
 设置测试任务只核对标题、截止时间和“知己行动”；说明日反馈自动、周/月最终确认、主题保存确认，以及完成判断来自后续日志。README 只保留一段高层说明，详细规则链接到设置文档。
 
-- [ ] **Step 3: 更新项目状态**
+- [x] **Step 3: 更新项目状态**
 
 把“可选结果分发”状态改为四来源最小适配已实现、待真实验收；真实验收清单写入 3 次日反馈、1 次周复盘和 1 次月复盘或主题。不得宣称尚未发生的真实创建已经完成。
 
-- [ ] **Step 4: 导出用户版并验证镜像**
+- [x] **Step 4: 导出用户版并验证镜像**
 
 Run:
 
@@ -200,11 +200,11 @@ Expected: export completes; all three tests PASS.
 - Consumes: 完成的四来源运行契约和同步用户版。
 - Produces: version `1.15.0`，发布记录、完整验证证据和单个本地实现提交。
 
-- [ ] **Step 1: 递增版本并写发布记录**
+- [x] **Step 1: 递增版本并写发布记录**
 
 将 `VERSION`、根 README 徽章、PROJECT_STATUS 当前版本和用户版版本统一为 `1.15.0`。在 CHANGELOG 顶部新增 `[功能]` 条目，说明四来源、确认门、最小字段、精确判重与排除的复杂能力。
 
-- [ ] **Step 2: 运行全量测试**
+- [x] **Step 2: 运行全量测试**
 
 Run:
 
@@ -219,10 +219,10 @@ if ($failed.Count -gt 0) { throw "Failed suites: $($failed -join ', ')" }
 
 Expected: 13 suites PASS and `$failed.Count` is 0.
 
-- [ ] **Step 3: 运行发布一致性审计**
+- [x] **Step 3: 运行发布一致性审计**
 
 验证：`VERSION`、PROJECT_STATUS、两个 README 均为 `1.15.0`；AGENTS/CLAUDE 哈希相同；主契约、overlay、用户版哈希相同；搜索不到旧 description 传递、项目/年度/人生设计 TickTick 提取表；`git diff --check` 通过。
 
-- [ ] **Step 4: 仅暂存本次实现文件并提交**
+- [x] **Step 4: 仅暂存本次实现文件并提交**
 
 使用 `git status --short` 建立明确文件清单，排除 `AI agent 自动化工作流搭建教程.md` 和忽略的运行配置/状态。按 CHANGELOG 最新条目生成提交信息，执行 `git add -- <explicit files>`、`git diff --cached --check`、`git commit`，最后用 `git log -1 --oneline` 和 `git status --short` 验证。
