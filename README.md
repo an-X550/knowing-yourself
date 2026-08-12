@@ -2,7 +2,7 @@
 
 > 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.15.3-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.15.4-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 这是什么
@@ -49,7 +49,15 @@
 
 一次性或周期性的纯提醒默认使用滴答清单原生通知；Codex 定时任务只在用户明确指定时例外。提醒只通知用户手动开始，不会自动读取文件或生成复盘。
 
-个人验证期可使用[本地飞书每日反馈入口](docs/local-feishu-daily-feedback-entry.md)：电脑保持在线且不休眠时，在手机私聊机器人发送 `日志：<原文>`，复用现有知己日反馈与结果分发；它不是全天候云服务。
+个人验证期可使用[本地飞书每日反馈入口](docs/local-feishu-daily-feedback-entry.md)：电脑保持在线且不休眠时，在手机私聊机器人发送 `日志：<原文>`，复用现有知己日反馈与结果分发；它不是全天候云服务。当前完整运行环境、`gpt-5.4` 分析配置、UU 远程维护、飞书/滴答部署、AI 后端替换边界和云服务器备选统一见[个人飞书入口、远程使用与 AI 部署](docs/personal-feishu-deployment.md)。该文档只服务维护者的个人环境，不进入 `zhiji-user/`。
+
+### 个人手机入口的最短路径
+
+1. 电脑保持联网、不休眠；按当前网络条件保持 VPN 可用。
+2. 运行飞书入口预检与监听；无需打开 Codex 桌面窗口。
+3. 手机私聊机器人发送 `日志：<任意自然语言>`，通常等待 2–5 分钟。
+4. 日反馈先写入本地，再沉淀飞书文档，并把唯一合格行动创建到“知己行动”滴答清单；外部失败不改变本地结果。
+5. 在外需要维护电脑时使用 UU 远程；只有完成 14 天使用观察且本机在线仍是持续阻碍，才考虑云服务器。
 
 ## 维护与分发
 
@@ -96,6 +104,7 @@ powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
 - 用户版完整指南：[`zhiji-user/README.md`](zhiji-user/README.md)
 - 用户版同步流程：[`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)
 - 本地飞书每日反馈入口：[`docs/local-feishu-daily-feedback-entry.md`](docs/local-feishu-daily-feedback-entry.md)
+- 个人飞书环境、UU 远程、飞书/滴答部署、AI 替换与云服务器备选：[`docs/personal-feishu-deployment.md`](docs/personal-feishu-deployment.md)
 - 第一性原理提醒：[`docs/first-principles.md`](docs/first-principles.md)
 - 质量基线与待验收项：[`docs/quality-baseline-matrix.md`](docs/quality-baseline-matrix.md)
 - 模型选择与 A/B/C 对比：[`docs/model-selection.md`](docs/model-selection.md)

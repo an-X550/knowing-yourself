@@ -32,8 +32,10 @@
 
    ```powershell
    codex --version
-   codex exec --sandbox read-only --ephemeral "只读取当前项目名称并只输出 zhiji_runtime_ready，不修改文件。"
+   codex login status
    ```
+
+   当前飞书日分析固定使用 `gpt-5.4`、`read-only` 和 `ephemeral`；预检不调用模型。
 
 4. 将 [配置示例](../.claude/shared/local-feishu-daily-feedback-config.example.json) 复制为 `复盘/.local-feishu-daily-feedback-config.json`，写入本人已验证的 `open_id`、官方原生 `lark-cli.exe` 和独立 Codex 可执行文件路径。Windows 不要填写 npm 的 `.cmd` shim；多行反馈经过 `cmd.exe` 时可能破坏参数边界。配置不保存 App Secret 或访问令牌；`state_path` 必须位于本仓库内。
 
@@ -53,7 +55,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .claude/workflows/local-feis
 powershell -NoProfile -ExecutionPolicy Bypass -File .claude/workflows/local-feishu-daily-feedback.ps1 -Mode Run
 ```
 
-窗口保持打开；按 `Ctrl+C` 停止。不要把它安装成 Windows 服务或开机任务，本轮只验证真实使用频率。
+窗口保持打开；按 `Ctrl+C` 停止。当前个人验证阶段不安装 Windows 服务或开机任务。完整环境、UU 远程维护、模型替换和云服务器备选见[个人飞书入口、远程使用与 AI 部署](personal-feishu-deployment.md)。
 
 ## 受控验收与观察门
 
@@ -61,7 +63,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .claude/workflows/local-feis
 
 接下来观察 14 天：至少 10 天真实写日志，并至少 7 次直接通过本入口获得日反馈，且没有造成明显额外负担，才值得评估云服务器。未达到时保留本地手动方案，不继续开发后台、队列或更多入口。
 
-2026-08-12 的受控样本显示 Codex CLI 可能在 WebSocket 连续超时后回落 HTTPS，预检与完整分析约需 2–5 分钟。该耗时是当前需要记录的使用事实，不应通过增加队列或第二套分析逻辑掩盖。
+2026-08-12 的受控样本显示 Codex CLI 可能在 WebSocket 连续超时后回落 HTTPS，完整分析约需 2–5 分钟；预检现已改为无模型调用的登录状态检查。该耗时是当前需要记录的使用事实，不应通过增加队列或第二套分析逻辑掩盖。
 
 ## 2026-08-12 受控验收记录
 

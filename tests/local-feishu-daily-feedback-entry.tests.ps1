@@ -69,6 +69,25 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
   }
   Assert-Equal (ConvertTo-ZhijiEntryDecision -Event $halfWidth -AllowedOpenId "ou_owner").journal_text "原文" "half-width colon must be accepted"
 
+  $pastedTemplate = $valid.PSObject.Copy()
+  $pastedTemplate.content = ([char]0xFEFF) + "`r`n日志" + ([char]0x200E) + " ： 日志 8.11`r`n`r`n开心的事情:`r`n1. 离家前吃了碗腌面，味道不错"
+  $pastedDecision = ConvertTo-ZhijiEntryDecision -Event $pastedTemplate -AllowedOpenId "ou_owner"
+  Assert-Equal $pastedDecision.action "process" "pasted journal with invisible leading characters must process"
+  Assert-Equal $pastedDecision.journal_text "日志 8.11`r`n`r`n开心的事情:`r`n1. 离家前吃了碗腌面，味道不错" "pasted journal body must stay unchanged"
+  Assert-Equal $pastedDecision.journal_date "2026-08-11" "explicit journal template date must override message date"
+
+  $freeForm = $valid.PSObject.Copy()
+  $freeForm.content = "日志：我今天有点累，但还是完成了计划。`n明天想早点休息。"
+  $freeFormDecision = ConvertTo-ZhijiEntryDecision -Event $freeForm -AllowedOpenId "ou_owner"
+  Assert-Equal $freeFormDecision.action "process" "arbitrary natural-language journal body must process"
+  Assert-Equal $freeFormDecision.journal_text "我今天有点累，但还是完成了计划。`n明天想早点休息。" "free-form body must remain unchanged"
+
+  $dateLikeText = $valid.PSObject.Copy()
+  $dateLikeText.content = "日志：日志 13.40`n这只是正文，不应因日期样式无效而拒绝分析。"
+  $dateLikeDecision = ConvertTo-ZhijiEntryDecision -Event $dateLikeText -AllowedOpenId "ou_owner"
+  Assert-Equal $dateLikeDecision.action "process" "invalid date-like body must still process"
+  Assert-Equal $dateLikeDecision.journal_date "2026-08-12" "invalid date-like body must fall back to message date"
+
   $wrongSender = $valid.PSObject.Copy()
   $wrongSender.sender_id = "ou_other"
   Assert-Equal (ConvertTo-ZhijiEntryDecision -Event $wrongSender -AllowedOpenId "ou_owner").action "reject_sender" "other sender must be rejected"
@@ -110,13 +129,11 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
         param($Prompt, $JournalText, $RepoRoot, $CodexPath)
         $calls.codex++
         Assert-True ($Prompt -match "2026-08-12") "Codex prompt must contain the confirmed date"
-        Assert-True ($Prompt -match "仅完成本地") "analysis Codex must not perform external distribution"
+        Assert-True ($Prompt -match "只返回可直接保存的每日反馈正文") "analysis Codex must only return feedback text"
         Assert-Equal $JournalText "第一行`n第二行" "Codex stdin must receive only the journal text"
         Assert-Equal $RepoRoot $tempRoot "Codex must run from the configured repository root"
-        $feedbackPath = Join-Path $RepoRoot "复盘/每日反馈/2026-08-12.md"
-        New-Item -ItemType Directory -Path (Split-Path -Parent $feedbackPath) -Force | Out-Null
-        [System.IO.File]::WriteAllText($feedbackPath, "# 每日反馈`n`n反馈正文", [System.Text.UTF8Encoding]::new($true))
-        [pscustomobject]@{ exit_code = 0; output = "反馈正文"; error_code = $null }
+        Assert-Equal (Get-Content -LiteralPath (Join-Path $RepoRoot "日志/2026-08-12.md") -Raw -Encoding UTF8) "第一行`n第二行" "listener must save journal before analysis"
+        [pscustomobject]@{ exit_code = 0; output = "# 每日反馈`n`n反馈正文"; error_code = $null }
       }
       $distribute = {
         param($FeedbackPath, $RepoRoot, $CodexPath, $LarkCliPath)
@@ -145,6 +162,7 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
       Assert-Equal $calls.codex 1 "Codex must run once"
       Assert-Equal $calls.distribute 1 "distribution must run only after the verified local artifact"
       Assert-Equal $calls.reply 2 "successful analysis must send acceptance and final replies"
+      Assert-Equal (Get-Content -LiteralPath (Join-Path $tempRoot "复盘/每日反馈/2026-08-12.md") -Raw -Encoding UTF8) "# 每日反馈`n`n反馈正文" "listener must persist Codex feedback"
       Assert-True ($calls.last_reply -match [regex]::Escape("# 每日反馈`n`n反馈正文")) "reply must use the verified local feedback artifact"
       Assert-True ($calls.last_reply -match "飞书：success；滴答：success") "reply must include the actual distribution summary"
 
@@ -246,13 +264,12 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
       $missingArtifactDecision = $decision.PSObject.Copy()
       $missingArtifactDecision.message_id = "om_feedback_missing"
       $missingArtifactDecision.journal_date = "2026-08-13"
-      $missingArtifact = Invoke-ZhijiEntryDecision -Decision $missingArtifactDecision -Config $config -CodexInvoker {
+      $returnedFeedback = Invoke-ZhijiEntryDecision -Decision $missingArtifactDecision -Config $config -CodexInvoker {
         param($Prompt, $JournalText, $RepoRoot, $CodexPath)
-        [pscustomobject]@{ exit_code = 0; output = "只有说明，没有反馈文件"; error_code = $null }
-      } -ReplyInvoker $reply
-      Assert-Equal $missingArtifact.status "failed" "missing feedback artifact must fail the request"
-      Assert-Equal $missingArtifact.error_code "feedback_missing" "missing feedback artifact must have an explicit error"
-      Assert-True ($calls.last_reply -match "feedback_missing") "missing artifact must send a failure reply, not Codex commentary"
+        [pscustomobject]@{ exit_code = 0; output = "Codex 返回的反馈正文"; error_code = $null }
+      } -DistributorInvoker $distribute -ReplyInvoker $reply
+      Assert-Equal $returnedFeedback.status "success" "returned feedback text must complete the request"
+      Assert-Equal (Get-Content -LiteralPath (Join-Path $tempRoot "复盘/每日反馈/2026-08-13.md") -Raw -Encoding UTF8) "Codex 返回的反馈正文" "listener must save returned feedback text"
 
       $staleDate = "2026-08-14"
       $stalePath = Join-Path $tempRoot "复盘/每日反馈/$staleDate.md"
@@ -389,7 +406,9 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
       if (Get-Command Get-ZhijiCodexArguments -ErrorAction SilentlyContinue) {
         $codexArgs = @(Get-ZhijiCodexArguments -Prompt "prompt")
         Assert-ContainsValue $codexArgs "--sandbox" "untrusted journal analysis must remain sandboxed"
-        Assert-ContainsValue $codexArgs "workspace-write" "analysis must write only inside the workspace"
+        Assert-ContainsValue $codexArgs "read-only" "analysis only returns text and must not write files"
+        Assert-ContainsValue $codexArgs "--model" "Feishu analysis must pin a cost-appropriate model"
+        Assert-ContainsValue $codexArgs "gpt-5.4" "Feishu analysis must use GPT-5.4"
         Assert-ContainsValue $codexArgs "--ignore-user-config" "untrusted journal analysis must not load user plugins or MCP configuration"
         Assert-True (-not (@($codexArgs) -ccontains "--approve-for-me")) "untrusted journal analysis must not receive automatic external-write approval"
         Assert-True (($codexArgs -join " ") -notmatch "shell_environment_policy.inherit=all") "analysis must not inherit all environment variables"
@@ -406,8 +425,8 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
           if ($Executable -eq "lark-test" -and @($Arguments)[0] -eq "auth") {
             return [pscustomobject]@{ exit_code = 0; output = '{"identities":{"bot":{"status":"ready","available":true,"verified":true}}}'; error_code = $null }
           }
-          if ($Executable -eq "codex-test" -and @($Arguments)[0] -eq "exec") {
-            return [pscustomobject]@{ exit_code = 0; output = "zhiji_runtime_ready"; error_code = $null }
+          if ($Executable -eq "codex-test" -and @($Arguments)[0] -eq "login") {
+            return [pscustomobject]@{ exit_code = 0; output = "Logged in using ChatGPT"; error_code = $null }
           }
           return [pscustomobject]@{ exit_code = 0; output = "1.0.0"; error_code = $null }
         }
@@ -415,7 +434,7 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
         $preflight = Test-ZhijiEntryRuntime -ConfigPath $validConfigPath -RepoRoot $repoRoot -CommandInvoker $preflightInvoker
         Assert-Equal $preflight.status "ready" "valid runtime preflight must be ready"
         Assert-True (($preflightCalls -join "`n") -match "lark-test\|auth status --json --verify") "preflight must verify Lark auth"
-        Assert-True (($preflightCalls -join "`n") -match "codex-test\|exec --sandbox read-only --ephemeral") "preflight must run a read-only Codex probe"
+        Assert-True (($preflightCalls -join "`n") -match "codex-test\|login status") "preflight must check login without consuming a model turn"
       } else {
         Add-Failure "missing function: Test-ZhijiEntryRuntime"
       }
@@ -447,6 +466,8 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
       }
 
       if (Get-Command Invoke-ZhijiLarkConsumer -ErrorAction SilentlyContinue) {
+        $consumerFunctionText = ${function:Invoke-ZhijiLarkConsumer}.ToString()
+        Assert-True ($consumerFunctionText -match [regex]::Escape('[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)')) "consumer must decode lark-cli stdout as UTF-8"
         $fakeLark = Join-Path $tempRoot "fake-lark.cmd"
         [System.IO.File]::WriteAllLines($fakeLark, @(
           "@echo off",
