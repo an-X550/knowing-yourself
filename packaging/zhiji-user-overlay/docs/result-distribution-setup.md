@@ -1,15 +1,15 @@
-# 结果分发设置（离线验收后使用）
+# 结果分发设置
 
-> 当前实现默认关闭。本页描述未来离线测试全部通过后，如何通过官方工具完成一次性设置；本轮不要运行安装、登录、建文件夹、导入或创建任务命令。
+> 仓库示例默认关闭。只有用户明确启用的运行配置才会调用官方工具。
 
-结果分发只在新报告成功写入并重新读取校验后运行：飞书保存完整报告副本，滴答/TickTick 只创建报告中已有的合格行动。本地文件始终是权威结果，任一外部失败都不回滚本地报告。
+结果分发只在白名单产物新写入并重新读取校验后运行：飞书保存正式复盘、人生设计、已确认主题思考和明确收录的收藏/附件；滴答/TickTick 仍只创建报告中已有的合格行动。本地文件始终是权威结果，任一外部失败都不回滚本地结果。
 
 ## 用户检查清单
 
 - [ ] 已确认本地报告流程在未配置分发时正常运行。
 - [ ] 已决定使用滴答清单中国区（`dida365`）还是 TickTick 国际区（`ticktick`）。
 - [ ] 有权在飞书租户中配置企业自建应用，并能查看目标文件夹。
-- [ ] 只准备脱敏、一次性的 Markdown 与测试任务，不使用真实日志或复盘正文。
+- [ ] 首次设置只准备脱敏的一次性 Markdown 与测试任务，不使用真实日志或复盘正文。
 - [ ] 接受飞书与滴答分别成功或失败，不要求双向同步、任务回读或自动复盘。
 - [ ] 在两个 disposable 测试都通过前，保持所有 result type 开关为 false。
 
@@ -31,7 +31,7 @@
 | `folder_inaccessible` | 应用或当前用户不能访问目标文件夹 | 只修正文件夹权限，不启用真实报告 |
 | `ready` | CLI、应用身份、目标文件夹与授权结果均通过 | 仍先做脱敏 disposable 测试 |
 
-### 未来安装与配置顺序
+### 安装与配置顺序
 
 在独立终端中按官方 CLI 指引运行：
 
@@ -52,16 +52,18 @@ lark-cli drive +create-folder --name "知己" --as bot
 
 只有返回 `permission_grant.status = granted`，才进入目标文件夹测试。不要擅自转移 owner。若 bot 缺少应用 scope，不要用 `auth login` 掩盖；打开 CLI 返回的 `console_url`，只在飞书官方控制台启用明确缺失的应用 scope，然后重新做预检。
 
-### 目标文件夹与 disposable 导入
+### 固定目录与 disposable 导入
+
+飞书根目录固定绑定为唯一的“知己”文件夹，并在运行配置的 `feishu.folders` 中记录正式结果类型对应的子目录 token。Markdown 转为在线文档；明确收录到收藏目录的普通附件使用 `drive +upload` 保留原格式。原始日志、画像、中间分析、配置、状态、缓存和项目代码永不上传；不得扫描电脑寻找候选文件。
 
 先对一份一次性脱敏 Markdown 做 dry-run，检查命令形态、目标文件夹和标题；随后只导入这份 disposable 文件一次：
 
 ```powershell
-lark-cli drive +import --file "<ABSOLUTE_DISPOSABLE_MD>" --type docx --folder-token "<FOLDER_TOKEN>" --name "知己·一次性测试" --as bot --dry-run
-lark-cli drive +import --file "<ABSOLUTE_DISPOSABLE_MD>" --type docx --folder-token "<FOLDER_TOKEN>" --name "知己·一次性测试" --as bot
+lark-cli drive +import --file "<WORKSPACE_RELATIVE_DISPOSABLE_MD>" --type docx --folder-token "<FOLDER_TOKEN>" --name "知己·一次性测试" --as bot --dry-run
+lark-cli drive +import --file "<WORKSPACE_RELATIVE_DISPOSABLE_MD>" --type docx --folder-token "<FOLDER_TOKEN>" --name "知己·一次性测试" --as bot
 ```
 
-`FOLDER_TOKEN` 是目标位置标识，不是应用密钥；把它写入被忽略的运行配置，不要粘贴进聊天。必须确认返回最终文档 token/URL、文件位于专用文件夹，且用户可访问。未确认前不启用真实 result type。
+`FOLDER_TOKEN` 是目标位置标识，不是应用密钥；把根目录及分类目录 token 写入被忽略的运行配置。必须确认返回最终文档 token/URL、文件位于对应分类目录，且用户可访问。未确认前不启用真实 result type。
 
 ## 滴答 / TickTick：官方 MCP 设置门
 
@@ -81,7 +83,9 @@ lark-cli drive +import --file "<ABSOLUTE_DISPOSABLE_MD>" --type docx --folder-to
 
 ## 启用顺序
 
-仓库示例 `.claude/shared/result-distribution-config.example.json` 中顶层、渠道和全部 result type 都是 `"enabled": false` 或 false 开关。未来把它复制到 `output.result_distribution_config` 对应的忽略路径后，也只启用用户明确同意且 disposable 测试已通过的渠道/结果类型；不要一次性全开。
+仓库示例 `.claude/shared/result-distribution-config.example.json` 中顶层、渠道和全部 result type 都是 `"enabled": false` 或 false 开关。把它复制到 `output.result_distribution_config` 对应的忽略路径后，只启用用户明确同意且 disposable 测试已通过的渠道/结果类型。
+
+首次历史沉淀必须先生成路径与 SHA-256 清单，经用户确认后再串行导入。新生成的白名单产物可按配置自动分发；已有文件的内容更新、改名或移动仍按当前 `changed_after_delivery` 规则显式处理，不静默覆盖，也不自动删除飞书内容。
 
 启用前依次确认：本地报告写入与复读成功、飞书为 `ready`、对应区域 MCP 为 `ready`、相同 fixture 重跑不会重复创建。任一条件缺失就保持该渠道关闭，另一个渠道可独立设置。
 

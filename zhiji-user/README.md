@@ -82,7 +82,7 @@ AI 应该在证据不足时降低结论强度，而不是补完故事；一次�
 
 Claude 兼容命令：`/review`、`/daily-review today`、`/journal-coach`、`/weekly-review`、`/monthly-review`、`/project-review`、`/yearly-review`、`/life-design --quick`。在 Codex 中可直接使用上表自然语言。
 
-可选的飞书/滴答结果分发默认关闭。离线验收通过后，如需把完整报告副本送到飞书、把报告中已有的合格行动送到滴答，请按 [`docs/result-distribution-setup.md`](docs/result-distribution-setup.md) 通过官方 CLI 与官方 MCP 设置；不要把密钥交给聊天或项目文件。未配置时原有本地流程不变。
+可选结果分发默认关闭。启用后，飞书可把新生成的正式复盘、人生设计、已确认主题思考和明确收录的收藏及附件沉淀到固定“知己”目录；滴答仍只接收报告中已有的合格行动。本地文件始终是权威来源，不扫描电脑，也不上传原始日志、画像、中间分析、配置或状态。设置方法见 [`docs/result-distribution-setup.md`](docs/result-distribution-setup.md)；不要把密钥交给聊天或项目文件。
 
 ## 结果保存与隐私
 
@@ -112,4 +112,4 @@ powershell -ExecutionPolicy Bypass -File scripts/protect-private-data.ps1
 
 ## 当前版本与验证状态
 
-当前用户版对应 `v1.13.0`。关键路径和分发边界已通过自动检查；闭环提醒仍需以至少 3 次真实触发验证其可执行性、噪声和漏检情况。
+当前用户版对应 `v1.14.0`。关键路径和分发边界已通过自动检查；飞书分类目录已完成真实创建验证，新白名单产物仍需在日常使用中观察自动落位。闭环提醒仍需以至少 3 次真实触发验证其可执行性、噪声和漏检情况。

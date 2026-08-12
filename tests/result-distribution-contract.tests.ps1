@@ -65,6 +65,8 @@ $noActionFixture = 'tests/fixtures/result-distribution/sample-no-action-report.m
 
 foreach ($path in @($mainPaths, $overlayPaths)) {
   Assert-Contains $path @(
+    'context.collection_topic',
+    'context.collection_attachment',
     'output.result_distribution_config',
     '复盘/.result-distribution-config.json',
     'output.result_distribution_state',
@@ -81,6 +83,19 @@ foreach ($path in @($mainContract, $overlayContract)) {
     'output.yearly_report',
     'output.life_design_report',
     'context.thinking_topic',
+    'context.collection_topic',
+    'context.collection_attachment',
+    'distribution: local_only',
+    '知己/复盘/每日反馈',
+    '知己/复盘/每周复盘',
+    '知己/复盘/每月复盘',
+    '知己/复盘/项目复盘',
+    '知己/复盘/年度回顾',
+    '知己/复盘/人生设计',
+    '知己/关于我/思考',
+    '知己/关于我/收藏吃灰库/{topic}',
+    'lark-cli drive +upload',
+    '不得扫描仓库或电脑寻找待上传文件',
     '用户明确确认',
     'input.*',
     'context.core_profile',
@@ -171,6 +186,18 @@ if (-not [string]::IsNullOrWhiteSpace($exampleText)) {
     if ($example.feishu.enabled -ne $false) { Add-Failure 'example config feishu.enabled must default to false' }
     if ($example.ticktick.enabled -ne $false) { Add-Failure 'example config ticktick.enabled must default to false' }
     if ($example.feishu.folder_token -ne '') { Add-Failure 'example config must not contain a folder token' }
+    foreach ($folderKey in @('daily_feedback','weekly_report','monthly_report','project_report','yearly_report','life_design_report','thinking_topic','collection_root')) {
+      if (-not $example.feishu.folders.PSObject.Properties[$folderKey]) {
+        Add-Failure "example config missing feishu.folders.$folderKey"
+      } elseif ($example.feishu.folders.$folderKey -ne '') {
+        Add-Failure "example config feishu.folders.$folderKey must default empty"
+      }
+    }
+    foreach ($typeKey in @('collection_topic','collection_attachment')) {
+      if (-not $example.result_types.PSObject.Properties[$typeKey]) {
+        Add-Failure "example config missing result_types.$typeKey"
+      }
+    }
     if (@('dida365', 'ticktick') -notcontains $example.ticktick.region) {
       Add-Failure 'example config ticktick.region must be dida365 or ticktick'
     }

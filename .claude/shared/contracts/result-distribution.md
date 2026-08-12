@@ -19,8 +19,12 @@ last_updated: 2026-08-11
 - `output.yearly_report`
 - `output.life_design_report`
 - 经**用户明确确认**并完成写入的 `context.thinking_topic`
+- 经**用户明确收录**并完成写入的 `context.collection_topic`
+- 经**用户明确收录**、先复制到收藏主题目录并完成复读的 `context.collection_attachment`
 
 禁止来源包括 `input.*`、`context.core_profile`、`context.current`、`context.verified_patterns`、`analysis.*`、`output.result_distribution_config` 和 `output.result_distribution_state`。原始日志、画像、中间分析、配置与状态永不上传。
+
+任何 Markdown 来源的 YAML frontmatter 含 `distribution: local_only` 时，飞书渠道返回 `skipped_not_configured`，不得上传。收藏附件必须从 `context.collection_attachment` 的受控路径进入；不得扫描仓库或电脑寻找待上传文件，也不得直接接收项目外路径。
 
 ## 配置与默认行为
 
@@ -105,6 +109,23 @@ App Secret、access token、refresh token、tenant token、device code、MCP tok
 
 ## 飞书适配器
 
+### 固定目录路由
+
+飞书目标只能使用运行配置中已绑定的“知己”根目录及其后代目录 token，不按名称搜索同名根目录，也不回退到飞书根目录或其他文件夹。目录映射固定为：
+
+| 来源 | 飞书目录 |
+|---|---|
+| `output.daily_feedback` | `知己/复盘/每日反馈` |
+| `output.weekly_report` | `知己/复盘/每周复盘` |
+| `output.monthly_report` | `知己/复盘/每月复盘` |
+| `output.project_report` | `知己/复盘/项目复盘` |
+| `output.yearly_report` | `知己/复盘/年度回顾` |
+| `output.life_design_report` | `知己/复盘/人生设计` |
+| `context.thinking_topic` | `知己/关于我/思考` |
+| `context.collection_topic` / `context.collection_attachment` | `知己/关于我/收藏吃灰库/{topic}` |
+
+目录 token 缺失、不可访问或不属于已绑定根目录时只让飞书渠道失败，不创建替代目录，不改变本地结果。目录创建属于首次配置或新收藏主题的现有 `lark-cli drive +create-folder` 操作；不得由结果分发器扫描或重组飞书其他内容。
+
 ### 预检与命令构造
 
 只使用飞书官方 `lark-cli`。执行真实分发时依次检查 `lark-cli --version`、`lark-cli auth status`、已配置的 application identity 和目标 `folder_token` 可访问性；任一项不满足只让飞书渠道失败，不影响 TickTick 或本地结果。
@@ -114,6 +135,14 @@ App Secret、access token、refresh token、tenant token、device code、MCP tok
 ```powershell
 lark-cli drive +import --file "<workspace-relative-md-path>" --type docx --folder-token "<folder-token>" --name "<document-title>" --as bot
 ```
+
+Markdown、Markdown 方言、TXT、HTML、DOC/DOCX、表格和 PPTX 只按官方 `drive +import` 支持的扩展名与目标类型转换。收藏中的 PDF、图片、音视频及其他官方允许的普通附件保留原格式，使用：
+
+```powershell
+lark-cli drive +upload --file "<workspace-relative-attachment-path>" --folder-token "<folder-token>" --name "<filename>" --as bot
+```
+
+普通附件路径必须是 `context.collection_attachment` 解析出的仓库相对路径；不得让调用方任意传入源目录或目标 token。
 
 argv 顺序固定为 `drive`, `+import`, `--file`, workspace-relative path, `--type`, `docx`, `--folder-token`, folder token, `--name`, title, `--as`, `bot`。命令必须从仓库 cwd 执行；路径、folder token 和标题各作为单独参数传入，因此中文路径、空格或标点不会被二次解释。argv 不得包含 App Secret、access token、tenant token 或其他凭证；`folder_token` 是非敏感目标标识，只从忽略的本地配置读取。
 

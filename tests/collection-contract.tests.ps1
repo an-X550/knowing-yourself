@@ -27,10 +27,16 @@ if (-not $collectionHook) {
 }
 
 Assert-Contains '.claude/shared/paths.md' 'context.collection_dir'
+Assert-Contains '.claude/shared/paths.md' 'context.collection_attachment'
 Assert-Contains '.claude/skills/collection.md' '## 摘要'
 Assert-Contains '.claude/skills/collection.md' '## 关键词'
 Assert-Contains '.claude/skills/collection.md' '## 原文 / 摘录全文'
 Assert-Contains '.claude/skills/collection.md' '## 原文链接'
+Assert-Contains '.claude/skills/collection.md' '先复制到对应收藏主题目录'
+Assert-Contains '.claude/skills/collection.md' '不得直接上传项目外路径'
+Assert-Contains '.claude/skills/collection.md' 'distribution: local_only'
+Assert-Contains '.claude/skills/collection.md' 'distribute context.collection_topic <resolved-local-path>'
+Assert-Contains '.claude/skills/collection.md' 'distribute context.collection_attachment <resolved-local-path>'
 
 if ($failures.Count -gt 0) {
   Write-Host "FAIL: collection contract checks ($($failures.Count))" -ForegroundColor Red

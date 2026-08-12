@@ -207,6 +207,25 @@ foreach ($entry in $workflows.GetEnumerator()) {
 Assert-SameFile $naturalRoutes[0] $naturalRoutes[1]
 Assert-SameFile $topicRoutes[0] $topicRoutes[1]
 
+$collectionRoutes = @(
+  '.claude/skills/collection.md',
+  'packaging/zhiji-user-overlay/.claude/skills/collection.md'
+)
+foreach ($path in $collectionRoutes) {
+  Assert-Contains $path @(
+    $contractPath,
+    'distribute context.collection_topic <resolved-local-path>',
+    'distribute context.collection_attachment <resolved-local-path>',
+    '明确收录',
+    '新写入',
+    '重新读取',
+    'distribution: local_only',
+    '不调用结果分发',
+    '分发摘要只追加到聊天'
+  )
+}
+Assert-SameFile $collectionRoutes[0] $collectionRoutes[1]
+
 if ($failures.Count -gt 0) {
   Write-Host "FAIL: result distribution routing checks ($($failures.Count))" -ForegroundColor Red
   $failures | ForEach-Object { Write-Host "- $_" -ForegroundColor Red }
