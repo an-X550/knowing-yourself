@@ -1,112 +1,85 @@
 # 知己
 
-> 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
+> 把日常记录变成更可靠的行动：看见模式，试一个小改变，再用结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.15.4-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.16.0-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
-## 这是什么
+## 你能用它解决什么
 
-知己是面向中文个人日志的 AI 复盘系统。它不以生成更多报告为目标，而是把记录、模式发现、低成本行动和后续验证收敛为一个可重复的闭环：
-
-```text
-记录 → 发现模式 → 形成行动 → 后续验证 → 沉淀认识
-```
-
-最小成功不是写出漂亮分析，而是形成一条用户自己不容易发现、并能由后续行为结果验证的洞察。
-
-项目的运行真相是 `.claude/`：不同入口复用同一套路径、证据和输出契约，避免以多份报告掩盖没有行动或没有验证的问题。
-
-## 读者与入口
-
-本 README 面向维护者、潜在贡献者，以及希望理解项目边界的人。
-
-- **首次使用或最终用户**：请从 [`zhiji-user/README.md`](zhiji-user/README.md) 开始。它包含环境准备、首次日志反馈、功能选择、隐私边界和常见问题。
-- **维护者**：先阅读 [`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)，再结合 [`PROJECT_STATUS.md`](PROJECT_STATUS.md) 确认当前事实、待验收项和已知问题。
-- **产品逻辑**：只在 `.claude/` 维护；`zhiji-user/` 是从运行真相裁剪出的用户分发包，不承载主开发流程。
-
-## 维护者的 5 分钟路径
-
-1. 阅读 [`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)，了解边界、版本与验证规则。
-2. 产品行为、路径和提示词只改 `.claude/`；用户可见说明改 [`packaging/zhiji-user-overlay/`](packaging/zhiji-user-overlay/)。
-3. 为改动运行相关 `tests/*.tests.ps1`；公开文档变更同步 `VERSION`、`PROJECT_STATUS.md` 与 `CHANGELOG.md`。
-4. 修改用户版源后运行 `scripts/export-zhiji-user.ps1`，再检查分发边界。
-5. 提交前检查工作区与链接；分发与治理细节见 [`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)。
-
-## 能力与运行源
-
-| 能力 | 目的 | 权威使用说明 |
-|------|------|--------------|
-| 日志记录与日反馈 | 从当日记录中形成单个关键洞察和可验证行动 | [`.claude/commands/daily-review.md`](.claude/commands/daily-review.md) |
-| 闭环缺口检查与低噪声提醒 | 可通过自然语言手动检查；成功新日反馈完成验证沉淀后也会检查一次。它不是后台定时任务，只提示一项最优先、需要你手动完成的日反馈、复盘或上下文沉淀 | [`.claude/agents/review-readiness-checker.md`](.claude/agents/review-readiness-checker.md) / [提醒契约](.claude/shared/contracts/readiness-delivery.md) |
-| 周、月、项目与年度复盘 | 基于沉淀证据校准更长时间尺度的趋势与选择 | [`.claude/commands/`](.claude/commands/) |
-| 日志教练与人生设计 | 改进记录质量，或在长期方向冲突时做校准 | [`.claude/commands/journal-coach.md`](.claude/commands/journal-coach.md) / [`.claude/commands/life-design.md`](.claude/commands/life-design.md) |
-| 主题思考与收藏吃灰库 | 经用户确认后沉淀可继续修正的认识和资料 | [`.claude/shared/contracts/topic-thinking.md`](.claude/shared/contracts/topic-thinking.md) / [`.claude/skills/collection.md`](.claude/skills/collection.md) |
-
-共同边界是：AI 提供证据整理、假说与低成本实验；用户保留对自身经历、价值选择和重大决定的最终解释权。证据不足时，系统必须降低结论强度，而不是补完故事。
-
-可选结果分发默认关闭。启用后，飞书可把新生成的正式复盘、人生设计、已确认主题思考和明确收录的收藏及附件沉淀到固定“知己”目录；滴答只接收每日反馈、周复盘、月复盘和已确认主题思考中的合格行动，任务只含 SMART 化标题与截止时间。日反馈自动创建，周/月及主题经过对应确认；完成判断仍只读取后续日志。本地文件始终权威。若本次只想保存到电脑，在生成请求中直接说“仅本地”，本轮同时跳过飞书和滴答且不留下永久标记；设置方法见 [`docs/result-distribution-setup.md`](docs/result-distribution-setup.md)。
-
-一次性或周期性的纯提醒默认使用滴答清单原生通知；Codex 定时任务只在用户明确指定时例外。提醒只通知用户手动开始，不会自动读取文件或生成复盘。
-
-个人验证期可使用[本地飞书每日反馈入口](docs/local-feishu-daily-feedback-entry.md)：电脑保持在线且不休眠时，在手机私聊机器人发送 `日志：<原文>`，复用现有知己日反馈与结果分发；它不是全天候云服务。当前完整运行环境、`gpt-5.4` 分析配置、UU 远程维护、飞书/滴答部署、AI 后端替换边界和云服务器备选统一见[个人飞书入口、远程使用与 AI 部署](docs/personal-feishu-deployment.md)。该文档只服务维护者的个人环境，不进入 `zhiji-user/`。
-
-### 个人手机入口的最短路径
-
-1. 电脑保持联网、不休眠；按当前网络条件保持 VPN 可用。
-2. 运行飞书入口预检与监听；无需打开 Codex 桌面窗口。
-3. 手机私聊机器人发送 `日志：<任意自然语言>`，通常等待 2–5 分钟。
-4. 日反馈先写入本地，再沉淀飞书文档，并把唯一合格行动创建到“知己行动”滴答清单；外部失败不改变本地结果。
-5. 在外需要维护电脑时使用 UU 远程；只有完成 14 天使用观察且本机在线仍是持续阻碍，才考虑云服务器。
-
-## 维护与分发
-
-- `.claude/` 是唯一运行真相，包含 commands、agents、skills、workflows 与 shared 契约。
-- `packaging/zhiji-user-overlay/` 保存只属于用户分发体验的变体源。
-- `zhiji-user/` 是最终用户分发包；用户教程以其中的 README 为准。
-
-维护者自己的长期真实使用默认留在主项目。刷新用户分发包时，在项目根目录执行：
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
-```
-
-导出与同步边界见 [`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)。产品或公开文档变更前，应遵守 [`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md) 中的必要性、版本和验证规范。
-
-## 项目结构
+写日志时，人很容易记住当天的感受，却很难看见跨时间重复出现的模式；即使得出一个解释，也常常没有机会验证。知己用 AI 帮你整理证据、提出可被推翻的假说，并把它收敛为一个低成本行动。
 
 ```text
-.
-|-- .claude/       # 唯一运行真相：commands、agents、skills、workflows、shared
-|-- .codex/        # Codex 开发辅助配置
-|-- docs/          # 方法论、说明、spec 与计划
-|-- examples/      # 脱敏示例
-|-- packaging/     # 用户版变体源、manifest 与同步说明
-|-- perspectives/  # 分析视角定义
-|-- scripts/       # 导出与维护脚本
-|-- tests/         # 完整性与契约检查
-|-- zhiji-user/    # 最终用户分发包
-|-- README.md
-|-- PROJECT_STATUS.md
-|-- CHANGELOG.md
-|-- AGENTS.md
-|-- CLAUDE.md
-|-- SETUP.md
-|-- VERSION
-`-- LICENSE
+记录事实 → 提出假说 → 试一个行动 → 记录结果 → 校准认识
 ```
 
-## 文档导航
+它不是日记代写工具，也不以生成更多报告为目标。一次有用的输出应当让你看见一个自己不容易看见的模式，并给你一个能在现实中验证的下一步。
 
-- 当前版本、进度、待办和已知问题：[`PROJECT_STATUS.md`](PROJECT_STATUS.md)
-- 发布级变化：[`CHANGELOG.md`](CHANGELOG.md)
-- 开发与维护规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
-- 用户版完整指南：[`zhiji-user/README.md`](zhiji-user/README.md)
-- 用户版同步流程：[`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)
-- 本地飞书每日反馈入口：[`docs/local-feishu-daily-feedback-entry.md`](docs/local-feishu-daily-feedback-entry.md)
-- 个人飞书环境、UU 远程、飞书/滴答部署、AI 替换与云服务器备选：[`docs/personal-feishu-deployment.md`](docs/personal-feishu-deployment.md)
-- 第一性原理提醒：[`docs/first-principles.md`](docs/first-principles.md)
-- 质量基线与待验收项：[`docs/quality-baseline-matrix.md`](docs/quality-baseline-matrix.md)
-- 模型选择与 A/B/C 对比：[`docs/model-selection.md`](docs/model-selection.md)
-- 主题思考端到端验收：[`docs/topic-thinking-acceptance.md`](docs/topic-thinking-acceptance.md)
-- 视角说明：[`perspectives/README.md`](perspectives/README.md)
+## 适合谁，不适合谁
+
+如果你想从拖延、情绪反复、精力波动、项目复盘或长期方向冲突中找出可检验的规律，知己适合你。你不需要先养成完美的日记习惯；一段真实、简短的记录就足够开始。
+
+它不诊断心理或医疗问题，不替你决定人生，也不会把一篇日志当作对你的最终结论。AI 的分析只是待验证的假说：证据不足时应降低结论强度，而不是补完故事。
+
+## 现在就开始
+
+请使用完整的用户分发包，并从 [用户版使用指南](zhiji-user/README.md) 完成环境准备。然后把下面这段话连同一篇真实日志交给能读取项目目录、并能读写 Markdown 的 AI 工具（如 Codex 或 Claude Code）：
+
+```text
+分析这篇日志。请找出一个我可能没看到的模式；区分事实与推断；
+只给我一个明天可验证的小实验。
+
+日志：今天本来要完成方案，但我一直整理资料，直到晚上也没开始写正文。
+```
+
+下一次记录时，补上实验结果即可：
+
+```text
+上次实验：做了 / 没做 / 做了一部分
+结果：发生了什么
+判断：支持原假说 / 出现反例 / 仍待验证
+```
+
+这就是最小闭环。先完成它，再考虑更长周期的复盘；没有行动和验证时，增加报告通常不会带来更多改变。
+
+## 你可以怎样使用
+
+在 Codex 中可直接自然语言说明需求；Claude 也保留 Slash Command 兼容入口。
+
+| 你的情况 | 可以直接说 | 你会得到 |
+| --- | --- | --- |
+| 刚写完日志，或今天卡住了 | `帮我做今天的日志反馈` | 一个关键洞察、一个小实验、一个观察点 |
+| 不知道下一步该补什么 | `最近有什么该补？` | 只给一条最优先路径 |
+| 想把日志写得更有用 | `看看我最近几天的日志质量，只告诉我优先改进什么` | 最该补的一类信息与写作建议 |
+| 想复盘一周、一个月或项目 | `生成本周复盘` / `对 X 做项目复盘` | 趋势、证据、反例与下一步 |
+| 长期目标、精力或生活结构持续冲突 | `我想重新检查最近的生活方向` | 方向校准与可验证的小实验 |
+| 想讨论并沉淀长期观点 | `先讨论这个问题，不要保存；形成认识后再问我是否写入` | 可确认、可修正的认识与依据 |
+
+日反馈优先于周、月和年度回顾：材料不足时，系统应建议先完成最近一次小闭环，而不是制造一份看似完整的报告。
+
+## 隐私与结果边界
+
+- 只提供你愿意交给当前 AI 服务处理的内容；真实日志默认不进入 Git，但这不等于加密或访问控制。
+- 本地 Markdown 是权威记录。可选的飞书沉淀与滴答行动分发默认关闭；本次只想保存在电脑时，直接说“仅本地”。
+- AI 负责整理证据、提出假说和设计低成本实验；你保留对经历、价值选择和重大决定的最终解释权。
+
+完整的隐私、目录与可选分发设置，请见 [用户版使用指南](zhiji-user/README.md) 和 [结果分发设置](docs/result-distribution-setup.md)。
+
+## 可选：手机记录入口
+
+若每天打开电脑与 AI 工具的摩擦太大，可以部署本地飞书入口：电脑保持在线且监听运行时，在手机私聊机器人发送 `日志：<原文>`，即可使用同一套日反馈闭环。它不是全天候云服务，当前通常需要等待 2–5 分钟。
+
+部署与限制见 [本地飞书每日反馈入口](docs/local-feishu-daily-feedback-entry.md)。用户分发版现在包含同一监听代码、无敏感配置示例和可交给执行型 AI 的 Codex / Claude / DeepSeek 部署指令；账号授权、目录 token、清单 ID 和运行状态仍由每位用户独立建立。
+
+## 项目与协作
+
+本仓库既包含可使用的系统，也包含它的运行定义与开发资料。产品行为以 `.claude/` 为准；`zhiji-user/` 是面向最终用户的分发包。
+
+- 想了解当前能力、待验证事项与已知限制：阅读 [PROJECT_STATUS.md](PROJECT_STATUS.md)。
+- 想了解版本变化：阅读 [CHANGELOG.md](CHANGELOG.md)。
+- 想维护或贡献：从 [AGENTS.md](AGENTS.md) 开始；用户包同步流程见 [用户版同步说明](docs/zhiji-user-sync-workflow.md)。
+- 想理解方法的底线：阅读 [第一性原理提醒](docs/first-principles.md)。
+
+## 许可证
+
+本项目采用 [MIT License](LICENSE)。
