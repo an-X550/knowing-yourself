@@ -175,6 +175,20 @@ if ((Read-Utf8 'AGENTS.md') -notmatch [regex]::Escape('docs/development-governan
   Add-Failure 'AGENTS.md does not route file changes to development governance'
 }
 
+foreach ($path in @('AGENTS.md', 'CLAUDE.md', 'packaging/zhiji-user-overlay/AGENTS.md', 'packaging/zhiji-user-overlay/CLAUDE.md')) {
+  $routing = Read-Utf8 $path
+  foreach ($expected in @('纯提醒时，默认使用滴答清单', '只有用户明确指定 Codex 定时任务时才例外', '需要到点自动执行工作的请求不属于纯提醒')) {
+    if ($routing -notmatch [regex]::Escape($expected)) {
+      Add-Failure "$path is missing reminder routing boundary: $expected"
+    }
+  }
+}
+
+if ((Get-FileHash -LiteralPath (Join-Path $repoRoot 'AGENTS.md') -Algorithm SHA256).Hash -ne
+    (Get-FileHash -LiteralPath (Join-Path $repoRoot 'CLAUDE.md') -Algorithm SHA256).Hash) {
+  Add-Failure 'AGENTS.md and CLAUDE.md must remain byte-identical'
+}
+
 Assert-ManagedExportMatches
 Assert-ManifestSourcesTracked
 
