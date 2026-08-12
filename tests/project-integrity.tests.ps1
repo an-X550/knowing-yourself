@@ -175,6 +175,31 @@ if ((Read-Utf8 'AGENTS.md') -notmatch [regex]::Escape('docs/development-governan
   Add-Failure 'AGENTS.md does not route file changes to development governance'
 }
 
+$boundarySpec = Read-Utf8 'docs/specs/directory-boundary-tightening.md'
+if ($boundarySpec -notmatch '(?m)^status: 已完成$' -or
+    $boundarySpec -match '(?m)^- \[ \]' -or
+    $boundarySpec -match [regex]::Escape('待实施')) {
+  Add-Failure 'directory boundary spec status drifted from its completed v1.5.5 implementation'
+}
+
+$auditSpec = Read-Utf8 'docs/specs/audit-cleanup.md'
+if ($auditSpec -notmatch '(?m)^status: 已完成$' -or
+    $auditSpec -match [regex]::Escape('workflow 禁用词内嵌项待后续处理')) {
+  Add-Failure 'audit cleanup spec still reports a completed runtime-contract migration as pending'
+}
+
+$roadmap = Read-Utf8 'docs/specs/evolution-roadmap.md'
+if ($roadmap -notmatch [regex]::Escape("| 当前版本 | v$currentVersion |") -or
+    $roadmap -match [regex]::Escape('只能 Claude Code 用户使用')) {
+  Add-Failure 'evolution roadmap current baseline does not match the released runtime shape'
+}
+
+$progress = Read-Utf8 'PROGRESS.md'
+if ($progress -match '(?i)\btoken\s*=' -or
+    $progress -match '滴答任务\s+[0-9a-f]{16,}') {
+  Add-Failure 'tracked PROGRESS.md exposes an external resource token or task id'
+}
+
 foreach ($path in @('AGENTS.md', 'CLAUDE.md', 'packaging/zhiji-user-overlay/AGENTS.md', 'packaging/zhiji-user-overlay/CLAUDE.md')) {
   $routing = Read-Utf8 $path
   foreach ($expected in @('纯提醒时，默认使用滴答清单', '只有用户明确指定 Codex 定时任务时才例外', '需要到点自动执行工作的请求不属于纯提醒')) {

@@ -1,6 +1,6 @@
 ---
 created: 2026-07-07
-status: 基本完成（仅余 workflow 禁用词内嵌项待后续处理）
+status: 已完成
 based_on:
   - 两轮第一性原理审计（2026-07-07）
   - 规划/2026-07-06~12.md（date_range 格式先例）
@@ -24,7 +24,7 @@ based_on:
 
 - [x] `git status` 显示 0 个未跟踪文件（全部核心文件已提交）
 - [x] `grep "YYYY-Www"` 在所有用户可见输出中附带日期范围
-- [ ] 禁用模糊词列表只在 `analysis-standards.md` 和 `.claude/shared/` 中出现，workflow 文件不内嵌
+- [x] 禁用模糊词列表只在 `analysis-standards.md` 和 `.claude/shared/` 中出现，workflow 文件不内嵌
 - [x] `weekly-processor` 不再出现在 README 和 PROJECT_STATUS 中
 - [x] `perspectives/README.md` 存在，说明提取器 vs 评估器两种架构
 - [x] `values-meaning.md` 不再硬编码用户个人数据
@@ -374,4 +374,4 @@ log.md 是一个"超级重复器"——它重复了 daily-analyzer 的输出格�
 
 ## 当前状态：已完成
 
-> 此 spec 的5个阶段已于 v1.2.0 执行完毕。剩余阶段5上下文精简在后续版本中持续推进。
+> 五个阶段均已完成；禁用词运行镜像已集中到 `.claude/shared/runtime-contracts.js`，workflow 不再内嵌维护。

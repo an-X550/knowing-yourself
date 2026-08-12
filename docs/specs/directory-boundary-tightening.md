@@ -1,6 +1,6 @@
 ---
 created: 2026-07-08
-status: 已采纳
+status: 已完成
 ---
 
 # 收紧 `.claude/` 与 `docs/` 的职责边界
@@ -204,11 +204,11 @@ status: 已采纳
 
 # 验收标准
 
-- [ ] `.claude/shared/*` 被明确规定为唯一运行契约层，其他运行文件不再维护平行权威。
-- [ ] `workflows/shared.js` 的未来职责被收紧为 helper，而不是共享真相副本。
-- [ ] `log skill`、`commands`、`agents`、`settings.json` 的边界被明确写清。
-- [ ] `docs/` 的五类文档角色被区分清楚：人类提醒、方法论文档、正式 spec、开发过程记录、历史归档。
-- [ ] 形成一份可直接执行的 implementation plan，后续改动可以按阶段落地。
+- [x] `.claude/shared/*` 被明确规定为唯一运行契约层，其他运行文件不再维护平行权威。
+- [x] `workflows/shared.js` 的未来职责被收紧为 helper，而不是共享真相副本。
+- [x] `log skill`、`commands`、`agents`、`settings.json` 的边界被明确写清。
+- [x] `docs/` 的五类文档角色被区分清楚：人类提醒、方法论文档、正式 spec、开发过程记录、历史归档。
+- [x] 形成一份可直接执行的 implementation plan，后续改动可以按阶段落地。
 
 # 实施建议
 
@@ -217,4 +217,6 @@ status: 已采纳
 3. 再处理文档分层与归档：`docs/specs/`、`docs/superpowers/`、`docs/archive/`
 4. 最后同步 README / PROJECT_STATUS / CHANGELOG 的结构说明与版本状态
 
-# 当前状态：已采纳，待实施
+# 当前状态：已完成
+
+> 已于 v1.5.5 落地；运行镜像集中在 `.claude/shared/runtime-contracts.js`，workflow 只消费共享常量与 helper，入口和文档分层由现行治理规范持续约束。
