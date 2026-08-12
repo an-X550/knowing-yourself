@@ -81,7 +81,7 @@ allowed-tools:
    - `❌ 没做`：具体干预记“本次未奏效”；同类行动连续 3 次没做时降低门槛或停止重复建议。
    - `⚠️ 证据不足`：保留为“证据不足”，不升级、不证伪。
    - 明确反例先记“出现反例”，只有满足证伪条件时才移入“已证伪的假说”。
-3. **结果分发**：读取 `.claude/shared/contracts/result-distribution.md`，仅把上一步已确认的新写入交给 `distribute output.daily_feedback <resolved-local-path>`。外部失败不修改本地反馈或验证沉淀；分发摘要只追加到聊天，不写入报告正文。若两个渠道均为 `skipped_not_configured`，不追加摘要，保持原有聊天输出不变。
+3. **结果分发**：若本次请求明确包含“仅本地”，完成本地反馈写入、复读与验证沉淀后不调用结果分发；否则读取 `.claude/shared/contracts/result-distribution.md`，仅把上一步已确认的新写入交给 `distribute output.daily_feedback <resolved-local-path>`。外部失败不修改本地反馈或验证沉淀；分发摘要只追加到聊天，不写入报告正文。若两个渠道均为 `skipped_not_configured`，不追加摘要，保持原有聊天输出不变。
 
 这里的“本次新写入”必须由当前写入步骤明确返回成功并与 resolved-local-path 一致；不能只凭文件存在或非空证明本轮新写入，随后还必须重新读取并通过结构校验。
 4. **展示给用户**：将同一份反馈文本展示在对话中，并在末尾用一句话说明是否更新了 `verified-patterns.md`；有实际分发结果时再追加契约返回的摘要

@@ -48,7 +48,7 @@ last_updated: 2026-07-31
 
 ## 新报告写入后的结果分发
 
-Codex 直接路由不依赖 Claude `Task` / `Workflow`。周报、月报或项目复盘综合完成后，只有本轮已向权威 output key **新写入**报告，并从解析出的实际路径**重新读取**到非空、结构合格的内容，才读取 `.claude/shared/contracts/result-distribution.md` 并执行对应 handoff：
+Codex 直接路由不依赖 Claude `Task` / `Workflow`。本次请求明确包含“仅本地”时，报告完成本地写入和复读后不调用结果分发；否则，周报、月报或项目复盘综合完成后，只有本轮已向权威 output key **新写入**报告，并从解析出的实际路径**重新读取**到非空、结构合格的内容，才读取 `.claude/shared/contracts/result-distribution.md` 并执行对应 handoff：
 
 - `distribute output.weekly_report <resolved-local-path>`
 - `distribute output.monthly_report <resolved-local-path>`

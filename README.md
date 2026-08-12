@@ -2,7 +2,7 @@
 
 > 从日志中发现自己看不到的模式，把洞察变成行动，再用真实结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.14.1-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.14.2-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 这是什么
@@ -45,7 +45,7 @@
 
 共同边界是：AI 提供证据整理、假说与低成本实验；用户保留对自身经历、价值选择和重大决定的最终解释权。证据不足时，系统必须降低结论强度，而不是补完故事。
 
-可选结果分发默认关闭。启用后，飞书可把新生成的正式复盘、人生设计、已确认主题思考和明确收录的收藏及附件沉淀到固定“知己”目录；滴答仍只接收报告中已有的合格行动。本地文件始终是权威来源，不扫描电脑、不上传原始日志、画像、中间分析、配置或状态；设置方法见 [`docs/result-distribution-setup.md`](docs/result-distribution-setup.md)。
+可选结果分发默认关闭。启用后，飞书可把新生成的正式复盘、人生设计、已确认主题思考和明确收录的收藏及附件沉淀到固定“知己”目录；滴答仍只接收报告中已有的合格行动。本地文件始终是权威来源，不扫描电脑、不上传原始日志、画像、中间分析、配置或状态。若本次只想保存到电脑，在生成请求中直接说“仅本地”，本轮会同时跳过飞书和滴答，不留下永久标记；设置方法见 [`docs/result-distribution-setup.md`](docs/result-distribution-setup.md)。
 
 ## 维护与分发
 

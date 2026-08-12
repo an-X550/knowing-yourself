@@ -90,7 +90,9 @@ foreach ($entry in $commands.GetEnumerator()) {
       '不写入报告正文',
       'skipped_not_configured',
       '保持原有聊天输出不变',
-      '不能只凭文件存在或非空证明本轮新写入'
+      '不能只凭文件存在或非空证明本轮新写入',
+      '本次请求明确包含“仅本地”',
+      '不调用结果分发'
     )
   }
 }
@@ -156,7 +158,9 @@ foreach ($path in $naturalRoutes) {
     '分析失败',
     '分发摘要只追加到聊天',
     '不写入报告正文',
-    '保持原有聊天输出不变'
+    '保持原有聊天输出不变',
+    '本次请求明确包含“仅本地”',
+    '不调用结果分发'
   )
 }
 
@@ -173,7 +177,8 @@ foreach ($path in $topicRoutes) {
     '重新读取',
     '未经确认',
     '不调用结果分发',
-    '分发摘要只追加到聊天'
+    '分发摘要只追加到聊天',
+    '本次请求明确包含“仅本地”'
   )
 }
 
@@ -219,10 +224,11 @@ foreach ($path in $collectionRoutes) {
     '明确收录',
     '新写入',
     '重新读取',
-    'distribution: local_only',
+    '本次请求明确包含“仅本地”',
     '不调用结果分发',
     '分发摘要只追加到聊天'
   )
+  Assert-NotContains $path @('distribution: local_only')
 }
 Assert-SameFile $collectionRoutes[0] $collectionRoutes[1]
 

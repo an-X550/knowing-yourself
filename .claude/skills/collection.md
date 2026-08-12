@@ -41,6 +41,6 @@ description: 用户明确要求“收录到收藏吃灰库/某主题”或等价
 
 ## 5. 飞书分发
 
-读取 `.claude/shared/contracts/result-distribution.md`。只有本轮明确收录并完成**新写入**后，才从磁盘**重新读取**非空收藏条目；未发生同名冲突且 YAML frontmatter 不含 `distribution: local_only` 时，调用 `distribute context.collection_topic <resolved-local-path>`。附件先复制到对应收藏主题目录并验证非空后，调用 `distribute context.collection_attachment <resolved-local-path>`。
+读取 `.claude/shared/contracts/result-distribution.md`。本次请求明确包含“仅本地”时，收藏完成本地写入、附件复制和复读后不调用结果分发；否则，只有本轮明确收录并完成**新写入**后，才从磁盘**重新读取**非空收藏条目并调用 `distribute context.collection_topic <resolved-local-path>`。附件先复制到对应收藏主题目录并验证非空后，调用 `distribute context.collection_attachment <resolved-local-path>`。
 
-已有收藏只读展示、同名冲突未裁决、缓存命中、`distribution: local_only`、复制/写入失败或路径校验失败时不调用结果分发。分发摘要只追加到聊天，不写入收藏正文；飞书失败不影响本地收录成功。
+已有收藏只读展示、同名冲突未裁决、缓存命中、复制/写入失败或路径校验失败时不调用结果分发。分发摘要只追加到聊天，不写入收藏正文；飞书失败不影响本地收录成功。

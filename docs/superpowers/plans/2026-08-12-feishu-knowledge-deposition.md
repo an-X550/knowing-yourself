@@ -28,11 +28,11 @@
 
 **Interfaces:**
 - Consumes: `.claude/shared/paths.md` 中既有输出 key 与收藏路径。
-- Produces: 对收藏来源、固定目录映射、非 Markdown 附件和 `local_only` 排除规则的回归断言。
+- Produces: 对收藏来源、固定目录映射、非 Markdown 附件和单次“仅本地”排除规则的回归断言。
 
 - [x] **Step 1: 写入失败断言**
 
-在三项现有测试中断言：契约允许 `context.collection_topic` 与 `context.collection_attachment`；飞书目标按“知己/复盘/类型”和“知己/关于我/类型”路由；收藏写入成功后调用分发；附件必须先进入受控收藏目录；`distribution: local_only` 跳过飞书。
+在三项现有测试中断言：契约允许 `context.collection_topic` 与 `context.collection_attachment`；飞书目标按“知己/复盘/类型”和“知己/关于我/类型”路由；收藏写入成功后调用分发；附件必须先进入受控收藏目录；本次请求明确说“仅本地”时同时跳过飞书和滴答。
 
 - [x] **Step 2: 运行聚焦测试确认 RED**
 
@@ -58,7 +58,7 @@ Expected: 至少一项因缺少新白名单或目录路由而 FAIL，且不是�
 
 - [x] **Step 1: 写最小契约**
 
-只增加来源白名单、路径真实性校验、固定目标目录映射、Markdown 在线文档导入、普通附件原格式上传和 `local_only` 跳过规则；明确更新内容仍返回 `changed_after_delivery`，不静默覆盖。
+只增加来源白名单、路径真实性校验、固定目标目录映射、Markdown 在线文档导入、普通附件原格式上传和单次“仅本地”跳过规则；明确更新内容仍返回 `changed_after_delivery`，不静默覆盖。
 
 - [x] **Step 2: 接通收藏调用点**
 
@@ -102,12 +102,12 @@ Expected: bot ready，专用用户可访问，根目录唯一且名称为“知�
 - Modify: `BLOCKED.md`
 
 **Interfaces:**
-- Consumes: 白名单目录、`local_only` 排除、测试日期排除规则和现有分发状态。
+- Consumes: 白名单目录、单次“仅本地”排除、测试日期排除规则和现有分发状态。
 - Produces: 等待用户确认的历史清单；一条非历史的新写入真实验收证据。
 
 - [x] **Step 1: 生成候选清单**
 
-列出白名单内真实文件的相对路径、类型和 SHA-256；排除 2099 测试材料、`local_only`、配置、状态及中间产物，不执行批量上传。
+列出白名单内真实文件的相对路径、类型和 SHA-256；排除 2099 测试材料、当次明确要求“仅本地”的内容、配置、状态及中间产物，不执行批量上传。
 
 - [x] **Step 2: 用受控失败样本补发做真实工具落位验证**
 

@@ -61,6 +61,9 @@ foreach ($path in @($mainGuide, $overlayGuide)) {
     '## 用户检查清单',
     '## 隐私与凭证边界',
     '默认关闭',
+    '本次生成请求中直接说“仅本地”',
+    '同时跳过飞书和滴答',
+    '不写入永久标记',
     'cli_missing',
     'app_not_configured',
     'bot_ready',
@@ -115,12 +118,14 @@ Assert-SameFile $mainGuide $overlayGuide
 Assert-Contains 'README.md' @(
   'docs/result-distribution-setup.md',
   '结果分发',
-  '默认关闭'
+  '默认关闭',
+  '仅本地'
 )
 Assert-Contains 'packaging/zhiji-user-overlay/README.md' @(
   'docs/result-distribution-setup.md',
   '结果分发',
-  '默认关闭'
+  '默认关闭',
+  '仅本地'
 )
 
 if ($failures.Count -gt 0) {

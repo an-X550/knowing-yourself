@@ -24,7 +24,7 @@ last_updated: 2026-08-11
 
 禁止来源包括 `input.*`、`context.core_profile`、`context.current`、`context.verified_patterns`、`analysis.*`、`output.result_distribution_config` 和 `output.result_distribution_state`。原始日志、画像、中间分析、配置与状态永不上传。
 
-任何 Markdown 来源的 YAML frontmatter 含 `distribution: local_only` 时，飞书渠道返回 `skipped_not_configured`，不得上传。收藏附件必须从 `context.collection_attachment` 的受控路径进入；不得扫描仓库或电脑寻找待上传文件，也不得直接接收项目外路径。
+用户在本次生成请求中明确说“仅本地”时，调用方完成本地写入、复读和必要沉淀后即停止；本轮不调用飞书或 TickTick，也不增加分发摘要。这个选择只对本次请求生效，不写入持久化标记、配置或状态，不改变以后请求的分发行为。收藏附件必须从 `context.collection_attachment` 的受控路径进入；不得扫描仓库或电脑寻找待上传文件，也不得直接接收项目外路径。
 
 ## 配置与默认行为
 

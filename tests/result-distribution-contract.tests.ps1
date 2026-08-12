@@ -85,7 +85,9 @@ foreach ($path in @($mainContract, $overlayContract)) {
     'context.thinking_topic',
     'context.collection_topic',
     'context.collection_attachment',
-    'distribution: local_only',
+    '用户在本次生成请求中明确说“仅本地”',
+    '本轮不调用飞书或 TickTick',
+    '不写入持久化标记、配置或状态',
     '知己/复盘/每日反馈',
     '知己/复盘/每周复盘',
     '知己/复盘/每月复盘',
@@ -134,6 +136,7 @@ foreach ($path in @($mainContract, $overlayContract)) {
     '不得宣称本地与外部“整体失败”'
   )
   Assert-NotContains $path @(
+    'distribution: local_only',
     '读取滴答任务',
     '读取 TickTick 任务',
     '完成检测',

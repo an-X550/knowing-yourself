@@ -46,6 +46,6 @@ last_updated: 2026-07-31
 
 ## 确认写入后的结果分发
 
-只有用户明确确认沉淀，且本轮对 `context.thinking_topic` 完成新写入后，才从解析出的实际路径重新读取；文件存在、非空且仍符合已确认主题结构时，读取 `.claude/shared/contracts/result-distribution.md` 并执行 `distribute context.thinking_topic <resolved-local-path>`。分发摘要只追加到聊天，不写入主题正文；第三方结果不得反向改变主题判断、行动卡或观点演化。
+本次请求明确包含“仅本地”时，主题完成本地写入和复读后不调用结果分发；否则，只有用户明确确认沉淀，且本轮对 `context.thinking_topic` 完成新写入后，才从解析出的实际路径重新读取；文件存在、非空且仍符合已确认主题结构时，读取 `.claude/shared/contracts/result-distribution.md` 并执行 `distribute context.thinking_topic <resolved-local-path>`。分发摘要只追加到聊天，不写入主题正文；第三方结果不得反向改变主题判断、行动卡或观点演化。
 
 未经确认、用户拒绝保存、只读召回、没有实质变化、写入失败或复读校验失败时不调用结果分发。若两个渠道均为 `skipped_not_configured`，不追加摘要，保持原有聊天输出不变。
