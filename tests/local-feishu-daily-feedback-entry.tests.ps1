@@ -30,6 +30,13 @@ function Assert-True {
   }
 }
 
+function Assert-ContainsValue {
+  param($Values, $Expected, [string]$Message)
+  if (-not (@($Values) -ccontains $Expected)) {
+    Add-Failure "$Message (missing=$Expected values=$(@($Values) -join ','))"
+  }
+}
+
 if (-not (Test-Path -LiteralPath $workflowPath -PathType Leaf)) {
   Add-Failure "missing workflow: .claude/workflows/local-feishu-daily-feedback.ps1"
 } else {
@@ -163,11 +170,96 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
       $replyFailureRepeat = Invoke-ZhijiEntryDecision -Decision $replyFailureDecision -Config $config -CodexInvoker $replyFailureCodex -ReplyInvoker $reply
       Assert-Equal $replyFailureRepeat.error_code "duplicate_reply_failed" "reply-failed duplicate must not reanalyze"
       Assert-Equal $script:replyFailureCodexCalls 1 "reply-failed duplicate must not rerun Codex"
+
+      if (Get-Command Read-ZhijiEntryConfig -ErrorAction SilentlyContinue) {
+        $validConfigPath = Join-Path $tempRoot "config.json"
+        $validStateRelative = "复盘/.local-feishu-daily-feedback-state.json"
+        $configJson = [ordered]@{
+          schema_version = 1
+          allowed_open_id = "ou_owner"
+          lark_cli_path = "lark-test"
+          codex_path = "codex-test"
+          state_path = $validStateRelative
+        } | ConvertTo-Json
+        [System.IO.File]::WriteAllText($validConfigPath, $configJson, [System.Text.UTF8Encoding]::new($true))
+        $loaded = Read-ZhijiEntryConfig -Path $validConfigPath -RepoRoot $repoRoot
+        Assert-Equal $loaded.allowed_open_id "ou_owner" "config must retain the owner open_id"
+        Assert-True ([System.IO.Path]::IsPathRooted($loaded.state_path)) "state path must resolve to an absolute path"
+        Assert-True ($loaded.state_path.StartsWith($repoRoot, [System.StringComparison]::OrdinalIgnoreCase)) "state path must remain in the repository"
+
+        $placeholderJson = $configJson.Replace("ou_owner", "ou_replace_with_your_open_id")
+        [System.IO.File]::WriteAllText($validConfigPath, $placeholderJson, [System.Text.UTF8Encoding]::new($true))
+        try {
+          $null = Read-ZhijiEntryConfig -Path $validConfigPath -RepoRoot $repoRoot
+          Add-Failure "placeholder open_id must fail config loading"
+        } catch {
+          Assert-True ($_.Exception.Message -match "allowed_open_id") "placeholder failure must identify allowed_open_id"
+        }
+
+        $escaping = $configJson.Replace($validStateRelative, "../outside.json")
+        [System.IO.File]::WriteAllText($validConfigPath, $escaping, [System.Text.UTF8Encoding]::new($true))
+        try {
+          $null = Read-ZhijiEntryConfig -Path $validConfigPath -RepoRoot $repoRoot
+          Add-Failure "escaping state path must fail config loading"
+        } catch {
+          Assert-True ($_.Exception.Message -match "state_path") "escaping path failure must identify state_path"
+        }
+      } else {
+        Add-Failure "missing function: Read-ZhijiEntryConfig"
+      }
+
+      if (Get-Command Get-ZhijiLarkConsumeArguments -ErrorAction SilentlyContinue) {
+        $consumeArgs = @(Get-ZhijiLarkConsumeArguments)
+        Assert-Equal ($consumeArgs -join "|") "event|consume|im.message.receive_v1|--as|bot" "listener argv must be fixed"
+      } else {
+        Add-Failure "missing function: Get-ZhijiLarkConsumeArguments"
+      }
+
+      if (Get-Command Get-ZhijiLarkReplyArguments -ErrorAction SilentlyContinue) {
+        $replyArgs = @(Get-ZhijiLarkReplyArguments -MessageId "om_valid" -Text "反馈" -Suffix "result")
+        Assert-ContainsValue $replyArgs "--as" "reply argv must include the identity flag"
+        Assert-ContainsValue $replyArgs "bot" "reply argv must use bot identity"
+        Assert-ContainsValue $replyArgs "--idempotency-key" "reply argv must include an idempotency key"
+        Assert-True ((@($replyArgs) | Where-Object { $_ -like "zhiji-*" }).Count -eq 1) "reply argv must contain one deterministic idempotency key"
+      } else {
+        Add-Failure "missing function: Get-ZhijiLarkReplyArguments"
+      }
+
+      if (Get-Command Test-ZhijiEntryRuntime -ErrorAction SilentlyContinue) {
+        $preflightCalls = New-Object System.Collections.Generic.List[string]
+        $preflightInvoker = {
+          param($Executable, $Arguments, $WorkingDirectory, $InputText)
+          $preflightCalls.Add("$Executable|$(@($Arguments) -join ' ')") | Out-Null
+          if ($Executable -eq "lark-test" -and @($Arguments)[0] -eq "auth") {
+            return [pscustomobject]@{ exit_code = 0; output = '{"bot":{"status":"ready","available":true,"verified":true}}'; error_code = $null }
+          }
+          if ($Executable -eq "codex-test" -and @($Arguments)[0] -eq "exec") {
+            return [pscustomobject]@{ exit_code = 0; output = "zhiji_runtime_ready"; error_code = $null }
+          }
+          return [pscustomobject]@{ exit_code = 0; output = "1.0.0"; error_code = $null }
+        }
+        [System.IO.File]::WriteAllText($validConfigPath, $configJson, [System.Text.UTF8Encoding]::new($true))
+        $preflight = Test-ZhijiEntryRuntime -ConfigPath $validConfigPath -RepoRoot $repoRoot -CommandInvoker $preflightInvoker
+        Assert-Equal $preflight.status "ready" "valid runtime preflight must be ready"
+        Assert-True (($preflightCalls -join "`n") -match "lark-test\|auth status --json --verify") "preflight must verify Lark auth"
+        Assert-True (($preflightCalls -join "`n") -match "codex-test\|exec --sandbox read-only --ephemeral") "preflight must run a read-only Codex probe"
+      } else {
+        Add-Failure "missing function: Test-ZhijiEntryRuntime"
+      }
     } finally {
       Remove-Item -LiteralPath $tempRoot -Recurse -Force
     }
   } else {
     Add-Failure "missing function: Invoke-ZhijiEntryDecision"
+  }
+}
+
+if (Test-Path -LiteralPath $workflowPath -PathType Leaf) {
+  $workflowText = Get-Content -LiteralPath $workflowPath -Raw -Encoding UTF8
+  foreach ($forbidden in @("Start-Job", "ForEach-Object -Parallel", "Invoke-Expression")) {
+    if ($workflowText -match [regex]::Escape($forbidden)) {
+      Add-Failure "workflow must not contain: $forbidden"
+    }
   }
 }
 

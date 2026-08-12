@@ -97,7 +97,7 @@ Run: `powershell -NoProfile -ExecutionPolicy Bypass -File tests/local-feishu-dai
 
 Expected: `PASS: local Feishu daily feedback entry checks`。
 
-- [ ] **Step 5: 提交 Task 1**
+- [x] **Step 5: 提交 Task 1**
 
 ```powershell
 git add -- tests/local-feishu-daily-feedback-entry.tests.ps1 .claude/workflows/local-feishu-daily-feedback.ps1
@@ -178,7 +178,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tests/result-distribution-ro
 
 Expected: 三项均 PASS。
 
-- [ ] **Step 5: 提交 Task 2**
+- [x] **Step 5: 提交 Task 2**
 
 ```powershell
 git add -- .claude/workflows/local-feishu-daily-feedback.ps1 .claude/shared/local-feishu-daily-feedback-config.example.json .claude/shared/paths.md tests/local-feishu-daily-feedback-entry.tests.ps1
@@ -199,17 +199,17 @@ git commit -m "feat: 接入每日反馈执行与防重"
 - Consumes: Task 2 的配置、状态和执行函数。
 - Produces: `-Mode Preflight` 检查两条 CLI 和配置；`-Mode Run` 持续消费 `im.message.receive_v1` NDJSON 并串行调用处理函数。
 
-- [ ] **Step 1: 写预检和监听参数失败测试**
+- [x] **Step 1: 写预检和监听参数失败测试**
 
 验证配置缺失、占位 open_id、CLI 不存在分别返回明确错误；检查实际监听 argv 必须恰好包含 `event consume im.message.receive_v1 --as bot`，回复 argv 必须包含 `--as bot` 与确定性 idempotency key；测试文件还要断言 workflow 不出现 `Start-Job`、并发处理、群聊白名单或任意 shell 字符串执行。
 
-- [ ] **Step 2: 运行测试并确认 RED**
+- [x] **Step 2: 运行测试并确认 RED**
 
 Run: `powershell -NoProfile -ExecutionPolicy Bypass -File tests/local-feishu-daily-feedback-entry.tests.ps1`
 
 Expected: FAIL，原因是 `Test-ZhijiEntryRuntime` / `Start-ZhijiEntryListener` 不存在或参数不满足。
 
-- [ ] **Step 3: 实现预检与串行监听**
+- [x] **Step 3: 实现预检与串行监听**
 
 `Preflight` 必须执行并检查：配置 schema、唯一 open_id、状态路径在仓库内、`lark-cli --version`、`lark-cli auth status --json --verify`、`codex --version`，随后运行一次 Codex 只读非交互任务，要求只返回 `zhiji_runtime_ready`。`Run` 先通过同一预检，再启动一个长连接消费进程，逐行解析 stdout JSON；任何无法解析的行只写本机诊断，不进入业务处理。
 
@@ -221,13 +221,13 @@ lark-cli event consume im.message.receive_v1 --as bot
 
 不使用 `--quiet`；持续显示 ready/exited 和丢事件诊断。每次只处理一条消息，完成后才读下一条。
 
-- [ ] **Step 4: 写个人验证期说明**
+- [x] **Step 4: 写个人验证期说明**
 
 文档只包含：安装官方 CLI、配置文件、飞书应用最小消息权限/事件、Codex 登录、关闭 Windows 自动睡眠、Preflight、Run、停止方式、三条受控验收和 14 天观察门。明确屏幕可以关闭、电脑或进程离线时重新发送、不提供离线补偿。
 
 README 只增加一条实验入口链接，不宣传为全天候或已云化能力。
 
-- [ ] **Step 5: 运行测试和文档链接检查**
+- [x] **Step 5: 运行测试和文档链接检查**
 
 Run:
 

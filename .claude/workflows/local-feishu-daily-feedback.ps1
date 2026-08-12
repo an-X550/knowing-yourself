@@ -150,6 +150,133 @@ function New-ZhijiIdempotencyKey {
   return "zhiji-$($hash.Substring(0, 32))"
 }
 
+function Read-ZhijiEntryConfig {
+  param(
+    [Parameter(Mandatory = $true)][string]$Path,
+    [Parameter(Mandatory = $true)][string]$RepoRoot
+  )
+
+  if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+    throw "Config file not found: $Path"
+  }
+
+  $config = Get-Content -LiteralPath $Path -Raw -Encoding UTF8 | ConvertFrom-Json
+  if ($null -eq $config -or [int]$config.schema_version -ne 1) {
+    throw "Unsupported config schema_version."
+  }
+  if ([string]::IsNullOrWhiteSpace([string]$config.allowed_open_id) -or
+      [string]$config.allowed_open_id -eq "ou_replace_with_your_open_id" -or
+      [string]$config.allowed_open_id -notmatch '^ou_[A-Za-z0-9]+$') {
+    throw "Config allowed_open_id must contain the verified owner open_id."
+  }
+  foreach ($name in @("lark_cli_path", "codex_path", "state_path")) {
+    if ([string]::IsNullOrWhiteSpace([string]$config.$name)) {
+      throw "Config $name must not be empty."
+    }
+  }
+
+  $resolvedRoot = [System.IO.Path]::GetFullPath($RepoRoot).TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
+  $statePath = [string]$config.state_path
+  if (-not [System.IO.Path]::IsPathRooted($statePath)) {
+    $statePath = Join-Path $resolvedRoot $statePath
+  }
+  $resolvedState = [System.IO.Path]::GetFullPath($statePath)
+  $requiredPrefix = $resolvedRoot + [System.IO.Path]::DirectorySeparatorChar
+  if (-not $resolvedState.StartsWith($requiredPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+    throw "Config state_path must remain inside the repository."
+  }
+
+  return [pscustomobject]@{
+    schema_version = 1
+    allowed_open_id = [string]$config.allowed_open_id
+    lark_cli_path = [string]$config.lark_cli_path
+    codex_path = [string]$config.codex_path
+    state_path = $resolvedState
+    repo_root = $resolvedRoot
+  }
+}
+
+function Get-ZhijiLarkConsumeArguments {
+  return @("event", "consume", "im.message.receive_v1", "--as", "bot")
+}
+
+function Get-ZhijiLarkReplyArguments {
+  param(
+    [Parameter(Mandatory = $true)][string]$MessageId,
+    [Parameter(Mandatory = $true)][string]$Text,
+    [Parameter(Mandatory = $true)][string]$Suffix
+  )
+
+  return @(
+    "im", "+messages-reply", "--message-id", $MessageId, "--text", $Text,
+    "--idempotency-key", (New-ZhijiIdempotencyKey -MessageId $MessageId -Suffix $Suffix),
+    "--as", "bot"
+  )
+}
+
+function Invoke-ZhijiExternalCommand {
+  param(
+    [Parameter(Mandatory = $true)][string]$Executable,
+    [Parameter(Mandatory = $true)][object[]]$Arguments,
+    [Parameter(Mandatory = $true)][string]$WorkingDirectory,
+    [AllowNull()][string]$InputText
+  )
+
+  Push-Location $WorkingDirectory
+  try {
+    if ($null -eq $InputText) {
+      $output = & $Executable $Arguments 2>&1
+    } else {
+      $output = $InputText | & $Executable $Arguments 2>&1
+    }
+    $exitCode = $LASTEXITCODE
+  } catch {
+    return [pscustomobject]@{ exit_code = 1; output = $null; error_code = "command_unavailable" }
+  } finally {
+    Pop-Location
+  }
+
+  return [pscustomobject]@{
+    exit_code = $exitCode
+    output = ($output -join [Environment]::NewLine).Trim()
+    error_code = if ($exitCode -eq 0) { $null } else { "command_failed" }
+  }
+}
+
+function Test-ZhijiEntryRuntime {
+  param(
+    [Parameter(Mandatory = $true)][string]$ConfigPath,
+    [Parameter(Mandatory = $true)][string]$RepoRoot,
+    [scriptblock]$CommandInvoker = ${function:Invoke-ZhijiExternalCommand}
+  )
+
+  $config = Read-ZhijiEntryConfig -Path $ConfigPath -RepoRoot $RepoRoot
+  $larkVersion = & $CommandInvoker $config.lark_cli_path @("--version") $config.repo_root $null
+  if ($larkVersion.exit_code -ne 0) { throw "lark-cli is unavailable." }
+
+  $authResult = & $CommandInvoker $config.lark_cli_path @("auth", "status", "--json", "--verify") $config.repo_root $null
+  if ($authResult.exit_code -ne 0) { throw "lark-cli auth verification failed." }
+  try {
+    $auth = [string]$authResult.output | ConvertFrom-Json
+  } catch {
+    throw "lark-cli auth verification returned invalid JSON."
+  }
+  if ($null -eq $auth.bot -or [string]$auth.bot.status -ne "ready" -or
+      $auth.bot.available -ne $true -or $auth.bot.verified -ne $true) {
+    throw "lark-cli bot identity is not ready, available, and verified."
+  }
+
+  $codexVersion = & $CommandInvoker $config.codex_path @("--version") $config.repo_root $null
+  if ($codexVersion.exit_code -ne 0) { throw "Codex CLI is unavailable." }
+  $probePrompt = "只读取当前项目名称并只输出 zhiji_runtime_ready，不修改文件。"
+  $codexProbe = & $CommandInvoker $config.codex_path @("exec", "--sandbox", "read-only", "--ephemeral", $probePrompt) $config.repo_root $null
+  if ($codexProbe.exit_code -ne 0 -or ([string]$codexProbe.output).Trim() -ne "zhiji_runtime_ready") {
+    throw "Codex non-interactive probe failed."
+  }
+
+  return [pscustomobject]@{ status = "ready"; config = $config; lark = "ready"; codex = "ready" }
+}
+
 function Invoke-ZhijiCodex {
   param(
     [Parameter(Mandatory = $true)][string]$Prompt,
@@ -183,12 +310,9 @@ function Send-ZhijiEntryReply {
     [Parameter(Mandatory = $true)][string]$Suffix
   )
 
-  $idempotencyKey = New-ZhijiIdempotencyKey -MessageId $MessageId -Suffix $Suffix
+  $arguments = Get-ZhijiLarkReplyArguments -MessageId $MessageId -Text $Text -Suffix $Suffix
   try {
-    $null = & $LarkCliPath @(
-      "im", "+messages-reply", "--message-id", $MessageId, "--text", $Text,
-      "--idempotency-key", $idempotencyKey, "--as", "bot"
-    ) 2>$null
+    $null = & $LarkCliPath $arguments 2>$null
     $exitCode = $LASTEXITCODE
   } catch {
     return [pscustomobject]@{ exit_code = 1; error_code = "reply_failed" }
@@ -197,6 +321,44 @@ function Send-ZhijiEntryReply {
     return [pscustomobject]@{ exit_code = $exitCode; error_code = "reply_failed" }
   }
   return [pscustomobject]@{ exit_code = 0; error_code = $null }
+}
+
+function Start-ZhijiEntryListener {
+  param([Parameter(Mandatory = $true)]$Config)
+
+  Write-Host "Zhiji local Feishu entry: ready (Ctrl+C to stop)."
+  $arguments = Get-ZhijiLarkConsumeArguments
+  & $Config.lark_cli_path $arguments 2>&1 | ForEach-Object {
+    $line = [string]$_
+    try {
+      $event = $line | ConvertFrom-Json
+    } catch {
+      Write-Host "[lark-cli] $line"
+      return
+    }
+
+    if ($null -eq $event.message_id) {
+      Write-Warning "Ignored event JSON without message_id."
+      return
+    }
+    $decision = ConvertTo-ZhijiEntryDecision -Event $event -AllowedOpenId $Config.allowed_open_id
+    switch ($decision.action) {
+      "process" {
+        $result = Invoke-ZhijiEntryDecision -Decision $decision -Config $Config
+        Write-Host "Processed $($decision.message_id): $($result.status)/$($result.error_code)"
+      }
+      "usage" {
+        $reply = Send-ZhijiEntryReply -MessageId $decision.message_id -Text $decision.reply_text -LarkCliPath $Config.lark_cli_path -Suffix "usage"
+        Write-Host "Usage reply $($decision.message_id): exit=$($reply.exit_code)"
+      }
+      default {
+        Write-Host "Ignored $($decision.message_id): $($decision.error_code)"
+      }
+    }
+  }
+  if ($LASTEXITCODE -ne 0) {
+    throw "lark-cli event consumer exited with code $LASTEXITCODE."
+  }
 }
 
 function Invoke-ZhijiEntryDecision {
@@ -254,5 +416,14 @@ function Invoke-ZhijiEntryDecision {
 }
 
 if ($MyInvocation.InvocationName -ne ".") {
-  throw "Runtime modes are not implemented yet."
+  $repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "../.."))
+  if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
+    $ConfigPath = Join-Path $repoRoot "复盘/.local-feishu-daily-feedback-config.json"
+  }
+  $preflight = Test-ZhijiEntryRuntime -ConfigPath $ConfigPath -RepoRoot $repoRoot
+  if ($Mode -eq "Preflight") {
+    Write-Host "lark=$($preflight.lark) codex=$($preflight.codex) config=ready"
+  } else {
+    Start-ZhijiEntryListener -Config $preflight.config
+  }
 }

@@ -49,6 +49,8 @@
 
 一次性或周期性的纯提醒默认使用滴答清单原生通知；Codex 定时任务只在用户明确指定时例外。提醒只通知用户手动开始，不会自动读取文件或生成复盘。
 
+个人验证期可使用[本地飞书每日反馈入口](docs/local-feishu-daily-feedback-entry.md)：电脑保持在线且不休眠时，在手机私聊机器人发送 `日志：<原文>`，复用现有知己日反馈与结果分发；它不是全天候云服务。
+
 ## 维护与分发
 
 - `.claude/` 是唯一运行真相，包含 commands、agents、skills、workflows 与 shared 契约。
@@ -93,6 +95,7 @@ powershell -ExecutionPolicy Bypass -File scripts/export-zhiji-user.ps1
 - 开发与维护规范：[`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md)
 - 用户版完整指南：[`zhiji-user/README.md`](zhiji-user/README.md)
 - 用户版同步流程：[`docs/zhiji-user-sync-workflow.md`](docs/zhiji-user-sync-workflow.md)
+- 本地飞书每日反馈入口：[`docs/local-feishu-daily-feedback-entry.md`](docs/local-feishu-daily-feedback-entry.md)
 - 第一性原理提醒：[`docs/first-principles.md`](docs/first-principles.md)
 - 质量基线与待验收项：[`docs/quality-baseline-matrix.md`](docs/quality-baseline-matrix.md)
 - 模型选择与 A/B/C 对比：[`docs/model-selection.md`](docs/model-selection.md)
