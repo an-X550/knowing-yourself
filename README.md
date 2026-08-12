@@ -1,8 +1,10 @@
 # 知己
 
+> 想先快速了解并体验项目？打开 [用户上手页](zhiji-user/index.html)。详细的浏览器版说明见 [用户使用说明](zhiji-user/guide.html)。
+
 > 把日常记录变成更可靠的行动：看见模式，试一个小改变，再用结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.16.0-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.16.1-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 你能用它解决什么

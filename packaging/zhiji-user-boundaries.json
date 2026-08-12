@@ -177,6 +177,9 @@
   ],
   "user_only": [
     "SKILL.md",
+    "index.html",
+    "guide.html",
+    "setup.html",
     ".zhiji-user-sync.json",
     "docs/release-acceptance-2026-07-09.md",
     "docs/release-checklist.md",

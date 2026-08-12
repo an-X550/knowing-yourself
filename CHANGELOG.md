@@ -1,9 +1,14 @@
 ---
 created: 2026-07-05
-last_updated: 2026-08-12
+last_updated: 2026-08-13
 ---
 
 # CHANGELOG - 改动记录
+
+## [2026-08-13 12:30] [文档] 同步用户版离线 HTML 浏览入口 (v1.16.0 -> v1.16.1)
+
+- **受影响文件**: `README.md`, `PROJECT_STATUS.md`, `VERSION`, `packaging/zhiji-user-manifest.json`, `packaging/zhiji-user-boundaries.json`, `packaging/zhiji-user-overlay/*.html`, `packaging/zhiji-user-overlay/README.md`, `zhiji-user/*.html`, `zhiji-user/README.md`
+- **改动摘要**: 将用户上手、详细使用说明与飞书/手机记录入口/滴答设置收敛为导出受控的离线 HTML 页面；主项目与用户版 README 均优先链接浏览器入口，避免后续导出覆盖、内容偏移或 Markdown 阅读体验不一致。
 
 ## [2026-08-12 23:52] [功能] 向用户版同步飞书每日反馈与通用 AI 部署入口 (v1.15.5 -> v1.16.0)
 
