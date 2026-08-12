@@ -335,6 +335,8 @@ foreach ($path in @($mainContract, $overlayContract)) {
     '`output.monthly_report`',
     '`context.thinking_topic`',
     '只传任务标题、截止日期或时间以及目标清单',
+    '`project_id`',
+    '正式分发只使用已保存的 `project_id`',
     '不传 description',
     '⚡ 明天试试',
     '行动：',
