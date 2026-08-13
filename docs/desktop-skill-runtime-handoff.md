@@ -83,13 +83,19 @@ status: active-handoff
 - `npm run package` 已完成 Vite 生产构建；最后 Electron 运行时下载因网络 `ECONNRESET` 中断，不是编译或代码失败。
 - 最新补充的审计断言和类型检查已通过；一次再次全量回归因 60 秒命令超时被终止，未产生写入。
 
+### 2026-08-14：已解除的执行环境阻塞与最终发布验证
+
+在受限沙箱中再次执行 P0 发布门时，`npm test` 在加载 `vitest.config.ts` 前即失败：桌面端 `node_modules` 是到 `D:\ZhijiDependencies\desktop\node_modules` 的 Windows junction，而当前沙箱拒绝构建工具沿该路径读取（`esbuild: Cannot read directory ... Access is denied`）。同次 `npm run typecheck` 通过。
+
+本次已在隔离工作树补齐两项 P0 工件：`tests/unit/daily-runtime.test.ts` 增加只扫描 `src/main-process/skill-runtime` 的回归测试，禁止任何 `.claude` 文本引用；`apps/zhiji-desktop/README.md` 增加 Skill Runtime 边界、LangGraph 编排、本地审计位置与不含敏感正文的说明。受当前权限限制，Vitest 无法实际加载配置以执行该测试；但同一受限目录中的只读源码扫描已确认 4 个 Runtime TypeScript 文件均不含 `.claude`，并且 `npm run typecheck` 通过。`npm run lint` 无 error，保留 5 条既有 warning。`npm run package` 同样在 Vite 配置加载阶段因同一访问拒绝中断，尚未到 Electron 下载阶段。
+
+该限制在本机权限恢复后已解除。最终验证结果：新增隔离回归测试 `daily-runtime.test.ts` 4/4 通过；全量 `npm test` 为 35 个测试文件、140 个测试全部通过；`npm run typecheck` 通过；`npm run lint` 无 error，仍有 5 条既有 warning；`npm run package` 成功完成 Vite 构建与 Windows x64 Electron Forge 封装。P0 发布门已具备验证证据。
+
 ## 未完成的内容：按优先级而非想象力推进
 
-### P0：先补齐日反馈发布门与隔离证明
+### P0：日反馈发布门与隔离证明（已完成）
 
-真实风险是“已经接入工作流，但没有防止未来改动重新依赖 `.claude`，也没有获得成功的 Windows 封装证据”。这比新增功能优先。
-
-交付条件：隔离回归测试、README 运行边界说明、`npm run package` 成功一次。若持续只因下载网络失败，记录网络证据，不得为此改业务代码或加入镜像脚本。
+已完成：隔离回归测试、README 运行边界说明和一次成功的 Windows x64 封装。后续不再为该发布门新增功能；仅在依赖、构建链或 Runtime 边界变化时重跑。
 
 ### P1：验证模式的受确认沉淀
 
@@ -138,4 +144,3 @@ status: active-handoff
 - 本交接：`docs/desktop-skill-runtime-handoff.md`
 - 下一步可执行计划：`docs/superpowers/plans/2026-08-14-desktop-runtime-release-gate.md`
 - 桌面端兼容范围：`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`
-
