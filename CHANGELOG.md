@@ -5,6 +5,11 @@ last_updated: 2026-08-13
 
 # CHANGELOG - 改动记录
 
+## [2026-08-13 18:09] [修复] 恢复周期复盘材料预览与生成 (v1.22.0 -> v1.22.1)
+
+- **受影响文件**: `apps/zhiji-desktop/src/shared/schemas/ipc.ts`、桌面 API 与 IPC handler、周期复盘测试、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 修复带日期范围校验的 Zod Schema 被运行时 `.omit()` / `.required()` 变形而导致周报、月报、项目复盘无法预览或生成的问题；改用预览与生成两个显式契约，并统一覆盖三种复盘类型。
+
 ## [2026-08-13 17:42] [功能] 补齐日志完整性与历史补写闭环 (v1.21.0 -> v1.22.0)
 
 - **受影响文件**: `apps/zhiji-desktop/src/`、客户端测试、`apps/zhiji-desktop/README.md`、`VERSION`、`PROJECT_STATUS.md`
