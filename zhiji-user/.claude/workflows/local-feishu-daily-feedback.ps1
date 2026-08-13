@@ -184,7 +184,7 @@ function Get-ZhijiJournalStructureHint {
 }
 
 function Get-ZhijiFollowUpHelpText {
-  return '💬 想继续聊这条反馈？发送“追问：你的问题”，也可直接写“为什么？”或“关于刚才，展开说说”。' + [Environment]::NewLine + '查看旧反馈可写：“问 8月10日：你的问题”。追问不会改写日志、创建任务或保存聊天记录。'
+  return '💬 继续追问：发送“追问：你的问题”；例如“追问：展开讲讲”。'
 }
 
 function Find-ZhijiLatestDailyFeedbackDate {
@@ -217,9 +217,7 @@ function ConvertTo-ZhijiFollowUpDecision {
   if ([string]::IsNullOrWhiteSpace($messageDate)) { return New-ZhijiFollowUpDecision -Action 'reject_event' -MessageId $messageId -ErrorCode 'create_time_invalid' }
   $content = ([string]$Event.content).Trim()
   $question = $content -replace '^\s*(?:追问|想问|问)\s*[：:]\s*', ''
-  $isFollowUp = $content -match '^\s*(?:追问|想问|问)\s*[：:]' -or
-    $content -match '^\s*(?:关于刚才|展开说说|为什么|那我该怎么做|我还是不懂)' -or
-    $content -match '(?:\d{4}\s*[-/]\s*\d{1,2}\s*[-/]\s*\d{1,2}|\d{1,2}\s*月\s*\d{1,2}\s*日)'
+  $isFollowUp = $content -match '^\s*追问\s*[：:]'
   if (-not $isFollowUp -or [string]::IsNullOrWhiteSpace($question)) {
     return New-ZhijiFollowUpDecision -Action 'usage' -MessageId $messageId -ReplyText (Get-ZhijiFollowUpHelpText) -ErrorCode 'follow_up_required'
   }
