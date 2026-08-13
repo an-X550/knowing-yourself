@@ -5,6 +5,11 @@ last_updated: 2026-08-13
 
 # CHANGELOG - 改动记录
 
+## [2026-08-13 23:42] [修复] 兼容 DeepSeek 每日反馈结构化输出 (v1.24.0 -> v1.24.1)
+
+- **受影响文件**: Windows 客户端 OpenAI 兼容 Provider、AI 配置适配器、每日反馈提示词与解析、错误提示、测试、客户端说明、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 正式生成每日反馈时启用 OpenAI 兼容的 JSON Object 模式，并向模型提供精确字段契约；解析层允许 DeepSeek 常见的 JSON 代码块包装，但仍对内部字段执行严格 Schema 校验。格式确实无效时改为可执行提示，不记录模型原文或用户日志。32 个测试文件、126 项测试、类型检查、Lint（0 error）、Electron E2E 与 Windows x64 打包通过。
+
 ## [2026-08-13 19:35] [功能] 对齐 Windows 客户端核心 Skill 闭环 (v1.23.0 -> v1.24.0)
 
 - **受影响文件**: Windows 客户端每日/周期/深度分析服务、领域与 IPC 契约、复盘与设置页面、首页建议、历史记录、测试、设计计划、客户端说明、产品审计、`VERSION`、`PROJECT_STATUS.md`
