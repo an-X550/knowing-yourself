@@ -90,6 +90,26 @@ function ConvertTo-ZhijiEntryDecision {
   return New-ZhijiEntryDecision -Action "process" -MessageId $messageId -JournalText $journalText -JournalDate $journalDate -StructureHint $structureHint
 }
 
+function New-ZhijiFollowUpDecision {
+  param(
+    [string]$Action,
+    $MessageId,
+    $JournalDate,
+    $Question,
+    $ReplyText,
+    $ErrorCode
+  )
+
+  [pscustomobject]@{
+    action = $Action
+    message_id = $MessageId
+    journal_date = $JournalDate
+    question = $Question
+    reply_text = $ReplyText
+    error_code = $ErrorCode
+  }
+}
+
 function Get-ZhijiJournalFirstLine {
   param([Parameter(Mandatory = $true)][string]$JournalText)
 
@@ -161,6 +181,57 @@ function Get-ZhijiJournalStructureHint {
   $nonEmpty = [ordered]@{}
   foreach ($key in $sections.Keys) { if (-not [string]::IsNullOrWhiteSpace([string]$sections[$key].content)) { $nonEmpty[$key] = $sections[$key] } }
   return [pscustomobject]@{ section_count = $nonEmpty.Count; sections = [pscustomobject]$nonEmpty }
+}
+
+function Get-ZhijiFollowUpHelpText {
+  return '💬 想继续聊这条反馈？发送“追问：你的问题”，也可直接写“为什么？”或“关于刚才，展开说说”。' + [Environment]::NewLine + '查看旧反馈可写：“问 8月10日：你的问题”。追问不会改写日志、创建任务或保存聊天记录。'
+}
+
+function Find-ZhijiLatestDailyFeedbackDate {
+  param([Parameter(Mandatory = $true)][string]$RepoRoot)
+
+  $directory = Join-Path $RepoRoot '复盘/每日反馈'
+  if (-not (Test-Path -LiteralPath $directory -PathType Container)) { return $null }
+  $latest = Get-ChildItem -LiteralPath $directory -Filter '*.md' -File |
+    Where-Object { $_.BaseName -match '^\d{4}-\d{2}-\d{2}$' } |
+    Sort-Object LastWriteTimeUtc -Descending |
+    Select-Object -First 1
+  if ($null -eq $latest) { return $null }
+  return $latest.BaseName
+}
+
+function ConvertTo-ZhijiFollowUpDecision {
+  param(
+    [Parameter(Mandatory = $true)][pscustomobject]$Event,
+    [Parameter(Mandatory = $true)][string]$AllowedOpenId,
+    [Parameter(Mandatory = $true)][string]$RepoRoot
+  )
+
+  $messageId = [string]$Event.message_id
+  if ([string]::IsNullOrWhiteSpace($messageId)) { return New-ZhijiFollowUpDecision -Action 'reject_event' -ErrorCode 'message_id_missing' }
+  if ([string]$Event.sender_id -cne $AllowedOpenId) { return New-ZhijiFollowUpDecision -Action 'reject_sender' -MessageId $messageId -ErrorCode 'sender_not_allowed' }
+  if ([string]$Event.chat_type -cne 'p2p') { return New-ZhijiFollowUpDecision -Action 'reject_chat' -MessageId $messageId -ErrorCode 'chat_not_allowed' }
+  if ([string]$Event.message_type -cne 'text') { return New-ZhijiFollowUpDecision -Action 'reject_type' -MessageId $messageId -ErrorCode 'message_type_not_supported' }
+
+  $messageDate = ConvertFrom-ZhijiUnixMilliseconds -Value ([string]$Event.create_time)
+  if ([string]::IsNullOrWhiteSpace($messageDate)) { return New-ZhijiFollowUpDecision -Action 'reject_event' -MessageId $messageId -ErrorCode 'create_time_invalid' }
+  $content = ([string]$Event.content).Trim()
+  $question = $content -replace '^\s*(?:追问|想问|问)\s*[：:]\s*', ''
+  $isFollowUp = $content -match '^\s*(?:追问|想问|问)\s*[：:]' -or
+    $content -match '^\s*(?:关于刚才|展开说说|为什么|那我该怎么做|我还是不懂)' -or
+    $content -match '(?:\d{4}\s*[-/]\s*\d{1,2}\s*[-/]\s*\d{1,2}|\d{1,2}\s*月\s*\d{1,2}\s*日)'
+  if (-not $isFollowUp -or [string]::IsNullOrWhiteSpace($question)) {
+    return New-ZhijiFollowUpDecision -Action 'usage' -MessageId $messageId -ReplyText (Get-ZhijiFollowUpHelpText) -ErrorCode 'follow_up_required'
+  }
+  $dateCandidate = Get-ZhijiJournalDateCandidate -JournalText $content -FallbackDate $messageDate
+  if ($null -eq $dateCandidate -and $content -match '(?<date>\d{4}\s*[-/]\s*\d{1,2}\s*[-/]\s*\d{1,2}|\d{1,2}\s*月\s*\d{1,2}\s*日)') {
+    $dateCandidate = Get-ZhijiJournalDateCandidate -JournalText $Matches.date -FallbackDate $messageDate
+  }
+  $journalDate = if ($null -ne $dateCandidate) { $dateCandidate.date } else { Find-ZhijiLatestDailyFeedbackDate -RepoRoot $RepoRoot }
+  if ([string]::IsNullOrWhiteSpace($journalDate) -or -not (Test-Path -LiteralPath (Join-Path $RepoRoot "复盘/每日反馈/$journalDate.md") -PathType Leaf)) {
+    return New-ZhijiFollowUpDecision -Action 'usage' -MessageId $messageId -ReplyText "没有找到对应的每日反馈。$(Get-ZhijiFollowUpHelpText)" -ErrorCode 'follow_up_feedback_missing'
+  }
+  return New-ZhijiFollowUpDecision -Action 'follow_up' -MessageId $messageId -JournalDate $journalDate -Question $question
 }
 
 function Read-ZhijiEntryState {
@@ -689,6 +760,44 @@ function Invoke-ZhijiCodex {
   return [pscustomobject]@{ exit_code = 0; output = [string]$result.output; error_code = $null }
 }
 
+function Invoke-ZhijiFollowUpDecision {
+  param(
+    [Parameter(Mandatory = $true)]$Decision,
+    [Parameter(Mandatory = $true)]$Config,
+    [scriptblock]$CodexInvoker = ${function:Invoke-ZhijiCodex},
+    [scriptblock]$ReplyInvoker = ${function:Send-ZhijiEntryReply}
+  )
+
+  if ($Decision.action -ne 'follow_up') { throw 'Invoke-ZhijiFollowUpDecision only accepts follow_up decisions.' }
+  $feedbackPath = Join-Path ([string]$Config.repo_root) ("复盘/每日反馈/$($Decision.journal_date).md")
+  if (-not (Test-Path -LiteralPath $feedbackPath -PathType Leaf)) {
+    $null = & $ReplyInvoker $Decision.message_id "没有找到对应的每日反馈。$(Get-ZhijiFollowUpHelpText)" $Config.lark_cli_path 'follow-up-missing'
+    return [pscustomobject]@{ status = 'failed'; error_code = 'follow_up_feedback_missing' }
+  }
+  $feedbackText = Get-Content -LiteralPath $feedbackPath -Raw -Encoding UTF8
+  $journalPath = Join-Path ([string]$Config.repo_root) ("日志/$($Decision.journal_date).md")
+  $journalText = if (Test-Path -LiteralPath $journalPath -PathType Leaf) { Get-Content -LiteralPath $journalPath -Raw -Encoding UTF8 } else { '' }
+  $prompt = @"
+这是知己的无状态日反馈追问，不是通用聊天或开发任务。目标日期：$($Decision.journal_date)。
+目标每日反馈：
+$feedbackText
+同日日志（可能为空，仅作补充证据）：
+$journalText
+用户问题：$($Decision.question)
+原文是唯一证据。区分事实、推断和建议；证据不足时直接说明。直接回答问题，默认不超过 300 中文字；不生成新的正式日反馈，不自动创建任务。不得修改文件，不得调用飞书、滴答或其他外部写入。只返回可直接发送给用户的回答正文。
+"@.Trim()
+  $result = & $CodexInvoker $prompt $Decision.question $Config.repo_root $Config.codex_path
+  if ($result.exit_code -ne 0 -or [string]::IsNullOrWhiteSpace([string]$result.output)) {
+    $errorCode = if ([string]::IsNullOrWhiteSpace([string]$result.error_code)) { 'runtime_unavailable' } else { [string]$result.error_code }
+    $null = & $ReplyInvoker $Decision.message_id "追问处理失败：$errorCode。请稍后重新发送。" $Config.lark_cli_path 'follow-up-failed'
+    return [pscustomobject]@{ status = 'failed'; error_code = $errorCode }
+  }
+  $replyText = ([string]$result.output).Trim() + [Environment]::NewLine + [Environment]::NewLine + (Get-ZhijiFollowUpHelpText)
+  $reply = & $ReplyInvoker $Decision.message_id $replyText $Config.lark_cli_path 'follow-up-result'
+  if ($reply.exit_code -ne 0) { return [pscustomobject]@{ status = 'failed'; error_code = 'reply_failed' } }
+  return [pscustomobject]@{ status = 'success'; error_code = $null }
+}
+
 function Invoke-ZhijiResultDistribution {
   param(
     [Parameter(Mandatory = $true)][string]$FeedbackPath,
@@ -821,11 +930,18 @@ function Start-ZhijiEntryListener {
         Write-Host "Processed $($decision.message_id): $($result.status)/$($result.error_code)"
       }
       "usage" {
-        $content = [string]$event.content
-        $prefixCodePoints = @($content.ToCharArray() | Select-Object -First 24 | ForEach-Object { 'U+{0:X4}' -f [int]$_ }) -join ','
-        Write-ZhijiRuntimeDiagnostic -RepoRoot $Config.repo_root -Phase "routing" -ErrorCode "journal_prefix_required" -Diagnostics "message_type=$([string]$event.message_type) length=$($content.Length) prefix_codepoints=$prefixCodePoints"
-        $reply = Send-ZhijiEntryReply -MessageId $decision.message_id -Text $decision.reply_text -LarkCliPath $Config.lark_cli_path -Suffix "usage"
-        Write-Host "Usage reply $($decision.message_id): exit=$($reply.exit_code)"
+        $followUp = ConvertTo-ZhijiFollowUpDecision -Event $event -AllowedOpenId $Config.allowed_open_id -RepoRoot $Config.repo_root
+        if ($followUp.action -eq 'follow_up') {
+          $result = Invoke-ZhijiFollowUpDecision -Decision $followUp -Config $Config
+          Write-Host "Follow-up $($followUp.message_id): $($result.status)/$($result.error_code)"
+        } else {
+          $content = [string]$event.content
+          $prefixCodePoints = @($content.ToCharArray() | Select-Object -First 24 | ForEach-Object { 'U+{0:X4}' -f [int]$_ }) -join ','
+          Write-ZhijiRuntimeDiagnostic -RepoRoot $Config.repo_root -Phase "routing" -ErrorCode $followUp.error_code -Diagnostics "message_type=$([string]$event.message_type) length=$($content.Length) prefix_codepoints=$prefixCodePoints"
+          $usageText = "发送日志：日志：<当天日志原文>。" + [Environment]::NewLine + (Get-ZhijiFollowUpHelpText)
+          $reply = Send-ZhijiEntryReply -MessageId $decision.message_id -Text $usageText -LarkCliPath $Config.lark_cli_path -Suffix "usage"
+          Write-Host "Usage reply $($decision.message_id): exit=$($reply.exit_code)"
+        }
       }
       default {
         Write-Host "Ignored $($decision.message_id): $($decision.error_code)"
@@ -933,7 +1049,7 @@ function Invoke-ZhijiEntryDecision {
   if ($distributionSummary -eq '分发：状态不可用' -and -not [string]::IsNullOrWhiteSpace([string]$distributionResult.output)) {
     $distributionSummary = ([string]$distributionResult.output).Trim()
   }
-  $finalReply = ([string]$feedbackText).Trim() + [Environment]::NewLine + [Environment]::NewLine + "——" + [Environment]::NewLine + $distributionSummary
+  $finalReply = ([string]$feedbackText).Trim() + [Environment]::NewLine + [Environment]::NewLine + "——" + [Environment]::NewLine + $distributionSummary + [Environment]::NewLine + [Environment]::NewLine + (Get-ZhijiFollowUpHelpText)
   $replyResult = & $ReplyInvoker $Decision.message_id $finalReply $Config.lark_cli_path "result"
   if ($replyResult.exit_code -ne 0) {
     Set-ZhijiEntryMessageState -State $state -MessageId $Decision.message_id -Status "failed" -JournalDate $Decision.journal_date -ErrorCode "reply_failed"

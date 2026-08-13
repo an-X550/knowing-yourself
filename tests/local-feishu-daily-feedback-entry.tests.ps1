@@ -158,6 +158,64 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
   $badTime.create_time = "not-a-time"
   Assert-Equal (ConvertTo-ZhijiEntryDecision -Event $badTime -AllowedOpenId "ou_owner").action "reject_event" "invalid event time must be rejected"
 
+  $followUpRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("zhiji-follow-up-test-" + [guid]::NewGuid().ToString("N"))
+  New-Item -ItemType Directory -Path (Join-Path $followUpRoot "复盘/每日反馈") -Force | Out-Null
+  try {
+    [System.IO.File]::WriteAllText((Join-Path $followUpRoot "复盘/每日反馈/2026-08-10.md"), "8月10日反馈", [System.Text.UTF8Encoding]::new($true))
+    [System.IO.File]::WriteAllText((Join-Path $followUpRoot "复盘/每日反馈/2026-08-12.md"), "8月12日反馈", [System.Text.UTF8Encoding]::new($true))
+    if (Get-Command ConvertTo-ZhijiFollowUpDecision -ErrorAction SilentlyContinue) {
+      $followUp = $valid.PSObject.Copy()
+      $followUp.content = "追问：为什么我总是迁就对方？"
+      $explicitFollowUp = ConvertTo-ZhijiFollowUpDecision -Event $followUp -AllowedOpenId "ou_owner" -RepoRoot $followUpRoot
+      Assert-Equal $explicitFollowUp.action "follow_up" "explicit follow-up must route"
+      Assert-Equal $explicitFollowUp.journal_date "2026-08-12" "follow-up without date must choose latest feedback"
+      Assert-Equal $explicitFollowUp.question "为什么我总是迁就对方？" "prefix must be removed from question"
+      $followUp.content = "问 8月10日：那条反馈哪里有证据？"
+      Assert-Equal (ConvertTo-ZhijiFollowUpDecision -Event $followUp -AllowedOpenId "ou_owner" -RepoRoot $followUpRoot).journal_date "2026-08-10" "dated follow-up must select named feedback"
+      $followUp.content = "今天吃了什么？"
+      Assert-Equal (ConvertTo-ZhijiFollowUpDecision -Event $followUp -AllowedOpenId "ou_owner" -RepoRoot $followUpRoot).action "usage" "ordinary chat must not invoke follow-up"
+    } else {
+      Add-Failure "missing function: ConvertTo-ZhijiFollowUpDecision"
+    }
+  } finally {
+    Remove-Item -LiteralPath $followUpRoot -Recurse -Force
+  }
+
+  if (Get-Command Invoke-ZhijiFollowUpDecision -ErrorAction SilentlyContinue) {
+    $followUpExecutionRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("zhiji-follow-up-execution-" + [guid]::NewGuid().ToString("N"))
+    New-Item -ItemType Directory -Path (Join-Path $followUpExecutionRoot "复盘/每日反馈") -Force | Out-Null
+    New-Item -ItemType Directory -Path (Join-Path $followUpExecutionRoot "日志") -Force | Out-Null
+    try {
+      $feedbackPath = Join-Path $followUpExecutionRoot "复盘/每日反馈/2026-08-12.md"
+      $journalPath = Join-Path $followUpExecutionRoot "日志/2026-08-12.md"
+      $distributionStatePath = Join-Path $followUpExecutionRoot "复盘/.result-distribution-state.json"
+      [System.IO.File]::WriteAllText($feedbackPath, "每日反馈原文", [System.Text.UTF8Encoding]::new($true))
+      [System.IO.File]::WriteAllText($journalPath, "日志原文", [System.Text.UTF8Encoding]::new($true))
+      [System.IO.File]::WriteAllText($distributionStatePath, '{"schema_version":1}', [System.Text.UTF8Encoding]::new($true))
+      $feedbackHash = Get-ZhijiFileSha256 -Path $feedbackPath
+      $journalHash = Get-ZhijiFileSha256 -Path $journalPath
+      $stateHash = Get-ZhijiFileSha256 -Path $distributionStatePath
+      $followUpDecision = [pscustomobject]@{ action = "follow_up"; message_id = "om_follow_up"; journal_date = "2026-08-12"; question = "为什么？" }
+      $followUpConfig = [pscustomobject]@{ repo_root = $followUpExecutionRoot; codex_path = "codex-test"; lark_cli_path = "lark-test" }
+      $capturedPrompt = $null; $replyText = $null
+      $followUpCodex = { param($Prompt,$JournalText,$RepoRoot,$CodexPath) $script:capturedPrompt = $Prompt; [pscustomobject]@{ exit_code = 0; output = "追问回答"; error_code = $null } }
+      $followUpReply = { param($MessageId,$Text,$LarkCliPath,$Suffix) $script:replyText = $Text; [pscustomobject]@{ exit_code = 0; error_code = $null } }
+      $followUpResult = Invoke-ZhijiFollowUpDecision -Decision $followUpDecision -Config $followUpConfig -CodexInvoker $followUpCodex -ReplyInvoker $followUpReply
+      Assert-Equal $followUpResult.status "success" "follow-up must return its direct reply"
+      Assert-True ($script:capturedPrompt -match "目标每日反馈") "prompt must include feedback context"
+      Assert-True ($script:capturedPrompt -match "原文是唯一证据") "prompt must state evidence boundary"
+      Assert-True ($script:capturedPrompt -match "不得修改文件") "prompt must remain read-only"
+      Assert-True ($script:replyText -match '发送“追问：你的问题”') "reply must advertise follow-up use"
+      Assert-Equal (Get-ZhijiFileSha256 -Path $feedbackPath) $feedbackHash "follow-up must not rewrite feedback"
+      Assert-Equal (Get-ZhijiFileSha256 -Path $journalPath) $journalHash "follow-up must not rewrite journal"
+      Assert-Equal (Get-ZhijiFileSha256 -Path $distributionStatePath) $stateHash "follow-up must not change distribution state"
+    } finally {
+      Remove-Item -LiteralPath $followUpExecutionRoot -Recurse -Force
+    }
+  } else {
+    Add-Failure "missing function: Invoke-ZhijiFollowUpDecision"
+  }
+
   if (Get-Command Invoke-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
     $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("zhiji-entry-test-" + [guid]::NewGuid().ToString("N"))
     New-Item -ItemType Directory -Path $tempRoot | Out-Null
