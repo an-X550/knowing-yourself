@@ -1,5 +1,7 @@
 # Desktop Skill Runtime Release Gate Implementation Plan
 
+> **Execution status (2026-08-14): completed.** This document is retained as the auditable P0 execution record, not as the next feature plan. The desktop branch commit is `a695b20`; the handoff/status record is `2b8290f` on `main`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 为已完成的桌面端日反馈 Skill Runtime 补齐隔离回归证明、用户可见的运行边界说明和 Windows 封装验收，不新增业务功能。
@@ -60,11 +62,11 @@ Run: `npm test -- tests/unit/daily-runtime.test.ts`
 
 Expected: PASS。
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```powershell
 git add apps/zhiji-desktop/tests/unit/daily-runtime.test.ts
-git commit -m "test: guard desktop runtime isolation"
+git commit -m "test: guard desktop runtime isolation" # completed as a695b20
 ```
 
 ### Task 2: 在桌面端 README 说明独立运行边界
@@ -95,11 +97,11 @@ Run: `Select-String -Path README.md -Pattern 'Skill Runtime|\.claude|daily-feedb
 
 Expected: 能定位上述边界；不得出现“会执行 Skill Markdown”“完全功能对齐”等不实表述。
 
-- [ ] **Step 4: 提交**
+- [x] **Step 4: 提交**
 
 ```powershell
 git add apps/zhiji-desktop/README.md
-git commit -m "docs: clarify desktop runtime boundary"
+git commit -m "test: guard desktop runtime isolation" # README and test were intentionally one focused commit
 ```
 
 ### Task 3: 完成实际可用的发布门验证
@@ -141,11 +143,11 @@ Expected: Electron Forge exit 0，生成 Windows x64 package。若失败是 `ECO
 
 在 `docs/desktop-skill-runtime-handoff.md` 的“已完成验证”添加最新事实：成功的命令、测试数量、lint warnings 和封装结果。只有封装成功后，才把 P0 标为完成；否则保留“网络阻塞、可安全重试”。
 
-- [ ] **Step 5: 最终提交**
+- [x] **Step 5: 最终提交**
 
 ```powershell
 git add docs/desktop-skill-runtime-handoff.md apps/zhiji-desktop/
-git commit -m "docs: record desktop runtime release gate"
+git commit -m "docs: record desktop runtime release gate" # completed as 2b8290f on main
 git status --porcelain
 git log -1 --oneline
 ```
@@ -158,3 +160,16 @@ Expected: 工作树干净；输出精确提交哈希。不要推送，除非用�
 - 没有引入任何新业务能力或未验证架构。
 - 每项代码变更有明确测试和命令；没有“以后再补”的隐含实现。
 - 完成后下一项候选只能是经过必要性闸门的 P1 验证模式沉淀，而不是扩张到通用 Agent。
+
+## 实际验证记录
+
+| 验证 | 实际结果 | 说明 |
+|---|---|---|
+| 隔离回归 | `npm test -- tests/unit/daily-runtime.test.ts`：4/4 通过 | 递归扫描 Runtime 源码；禁止 `.claude` 引用 |
+| 全量回归 | `npm test`：35 files / 140 tests 通过 | 包含日反馈 Runtime、审计、UI 与既有桌面端测试 |
+| 类型检查 | `npm run typecheck`：通过 | TypeScript 无错误 |
+| lint | `npm run lint`：0 error、5 warning | warning 均为已存在且未修改文件；未关闭规则掩盖 |
+| Windows 封装 | `npm run package`：通过 | Electron Forge 已完成 Vite 构建及 Windows x64 package |
+| Git 推送 | `origin/main` 与 `origin/codex/desktop-daily-skill-runtime` 已推送 | 不含未跟踪 `.superpowers/` |
+
+当依赖版本、Electron Forge/Vite 构建链或 `skill-runtime` 的隔离边界发生变化时，重新执行本表所有验证；否则不要重复实现其中内容。

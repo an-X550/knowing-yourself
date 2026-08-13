@@ -6,6 +6,117 @@ status: active-handoff
 
 # 知己桌面端 Skill Runtime：架构、状态与交接
 
+> **交接用途：** 本文是给新接手的 AI Agent 或开发者的运行手册，而不是产品宣传页。它记录已确认的架构边界、当前代码事实、已验证证据、后续切片与停止条件。开始任何桌面端改动前必须完整阅读本文；若本文与代码冲突，以代码、测试和最新 Git 提交为准，并在完成核查后修正文档。
+
+## 30 分钟接手清单
+
+不要根据聊天记录或文件名猜测状态；按下列顺序建立可复核基线。
+
+1. 在主仓库 `C:\Users\panda\.claude\skills\知己` 执行 `git status --short`，确认用户未提交的改动；不要清理、重置或覆盖它们。
+2. 读取 `AGENTS.md`、`PROJECT_STATUS.md`、`CHANGELOG.md` 最近条目和本文。它们分别定义项目规范、当前事实、发布历史与桌面端边界。
+3. 桌面端实现不在 `main`：切换或新建隔离工作树，基于远端分支 `origin/codex/desktop-daily-skill-runtime`。其截至 P0 的最新提交为 `a695b20`；不要在主工作区直接实现桌面端功能。
+4. 在 `<worktree>/apps/zhiji-desktop` 执行：
+
+   ```powershell
+   npm test
+   npm run typecheck
+   npm run lint
+   npm run package
+   ```
+
+   期望：测试通过、类型检查通过、lint 无 error、Windows x64 package 成功。lint 有 5 条既有 warning，位于未修改的既有文件；不要为消除它们扩大本任务范围。
+5. 检查 `git status --short`。工作树可能有本地 Agent 生成的未跟踪 `.superpowers/` 目录；它不是产品文件，不可加入提交。
+6. 只在基线通过后选择一个后续切片。先通过“必要性闸门”，再写新的 spec 和实施计划；不要把 P0 发布门再次当作待实现功能。
+
+## 当前交付的可复核快照
+
+| 范畴 | 事实 | 证据 |
+|---|---|---|
+| 桌面端实现分支 | `codex/desktop-daily-skill-runtime` | 已推送到 `origin/codex/desktop-daily-skill-runtime` |
+| 日反馈 Runtime 主提交 | `37dba5a feat: complete desktop daily skill runtime` | 包含 LangGraph、审计、API/UI 迁移 |
+| P0 隔离与发布门提交 | `a695b20 test: guard desktop runtime isolation` | Runtime 源码隔离回归测试与 README 边界 |
+| 主分支交接文档 | `2b8290f docs: record desktop runtime release gate` | 发布门证据写入本文和 P0 计划 |
+| 最新完整测试 | 35 files / 140 tests 通过 | `npm test`，2026-08-14 |
+| 静态检查 | `npm run typecheck` 通过；`npm run lint` 0 error / 5 warning | 2026-08-14 |
+| 封装 | Electron Forge Windows x64 package 成功 | `npm run package`，2026-08-14 |
+
+## 系统地图：请求、数据和责任如何流动
+
+```text
+Renderer (React)
+  TodayPage -> window.zhiji.reviews.generateDaily({ date })
+       | 只显示 review.body 或 clarification.question
+       v
+Preload + validated IPC
+  reviews:generate-daily -> GenerateDailyReview.execute({ date, model })
+       v
+Application layer
+  读取目标日期 journals + reviews + 可选 profile
+  检查同日 sourceVersions 缓存
+  创建可取消 ReviewTask
+       v
+Skill Runtime (LangGraph)
+  build_evidence -> D: clarify -> END
+                 -> A/B/C: provider.collect -> JSON Schema -> render -> END
+       v
+Persistence boundary
+  MarkdownReviewRepository.save (atomic write + reread validation)
+  DailyAuditRecorder.record (append-only JSONL summary)
+       v
+Desktop data root only
+  journals/ reviews/ projects/ profile/ runtime/daily-feedback-audit.jsonl
+```
+
+**责任分割必须保持：** Renderer 不接触文件、密钥或模型；IPC 不接受未校验数据；Runtime 不直接读路径；仓储负责业务数据写入；审计只记录摘要；模型不决定权限、文件路径或是否创建新工作流。
+
+## 当前关键接口：后续 Agent 不要重新发明
+
+### 日反馈 Runtime
+
+`apps/zhiji-desktop/src/main-process/skill-runtime/daily-runtime.ts`
+
+```ts
+export interface ProviderPort {
+  collect(messages: ChatMessage[], signal?: AbortSignal, options?: CollectOptions): Promise<string>;
+}
+
+export type DailyRuntimeResult =
+  | { kind: 'review'; body: string; grade: 'A' | 'B' | 'C'; output: DailyReviewOutput }
+  | { kind: 'clarification'; question: string; grade: 'D' };
+```
+
+图内只有三个节点：`build_evidence`、`clarify`、`generate`。D 级必须在 `clarify` 结束，不能调用 `provider.collect`、不能保存 Review。A/B/C 才允许调用模型；模型输出必须经 `DailyReviewOutputSchema` 解析。C 级无条件将 `patternConnection` 归零；B 级提示词禁止无跨日证据的历史模式断言。
+
+### 应用层结果联合类型
+
+`GenerateDailyReview.execute` 与 Renderer API 都返回：
+
+```ts
+type DailyGenerationResult =
+  | { kind: 'review'; review: Review }
+  | { kind: 'clarification'; question: string };
+```
+
+任何新 UI 或 IPC 消费者必须穷尽处理两个分支；不得把澄清误当 Error，也不得为 D 级伪造空 Review。相同 `sourceVersions` 的当日记录在未传 `regenerate: true` 时直接复用，这是避免重复 LLM 调用和重复写入的缓存契约。
+
+### 证据和审计数据
+
+`DailyEvidence` 只保存从目标 journals 中确定性提取的 `facts`、`states`、`interpretations`、`intentions` 与 `gaps`。它不是心理诊断，也不是长期记忆。
+
+审计事件格式固定为：
+
+```ts
+interface DailyAuditEvent {
+  date: string;
+  sourceIds: string[];
+  grade: 'A' | 'B' | 'C' | 'D';
+  outcome: 'review' | 'clarification';
+  priorActionStatus?: 'done' | 'not_done' | 'insufficient';
+}
+```
+
+写入位置为 `<dataRoot>/runtime/daily-feedback-audit.jsonl`，每行一个 JSON 对象并附加 `at`。不得把日志正文、模型原始回复、API Key、完整个人资料写入该文件。审计写入目前是正常成功路径的一部分；若未来想改为“审计失败不影响复盘保存”，必须先有明确故障证据、单独 spec、测试和用户可见的降级说明。
+
 ## 给后续 AI Agent 的一句话
 
 知己桌面端不是“再调用一次 LLM”的产品，也不是开放权限的通用 Agent；它是一个 Windows 本地、单用户、应用打开时运行的**受控 Skill Runtime**。它用版本化兼容快照复现已验证的业务规则子集，使用 LangGraph JS 编排确定的工作流，并让模型只在受限上下文、严格 Schema 和程序化读写边界内工作。
@@ -97,23 +208,49 @@ status: active-handoff
 
 已完成：隔离回归测试、README 运行边界说明和一次成功的 Windows x64 封装。后续不再为该发布门新增功能；仅在依赖、构建链或 Runtime 边界变化时重跑。
 
-### P1：验证模式的受确认沉淀
+### P1：验证模式的受确认沉淀（下一候选，尚未获必要性闸门通过）
 
 当前 JSONL 审计能追溯“行动是否被验证”，但不是用户可管理的长期模式库。只有在真实使用中确认用户需要跨日复用已验证模式时，新增桌面端自己的 `verified-patterns` 数据模型。
 
 关键规则：模型只能提出候选；UI 展示来源、证据与变更差异；用户明确确认后保存。绝不把单次日反馈或审计日志直接升格为长期事实。
 
+开始 P1 前必须取得一次真实证据：用户需要在后续日反馈或周期复盘中主动复用一个已验证模式，而 JSONL 审计不足以让用户查看、理解或管理它。没有该证据时，不创建数据模型、页面、SQLite 或“记忆”。获准后的最小范围仅为独立仓储、候选预览、确认/拒绝、来源 review ID 与证据摘要、只读列表；不含自动提取、自动写入、向量检索、跨设备同步或通用长期记忆。
+
 ### P2：周/月/项目复盘迁移为第二个垂直切片
 
 先用已有周期复盘能力建立兼容矩阵和金样本，再迁移“下游沉淀优先、证据不足降级、复盘六问、确认写入”。不要只把现有 prompt 丢进 LangGraph。
+
+开始前的验收物是：周期复盘兼容矩阵、脱敏金样本、每个输出字段对应的最小材料表。没有这些，不接入图编排。
 
 ### P3：主题思考与受控联网
 
 实现“匹配索引 → 最多读取两个相关主题 → 讨论 → 提议差异 → 用户确认后保存”的暂停/恢复闭环。联网只由用户明确请求触发，来源与查询可见，搜索结果不能静默沉淀。
 
+这一切片需要应用关闭后的暂停/恢复，届时才评估 LangGraph 持久化与 SQLite checkpointer；不要为了 P1 或 P2 提前引入它。
+
 ### P4：模糊意图路由
 
 仅在明确入口不足时，让模型从注册工作流枚举中选择 `WorkflowIntent`；Zod 校验失败即回退到澄清。不得允许模型创造流程、工具或权限。
+
+## 后续 Agent 的决策表
+
+| 观察到的需求 | 先做什么 | 允许的下一步 | 禁止的下一步 |
+|---|---|---|---|
+| “日反馈太泛/不准” | 取一条脱敏 journal 与期望输出，复现到测试 | 调整证据分级或 Schema 约束，先红测 | 仅加长 prompt、降低 D 级门槛 |
+| “想记住已经验证的规律” | 记录一次真实复用场景 | 走 P1 必要性闸门 | 自动从旧日志归纳人格/模式 |
+| “想做周报/月报” | 建兼容矩阵和金样本 | 走 P2 单独 spec | 复用日反馈图或泛化成 Agent loop |
+| “想联网查资料” | 确认用户明确请求和使用目的 | 设计固定 web 工具与来源展示 | 给模型任意浏览器/URL 权限 |
+| “想让它自己决定做什么” | 收集真实模糊入口的失败样本 | P4 注册表内 intent 路由 | 通用 Agent、shell、任意工具市场 |
+
+## 变更质量门：必须逐项证明
+
+1. **隔离：** `skill-runtime` 源码扫描和 `daily-runtime.test.ts` 仍通过；没有 `.claude` 运行时依赖。
+2. **权限：** 新工具有输入 Zod Schema、固定数据范围、明确副作用和用户批准规则；没有通用读写/删除/shell 工具。
+3. **事实边界：** 证据不足时返回澄清或 `insufficient`，不编造解释、动机、历史模式或行动完成状态。
+4. **数据完整性：** 所有正式写入通过仓储、原子写入和复读；删除继续走 Windows 回收站。
+5. **用户可见性：** UI 显示结果或澄清及必要的材料/权限提示，不泄露模型链式思维和隐私原文。
+6. **回归：** 先运行新增失败测试，再运行关联测试、全量 `npm test`、`npm run typecheck`、`npm run lint`、`npm run package`。
+7. **文档：** 更新兼容矩阵、本文、状态/变更日志中真正改变的事实；写出提交哈希、命令和准确结果。
 
 ### 可选 Spike：DeepSeek Harness
 
@@ -132,7 +269,7 @@ status: active-handoff
 
 1. 在仓库根目录阅读本文件、`AGENTS.md`、`PROJECT_STATUS.md`、`CHANGELOG.md` 最近条目，以及 `docs/superpowers/specs/2026-08-14-skill-runtime-agent-architecture-design.md`。
 2. 阅读 `apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`src/main-process/skill-runtime/`、相关测试和本次计划文件。
-3. 使用新隔离工作树，基于 `codex/desktop-daily-skill-runtime` 分支；先执行 `npm ci`、`npm test`、`npm run typecheck`，确认基线。
+3. 使用新隔离工作树，基于 `origin/codex/desktop-daily-skill-runtime` 分支；先执行 `npm ci`、`npm test`、`npm run typecheck`、`npm run lint`、`npm run package`，确认基线。`node_modules` 可以是指向 D 盘依赖目录的 Windows junction；先复用它，只有确证本机不存在兼容依赖后才安装。
 4. 只选择本文件 P0–P4 的一个切片。先做必要性闸门；通过后写规格与逐步计划，再实现。
 5. 每任务坚持 TDD、最小改动、聚焦提交；完成后跑关联测试、全量测试、类型检查、lint、实际存在的打包脚本。
 6. 在最终交接中报告：改动文件、用户可见行为、未完成项、精确验证命令/结果、提交哈希和任何外部阻塞。
@@ -142,5 +279,5 @@ status: active-handoff
 - 架构设计：`docs/superpowers/specs/2026-08-14-skill-runtime-agent-architecture-design.md`
 - 已执行的日反馈计划：`docs/superpowers/plans/2026-08-14-desktop-daily-skill-runtime.md`
 - 本交接：`docs/desktop-skill-runtime-handoff.md`
-- 下一步可执行计划：`docs/superpowers/plans/2026-08-14-desktop-runtime-release-gate.md`
+- 已完成的 P0 发布门执行记录：`docs/superpowers/plans/2026-08-14-desktop-runtime-release-gate.md`
 - 桌面端兼容范围：`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`
