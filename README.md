@@ -25,7 +25,7 @@
 
 ## 现在就开始
 
-不使用 CLI、Skill 或 Agent 的 Windows 用户，可使用 [Windows 桌面客户端](apps/zhiji-desktop/README.md)。它提供今天、复盘、项目、历史和设置五个可视化入口，数据仍以本地 Markdown/JSON 保存，并支持用户自己的 OpenAI 兼容 API Key。
+不使用 CLI、Skill 或 Agent 的 Windows 用户，可使用 [Windows 桌面客户端](apps/zhiji-desktop/README.md)。它提供开始、日志、复盘、项目和设置五个可视化入口，并已覆盖日反馈、周/月/项目/年复盘、日志质量检查和快速方向校准；数据仍以本地 Markdown/JSON 保存，并支持用户自己的 OpenAI 兼容 API Key。
 
 请使用完整的用户分发包，并从 [用户版使用指南](zhiji-user/README.md) 完成环境准备。然后把下面这段话连同一篇真实日志交给能读取项目目录、并能读写 Markdown 的 AI 工具（如 Codex 或 Claude Code）：
 
