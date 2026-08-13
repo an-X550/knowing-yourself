@@ -5,6 +5,16 @@ last_updated: 2026-08-13
 
 # CHANGELOG - 改动记录
 
+## [2026-08-13 14:55] [功能] 补齐 Windows 客户端本地数据掌控闭环 (v1.17.0 -> v1.18.0)
+
+- **受影响文件**: Windows 客户端数据目录、个人背景、备份校验、设置、今天/复盘交互、测试与客户端说明，以及根 `PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 普通用户现在可看见并打开真实本地数据目录，在固定 Markdown 文件中管理可导出恢复的个人背景；备份在预览与正式切换前验证业务 Schema 和关系，API Key 继续排除。日反馈和周期复盘可原位阅读，未配置 AI 仍可保存日志；目录迁移、合并恢复和个人背景注入 AI 继续暂缓。
+
+## [2026-08-13 12:45] [功能] 交付本地优先 Windows 桌面客户端 MVP (v1.16.1 -> v1.17.0)
+
+- **受影响文件**: `apps/zhiji-desktop/`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `.gitignore`, `docs/superpowers/`
+- **改动摘要**: 新增面向非 CLI 用户的 Electron + React + TypeScript Windows 客户端，以交互原型为基线提供今天、复盘、项目、历史和设置五页；日志、复盘和项目继续保存在本地，支持用户自己的 OpenAI 兼容 API Key、Windows 安全凭据与带清单/哈希校验的 ZIP 备份和空目录恢复。23 个测试文件、48 项测试、真实 Electron E2E、类型检查、生产依赖 0 漏洞和现有 CLI/Skill/Agent 回归均已通过；x64 安装包已生成但未执行安装，Windows 10、升级/卸载、签名和自动更新仍明确暂缓。
+
 ## [2026-08-13 12:30] [文档] 同步用户版离线 HTML 浏览入口 (v1.16.0 -> v1.16.1)
 
 - **受影响文件**: `README.md`, `PROJECT_STATUS.md`, `VERSION`, `packaging/zhiji-user-manifest.json`, `packaging/zhiji-user-boundaries.json`, `packaging/zhiji-user-overlay/*.html`, `packaging/zhiji-user-overlay/README.md`, `zhiji-user/*.html`, `zhiji-user/README.md`

@@ -4,7 +4,7 @@
 
 > 把日常记录变成更可靠的行动：看见模式，试一个小改变，再用结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.16.1-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.17.0-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 你能用它解决什么
@@ -24,6 +24,8 @@
 它不诊断心理或医疗问题，不替你决定人生，也不会把一篇日志当作对你的最终结论。AI 的分析只是待验证的假说：证据不足时应降低结论强度，而不是补完故事。
 
 ## 现在就开始
+
+不使用 CLI、Skill 或 Agent 的 Windows 用户，可使用 [Windows 桌面客户端](apps/zhiji-desktop/README.md)。它提供今天、复盘、项目、历史和设置五个可视化入口，数据仍以本地 Markdown/JSON 保存，并支持用户自己的 OpenAI 兼容 API Key。
 
 请使用完整的用户分发包，并从 [用户版使用指南](zhiji-user/README.md) 完成环境准备。然后把下面这段话连同一篇真实日志交给能读取项目目录、并能读写 Markdown 的 AI 工具（如 Codex 或 Claude Code）：
 
@@ -79,7 +81,7 @@
 
 本仓库既包含可使用的系统，也包含它的运行定义与开发资料。产品行为以 `.claude/` 为准；`zhiji-user/` 是面向最终用户的分发包。
 
-- 想了解当前能力、待验证事项与已知限制：阅读 [PROJECT_STATUS.md](PROJECT_STATUS.md)。
+- 想了解当前能力、待验证事项与已知限制：阅读 [PROJECT_STATUS.md](PROJECT_STATUS.md)；桌面端开发与发布说明见 [Windows 客户端 README](apps/zhiji-desktop/README.md)。
 - 想了解版本变化：阅读 [CHANGELOG.md](CHANGELOG.md)。
 - 想维护或贡献：从 [AGENTS.md](AGENTS.md) 开始；用户包同步流程见 [用户版同步说明](docs/zhiji-user-sync-workflow.md)。
 - 想理解方法的底线：阅读 [第一性原理提醒](docs/first-principles.md)。

@@ -1,0 +1,30 @@
+import { app, dialog, safeStorage, shell } from 'electron';
+import path from 'node:path';
+import { SaveJournal } from './application/save-journal';
+import { registerHandlers } from './ipc/register-handlers';
+import { MarkdownJournalRepository } from './infrastructure/markdown/journal-repository';
+import { JsonProjectRepository } from './infrastructure/markdown/project-repository';
+import { CredentialStore } from './infrastructure/credentials/credential-store';
+import { ConfigureAi } from './application/configure-ai';
+import { MarkdownReviewRepository } from './infrastructure/markdown/review-repository';
+import { ReviewTaskManager } from './domain/review-task';
+import { GenerateDailyReview } from './application/generate-daily-review';
+import { GeneratePeriodicReview } from './application/generate-periodic-review';
+import { DataTransferService } from './infrastructure/transfer/data-transfer-service';
+import { DataDirectoryService } from './infrastructure/data-directory/data-directory-service';
+import { MarkdownProfileRepository } from './infrastructure/markdown/profile-repository';
+
+export function bootstrap() {
+  const dataRoot = process.env.ZHIJI_DATA_ROOT ?? path.join(app.getPath('documents'), '知己');
+  const journals = new MarkdownJournalRepository(dataRoot);
+  const projects = new JsonProjectRepository(dataRoot);
+  const credentials = new CredentialStore(app.getPath('userData'), safeStorage);
+  const configureAi = new ConfigureAi(dataRoot, credentials, !app.isPackaged);
+  const reviews = new MarkdownReviewRepository(dataRoot);
+  const reviewTasks = new ReviewTaskManager();
+  const generateDailyReview = new GenerateDailyReview(journals, reviews, configureAi, reviewTasks);
+  const generatePeriodicReview = new GeneratePeriodicReview(journals, reviews, configureAi, reviewTasks);
+  const transfer = new DataTransferService(dataRoot, app.getVersion());
+  const dataDirectory = new DataDirectoryService(dataRoot, (target) => shell.openPath(target));
+  registerHandlers({ journals, projects, reviews, profile: new MarkdownProfileRepository(dataRoot), reviewTasks, generateDailyReview, generatePeriodicReview, saveJournal: new SaveJournal(journals), configureAi, transfer, dataDirectory, dialog });
+}
