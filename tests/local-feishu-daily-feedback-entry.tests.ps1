@@ -76,6 +76,11 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
   Assert-Equal $pastedDecision.journal_text "日志 8.11`r`n`r`n开心的事情:`r`n1. 离家前吃了碗腌面，味道不错" "pasted journal body must stay unchanged"
   Assert-Equal $pastedDecision.journal_date "2026-08-11" "explicit journal template date must override message date"
 
+  $happinessTemplate = $valid.PSObject.Copy()
+  $happinessTemplate.content = "日志：幸福日志 8.10`n`n开心的事情：和朋友玩游戏"
+  $happinessDecision = ConvertTo-ZhijiEntryDecision -Event $happinessTemplate -AllowedOpenId "ou_owner"
+  Assert-Equal $happinessDecision.journal_date "2026-08-10" "幸福日志日期必须覆盖消息接收日"
+
   $freeForm = $valid.PSObject.Copy()
   $freeForm.content = "日志：我今天有点累，但还是完成了计划。`n明天想早点休息。"
   $freeFormDecision = ConvertTo-ZhijiEntryDecision -Event $freeForm -AllowedOpenId "ou_owner"
@@ -87,6 +92,45 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
   $dateLikeDecision = ConvertTo-ZhijiEntryDecision -Event $dateLikeText -AllowedOpenId "ou_owner"
   Assert-Equal $dateLikeDecision.action "process" "invalid date-like body must still process"
   Assert-Equal $dateLikeDecision.journal_date "2026-08-12" "invalid date-like body must fall back to message date"
+
+  $explicitDateCases = @(
+    @{ body = "日记 2026年8月10日`n感受：内容"; expected = "2026-08-10" },
+    @{ body = "# 日期：8/10`n开心的事情：内容"; expected = "2026-08-10" },
+    @{ body = "2026/8/10`n思考：内容"; expected = "2026-08-10" }
+  )
+  foreach ($case in $explicitDateCases) {
+    $explicitDate = $valid.PSObject.Copy()
+    $explicitDate.content = "日志：$($case.body)"
+    Assert-Equal (ConvertTo-ZhijiEntryDecision -Event $explicitDate -AllowedOpenId "ou_owner").journal_date $case.expected "explicit journal must parse $($case.body)"
+  }
+  $invalidCalendarDate = $valid.PSObject.Copy()
+  $invalidCalendarDate.content = "日志：幸福日志 2.30`n思考：内容"
+  Assert-Equal (ConvertTo-ZhijiEntryDecision -Event $invalidCalendarDate -AllowedOpenId "ou_owner").journal_date "2026-08-12" "invalid calendar date must fall back to message date"
+
+  $namedEntry = $valid.PSObject.Copy()
+  $namedEntry.content = "幸福日志 8.10`n思考：内容"
+  $namedDecision = ConvertTo-ZhijiEntryDecision -Event $namedEntry -AllowedOpenId "ou_owner"
+  Assert-Equal $namedDecision.action "process" "named dated journal must not require 日志 prefix"
+  Assert-Equal $namedDecision.journal_date "2026-08-10" "named dated journal must retain parsed date"
+  $structuredEntry = $valid.PSObject.Copy()
+  $structuredEntry.content = "8月10日`n开心的事情：a`n思考：b"
+  Assert-Equal (ConvertTo-ZhijiEntryDecision -Event $structuredEntry -AllowedOpenId "ou_owner").action "process" "dated journal with two sections must not require prefix"
+  $oneSection = $valid.PSObject.Copy()
+  $oneSection.content = "8月10日`n思考：b"
+  Assert-Equal (ConvertTo-ZhijiEntryDecision -Event $oneSection -AllowedOpenId "ou_owner").action "usage" "one section must not auto-archive"
+  $plainChat = $valid.PSObject.Copy()
+  $plainChat.content = "明天 8月10日一起吃饭"
+  Assert-Equal (ConvertTo-ZhijiEntryDecision -Event $plainChat -AllowedOpenId "ou_owner").action "usage" "ordinary chat must not auto-archive"
+
+  if (Get-Command Get-ZhijiJournalStructureHint -ErrorAction SilentlyContinue) {
+    $hint = Get-ZhijiJournalStructureHint -JournalText "开心的事情：散步`n思考：慢下来`nToDo：写三条"
+    Assert-Equal $hint.section_count 3 "three distinct sections must be recognized"
+    Assert-Equal $hint.sections.intentions.title "ToDo" "English ToDo must retain original title"
+    Assert-True ($hint.sections.reflections.content -match "慢下来") "section content must retain text"
+    Assert-Equal (Get-ZhijiJournalStructureHint -JournalText "今天散步后感觉很好。").section_count 0 "free prose must not invent sections"
+  } else {
+    Add-Failure "missing function: Get-ZhijiJournalStructureHint"
+  }
 
   $wrongSender = $valid.PSObject.Copy()
   $wrongSender.sender_id = "ou_other"
@@ -166,6 +210,22 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
       Assert-True ($calls.last_reply -match [regex]::Escape("# 每日反馈`n`n反馈正文")) "reply must use the verified local feedback artifact"
       Assert-True ($calls.last_reply -match "飞书：success；滴答：success") "reply must include the actual distribution summary"
 
+      $structuredDecision = $namedDecision.PSObject.Copy()
+      $structuredDecision.message_id = "om_structure_hint"
+      $structuredDecision.journal_text = "幸福日志 8.10`n开心的事情：散步`n思考：慢下来`nToDo：写三条"
+      $structuredDecision.structure_hint = Get-ZhijiJournalStructureHint -JournalText $structuredDecision.journal_text
+      $structuredPrompt = $null
+      $structuredCodex = {
+        param($Prompt, $JournalText, $RepoRoot, $CodexPath)
+        $script:structuredPrompt = $Prompt
+        [pscustomobject]@{ exit_code = 0; output = "反馈正文"; error_code = $null }
+      }
+      $structuredResult = Invoke-ZhijiEntryDecision -Decision $structuredDecision -Config $config -CodexInvoker $structuredCodex -DistributorInvoker $distribute -ReplyInvoker $reply
+      Assert-Equal $structuredResult.status "success" "structured journal must still complete"
+      Assert-True ($script:structuredPrompt -match "confirmed 日期为 2026-08-10") "structured prompt must retain confirmed date"
+      Assert-True ($script:structuredPrompt -match "ToDo") "structured prompt must include the section hint"
+      Assert-True ($script:structuredPrompt -match "原文是唯一证据") "structured prompt must keep evidence boundary"
+
       if (Get-Command New-ZhijiDistributionPlan -ErrorAction SilentlyContinue) {
         $distributionConfig = [ordered]@{
           schema_version = 1
@@ -195,6 +255,7 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
           $tickArgs = @(Get-ZhijiTickTickCodexArguments -RequestJson '{"title_codepoints":[26126,22825],"exact_due_date":"2026-08-18","project_id":"project_daily"}')
           Assert-ContainsValue $tickArgs "--ignore-user-config" "TickTick worker must not load user plugins or MCPs"
           Assert-ContainsValue $tickArgs "--skip-git-repo-check" "TickTick worker must run outside the repository"
+          Assert-True (-not (@($tickArgs) -ccontains "--approve-for-me")) "TickTick worker must not combine --approve-for-me with --sandbox"
           Assert-True (($tickArgs -join ' ') -match [regex]::Escape("enabled_tools=['create_task']")) "TickTick worker must expose only create_task"
           Assert-True (($tickArgs -join ' ') -notmatch '明天|反馈|行动') "TickTick worker argv must not contain natural-language report data"
         } else {
@@ -244,7 +305,7 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
           $originalTickTick = ${function:Invoke-ZhijiTickTickDistribution}
           try {
             function Invoke-ZhijiFeishuDistribution { param($Plan,$RepoRoot) [ordered]@{ status = "success"; document_token = "doc_new"; attempted_at = "now" } }
-            function Invoke-ZhijiTickTickDistribution { param($Plan,$CodexPath) $script:ticktickCalls++; [ordered]@{ status = "success"; actions = @(); attempted_at = "now" } }
+            function Invoke-ZhijiTickTickDistribution { param($Plan,$CodexPath,$RepoRoot) $script:ticktickCalls++; [ordered]@{ status = "success"; actions = @(); attempted_at = "now" } }
             $null = Invoke-ZhijiResultDistribution -FeedbackPath (Join-Path $distributionRoot "复盘/每日反馈/2026-08-19.md") -RepoRoot $distributionRoot -CodexPath "codex-test" -LarkCliPath "lark-test"
             $persisted = Get-Content -LiteralPath (Join-Path $distributionRoot "复盘/.result-distribution-state.json") -Raw -Encoding UTF8 | ConvertFrom-Json
             Assert-Equal $persisted.sources.'复盘/每日反馈/2026-08-19.md'.feishu.last_attempt.status "success" "Feishu result must be persisted before the next channel"
@@ -294,7 +355,7 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
       Assert-Equal $duplicate.status "success" "successful duplicate must remain successful"
       Assert-Equal $duplicate.error_code "duplicate_success" "successful duplicate must be classified"
       Assert-Equal $calls.codex 1 "successful duplicate must not rerun Codex"
-      Assert-Equal $calls.reply 6 "successful duplicate must receive one idempotent acknowledgement"
+      Assert-Equal $calls.reply 8 "successful duplicate must receive one idempotent acknowledgement"
 
       $failedDecision = $decision.PSObject.Copy()
       $failedDecision.message_id = "om_codex_failed"
@@ -307,7 +368,7 @@ if (Get-Command ConvertTo-ZhijiEntryDecision -ErrorAction SilentlyContinue) {
       $failed = Invoke-ZhijiEntryDecision -Decision $failedDecision -Config $config -CodexInvoker $failedCodex -ReplyInvoker $reply
       Assert-Equal $failed.status "failed" "Codex failure must fail the request"
       Assert-Equal $failed.error_code "runtime_unavailable" "Codex failure must retain a normalized code"
-      Assert-Equal $calls.reply 8 "Codex failure must send acceptance and failure replies"
+      Assert-Equal $calls.reply 10 "Codex failure must send acceptance and failure replies"
 
       $replyFailureDecision = $decision.PSObject.Copy()
       $replyFailureDecision.message_id = "om_reply_failed"
