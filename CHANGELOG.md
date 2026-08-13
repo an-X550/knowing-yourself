@@ -5,6 +5,11 @@ last_updated: 2026-08-13
 
 # CHANGELOG - 改动记录
 
+## [2026-08-13 14:55] [功能] 补齐 Windows 客户端本地数据掌控闭环 (v1.17.0 -> v1.18.0)
+
+- **受影响文件**: Windows 客户端数据目录、个人背景、备份校验、设置、今天/复盘交互、测试与客户端说明，以及根 `PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 普通用户现在可看见并打开真实本地数据目录，在固定 Markdown 文件中管理可导出恢复的个人背景；备份在预览与正式切换前验证业务 Schema 和关系，API Key 继续排除。日反馈和周期复盘可原位阅读，未配置 AI 仍可保存日志；目录迁移、合并恢复和个人背景注入 AI 继续暂缓。
+
 ## [2026-08-13 12:45] [功能] 交付本地优先 Windows 桌面客户端 MVP (v1.16.1 -> v1.17.0)
 
 - **受影响文件**: `apps/zhiji-desktop/`, `README.md`, `PROJECT_STATUS.md`, `VERSION`, `.gitignore`, `docs/superpowers/`
