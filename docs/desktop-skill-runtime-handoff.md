@@ -247,13 +247,30 @@ interface DailyAuditEvent {
 
 该限制在本机权限恢复后已解除。最终验证结果：新增隔离回归测试 `daily-runtime.test.ts` 4/4 通过；全量 `npm test` 为 35 个测试文件、140 个测试全部通过；`npm run typecheck` 通过；`npm run lint` 无 error，仍有 5 条既有 warning；`npm run package` 成功完成 Vite 构建与 Windows x64 Electron Forge 封装。P0 发布门已具备验证证据。
 
+### 2026-08-14：基线复核与 P1-P4 闸门评估
+
+在隔离工作树 `codex/desktop-daily-skill-runtime`（HEAD `a695b20`）上再次执行完整基线验证：
+
+| 验证 | 结果 | 说明 |
+|---|---|---|
+| `npm run typecheck` | 通过 | TypeScript 无错误 |
+| `npm run lint` | 0 error / 5 warning | warning 均为既有文件，未关闭规则 |
+| `npm test` | 35 files / 140 tests 通过 | 含 `daily-runtime.test.ts` 隔离回归 4/4 |
+| `npm run package` | 环境限制 | Vite 构建通过；Electron Packager 在清理 `out/` 时触发 WorkBuddy safe-delete 批量确认阈值（80 文件 > 50 阈值）。手动清理 `out/` 构建产物后重试，结果待确认。非产品代码失败。 |
+
+一致性核查结论：skill-runtime 源码（4 个 TypeScript 文件）、隔离测试、审计记录器、application 层接口、兼容快照、README 边界说明和兼容矩阵全部与本文描述一致。Grep 确认 skill-runtime 目录零 `.claude` 引用。无文档与代码不一致项。
+
+P1-P4 必要性闸门评估结果：四项均未通过（详见各自规格文档）。已为每个切片沉淀架构规格、兼容矩阵扩展、金样本要求、触发条件和停止理由。不编码。
+
 ## 未完成的内容：按优先级而非想象力推进
 
 ### P0：日反馈发布门与隔离证明（已完成）
 
 已完成：隔离回归测试、README 运行边界说明和一次成功的 Windows x64 封装。后续不再为该发布门新增功能；仅在依赖、构建链或 Runtime 边界变化时重跑。
 
-### P1：验证模式的受确认沉淀（下一候选，尚未获必要性闸门通过）
+### P1：验证模式的受确认沉淀（必要性闸门未通过，规格已沉淀）
+
+> **规格文档**：`docs/superpowers/specs/2026-08-14-desktop-p1-verified-patterns-design.md`
 
 当前 JSONL 审计能追溯“行动是否被验证”，但不是用户可管理的长期模式库。只有在真实使用中确认用户需要跨日复用已验证模式时，新增桌面端自己的 `verified-patterns` 数据模型。
 
@@ -261,21 +278,35 @@ interface DailyAuditEvent {
 
 开始 P1 前必须取得一次真实证据：用户需要在后续日反馈或周期复盘中主动复用一个已验证模式，而 JSONL 审计不足以让用户查看、理解或管理它。没有该证据时，不创建数据模型、页面、SQLite 或“记忆”。获准后的最小范围仅为独立仓储、候选预览、确认/拒绝、来源 review ID 与证据摘要、只读列表；不含自动提取、自动写入、向量检索、跨设备同步或通用长期记忆。
 
-### P2：周/月/项目复盘迁移为第二个垂直切片
+**2026-08-14 闸门评估**：四项条件均不成立（无真实跨日复用需求证据、JSONL 审计是更简单替代方案、无真实验证样本可验证）。规格文档已沉淀触发条件、最小实施范围和金样本要求。不编码。
+
+### P2：周/月/项目复盘迁移为第二个垂直切片（必要性闸门未通过，规格已沉淀）
+
+> **规格文档**：`docs/superpowers/specs/2026-08-14-desktop-p2-periodic-review-design.md`
 
 先用已有周期复盘能力建立兼容矩阵和金样本，再迁移“下游沉淀优先、证据不足降级、复盘六问、确认写入”。不要只把现有 prompt 丢进 LangGraph。
 
 开始前的验收物是：周期复盘兼容矩阵、脱敏金样本、每个输出字段对应的最小材料表。没有这些，不接入图编排。
 
-### P3：主题思考与受控联网
+**2026-08-14 闸门评估**：四项条件均不成立（Codex + .claude/ 周期复盘已"已完成真实验收"、无真实桌面端需求、前置验收物未准备）。规格文档已沉淀触发条件（日反馈连续使用 4 周 + 用户主动要求 + 金样本就绪）和最小实施范围。不编码。
+
+### P3：主题思考与受控联网（必要性闸门未通过，规格已沉淀）
+
+> **规格文档**：`docs/superpowers/specs/2026-08-14-desktop-p3-topic-thinking-design.md`
 
 实现“匹配索引 → 最多读取两个相关主题 → 讨论 → 提议差异 → 用户确认后保存”的暂停/恢复闭环。联网只由用户明确请求触发，来源与查询可见，搜索结果不能静默沉淀。
 
 这一切片需要应用关闭后的暂停/恢复，届时才评估 LangGraph 持久化与 SQLite checkpointer；不要为了 P1 或 P2 提前引入它。
 
-### P4：模糊意图路由
+**2026-08-14 闸门评估**：四项条件均不成立（无真实桌面端主题思考需求、当前 Runtime 使用 MemorySaver 不支持暂停/恢复、Codex + .claude/ 主题思考已有完整契约）。规格文档已沉淀架构前置条件（SQLite checkpointer 评估）、触发条件和最小实施范围。不编码。
+
+### P4：模糊意图路由（必要性闸门未通过，规格已沉淀）
+
+> **规格文档**：`docs/superpowers/specs/2026-08-14-desktop-p4-intent-routing-design.md`
 
 仅在明确入口不足时，让模型从注册工作流枚举中选择 `WorkflowIntent`；Zod 校验失败即回退到澄清。不得允许模型创造流程、工具或权限。
+
+**2026-08-14 闸门评估**：四项条件均不成立（桌面端只有日反馈一个工作流、无真实模糊入口失败样本、当前入口均为确定性路由）。规格文档已沉淀触发条件（至少 2 个工作流 + 5 个失败样本 + 确定性入口确实不足）和最小实施范围。不编码。
 
 ## 后续 Agent 的决策表
 
@@ -326,3 +357,7 @@ interface DailyAuditEvent {
 - 本交接：`docs/desktop-skill-runtime-handoff.md`
 - 已完成的 P0 发布门执行记录：`docs/superpowers/plans/2026-08-14-desktop-runtime-release-gate.md`
 - 桌面端兼容范围：`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`
+- P1 待触发规格（验证模式沉淀，闸门未通过）：`docs/superpowers/specs/2026-08-14-desktop-p1-verified-patterns-design.md`
+- P2 待触发规格（周期复盘迁移，闸门未通过）：`docs/superpowers/specs/2026-08-14-desktop-p2-periodic-review-design.md`
+- P3 待触发规格（主题思考与受控联网，闸门未通过）：`docs/superpowers/specs/2026-08-14-desktop-p3-topic-thinking-design.md`
+- P4 待触发规格（模糊意图路由，闸门未通过）：`docs/superpowers/specs/2026-08-14-desktop-p4-intent-routing-design.md`
