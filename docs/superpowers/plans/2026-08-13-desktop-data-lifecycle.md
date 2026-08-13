@@ -38,10 +38,10 @@
 **Interfaces:**
 - Produces: `journals.delete(id): Promise<void>`、`reviews.delete(id): Promise<void>`，内部只向注入的 `trashItem(path)` 传解析后的真实路径。
 
-- [ ] 写仓储和页面失败测试：稳定 ID 定位文件、确认后调用删除、删除后刷新、其他实体不被调用。
-- [ ] 运行目标测试，确认因接口或按钮不存在而失败。
-- [ ] 实现仓储、IPC、Preload、确认 UI 和刷新逻辑。
-- [ ] 运行目标测试并确认通过。
+- [x] 写仓储和页面失败测试：稳定 ID 定位文件、确认后调用删除、删除后刷新、其他实体不被调用。
+- [x] 运行目标测试，确认因接口或按钮不存在而失败。
+- [x] 实现仓储、IPC、Preload、确认 UI 和刷新逻辑。
+- [x] 运行目标测试并确认通过。
 
 ### Task 2: 项目完整安全生命周期
 
@@ -61,10 +61,10 @@
 **Interfaces:**
 - Produces: `projects.rename({id,name})`、`projects.restore(id)`、`projects.delete(id)`；删除 handler 在 Main Process 检查 `journals.list()` 中无项目引用。
 
-- [ ] 写失败测试：忽略大小写/空格的全局重名、重命名、恢复、空项目删除、有关联日志拒绝。
-- [ ] 运行目标测试，确认失败原因对应缺失行为。
-- [ ] 实现 Zod 契约、仓储方法、IPC/Preload 和项目页操作。
-- [ ] 运行目标测试并确认通过。
+- [x] 写失败测试：忽略大小写/空格的全局重名、重命名、恢复、空项目删除、有关联日志拒绝。
+- [x] 运行目标测试，确认失败原因对应缺失行为。
+- [x] 实现 Zod 契约、仓储方法、IPC/Preload 和项目页操作。
+- [x] 运行目标测试并确认通过。
 
 ### Task 3: API Key 清除与原生下拉统一
 
@@ -81,10 +81,10 @@
 **Interfaces:**
 - Produces: `settings.clearApiKey(): Promise<PublicProviderConfig>`，删除当前公开配置所选服务商的凭证。
 
-- [ ] 写设置页失败测试：确认后清除、刷新全局状态、显示成功反馈。
-- [ ] 运行测试确认因接口或按钮不存在而失败。
-- [ ] 实现 Main/Preload/Renderer 链路和全局 `select` CSS；不新增组件库。
-- [ ] 运行设置和渲染测试并确认通过。
+- [x] 写设置页失败测试：确认后清除、刷新全局状态、显示成功反馈。
+- [x] 运行测试确认因接口或按钮不存在而失败。
+- [x] 实现 Main/Preload/Renderer 链路和全局 `select` CSS；不新增组件库。
+- [x] 运行设置和渲染测试并确认通过。
 
 ### Task 4: 集中验证与发布同步
 
@@ -97,8 +97,8 @@
 **Interfaces:**
 - Consumes: Tasks 1–3 的全部公开行为。
 
-- [ ] 运行 `npm test`、`npm run typecheck`、`npm run lint`。
-- [ ] 运行 `npm run test:e2e` 和 `npm run package`，关闭锁定打包目录的本项目进程后再执行。
-- [ ] 更新客户端说明、测试数量、版本、状态和一条合并 CHANGELOG。
-- [ ] 运行版本一致性与 `git diff --check`。
-- [ ] 本地提交并确认工作区干净；不推送远端。
+- [x] 运行 `npm test`、`npm run typecheck`、`npm run lint`。
+- [x] 运行 `npm run test:e2e` 和 `npm run package`，关闭锁定打包目录的本项目进程后再执行。
+- [x] 更新客户端说明、测试数量、版本、状态和一条合并 CHANGELOG。
+- [x] 运行版本一致性与 `git diff --check`。
+- [x] 本地提交并确认工作区干净；不推送远端。
