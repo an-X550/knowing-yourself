@@ -5,7 +5,7 @@ last_updated: 2026-08-14
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.26.0
+**当前版本**：1.26.2
 
 ## 项目概述
 
@@ -77,7 +77,7 @@ last_updated: 2026-08-14
 - [x] 桌面端月报深度已实现（v1.24.6，阶段 B）：主主题归并（五要素）、下月规划目标+手段+检查点+假说、触发条件满足时输出指向复盘页方向校准的升级提醒；主主题不足时代码强制披露不硬凑；周报/项目复盘零变化。
 - [x] 洞察三链路契约审计完成（v1.24.7，阶段 C）：coach/yearly/life-design 无结构漂移；4 项判据漂移已修（coach 六步法命名与方向信号判据→`journal-coach-v3`、yearly 升级提醒→`yearly-review-v2`、life-design 下次如何验证→`life-design-v2`）；4 项设计性差异与 1 项已知差异登记不修（报告见 `docs/2026-08-14-insight-contract-audit.md`）。
 - [x] 桌面端全面审计优化完成（v1.25.0）：S1 意图路由删除、S2/S4 错误中文化与网络加固、S3 主题思考 v2、S5 契约类型归位、S6 新鲜度去重、S7 依赖清理、S8 台账登记（D1-D6）全部落地；P2（B2 IPC 错误结构化、C5 e2e 补测、F5/F4）与 D2 消费规则实现延后（见 `docs/2026-08-14-desktop-optimization-plan.md` 非目标）。
-- [x] 桌面端苹果风重设计（v1.26.0）：设计令牌系统（字阶/间距/圆角/阴影/动效）+ 暗色模式落地；主题思考页 10 个零样式 class 缺陷修复；主题讨论 AI 回复流式呈现；复盘生成真实阶段进度；ConfirmDialog 统一确认弹窗（消灭 window.confirm）；labels/hasApiKey 重复归一。后端清理（ProviderPort 去重、死代码删除、竞态与超时修复）按 spec 延后另批。视觉走查与 10 秒理解测试待人工。
+- [x] 桌面端后端清理（v1.26.2，spec 阶段 4）：ProviderPort/fenced-JSON/预览令牌归一，3 个死代码文件删除，15 处裸 Error→AppError + CANCELLED 错误码，AI 60s 超时与取消误报修复，project/pattern 仓储写队列，IPC model 注入样板下沉。e2e 与视觉走查仍待人工。
 - [ ] 用真实非模板日志补周报、项目复盘示例。
 - [ ] 为 `/yearly-review` 准备足够月报样本。
 

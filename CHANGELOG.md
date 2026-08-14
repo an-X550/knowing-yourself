@@ -5,6 +5,16 @@ last_updated: 2026-08-14
 
 # CHANGELOG - 改动记录
 
+## [2026-08-15 01:40] [重构] 桌面端后端清理：重复定义归一、死代码删除、错误体系统一、竞态与超时修复 (v1.26.1 -> v1.26.2)
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/infrastructure/ai/provider-port.ts`（新增）、`prompts/parse-fenced-json.ts`（新增）、`application/preview-token-store.ts`（新增）、`application/{generate-daily-review,generate-periodic-review,generate-insight-review,topic-thinking,verified-patterns}.ts`、`skill-runtime/{daily-runtime,periodic-runtime,daily-grade-review}.ts`、`prompts/{daily-review-v1,journal-coach-v2,verified-patterns-v1,periodic-review-v1,topic-thinking-v1}.ts`、`infrastructure/ai/openai-compatible-provider.ts`、`infrastructure/transfer/{data-transfer-service,business-archive-validator,archive-manifest}.ts`、`infrastructure/markdown/project-repository.ts`、`infrastructure/patterns/verified-pattern-repository.ts`、`infrastructure/topics/topic-repository.ts`、`infrastructure/data-directory/data-directory-service.ts`、`ipc/register-handlers.ts`、`shared/errors/app-error.ts`、`apps/zhiji-desktop/docs/architecture.md`、`VERSION`、`PROJECT_STATUS.md`；删除 `domain/{token-budget,date-periods,project-materials}.ts` 及其三个测试文件
+- **改动摘要**: 按 spec 阶段 4 执行（无契约与行为变化）。归一：`ProviderPort` 8 处逐字重复→`infrastructure/ai/provider-port.ts`（stream 可选）；fenced-JSON 解析 6 份拷贝→`prompts/parse-fenced-json.ts`；预览令牌 TTL/剪枝/摘要 2 套→`application/preview-token-store.ts`。删除 3 个零生产引用死文件。错误体系：transfer/validator/runtime/repository 共 15 处裸 `throw new Error` → AppError（IMPORT_REJECTED/INVALID_INPUT/UNKNOWN）；新增 `CANCELLED` 错误码。AI 层：请求加 60s 超时（AbortSignal.any 合并调用方信号）；修复「取消被误报为 NETWORK_TIMEOUT」死分支；流式读取中段错误同样归类。竞态：project/pattern 仓储读-改-写接入串行写队列（唯一性检查与落盘不再可被插入）。IPC：7 处「取公开配置注入 model」样板下沉为 `withModel()`。
+
+## [2026-08-15 00:50] [修复] 桌面端外观手动切换 + Markdown 行内渲染 (v1.26.0 -> v1.26.1)
+
+- **受影响文件**: `apps/zhiji-desktop/src/renderer/utils/theme.ts`（新增）、`src/renderer.tsx`、`src/index.css`、`src/renderer/components/markdown-document.tsx`、`src/renderer/pages/settings-page.tsx`、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 修复两个真实使用反馈。① 暗色模式此前只能跟随系统：新增设置页「外观」卡片（跟随系统/浅色/深色三段切换），偏好存 localStorage，暗色令牌改由 `<html data-theme>` 驱动并监听系统切换，jsdom 环境兜底。② 主题讨论 AI 回复中的 `**加粗**`、`1. 有序列表`、`` `代码` `` 以纯文本裸露：MarkdownDocument 新增行内渲染（加粗/斜体/行内代码）与有序列表块，表格单元格同步支持行内样式，不解析 HTML 的安全边界不变。验收门：`npm test` 54 files / 308 tests 全过；`tsc --noEmit` 通过；已重新打包 exe。
+
 ## [2026-08-14 23:50] [功能] 桌面端苹果风重设计：设计令牌系统、暗色模式、AI 流式输出与阶段进度、确认弹窗统一 (v1.25.0 -> v1.26.0)
 
 - **受影响文件**: `apps/zhiji-desktop/src/index.css`（整体重写）、`src/renderer/components/confirm-dialog.tsx`（新增）、`src/renderer/domain/history-items.ts`、`features/history/history-filter.tsx`、`history-reader.tsx`、`hooks/use-app-data.ts`、`app/app.tsx`、`pages/today-page.tsx`、`reviews-page.tsx`、`topics-page.tsx`、`projects-page.tsx`、`settings-page.tsx`、`src/shared/contracts/desktop-api.ts`、`src/preload.ts`、`src/main-process/application/topic-thinking.ts`、`domain/review-task.ts`、`ipc/register-handlers.ts`、`tests/unit/{app,today-page,reviews-page,topics-page,settings-page,projects-page}.test.tsx`、`docs/specs/desktop-apple-redesign-and-architecture-cleanup.md`（新增）、`VERSION`、`PROJECT_STATUS.md`
