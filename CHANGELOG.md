@@ -5,6 +5,11 @@ last_updated: 2026-08-14
 
 # CHANGELOG - 改动记录
 
+## [2026-08-14] [功能] 桌面端 R2 证据分级修复：D 级判级语义复核（阶段 A） (v1.24.4 -> v1.24.5)
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/skill-runtime/daily-grade-review.ts`（新增）、`daily-runtime.ts`、`compatibility/daily-feedback-v1.ts`、`tests/unit/daily-evidence-gold.test.ts`（新增）、`tests/unit/daily-runtime.test.ts`、`tests/integration/generate-daily-review.test.ts`、`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`contract-prompt-mapping.md`、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 按 `docs/2026-08-14-r2-grading-fix-task-brief.md` 修复证据分级分歧 3/5 中的 D 级误熔断（S2 形态：短小第一人称评价被正则判 D，用户得不到反馈）。正则前置门不变，A/B/C 快路径零变化；仅正则判 D 时经既有 ProviderPort 追加至多一次 zod strict 约束的语义复核短调用，确认本人经历则保守升至 C（镜像反射级，不跳 A/B），失败、超时或输出无效回落原 D 补证。契约变更（用户拍板放行）：冻结项“D 级降级不调用模型”改为“反馈生成不调用模型；判级阶段允许至多一次复核短调用”。兼容快照 `desktop-daily-feedback-v2`→`v3` 增记该行为；A/B/C 级差（只影响反馈深度）登记为已知差异不修。新增金样本回归集 10 条（基线 5 + 新增 5，真实日志脱敏，含 2 条短评价、2 条疑问式解释、1 条模板日志）。验收门：`npm test` 52 files / 258 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 5 既有 warning。原 Skill 系统 `.claude/` 零改动。
+
 ## [2026-08-14] [功能] 桌面端与 Skill 契约对齐（R3/R6 同构、R5 上限、R1 对照表、R2 证据） (v1.24.3 -> v1.24.4)
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/prompts/periodic-review-v1.ts`、`periodic-runtime.ts`、`compatibility/periodic-review-v1.ts`、`prompts/daily-review-v1.ts`、`compatibility/daily-feedback-v1.ts`、`tests/**`、`apps/zhiji-desktop/docs/contract-prompt-mapping.md`、`skill-compatibility-matrix.md`、`architecture.md`、`docs/2026-08-14-r2-evidence-grading-comparison.md`、`VERSION`、`PROJECT_STATUS.md`

@@ -14,7 +14,7 @@ status: active-handoff
 
 1. 在主仓库 `C:\Users\panda\.claude\skills\知己` 执行 `git status --short`，确认用户未提交的改动；不要清理、重置或覆盖它们。
 2. 读取 `AGENTS.md`、`PROJECT_STATUS.md`、`CHANGELOG.md` 最近条目和本文。它们分别定义项目规范、当前事实、发布历史与桌面端边界。
-3. 桌面端实现不在 `main`：切换或新建隔离工作树，基于远端分支 `origin/codex/desktop-daily-skill-runtime`。其截至 P0 的最新提交为 `a695b20`；不要在主工作区直接实现桌面端功能。
+3. 桌面端 P0-P4 已于 2026-08-14 合并进 `main`（提交 `35026bb`）。继续开发基于 `main` 新建隔离工作树；不要在主工作区直接实现桌面端功能。
 4. 在 `<worktree>/apps/zhiji-desktop` 执行：
 
    ```powershell
@@ -214,12 +214,11 @@ interface DailyAuditEvent {
 | 项目 | 位置 |
 |---|---|
 | 主工作区 | `C:\Users\panda\.claude\skills\知己` |
-| 桌面端隔离工作树 | `C:\Users\panda\.claude\skills\知己\.worktrees\desktop-daily-skill-runtime` |
-| 桌面端分支 | `codex/desktop-daily-skill-runtime` |
-| 当前实现提交 | `37dba5a feat: complete desktop daily skill runtime` |
-| 前置实现提交 | `9a3391c`、`3e53b9a`、`4d4058b` |
+| 桌面端历史工作树（P0-P4 已合并，仅作历史参考） | `C:\Users\panda\.claude\skills\知己\.worktrees\desktop-daily-skill-runtime` |
+| 桌面端历史分支 | `codex/desktop-daily-skill-runtime` |
+| 当前真相 | `main`（合并提交 `35026bb`，2026-08-14） |
 
-不要在主工作区直接继续修改桌面端功能；先在新的隔离工作树或上述分支继续。不要把工作树目录提交进主分支。
+不要在主工作区直接继续修改桌面端功能；先基于 `main` 新建隔离工作树再实现。不要把工作树目录提交进主分支。
 
 ### 已完成：日反馈垂直切片
 
@@ -346,7 +345,7 @@ P1-P4 必要性闸门评估结果：四项均未通过（详见各自规格文�
 
 1. 在仓库根目录阅读本文件、`AGENTS.md`、`PROJECT_STATUS.md`、`CHANGELOG.md` 最近条目，以及 `docs/superpowers/specs/2026-08-14-skill-runtime-agent-architecture-design.md`。
 2. 阅读 `apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`src/main-process/skill-runtime/`、相关测试和本次计划文件。
-3. 使用新隔离工作树，基于 `origin/codex/desktop-daily-skill-runtime` 分支；先执行 `npm ci`、`npm test`、`npm run typecheck`、`npm run lint`、`npm run package`，确认基线。`node_modules` 可以是指向 D 盘依赖目录的 Windows junction；先复用它，只有确证本机不存在兼容依赖后才安装。
+3. 使用新隔离工作树，基于 `main`（P0-P4 已于 2026-08-14 合并）；先执行 `npm ci`、`npm test`、`npm run typecheck`、`npm run lint`、`npm run package`，确认基线。`node_modules` 可以是指向 D 盘依赖目录的 Windows junction；先复用它，只有确证本机不存在兼容依赖后才安装。
 4. 只选择本文件 P0–P4 的一个切片。先做必要性闸门；通过后写规格与逐步计划，再实现。
 5. 每任务坚持 TDD、最小改动、聚焦提交；完成后跑关联测试、全量测试、类型检查、lint、实际存在的打包脚本。
 6. 在最终交接中报告：改动文件、用户可见行为、未完成项、精确验证命令/结果、提交哈希和任何外部阻塞。
