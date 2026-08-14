@@ -5,6 +5,11 @@ last_updated: 2026-08-13
 
 # CHANGELOG - 改动记录
 
+## [2026-08-14] [功能] 桌面端受控 Skill Runtime 完成 P1-P4 四个切片（隔离工作树，未合并）
+
+- **受影响文件**: `apps/zhiji-desktop/**`（周期复盘 Runtime、验证模式仓储与服务、主题思考仓储/会话 checkpoint/受控联网、意图路由、对应 IPC/UI/测试）、`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`PROJECT_STATUS.md`、`PROGRESS.md`、主仓库 `docs/desktop-skill-runtime-handoff.md`
+- **改动摘要**: 在隔离工作树 `codex/desktop-daily-skill-runtime` 按 TDD 完成：P0/P2 周期复盘（LangGraph Runtime、A-D 证据分级、D 级补证不调模型、下游沉淀优先材料组装、预览确认、原子保存，提交 `49f2013`）；P1 受确认验证模式（模型只提候选、确认才写 JSON 快照、拒绝无持久化，提交 `fb3a326`）；P3 主题思考与受控联网（讨论—展示差异—确认—沉淀、文件型 checkpoint 重启恢复、联网仅用户显式触发且 sourceId 绑定搜索会话，提交 `7908a4c`）；P4 意图路由（确定性匹配优先、模型只能选固定枚举、Zod 失败回退澄清，提交 `a9fcf78`）。最终验证：`npm test` 50 files / 229 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 5 既有 warning；`npm run package` Windows x64 成功。原 Skill 系统零改动；BLOCKED.md：无。未推送、未合并，等待用户验收。
+
 ## [2026-08-14 00:40] [修复] 对齐桌面端反馈契约并安全渲染 Markdown (v1.24.1 -> v1.24.2)
 
 - **受影响文件**: Windows 客户端日反馈与日志质量生成契约、前端文档渲染、相关测试与说明、`VERSION`、`PROJECT_STATUS.md`
