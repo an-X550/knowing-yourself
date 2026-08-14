@@ -5,6 +5,11 @@ last_updated: 2026-08-14
 
 # CHANGELOG - 改动记录
 
+## [2026-08-15 03:10] [功能] 桌面端自定义存储位置、日志模板系统、版本管理 (v1.26.2 -> v1.27.0)
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/infrastructure/data-directory/{data-root-config,data-root-holder}.ts`（新增）、`infrastructure/templates/template-repository.ts`（新增）、`bootstrap.ts`、`main.ts`、`ipc/register-handlers.ts`、`shared/schemas/{domain,ipc}.ts`、`shared/contracts/desktop-api.ts`、`preload.ts`、`renderer/pages/{today-page,settings-page}.tsx`、`package.json`（版本 1.0.0→1.27.0）、`VERSION`、`PROJECT_STATUS.md`、各页面测试 mock
+- **改动摘要**: 三个新需求落地。① 自定义存储位置：新增 `DataRootConfig`（读写 `<userData>/zhiji-config.json`，存 dataRoot 与 updateUrl）与 `DataRootHolder`（运行期持有 + changeLocation 迁移）；bootstrap 改为 async 读配置；设置页"本地数据"卡片新增"更改存储位置"按钮，弹出系统文件夹选择器，确认后复制现有数据到新位置并提示重启；目标必须为空目录避免覆盖。② 日志模板：新增 `TemplateRepository` 读写 `<dataRoot>/templates/*.md`；日志页日志内容上方新增"从模板开始"下拉，选择即追加模板正文；设置页新增"日志模板"卡片，支持新建/编辑/删除模板（名称+正文）。③ 版本管理：package.json 版本同步 VERSION（1.27.0）；设置页新增"关于"卡片显示版本号与发布地址输入框，"检查更新"打开配置的 URL 获取最新安装包；用 `npm run make` 产出 Squirrel Windows 安装包到 `out/make/`。验收门：typecheck 通过；lint 0 error；受影响页面单测全过；集成测试抽样全过。
+
 ## [2026-08-15 01:40] [重构] 桌面端后端清理：重复定义归一、死代码删除、错误体系统一、竞态与超时修复 (v1.26.1 -> v1.26.2)
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/infrastructure/ai/provider-port.ts`（新增）、`prompts/parse-fenced-json.ts`（新增）、`application/preview-token-store.ts`（新增）、`application/{generate-daily-review,generate-periodic-review,generate-insight-review,topic-thinking,verified-patterns}.ts`、`skill-runtime/{daily-runtime,periodic-runtime,daily-grade-review}.ts`、`prompts/{daily-review-v1,journal-coach-v2,verified-patterns-v1,periodic-review-v1,topic-thinking-v1}.ts`、`infrastructure/ai/openai-compatible-provider.ts`、`infrastructure/transfer/{data-transfer-service,business-archive-validator,archive-manifest}.ts`、`infrastructure/markdown/project-repository.ts`、`infrastructure/patterns/verified-pattern-repository.ts`、`infrastructure/topics/topic-repository.ts`、`infrastructure/data-directory/data-directory-service.ts`、`ipc/register-handlers.ts`、`shared/errors/app-error.ts`、`apps/zhiji-desktop/docs/architecture.md`、`VERSION`、`PROJECT_STATUS.md`；删除 `domain/{token-budget,date-periods,project-materials}.ts` 及其三个测试文件
