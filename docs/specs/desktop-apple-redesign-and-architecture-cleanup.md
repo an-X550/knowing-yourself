@@ -1,9 +1,10 @@
 ---
 created: 2026-08-14
-status: 待确认
+status: 前端部分已完成（v1.26.0，阶段 0-3 + 流式 + 暗色）；阶段 4 后端清理与 e2e/视觉走查待续
 based_on:
   - 2026-08-14 前后端架构第一性原理审计（backend-auditor / frontend-auditor 双代理事实报告）
   - 用户前端诉求：苹果设计语言、界面不复杂、方便用且用得好
+  - 用户确认范围：前端优先 + AI 流式输出 + 暗色模式
 scope: apps/zhiji-desktop（不含 .claude Skill 系统）
 ---
 
