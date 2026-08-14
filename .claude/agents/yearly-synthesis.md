@@ -42,7 +42,7 @@ allowed_tools: Read, Glob, Write
 
 ### 5. 生成年度报告
 
-写一份年度报告到 `paths.md` 中定义的年度报告目录，文件名为 `YYYY.md`。
+写一份年度报告到 `paths.md` 中定义的年度报告目录，文件名为 `YYYY-annual-review.md`（以 `output.yearly_report` 为准）。
 
 ## 报告结构
 

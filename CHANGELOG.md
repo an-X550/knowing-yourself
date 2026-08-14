@@ -5,6 +5,11 @@ last_updated: 2026-08-14
 
 # CHANGELOG - 改动记录
 
+## [2026-08-14 21:30] [功能] 桌面端全面审计优化落地：意图路由删除、错误中文化、主题思考 v2、契约与依赖清理、台账治理同步 (v1.24.8 -> v1.25.0)
+
+- **受影响文件**: `apps/zhiji-desktop/src/**`（start-page/navigation/intent 链路删除、`shared/errors/app-error.ts`、`infrastructure/ai|web`、`prompts/topic-thinking-v1.ts`、`application/topic-thinking.ts`、`renderer.tsx`、`shared/schemas/domain.ts`、`shared/contracts/desktop-api.ts`、`renderer/hooks/use-app-data.ts`、`renderer/domain/next-step.ts`、`main-process/application/generate-daily-review.ts`、`shared/domain/daily-freshness.ts`（新增）、`infrastructure/ai/provider-config.ts`、`infrastructure/data-directory/data-directory-service.ts`、`package.json`、`package-lock.json`）、`apps/zhiji-desktop/tests/**`（新增 `daily-freshness.test.ts`，删除意图路由用例）、`apps/zhiji-desktop/docs/architecture.md`、`docs/skill-compatibility-matrix.md`、`docs/contract-prompt-mapping.md`、`.claude/agents/yearly-synthesis.md`、`docs/2026-08-14-desktop-product-tech-audit.md`（新增）、`docs/2026-08-14-desktop-optimization-plan.md`（新增）、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 按 2026-08-14 全面审计与优化方案执行 P0+P1。S1 首页意图路由整体删除（用户拍板）：输入框/出发/前往、`intent.resolve` IPC、服务与提示词及测试一并移除，台账登记下线。S2/S4 错误码中文化与裸 Error 收敛（appError 工厂带中文默认文案，用户不再看到 `RATE_LIMITED` 类裸码），网络层加固（SSE 帧级容错、fetch 超时、会话上限）。S3 主题思考改造 `topic-thinking-v1`→`v2`：日反馈/复盘页可携上下文摘录跳转探讨，update 模式合并式重组整篇论证，提案持久化到会话 checkpoint（重启后可确认），Markdown 渲染生效。S5 契约层类型归位：三个类型移入 `shared/schemas/domain.ts` 消除 shared/renderer 对 main-process 的反向依赖，transfer/preview/topics 匿名返回类型改命名 schema（preview/previewInsight 重复合并）。S6 日反馈新鲜度逻辑抽至 `shared/domain/daily-freshness.ts`，前后端同引用，双端对照单测先红后绿。S7 移除五个未使用依赖与 react-query 死接线（lock 同步）。S8 台账登记：D1 双轨数据互不可消费（已知差异）、D3 月报额外一级标题（有意差异）、D4 月报视角证据包层（设计性差异不实现）、D5 补本地飞书入口与收藏吃灰库两条有意排除行、D2 复盘消费规则缺失（仅登记，实现需另过必要性闸门）、D6 修正 yearly 输出文件名为 `YYYY-annual-review.md`；architecture.md 同步实测测试数（54 文件 / 308 测试）与依赖清理事实。验收门：`npm test` 54 files / 308 tests 全过；`tsc --noEmit` 通过；lint 0 error / 5 既有 warning。README 入口描述仍准确（六入口）未改；AGENTS/CLAUDE 未提及意图路由未改。
+
 ## [2026-08-14] [修复] 桌面端入口描述修正与主题思考发布验证 (v1.24.7 -> v1.24.8)
 
 - **受影响文件**: `README.md`、`apps/zhiji-desktop/README.md`、`docs/2026-08-14-desktop-skill-output-quality-audit.md`（新增）、`docs/2026-08-14-topic-thinking-release-task-brief.md`（新增）、`VERSION`、`PROJECT_STATUS.md`
