@@ -1,9 +1,14 @@
 ---
 created: 2026-07-05
-last_updated: 2026-08-13
+last_updated: 2026-08-14
 ---
 
 # CHANGELOG - 改动记录
+
+## [2026-08-14] [功能] 桌面端与 Skill 契约对齐（R3/R6 同构、R5 上限、R1 对照表、R2 证据） (v1.24.3 -> v1.24.4)
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/prompts/periodic-review-v1.ts`、`periodic-runtime.ts`、`compatibility/periodic-review-v1.ts`、`prompts/daily-review-v1.ts`、`compatibility/daily-feedback-v1.ts`、`tests/**`、`apps/zhiji-desktop/docs/contract-prompt-mapping.md`、`skill-compatibility-matrix.md`、`architecture.md`、`docs/2026-08-14-r2-evidence-grading-comparison.md`、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 按契约审计任务书完成四项。R3/R6 选项 A：周期复盘提示词版本 `periodic-review-v2`→`v3`，补齐六问一级标题、聊天摘要、方向锚点五态缺席检查，新增 `applyPeriodicQualityGates` 在代码层强制注入 B/C 降级标注与空锚点披露，快照升级 `desktop-periodic-review-v2`；周报深度（3Why 与目标/手段/检查三要素）随主线完成，月报主主题归并延后。R5：日反馈提示词补“常规 260 字、例外≤320 字”上限并递增 `daily-review-v3`，快照 `desktop-daily-feedback-v2`，不加长度硬校验。R1：新增契约-提示词对照表与 6 项漂移防护断言测试。R2：5 条真实非模板日志脱敏对照，发现分歧 3/5（含 1 条 D 级误熔断、1 条跨 2 级），按任务书另行立项、本轮不改代码。验收门：`npm test` 50 files / 237 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 5 既有 warning。提交：`60acdf3`、`305b219`、`46be443` 及 R2 证据文档。原 Skill 系统 `.claude/` 零改动。
 
 ## [2026-08-14] [功能] 桌面端受控 Skill Runtime 完成 P1-P4 四个切片并合并入 main
 
