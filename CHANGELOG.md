@@ -5,6 +5,11 @@ last_updated: 2026-08-14
 
 # CHANGELOG - 改动记录
 
+## [2026-08-14] [修复] 桌面端入口描述修正与主题思考发布验证 (v1.24.7 -> v1.24.8)
+
+- **受影响文件**: `README.md`、`apps/zhiji-desktop/README.md`、`docs/2026-08-14-desktop-skill-output-quality-audit.md`（新增）、`docs/2026-08-14-topic-thinking-release-task-brief.md`（新增）、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 修正两份 README 的入口描述（五个→六个，补主题思考），消除与实际导航不符的误导；附产品与 Skill 差异审计报告（输出质量、后端提示词对齐现状、主题思考缺失误判的根因分析）。无代码与提示词变化；重新打包使既有主题思考功能（提交 7908a4c）进入用户可用构建。
+
 ## [2026-08-14] [功能] 桌面端洞察三链路契约审计与判据漂移修复（阶段 C） (v1.24.6 -> v1.24.7)
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/prompts/insight-review-prompts.ts`、`prompts/journal-coach-v2.ts`、`tests/integration/generate-insight-review.test.ts`、`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`contract-prompt-mapping.md`、`architecture.md`、`docs/2026-08-14-insight-contract-audit.md`（新增）、`VERSION`、`PROJECT_STATUS.md`
