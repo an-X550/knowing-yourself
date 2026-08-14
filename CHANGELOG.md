@@ -5,6 +5,11 @@ last_updated: 2026-08-14
 
 # CHANGELOG - 改动记录
 
+## [2026-08-14] [功能] 桌面端洞察三链路契约审计与判据漂移修复（阶段 C） (v1.24.6 -> v1.24.7)
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/prompts/insight-review-prompts.ts`、`prompts/journal-coach-v2.ts`、`tests/integration/generate-insight-review.test.ts`、`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`contract-prompt-mapping.md`、`architecture.md`、`docs/2026-08-14-insight-contract-audit.md`（新增）、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 按路线图阶段 C 完成 coach/yearly/life-design 三链路只读对照审计（报告见 `docs/2026-08-14-insight-contract-audit.md`）：无结构漂移；4 项判据漂移立项修复，4 项设计性差异与 1 项已知差异只登记。修复：① coach 六步法命名对齐方法论权威（回忆事实、筛选重点、评估结果、洞察思考、行为改进、分享讨论），directionWarning 补四类方向信号枚举与「单日情绪低落或普通任务压力不触发」排除，提示词版本 `journal-coach-v2`→`v3`；② yearly 补升级提醒触发条件（长期方向冲突/重复卡点/工作观人生观冲突/无法局部优化），措辞指向复盘页方向校准入口、不出现命令字样，`yearly-review-v1`→`v2`；③ life-design 补「下次如何验证」要求，`life-design-v1`→`v2`。设计性差异登记：yearly <6 份硬拦截（Skill 警告继续）、yearly 输出简洁五要素（Skill 13 节长报告）、life-design 仅 quick 模式；已知差异登记：coach patterns 未单列六步法环节维度。新增 yearly 链路集成测试（6 份月报门槛 + 升级提醒契约断言）。验收门：`npm test` 52 files / 268 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 5 既有 warning。原 Skill 系统 `.claude/` 零改动。
+
 ## [2026-08-14] [功能] 桌面端月报深度落地：主主题归并与方向校准升级提醒（阶段 B） (v1.24.5 -> v1.24.6)
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/prompts/periodic-review-v1.ts`、`skill-runtime/periodic-runtime.ts`、`compatibility/periodic-review-v1.ts`、`tests/unit/periodic-review-v1.test.ts`、`tests/unit/periodic-runtime.test.ts`、`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`contract-prompt-mapping.md`、`architecture.md`、`VERSION`、`PROJECT_STATUS.md`
