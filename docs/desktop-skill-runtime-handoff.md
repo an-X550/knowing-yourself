@@ -256,7 +256,7 @@ interface DailyAuditEvent {
 | `npm run typecheck` | 通过 | TypeScript 无错误 |
 | `npm run lint` | 0 error / 5 warning | warning 均为既有文件，未关闭规则 |
 | `npm test` | 35 files / 140 tests 通过 | 含 `daily-runtime.test.ts` 隔离回归 4/4 |
-| `npm run package` | 环境限制 | Vite 构建通过；Electron Packager 在清理 `out/` 时触发 WorkBuddy safe-delete 批量确认阈值（80 文件 > 50 阈值）。手动清理 `out/` 构建产物后重试，结果待确认。非产品代码失败。 |
+| `npm run package` | 通过 | Vite 构建通过；Electron Forge Windows x64 封装成功。首次运行时 WorkBuddy safe-delete 在清理 `.vite/` 和 `out/` 构建产物时触发批量确认阈值（85 文件 > 50 阈值）；手动清理后重试成功。非产品代码失败。 |
 
 一致性核查结论：skill-runtime 源码（4 个 TypeScript 文件）、隔离测试、审计记录器、application 层接口、兼容快照、README 边界说明和兼容矩阵全部与本文描述一致。Grep 确认 skill-runtime 目录零 `.claude` 引用。无文档与代码不一致项。
 
