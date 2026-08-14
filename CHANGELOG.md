@@ -5,6 +5,11 @@ last_updated: 2026-08-13
 
 # CHANGELOG - 改动记录
 
+## [2026-08-14] [功能] 桌面端受控 Skill Runtime 完成 P1-P4 四个切片并合并入 main
+
+- **受影响文件**: `apps/zhiji-desktop/**`（周期复盘 Runtime、验证模式仓储与服务、主题思考仓储/会话 checkpoint/受控联网、意图路由、对应 IPC/UI/测试）、`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`PROJECT_STATUS.md`、`PROGRESS.md`、主仓库 `docs/desktop-skill-runtime-handoff.md`
+- **改动摘要**: 在隔离工作树 `codex/desktop-daily-skill-runtime` 按 TDD 完成：P0/P2 周期复盘（LangGraph Runtime、A-D 证据分级、D 级补证不调模型、下游沉淀优先材料组装、预览确认、原子保存，提交 `49f2013`）；P1 受确认验证模式（模型只提候选、确认才写 JSON 快照、拒绝无持久化，提交 `fb3a326`）；P3 主题思考与受控联网（讨论—展示差异—确认—沉淀、文件型 checkpoint 重启恢复、联网仅用户显式触发且 sourceId 绑定搜索会话，提交 `7908a4c`）；P4 意图路由（确定性匹配优先、模型只能选固定枚举、Zod 失败回退澄清，提交 `a9fcf78`）。验收门：`npm test` 50 files / 229 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 5 既有 warning；`npm run package` Windows x64 成功。原 Skill 系统零改动；BLOCKED.md：无。2026-08-14 用户验收后以 `--no-ff` 合并入 `main`，未推送。
+
 ## [2026-08-14 02:50] [修复] 收敛飞书日反馈追问入口并恢复运行时提示 (v1.24.2 -> v1.24.3)
 
 - **受影响文件**: 飞书日反馈监听 workflow、用户分发副本、入口回归测试、`VERSION`、`PROJECT_STATUS.md`

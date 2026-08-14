@@ -1,7 +1,8 @@
-import type { Journal, Profile, Project, Review } from '../schemas/domain';
-import type { CreateJournalInput, CreateProjectInput, InsightReviewGenerateInput, InsightReviewPreviewInput, JournalQuery, PeriodicReviewGenerateInput, PeriodicReviewPreviewInput, RenameProjectInput, SaveProfileInput, SaveProviderConfigInput, UpdateJournalInput } from '../schemas/ipc';
+import type { DailyGenerationResult, IntentResolution, Journal, PeriodicGenerationResult, Profile, Project, Review, TopicIndexEntry, TopicSession, VerifiedPattern, VerifiedPatternCandidate, WebSearchResult, WebSourceContent } from '../schemas/domain';
+import type { ConfirmPatternInput, CreateJournalInput, CreateProjectInput, DiscussTopicInput, InsightReviewGenerateInput, InsightReviewPreviewInput, IntentResolveInput, JournalQuery, PeriodicReviewGenerateInput, PeriodicReviewPreviewInput, ProposePatternsInput, ReadWebSourceInput, RenameProjectInput, SaveProfileInput, SaveProviderConfigInput, StartTopicInput, TopicNameInput, TopicSessionInput, UpdateJournalInput, WebSearchInput } from '../schemas/ipc';
 import type { PublicProviderConfig } from '../../main-process/infrastructure/ai/provider-config';
 import type { DataDirectoryInfo } from '../../main-process/infrastructure/data-directory/data-directory-service';
+import type { TopicSummaryProposal } from '../../main-process/application/topic-thinking';
 
 export interface ZhijiDesktopApi {
   dataDirectory: { getInfo(): Promise<DataDirectoryInfo>; open(): Promise<void> };
@@ -33,13 +34,33 @@ export interface ZhijiDesktopApi {
     clearApiKey(): Promise<PublicProviderConfig>;
   };
   reviews: {
-    generateDaily(input: { date: string; regenerate?: boolean }): Promise<Review>;
+    generateDaily(input: { date: string; regenerate?: boolean }): Promise<DailyGenerationResult>;
     list(): Promise<Review[]>;
     cancel(): Promise<void>;
     preview(input: PeriodicReviewPreviewInput): Promise<{ token: string; type: string; start: string; end: string; sources: { id: string; date: string; excerpt: string }[] }>;
-    generatePeriodic(input: PeriodicReviewGenerateInput): Promise<Review>;
+    generatePeriodic(input: PeriodicReviewGenerateInput): Promise<PeriodicGenerationResult>;
     previewInsight(input: InsightReviewPreviewInput): Promise<{ token: string; type: string; start: string; end: string; sources: { id: string; date: string; excerpt: string }[] }>;
     generateInsight(input: InsightReviewGenerateInput): Promise<Review>;
     delete(id: string): Promise<void>;
   };
+  patterns: {
+    list(): Promise<VerifiedPattern[]>;
+    propose(input: ProposePatternsInput): Promise<VerifiedPatternCandidate[]>;
+    confirm(input: ConfirmPatternInput): Promise<VerifiedPattern>;
+  };
+  topics: {
+    start(input: StartTopicInput): Promise<{ sessionId: string; draft: string; referencedTopics: { topic: string; title: string }[] }>;
+    discuss(input: DiscussTopicInput): Promise<{ reply: string }>;
+    propose(input: TopicSessionInput): Promise<TopicSummaryProposal>;
+    confirm(input: TopicSessionInput): Promise<{ topic: string }>;
+    list(): Promise<TopicIndexEntry[]>;
+    get(input: TopicNameInput): Promise<{ topic: string; body: string }>;
+    sessions(): Promise<TopicSession[]>;
+    resume(input: TopicSessionInput): Promise<TopicSession>;
+  };
+  web: {
+    search(input: WebSearchInput): Promise<{ searchSessionId: string; results: WebSearchResult[] }>;
+    readSource(input: ReadWebSourceInput): Promise<WebSourceContent>;
+  };
+  intent: { resolve(input: IntentResolveInput): Promise<IntentResolution> };
 }

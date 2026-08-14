@@ -1,6 +1,6 @@
 import { ipcMain, type dialog as ElectronDialog } from 'electron';
 import { z } from 'zod';
-import { CreateJournalInputSchema, CreateProjectInputSchema, GenerateDailyReviewInputSchema, IdSchema, InsightReviewGenerateInputSchema, InsightReviewPreviewInputSchema, JournalQuerySchema, PeriodicReviewGenerateInputSchema, PeriodicReviewPreviewInputSchema, RenameProjectInputSchema, SaveProfileInputSchema, SaveProviderConfigInputSchema, UpdateJournalInputSchema } from '../../shared/schemas/ipc';
+import { ConfirmPatternInputSchema, CreateJournalInputSchema, CreateProjectInputSchema, DiscussTopicInputSchema, GenerateDailyReviewInputSchema, IdSchema, InsightReviewGenerateInputSchema, InsightReviewPreviewInputSchema, IntentResolveInputSchema, JournalQuerySchema, PeriodicReviewGenerateInputSchema, PeriodicReviewPreviewInputSchema, ProposePatternsInputSchema, ReadWebSourceInputSchema, RenameProjectInputSchema, SaveProfileInputSchema, SaveProviderConfigInputSchema, StartTopicInputSchema, TopicNameInputSchema, TopicSessionInputSchema, UpdateJournalInputSchema, WebSearchInputSchema } from '../../shared/schemas/ipc';
 import type { MarkdownProfileRepository } from '../infrastructure/markdown/profile-repository';
 import type { MarkdownJournalRepository } from '../infrastructure/markdown/journal-repository';
 import type { JsonProjectRepository } from '../infrastructure/markdown/project-repository';
@@ -13,8 +13,12 @@ import type { GeneratePeriodicReview } from '../application/generate-periodic-re
 import type { DataTransferService } from '../infrastructure/transfer/data-transfer-service';
 import type { DataDirectoryService } from '../infrastructure/data-directory/data-directory-service';
 import type { GenerateInsightReview } from '../application/generate-insight-review';
+import type { VerifiedPatternService } from '../application/verified-patterns';
+import type { TopicThinkingService } from '../application/topic-thinking';
+import type { IntentRoutingService } from '../application/intent-routing';
+import type { WebSearchService } from '../infrastructure/web/web-search-service';
 
-export function registerHandlers(deps: { createJournal: CreateJournal; updateJournal: UpdateJournal; journals: MarkdownJournalRepository; projects: JsonProjectRepository; profile: MarkdownProfileRepository; configureAi: ConfigureAi; generateDailyReview: GenerateDailyReview; generatePeriodicReview: GeneratePeriodicReview; generateInsightReview: GenerateInsightReview; reviews: MarkdownReviewRepository; reviewTasks: ReviewTaskManager; transfer: DataTransferService; dataDirectory: DataDirectoryService; dialog: Pick<typeof ElectronDialog, 'showSaveDialog' | 'showOpenDialog'> }) {
+export function registerHandlers(deps: { createJournal: CreateJournal; updateJournal: UpdateJournal; journals: MarkdownJournalRepository; projects: JsonProjectRepository; profile: MarkdownProfileRepository; configureAi: ConfigureAi; generateDailyReview: GenerateDailyReview; generatePeriodicReview: GeneratePeriodicReview; generateInsightReview: GenerateInsightReview; verifiedPatterns: VerifiedPatternService; topicThinking: TopicThinkingService; intentRouting: IntentRoutingService; webSearch: WebSearchService; reviews: MarkdownReviewRepository; reviewTasks: ReviewTaskManager; transfer: DataTransferService; dataDirectory: DataDirectoryService; dialog: Pick<typeof ElectronDialog, 'showSaveDialog' | 'showOpenDialog'> }) {
   ipcMain.handle('data-directory:get-info', () => deps.dataDirectory.getInfo());
   ipcMain.handle('data-directory:open', () => deps.dataDirectory.open());
   ipcMain.handle('profile:get', () => deps.profile.get()); ipcMain.handle('profile:save', (_event, raw) => deps.profile.save(SaveProfileInputSchema.parse(raw))); ipcMain.handle('profile:clear', () => deps.profile.clear());
@@ -60,4 +64,18 @@ export function registerHandlers(deps: { createJournal: CreateJournal; updateJou
   ipcMain.handle('reviews:generate-periodic', async (_event, raw) => { const input = PeriodicReviewGenerateInputSchema.parse(raw); const config = await deps.configureAi.getPublicConfig(); return deps.generatePeriodicReview.execute({ ...input, model: config.model }); });
   ipcMain.handle('reviews:preview-insight', async (_event, raw) => { const input = InsightReviewPreviewInputSchema.parse(raw); const config = await deps.configureAi.getPublicConfig(); return deps.generateInsightReview.preview({ ...input, model: config.model }); });
   ipcMain.handle('reviews:generate-insight', async (_event, raw) => { const input = InsightReviewGenerateInputSchema.parse(raw); const config = await deps.configureAi.getPublicConfig(); return deps.generateInsightReview.execute({ ...input, model: config.model }); });
+  ipcMain.handle('patterns:list', async () => (await deps.verifiedPatterns.list()).patterns);
+  ipcMain.handle('patterns:propose', async (_event, raw) => { const input = ProposePatternsInputSchema.parse(raw); const config = await deps.configureAi.getPublicConfig(); return deps.verifiedPatterns.propose({ ...input, model: config.model }); });
+  ipcMain.handle('patterns:confirm', (_event, raw) => deps.verifiedPatterns.confirm(ConfirmPatternInputSchema.parse(raw)));
+  ipcMain.handle('topics:start', async (_event, raw) => { const input = StartTopicInputSchema.parse(raw); const config = await deps.configureAi.getPublicConfig(); return deps.topicThinking.start({ ...input, model: config.model }); });
+  ipcMain.handle('topics:discuss', async (_event, raw) => { const input = DiscussTopicInputSchema.parse(raw); const config = await deps.configureAi.getPublicConfig(); return deps.topicThinking.discuss({ ...input, model: config.model }); });
+  ipcMain.handle('topics:propose', async (_event, raw) => { const input = TopicSessionInputSchema.parse(raw); const config = await deps.configureAi.getPublicConfig(); return deps.topicThinking.proposeSummary({ ...input, model: config.model }); });
+  ipcMain.handle('topics:confirm', (_event, raw) => deps.topicThinking.confirm(TopicSessionInputSchema.parse(raw)));
+  ipcMain.handle('topics:list', () => deps.topicThinking.list());
+  ipcMain.handle('topics:get', (_event, raw) => deps.topicThinking.get(TopicNameInputSchema.parse(raw)));
+  ipcMain.handle('topics:sessions', () => deps.topicThinking.listSessions());
+  ipcMain.handle('topics:resume', (_event, raw) => deps.topicThinking.resume(TopicSessionInputSchema.parse(raw)));
+  ipcMain.handle('web:search', (_event, raw) => deps.webSearch.search(WebSearchInputSchema.parse(raw)));
+  ipcMain.handle('web:read-source', (_event, raw) => deps.webSearch.readSource(ReadWebSourceInputSchema.parse(raw)));
+  ipcMain.handle('intent:resolve', async (_event, raw) => { const input = IntentResolveInputSchema.parse(raw); const config = await deps.configureAi.getPublicConfig(); return deps.intentRouting.resolve({ ...input, model: config.model }); });
 }

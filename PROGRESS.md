@@ -1,12 +1,14 @@
-# 知己端到端闭环验收进度
-任务 0/2/3：本地分析、飞书、滴答与重复查看证据齐全；正式开关正确；聚焦与完整测试通过。
-提醒路由：一次性与周期性纯提醒默认使用滴答；Codex 只在用户明确指定时例外，自动执行请求另行评估。
-周复盘提醒：滴答已返回原生周重复、时区与到点提醒字段；每周日 19:00 Asia/Shanghai，首次真实通知待 2026-08-16 验证。具体任务 ID 只保留在滴答与本地忽略配置中。
-Codex 自动化：automation-2 已通过 automation_update 更新为 PAUSED，避免重复通知；test-hhhhh 已删除。
-目录：正式“知己”已迁入专用用户“我的空间”，用户为根 owner、bot 可继续写入；旧共享根已改名为测试归档。
-历史清单：用户确认的 60 项已串行同步，结果 60 success / 0 failed / 60 个唯一 token 与 URL。
-分类计数：日 13、周 2、月 3、项目 3、人生设计 2、主题思考 36、收藏 1；年度 0。
-完整性：清单 SHA 不匹配 0、状态缺失 0、状态异常 0；滴答历史调用 0。
-幂等：60 项均满足同路径 + 同 SHA + 飞书 success，再运行应全部 skipped_duplicate、外部调用 0。
-授权：专用用户根目录及原 8 个分类与收藏主题均已验证 bot/user 可访问；具体 token 只保留在本地忽略配置中。
-剩余观察门：Task 10 三次真实新写入及首次真实非 Markdown 收藏附件；历史同步与受控样本均不计入。
+# 桌面端 Skill Runtime P1-P4 交付进度（已完成）
+
+目标：完成受控 Skill Runtime（周期复盘、验证模式、主题思考/受控联网、意图路由），可测试、可打包、可维护。
+顺序：任务0 基线 -> P0/P2 周期复盘完善 -> P1 验证模式 -> P3 主题思考/联网 -> P4 意图路由 -> 全量验证+聚焦提交。
+最大风险：新增 IPC/UI 面破坏既有日反馈闭环；模型输出不合 Schema；打包链受网络影响。（均未发生）
+
+- [x] 任务0：基线 38 files/158 tests 通过；typecheck 通过；lint 0 error；package x64 成功。基线 HEAD a695b20 + 未提交 P2 探索。
+- [x] P0/P2 周期复盘：下游沉淀优先（阈值 3）、A-D 分级、D 级补证不调模型、预览确认、原子保存；提交 `49f2013`。
+- [x] P1 验证模式：候选-确认/拒绝、JSON 快照原子写+复读、损坏报错；提交 `fb3a326`。
+- [x] P3 主题思考/受控联网：讨论-差异-确认-沉淀、文件型 checkpoint、sourceId 会话绑定；提交 `7908a4c`。
+- [x] P4 意图路由：确定性匹配 -> 固定枚举 -> Zod 失败回退澄清；提交 `a9fcf78`。
+- [x] 最终：npm test 50 files/229 tests 全过；typecheck 通过；lint 0 error/5 既有 warning；package x64 成功。handoff/PROJECT_STATUS/CHANGELOG 已更新。BLOCKED.md：无。
+
+高性价比决策记录：WebSourceContent 与 WorkflowIntent Schema 统一放 shared/domain（避免 renderer 跨层引 infrastructure）；P3/P4 提示词为自有快照，只把 `.claude` 契约当规则源参考。
