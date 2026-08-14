@@ -5,6 +5,11 @@ last_updated: 2026-08-14
 
 # CHANGELOG - 改动记录
 
+## [2026-08-14] [功能] 桌面端月报深度落地：主主题归并与方向校准升级提醒（阶段 B） (v1.24.5 -> v1.24.6)
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/prompts/periodic-review-v1.ts`、`skill-runtime/periodic-runtime.ts`、`compatibility/periodic-review-v1.ts`、`tests/unit/periodic-review-v1.test.ts`、`tests/unit/periodic-runtime.test.ts`、`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`contract-prompt-mapping.md`、`architecture.md`、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 按 `review-synthesis.md`「月报深度」四条补齐桌面端月报（提示词版本 `periodic-review-v3`→`v4`，快照 `desktop-periodic-review-v2`→`v3`，deferred 项移入 supports）：月报在写报告前归并 2-3 个主主题（主题名/支持视角/关键证据/反例或证据不足/对重来或下月规划的意义），渲染新增「主主题」节；下月规划含目标+手段+检查点+假说；触发条件（长期方向冲突/重复卡点/工作观人生观冲突/只能局部修补）满足时输出一条基于证据的升级提醒，措辞按桌面语境改写为指向复盘页的“方向校准”，不出现命令字样、不自动生成报告。主主题少于 2 条时代码强制注入证据不足披露（不硬凑）。周报与项目复盘渲染零变化（回归断言）。验收门：`npm test` 52 files / 267 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 5 既有 warning。原 Skill 系统 `.claude/` 零改动。
+
 ## [2026-08-14] [功能] 桌面端 R2 证据分级修复：D 级判级语义复核（阶段 A） (v1.24.4 -> v1.24.5)
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/skill-runtime/daily-grade-review.ts`（新增）、`daily-runtime.ts`、`compatibility/daily-feedback-v1.ts`、`tests/unit/daily-evidence-gold.test.ts`（新增）、`tests/unit/daily-runtime.test.ts`、`tests/integration/generate-daily-review.test.ts`、`apps/zhiji-desktop/docs/skill-compatibility-matrix.md`、`contract-prompt-mapping.md`、`VERSION`、`PROJECT_STATUS.md`
