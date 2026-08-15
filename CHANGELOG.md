@@ -1,9 +1,14 @@
 ---
 created: 2026-07-05
-last_updated: 2026-08-14
+last_updated: 2026-08-15
 ---
 
 # CHANGELOG - 改动记录
+
+## [2026-08-15 11:56] [修复] 模板编辑弹窗每敲一字焦点跳转卡住 + 安装打包分发文档 (v1.27.0 -> v1.27.1)
+
+- **受影响文件**: `apps/zhiji-desktop/src/renderer/components/modal.tsx`、`docs/install-package-distribute.md`（新增）、`README.md`、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 修复模板编辑弹窗焦点 bug——`Modal` 的 `useEffect` 依赖内联 `onClose` 引用导致每次渲染都重跑，且 `querySelector('input,button,select,textarea')` 命中 header 的关闭键，导致每敲一个字焦点就跳到关闭按钮、输入框失焦卡住。改为 `onClose` 存 ref（effect 只在 open 变化时执行）+ 只聚焦 input/textarea/select。新增 `docs/install-package-distribute.md`：安装（安装版/免安装版）、打包（npm run make/package + 本机两个环境坑）、分发（要发哪些文件、更新机制、代码签名现状）、文件职责清单（数据目录/userData/源码结构）。README 补充 v1.27.0 三个新功能说明与文档链接。验收门：typecheck 通过；projects/settings/today 等弹窗相关单测全过。
 
 ## [2026-08-15 03:10] [功能] 桌面端自定义存储位置、日志模板系统、版本管理 (v1.26.2 -> v1.27.0)
 
