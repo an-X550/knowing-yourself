@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20] [文档] 确认桌面端 DeepSeek Harness Agent 架构 (v1.27.6 -> v1.27.7)
+
+- **受影响文件**: `docs/specs/2026-08-20-deepseek-harness-agent-architecture.md`、`PROJECT_STATUS.md`、`README.md`、`VERSION`、`CHANGELOG.md`
+- **改动摘要**: 依据第一性原理确认桌面端的 Agent 升级方向：保留现有 React 专业页面、领域服务、LangGraph 和本地安全边界，由独立 Electron Utility Process 中的 DSH 负责会话与工具编排；正式规格同时记录不可原样保留的模型调用、Skill 运行方式和主题临时会话，以及后续实施阶段与验收条件，避免未来任务重新争论架构或误把 DSH Web UI 当成产品主体。
+
 ## [2026-08-20] [配置] WorkBuddy 入口改为多通道与显式分发授权 (v1.27.5 -> v1.27.6)
 
 - **受影响文件**: WorkBuddy 运行入口、固定提示词、兼容跳转、回归测试、入口与状态文档

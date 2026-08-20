@@ -5,7 +5,7 @@ last_updated: 2026-08-20
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.27.6
+**当前版本**：1.27.7
 
 ## 项目概述
 
@@ -50,6 +50,7 @@ last_updated: 2026-08-20
 | 用户版分发与边界 | 已完成同步；真实用户部署待验收 | overlay、manifest、导出链路、Codex 日志路由、Windows Stop Hook、年度目录和分发边界测试已具备。用户版现包含与主项目逐字一致的单用户飞书监听工作流与配置示例，以及独立的飞书/滴答、Codex、Claude、DeepSeek AI 部署指令；不包含维护者的 open_id、目录 token、清单 ID、凭证、状态或 UU 远程偏好。仍需真实用户按说明完成一次脱敏部署验收。 |
 | 用户版浏览入口 | 已完成 | `zhiji-user/` 的 `index.html`、`guide.html` 与 `setup.html` 由 overlay 和 manifest 受控导出，分别面向首次了解、完整使用说明与飞书/手机记录入口/滴答设置；HTML 只承担离线阅读与导航，Markdown 保留技术细节。 |
 | Windows 桌面客户端 | 核心 Skill 用户闭环、日志完整性与必要数据生命周期已完成；2026-08-14 全面审计优化（P0+P1）已落地；目标用户理解测试和安装矩阵待人工验收 | 一级导航保持开始、日志、复盘、主题思考、项目、设置。桌面端不运行 Claude Skill/Agent，而由 Main Process 通过受校验的结构化契约实现同等产品行为：每日反馈现按 Skill 的昨日闭环、单一盲点、可选历史连接、单一原子行动与认知追踪格式确定性排版；日志质量检查按 A-D 分析就绪度、六步法、重复模式和一项改进输出。反馈与复盘在前端安全渲染标题、引用、列表和表格，不再裸显 Markdown 符号或执行原始 HTML。个人背景仅在用户明确开启后注入 AI；数据目录、可验证备份、安全 IPC 和 OpenAI 兼容接口保持不变。2026-08-14 审计优化落地：首页意图路由整体删除（用户拍板）；全部用户可见错误中文化、网络层加固；主题思考 v2（带上下文跳转、合并式更新、提案持久化到 checkpoint）；契约类型归位 shared 与返回类型命名化；新鲜度逻辑抽 shared 去重；五个未使用依赖与 react-query 死接线移除；D1-D6 漂移点全部登记入兼容矩阵与契约对照表（D2 仅登记不实现）。验收门：npm test 54 files / 308 tests、tsc --noEmit、lint 0 error。独立假说台账、旧格式迁移器、关闭窗口草稿保护、目录迁移、合并恢复、安装/升级/卸载和 Windows 10 仍未实现或验证。 |
+| DeepSeek Harness Agent 升级 | 架构已确认；待实施 | 现有 React 专业页面与知己领域服务继续作为产品主体；DSH 计划运行在独立 Electron Utility Process，只负责任务理解、会话和工具编排，通过 Main Process 的受校验领域工具调用现有日志、复盘、主题与项目能力。当前尚未引入 DSH 代码或新增 Agent 页面，实施边界见 [`deepseek-harness-agent-architecture`](docs/specs/2026-08-20-deepseek-harness-agent-architecture.md)。 |
 | 质量基线 | 已完成 | 覆盖日反馈、周/月/项目/年度复盘、人生设计和用户版的组件边界；真实样本仍需持续补齐。 |
 | 主题思考库 | 已完成首轮审查 | 首稿先给可确认主线；确认后才按用途写入 0–6 或短结构。新认知先分类其影响，再重组受影响的当前论证；篇幅按理解所需决定，默认执行第一性原理审查与合并更新。 |
 | 收藏吃灰库 | 已完成 | 用户明确收录时按标题、摘要、关键词、原文/摘录、链接五段式保存，并有主项目与用户版路由回归。 |
@@ -57,10 +58,11 @@ last_updated: 2026-08-20
 
 ## 待办事项
 
-当前仍有引用价值的实现规格：[`audit-cleanup`](docs/specs/audit-cleanup.md)、[`directory-boundary-tightening`](docs/specs/directory-boundary-tightening.md)、[`evolution-roadmap`](docs/specs/evolution-roadmap.md)、[`git-commit-escalation-flow`](docs/specs/git-commit-escalation-flow.md)、[`monthly-perspective-audit`](docs/specs/monthly-perspective-audit-2026-07-08.md)、[`monthly-processor-evidence-packets`](docs/specs/monthly-processor-evidence-packets.md)、[`monthly-synthesis-theme-compression`](docs/specs/monthly-synthesis-theme-compression.md)、[`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。
+当前仍有引用价值的实现规格：[`audit-cleanup`](docs/specs/audit-cleanup.md)、[`deepseek-harness-agent-architecture`](docs/specs/2026-08-20-deepseek-harness-agent-architecture.md)、[`directory-boundary-tightening`](docs/specs/directory-boundary-tightening.md)、[`evolution-roadmap`](docs/specs/evolution-roadmap.md)、[`git-commit-escalation-flow`](docs/specs/git-commit-escalation-flow.md)、[`monthly-perspective-audit`](docs/specs/monthly-perspective-audit-2026-07-08.md)、[`monthly-processor-evidence-packets`](docs/specs/monthly-processor-evidence-packets.md)、[`monthly-synthesis-theme-compression`](docs/specs/monthly-synthesis-theme-compression.md)、[`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。
 
 ### 高优先级
 
+- [ ] 按 DeepSeek Harness Agent 架构阶段 A 开始实施：先完成 Utility Process、DSH 会话桥、模型传输与 Agent 页面，不移除现有专业入口。
 - [ ] 连续运行至少 5 次真实 `/daily-review`，验证 `verified-patterns.md` 写回质量。
 - [ ] 完成至少 3 次真实闭环缺口检查，记录建议是否可执行、是否被忽略为噪声、是否漏掉必要动作；未出现重复证据前不调整阈值或增加类别。
 - [ ] 以真实样本观察周/月/项目复盘；仅在出现可复现的重复、证据缺口或行动不可检查时修复。
@@ -128,3 +130,4 @@ last_updated: 2026-08-20
 | 2026-08-14 | 桌面重设计采用自研苹果设计令牌而非引入 Tailwind/组件库 | 86 个源文件已有 BEM 雏形，苹果感来自层级、留白与动效纪律而非框架；迁移风险大于收益；SF Pro 有许可限制，用 Windows 系统字体栈替代。 |
 | 2026-08-14 | AI 流式只落在主题讨论，复盘生成改用真实阶段进度 | 日反馈/周期复盘走 JSON 结构化输出 + 确定性排版，逐字流式只会给用户看裸 JSON；主题讨论是自由文本，流式有真实价值；复盘等待用 ReviewTaskManager 阶段推送解决。 |
 | 2026-08-20 | 禁用 Superpowers 自动工作流约束 | 当前项目已具备自身的开发规范与治理流程；保留既有 superpowers 文本为注释，避免其在后续开发任务中被自动触发，同时保留可恢复性。 |
+| 2026-08-20 | 桌面端以 DSH 编排层升级为 Agent，现有知己内核继续掌握正式产物 | 用户目标是拥有能够连续理解、调用工具和多步执行的知己 Agent；最小替代不是恢复只负责跳转的意图路由。DSH 置于独立 Utility Process，现有 React 页面、领域服务、LangGraph、Schema、确认和本地安全边界继续保留；不采用 DSH Web UI，不给模型通用文件或 Shell 权限。 |
