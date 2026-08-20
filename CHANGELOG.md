@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20] [文档] 用户版接入 WorkBuddy 飞书智能体部署路径 (v1.27.14 -> v1.27.15)
+
+- **受影响文件**: `zhiji-user/` 导出源、WorkBuddy 运行入口、用户版 README/离线说明、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 用户版现在包含与主项目一致的 WorkBuddy 多通道运行入口，并提供一份可直接交给 AI 执行的部署说明：用户自行完成 WorkBuddy、飞书智能体、飞书应用和滴答 MCP 的官方授权，AI 负责受限的本地配置与脱敏验收。文档明确 WorkBuddy 助理目录不能替代知己工作空间、本地 Markdown 是权威记录，以及滴答只允许唯一创建任务工具；旧本地飞书监听不再是新用户推荐路径。
+
 ## [2026-08-20] [修复] 建立 DSH Agent 阶段 0 可判基线 (v1.27.13 -> v1.27.14)
 
 - **受影响文件**: `apps/zhiji-desktop/tests/unit/reviews-page.test.tsx`、`apps/zhiji-desktop/docs/dsh-integration-notes.md`、`PROGRESS.md`、`PROJECT_STATUS.md`、`VERSION`

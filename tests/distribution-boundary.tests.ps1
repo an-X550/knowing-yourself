@@ -1,4 +1,4 @@
-param([switch]$RequireCleanUserRepo)
+﻿param([switch]$RequireCleanUserRepo)
 
 $ErrorActionPreference = 'Stop'
 
@@ -48,7 +48,8 @@ if ($shared -notcontains '.claude/shared/contracts/codex-natural-language-routin
 
 foreach ($requiredShared in @(
   '.claude/workflows/local-feishu-daily-feedback.ps1',
-  '.claude/shared/local-feishu-daily-feedback-config.example.json'
+  '.claude/shared/local-feishu-daily-feedback-config.example.json',
+  '.claude/workflows/workbuddy-message-entry.md'
 )) {
   if ($shared -notcontains $requiredShared) {
     Add-Failure "local Feishu runtime is not declared shared: $requiredShared"
@@ -56,9 +57,10 @@ foreach ($requiredShared in @(
 }
 
 $userDeploymentSource = 'packaging/zhiji-user-overlay/docs/feishu-ai-deployment.md'
+$userWorkBuddyDeploymentSource = 'packaging/zhiji-user-overlay/docs/workbuddy-deployment.md'
 $userEntrySource = 'packaging/zhiji-user-overlay/docs/local-feishu-daily-feedback-entry.md'
 $userReadmeSource = 'packaging/zhiji-user-overlay/README.md'
-foreach ($requiredSource in @($userDeploymentSource, $userEntrySource)) {
+foreach ($requiredSource in @($userDeploymentSource, $userWorkBuddyDeploymentSource, $userEntrySource)) {
   if (-not (Test-Path -LiteralPath (Join-Path $repoRoot $requiredSource) -PathType Leaf)) {
     Add-Failure "missing user Feishu deployment source: $requiredSource"
   }
@@ -71,9 +73,16 @@ foreach ($requiredTerm in @('Codex', 'Claude', 'DeepSeek', 'lark-cli', 'dida365'
   }
 }
 
+$workBuddyDeploymentText = Read-Utf8 $userWorkBuddyDeploymentSource
+foreach ($requiredTerm in @('WorkBuddy', 'dida365_create_task', 'disabledTools')) {
+  if ($workBuddyDeploymentText -notmatch [regex]::Escape($requiredTerm)) {
+    Add-Failure "user WorkBuddy deployment guide is missing: $requiredTerm"
+  }
+}
+
 $userReadmeText = Read-Utf8 $userReadmeSource
-if ($userReadmeText -notmatch 'docs/feishu-ai-deployment\.md') {
-  Add-Failure 'user README does not link the Feishu AI deployment guide'
+if ($userReadmeText -notmatch 'docs/workbuddy-deployment\.md') {
+  Add-Failure 'user README does not link the WorkBuddy deployment guide'
 }
 
 $mainFeishuWorkflow = Read-Utf8 '.claude/workflows/local-feishu-daily-feedback.ps1'

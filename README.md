@@ -4,7 +4,7 @@
 
 > 把日常记录变成更可靠的行动：看见模式，试一个小改变，再用结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.27.13-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.27.15-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 你能用它解决什么
@@ -73,7 +73,7 @@
 
 ## 可选：手机记录入口
 
-本地飞书日反馈入口已于 2026-08-20 **弃案**：代码、配置示例和验收记录仍保留，但监听启动已注释，当前不应部署。日常消息交互可改由 WorkBuddy 远程助理承担；远程助理固定使用专属文件夹，不能切换成项目工作目录，因此须按[多通道固定提示词](docs/workbuddy-agent-prompt.md)一次性填写“知己”项目绝对路径。日常消息以 `[知己]` 开头即可按唯一入口契约路由日志、周/月/项目复盘与主题思考，无需再重复路径；这一标记也能直接迁移到其他 Agent 平台。已启用的本地分发配置会在新结果验证成功后默认同步允许结果；本轮说“仅本地”即可同时跳过飞书和滴答。恢复旧入口前须重新验证额度、事件连接与路由体验。详见[弃案说明](docs/local-feishu-daily-feedback-entry.md)。
+本地飞书日反馈入口已于 2026-08-20 **弃案**，当前不应部署。日常消息交互推荐 WorkBuddy 远程助理：它固定运行在专属文件夹，因此必须通过一次配置的项目绝对路径进入知己工作空间；用户版现随包提供[WorkBuddy + 飞书智能体部署说明](zhiji-user/docs/workbuddy-deployment.md)，包含人工配置、自定义提示词、飞书云文档、滴答 MCP 与 AI 一键部署步骤。日常消息以 `[知己]` 开头即可路由日志、周/月/项目复盘与主题思考，无需重复路径；`仅本地` 可同时跳过飞书和滴答。详见[弃案说明](docs/local-feishu-daily-feedback-entry.md)。
 
 ## 项目与协作
 

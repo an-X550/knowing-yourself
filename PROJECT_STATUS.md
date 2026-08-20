@@ -5,7 +5,7 @@ last_updated: 2026-08-20
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.27.14
+**当前版本**：1.27.15
 
 ## 项目概述
 
@@ -47,8 +47,8 @@ last_updated: 2026-08-20
 | 可选结果分发 | 四来源滴答最小适配可正式使用 | `ticktick_adaptation: ready_for_formal_use`。飞书历史 60 项已按人工确认完成同步；滴答只处理每日反馈、周复盘、月复盘和已确认主题思考，任务仅含 SMART 化标题与截止时间。自动化端到端模拟覆盖四来源、确认门、防重、旧状态、失败重试、仅本地和日志完成判断；官方 MCP 冒烟测试已在现有“知己行动”清单成功创建一项脱敏任务。正式运行使用设置阶段保存的清单 `project_id`，不读取或更新远端任务，不做后台重试、模糊去重或复杂调度。 |
 | 低频人生设计 | 已完成 | `/life-design` 是独立方向校准入口；年度链路仍待更多月报样本完成端到端验证。 |
 | 运行快路径 | 已完成 | 日反馈优先复用已有反馈；复盘优先消费沉淀物和证据包，仅在冲突或引用缺失时扩大读取范围。 |
-| 用户版分发与边界 | 已完成同步；真实用户部署待验收 | overlay、manifest、导出链路、Codex 日志路由、Windows Stop Hook、年度目录和分发边界测试已具备。用户版现包含与主项目逐字一致的单用户飞书监听工作流与配置示例，以及独立的飞书/滴答、Codex、Claude、DeepSeek AI 部署指令；不包含维护者的 open_id、目录 token、清单 ID、凭证、状态或 UU 远程偏好。仍需真实用户按说明完成一次脱敏部署验收。 |
-| 用户版浏览入口 | 已完成 | `zhiji-user/` 的 `index.html`、`guide.html` 与 `setup.html` 由 overlay 和 manifest 受控导出，分别面向首次了解、完整使用说明与飞书/手机记录入口/滴答设置；HTML 只承担离线阅读与导航，Markdown 保留技术细节。 |
+| 用户版分发与边界 | 已完成 WorkBuddy 入口同步；真实用户部署待验收 | overlay、manifest、导出链路、Codex 日志路由、Windows Stop Hook、年度目录和分发边界测试已具备。用户版现包含与主项目逐字一致的 WorkBuddy 多通道入口，以及可由 AI 执行、但保留人类授权的 WorkBuddy/飞书智能体/飞书云文档/滴答 MCP 部署说明；不包含维护者的 open_id、目录 token、清单 ID、凭证、状态或个人远程偏好。仍需真实用户按说明完成一次脱敏部署验收。 |
+| 用户版浏览入口 | 已完成 | `zhiji-user/` 的 `index.html`、`guide.html` 与 `setup.html` 由 overlay 和 manifest 受控导出，分别面向首次了解、完整使用说明与 WorkBuddy 飞书智能体/飞书云文档/滴答设置；HTML 只承担离线阅读与导航，Markdown 保留技术细节。 |
 | Windows 桌面客户端 | 核心 Skill 用户闭环、日志完整性与必要数据生命周期已完成；2026-08-14 全面审计优化（P0+P1）已落地；目标用户理解测试和安装矩阵待人工验收 | 一级导航保持开始、日志、复盘、主题思考、项目、设置。桌面端不运行 Claude Skill/Agent，而由 Main Process 通过受校验的结构化契约实现同等产品行为：每日反馈现按 Skill 的昨日闭环、单一盲点、可选历史连接、单一原子行动与认知追踪格式确定性排版；日志质量检查按 A-D 分析就绪度、六步法、重复模式和一项改进输出。反馈与复盘在前端安全渲染标题、引用、列表和表格，不再裸显 Markdown 符号或执行原始 HTML。个人背景仅在用户明确开启后注入 AI；数据目录、可验证备份、安全 IPC 和 OpenAI 兼容接口保持不变。2026-08-14 审计优化落地：首页意图路由整体删除（用户拍板）；全部用户可见错误中文化、网络层加固；主题思考 v2（带上下文跳转、合并式更新、提案持久化到 checkpoint）；契约类型归位 shared 与返回类型命名化；新鲜度逻辑抽 shared 去重；五个未使用依赖与 react-query 死接线移除；D1-D6 漂移点全部登记入兼容矩阵与契约对照表（D2 仅登记不实现）。验收门：npm test 54 files / 308 tests、tsc --noEmit、lint 0 error。独立假说台账、旧格式迁移器、关闭窗口草稿保护、目录迁移、合并恢复、安装/升级/卸载和 Windows 10 仍未实现或验证。 |
 | DeepSeek Harness Agent 升级 | 阶段 0 已完成；阶段 A 待实施 | 已将日期敏感页面测试改为相对日期断言，桌面端现有测试全绿；DSH `0.1.0-rc.8` 源码构建和 npm 发布包已核验。阶段 A 将优先在独立 Electron Utility Process 中使用发布包，通过 Main Process 的受校验领域工具调用既有日志、复盘、主题与项目能力；接入面和降级条件见 [`dsh-integration-notes`](apps/zhiji-desktop/docs/dsh-integration-notes.md)。当前仍未引入 DSH 代码或新增 Agent 页面，实施边界见 [`deepseek-harness-agent-architecture`](docs/specs/2026-08-20-deepseek-harness-agent-architecture.md)。 |
 | 质量基线 | 已完成 | 覆盖日反馈、周/月/项目/年度复盘、人生设计和用户版的组件边界；真实样本仍需持续补齐。 |
