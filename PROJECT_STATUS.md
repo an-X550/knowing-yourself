@@ -5,7 +5,7 @@ last_updated: 2026-08-20
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.27.9
+**当前版本**：1.27.10
 
 ## 项目概述
 
@@ -40,7 +40,7 @@ last_updated: 2026-08-20
 |------|------|------|
 | 日反馈闭环 | 已完成 | 日志粘贴与 `/daily-review` 统一进入 `daily-analyzer`；输出按单洞察、单行动、可观察预测收敛，输入不足按 A-D 证据等级降级。 |
 | 本地飞书日反馈入口 | 弃案；实现保留、监听已注释 | 2026-08-20 因本地前台监听、Codex 额度依赖和前缀路由带来的使用摩擦，改由 WorkBuddy 工作区代理承担飞书交互。主工作流及用户版镜像保留，`-Mode Run` 的监听启动调用已注释并显示弃案提示；恢复前需重新验证额度、事件连接与路由体验。 |
-| WorkBuddy 多通道运行入口 | 契约与适配边界已实现；待首次真实人工验收 | 飞书、微信等已绑定“知己”工作区的智能体通过固定提示词进入 `.claude/workflows/workbuddy-message-entry.md`；新结果写入并复读成功后，已启用配置默认委托既有分发契约，单次“仅本地”同时跳过两个渠道。飞书固定读取本地 `lark_cli_path`；滴答通过 WorkBuddy `disabledTools` 禁用其他 49 项工具，只允许 `dida365_create_task`，缺失或允许集合不唯一时不回退 Codex。两个渠道独立失败；核心画像和当前状态只允许提出拟议变更，主题写入需显式确认。实现规格见 [`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。 |
+| WorkBuddy 多通道运行入口 | 入口路由已按显式标记与绝对路径修复；待重连后继续人工验收 | 真实脱敏验收确认 WorkBuddy 远程助理固定落在专属文件夹，且模型拿不到可靠的来源通道字段。固定提示词现以 `[知己]` 作为跨平台触发信号，并从可信的“知己”绝对路径读取 `.claude/workflows/workbuddy-message-entry.md`；用户无需重复路径，平台 memory 不得替代业务写入。新结果写入并复读成功后，已启用配置默认委托既有分发契约，单次“仅本地”同时跳过两个渠道。飞书固定读取本地 `lark_cli_path`；滴答通过 WorkBuddy `disabledTools` 只允许 `dida365_create_task`，缺失或允许集合不唯一时不回退 Codex。两个渠道独立失败。实现规格见 [`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。 |
 | 日志质量教练 | 已完成 | `journal-quality-coach` 独立评估分析就绪度与六步法写作习惯。 |
 | 周/月/项目复盘 | 已完成真实验收 | 统一复盘六问；按会改变判断、重来选择或行动的内容自适应展开，保留证据、边界、项目锚点与行动质量门。Codex 可直接理解三类自然语言请求，Claude slash command 保持兼容。 |
 | 闭环缺口检查与提醒 | 语义检查已完成；滴答通知待首次真实验证 | Codex 的“下一步、遗漏、更新、复盘”语义继续进入统一检查。一次性与周期性纯提醒默认由滴答原生通知承担，只通知用户手动开始；Codex 定时派发经受控测试和完整重启后仍未送达，不再作为默认通道。已创建每周日 19:00（`Asia/Shanghai`）周复盘滴答任务，首次真实通知待 2026-08-16 验证。 |
