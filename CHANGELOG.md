@@ -5,6 +5,11 @@ last_updated: 2026-08-15
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20 00:00] [配置] 禁用 Superpowers 自动工作流约束 (v1.27.2 -> v1.27.3)
+
+- **受影响文件**: `AGENTS.md`、`CLAUDE.md`、`docs/development-governance.md`、`VERSION`、`PROJECT_STATUS.md`
+- **改动摘要**: 将开发规范中自动评估、调用和复用 Superpowers 的规则整体注释，后续项目开发只遵循仓库自身流程；相关文本保留，便于需要时恢复。
+
 ## [2026-08-15 11:56] [修复] 模板编辑弹窗每敲一字焦点跳转卡住 + 安装打包分发文档 (v1.27.0 -> v1.27.1)
 
 - **受影响文件**: `apps/zhiji-desktop/src/renderer/components/modal.tsx`、`docs/install-package-distribute.md`（新增）、`README.md`、`VERSION`、`PROJECT_STATUS.md`
