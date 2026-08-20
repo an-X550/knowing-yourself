@@ -73,3 +73,10 @@
 - [x] 依据 DeepSeek 官方当前模型清单，将桌面端默认模型更新为 `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 配置读取时自动迁移，不改动 API Key 或日志数据。
 - [x] 连接测试改为非流式、最多 1 token 的请求，避免把“鉴权/模型检查”误当成完整生成并等待 SSE 超时；正式复盘和 Agent 仍保留流式链路。
 - [x] focused 27 tests、Node HTTPS 无 Key 网络冒烟（服务端约 250ms 返回 401）、全量 51 files / 289 tests、typecheck、lint（0 error / 6 既有 warning）、标准 package 与打包 E2E（1 passed）均通过。
+
+## DeepSeek Harness Agent 阶段 H：Agent 工具协议兼容（2026-08-21，已完成）
+
+- [x] 复现用户“每日反馈可用、Agent 提问失败”：普通 DeepSeek 请求返回 200，带当前 Agent 工具定义返回 400；服务端明确拒绝含 `.` 的函数名。
+- [x] 在 OpenAI 兼容层仅对外部 API 请求将工具名转换为字母/数字/下划线/连字符，模型返回工具调用时映射回 DSH 内部名称；不改变既有工具 action、会话数据或 Main Process 权限边界。
+- [x] DeepSeek Agent 请求显式使用非思考模式，避免当前桥接协议未传递 `reasoning_content` 导致工具回合协议错误；每日反馈等普通生成链路保持原模式。
+- [x] focused provider/Agent tests（16 tests）、typecheck、全量 51 files / 290 tests、lint（0 error / 6 既有 warning）、标准 package 与打包 E2E（1 passed）均通过。

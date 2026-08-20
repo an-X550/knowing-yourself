@@ -1,9 +1,14 @@
 ---
 created: 2026-07-05
-last_updated: 2026-08-20
+last_updated: 2026-08-21
 ---
 
 # CHANGELOG - 改动记录
+
+## [2026-08-21 00:32] [修复] 修复 DeepSeek Agent 工具调用兼容性（v2.0.2 -> v2.0.3）
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/infrastructure/ai/openai-compatible-provider.ts`、Agent provider 回归测试、桌面架构与 DSH 接入说明、`PROJECT_STATUS.md`、`PROGRESS.md`、`README.md`、`VERSION`
+- **改动摘要**: DeepSeek API 要求工具函数名只包含字母、数字、下划线和连字符；知己 Agent 内部工具名原含 `.`，导致每日反馈可用但 Agent 请求返回 400。现在只在外部 API 边界转换工具名，返回时恢复 DSH 内部名称；DeepSeek Agent 请求关闭思考模式，避免当前桥接协议未保留 `reasoning_content` 导致工具回合再次失败。
 
 ## [2026-08-21 00:11] [修复] 更新 DeepSeek 模型并收敛连接测试超时（v2.0.1 -> v2.0.2）
 
