@@ -27,3 +27,10 @@
 - [x] 建立 `AgentFacade`、共享 Zod MessagePort 协议、`agent.start/send/cancel/list/get` IPC、Preload 订阅和 Agent 一级页面；原有六页职责未改变。
 - [x] Main Process `AgentModelTransport` 经 `ConfigureAi.stream()` 代理模型流；API Key 不进入 Renderer、Utility Process 或会话结构。
 - [x] 新增真实 DSH loop + 假模型、假 DSH 两轮流事件/取消/退出/崩溃、Agent 页面和 schema 测试；阶段 B 前未接入领域工具或持久化会话。
+
+## DeepSeek Harness Agent 阶段 B（2026-08-20，已完成）
+
+- [x] Main Process `AgentToolDispatcher` 对每个 Utility Process 工具请求再次执行共享严格 Zod 校验；只复用既有日志、复盘、项目、主题、验证模式和 `WebSearchService` 的只读服务，结果限制为脱敏摘要。
+- [x] DSH 只注册显式的知己高层工具，以及 `ui.navigate` / `ui.present`；未加载 Shell、终端、通用文件系统、任意 URL、设置、备份、删除、确认或正式工作流工具。
+- [x] Agent 页将工具活动、导航和结果卡片视为数据：Renderer 再验证导航目标，只映射到既有页面，不执行 URL、脚本或 DOM 指令。
+- [x] 工具流可跨日志与复盘两类材料完成一轮真实 DSH Agent loop；补齐 OpenAI 兼容工具调用分片缺少后续 call ID 的解析回归，避免真实模型截断工具参数。

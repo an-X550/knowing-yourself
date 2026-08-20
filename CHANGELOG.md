@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20] [功能] 完成桌面端 DSH Agent 阶段 B 只读领域工具桥 (v1.27.16 -> v1.27.17)
+
+- **受影响文件**: `apps/zhiji-desktop/` 的 DSH 工具运行时、Main Process 分发器、模型工具调用流、Agent 页面、测试与架构文档；`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`
+- **改动摘要**: DSH 现在可经 Main Process 的严格 Zod 工具桥读取脱敏日志、复盘、项目、已确认主题与验证模式，复用受控搜索/读源，并以安全的数据事件请求既有页面导航和结果卡。未把每日反馈、周/月/项目复盘等正式工作流迁入或改写为聊天；它们继续使用既有证据、预览确认、取消与仓储写入链路。补齐 OpenAI 兼容流中工具调用后续分片省略 call ID 的解析，确保真实工具参数完整。
+
 ## [2026-08-20] [功能] 完成桌面端 DSH Agent 阶段 A 会话桥 (v1.27.15 -> v1.27.16)
 
 - **受影响文件**: `apps/zhiji-desktop/` 的 DSH 运行时、Main/Preload/IPC 契约、Agent 页面、测试与架构文档；`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`
