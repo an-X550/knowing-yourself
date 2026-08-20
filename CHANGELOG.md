@@ -5,6 +5,12 @@ last_updated: 2026-08-21
 
 # CHANGELOG - 改动记录
 
+## [2026-08-21 01:02] [修复] 修复知己 Agent 日期事实、会话删除和键盘发送（v2.0.3 -> v2.0.4）
+
+- **受影响文件**: Agent DSH/IPC/Preload/Renderer 链路、Agent 页面与回归测试、桌面架构与 DSH 接入说明、`PROJECT_STATUS.md`、`PROGRESS.md`、`README.md`、`VERSION`
+- **改动摘要**: 用户实测发现 Agent 对“今天星期几”给出错误日期、会话不能删除、Enter 只能换行。现在每轮模型请求注入桌面端真实本地日期；会话删除经过 Main Process 校验，停止运行后移入系统回收站；Enter 发送、Shift+Enter 保留换行。日志、复盘和其他会话不受影响。
+- **验证结果**: v2.0.4 打包版在当前 API Key 下真实通过日期问答、只读日志摘要读取、会话删除和重启恢复；`npm test` 51 files / 293 tests、`npm run typecheck`、`npm run lint` 0 error / 6 既有 warning、`npm run package`、`npm run test:e2e` 1 passed。
+
 ## [2026-08-21 00:32] [修复] 修复 DeepSeek Agent 工具调用兼容性（v2.0.2 -> v2.0.3）
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/infrastructure/ai/openai-compatible-provider.ts`、Agent provider 回归测试、桌面架构与 DSH 接入说明、`PROJECT_STATUS.md`、`PROGRESS.md`、`README.md`、`VERSION`

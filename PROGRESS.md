@@ -80,3 +80,12 @@
 - [x] 在 OpenAI 兼容层仅对外部 API 请求将工具名转换为字母/数字/下划线/连字符，模型返回工具调用时映射回 DSH 内部名称；不改变既有工具 action、会话数据或 Main Process 权限边界。
 - [x] DeepSeek Agent 请求显式使用非思考模式，避免当前桥接协议未传递 `reasoning_content` 导致工具回合协议错误；每日反馈等普通生成链路保持原模式。
 - [x] focused provider/Agent tests（16 tests）、typecheck、全量 51 files / 290 tests、lint（0 error / 6 既有 warning）、标准 package 与打包 E2E（1 passed）均通过。
+
+## DeepSeek Harness Agent 阶段 I：真实可用性收敛（2026-08-21，已完成）
+
+- [x] 复现用户实测：Agent 缺少当前日期上下文，模型把“今天星期几”回答为错误日期；会话列表无删除入口；输入框未绑定 Enter 发送。
+- [x] 每轮模型请求注入桌面端本地日期与星期事实，明确禁止联网猜测；不改变每日反馈、周/月复盘的既有模型提示词。
+- [x] 新增受控 `session.delete` 链路：运行中禁止删除，Utility 先释放 DSH 会话，Main Process 将对应会话目录移入系统回收站，Renderer 需显式确认。
+- [x] Agent 输入支持 Enter 发送、Shift+Enter 换行，并保留中文输入法组合态不误发送。
+- [x] 当前 API Key 下的打包版真实 Agent 冒烟通过：页面显示“AI 已配置”；用 Enter 提问“今天星期几”得到“今天是星期五”（本机日期 2026-08-21）；用受控只读工具读取最近日志并返回 2026-08-20、2026-08-15、2026-08-13 等真实摘要；会话确认删除后目录移入系统回收站，重启后会话数量恢复，日志和复盘未改动。
+- [x] 阶段 I 最终验证：`npm test` 51 files / 293 tests、`npm run typecheck`、`npm run lint` 0 error / 6 既有 warning、`npm run package`、打包版实际 API 冒烟和 `npm run test:e2e` 1 passed 均通过。
