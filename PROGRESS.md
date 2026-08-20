@@ -50,13 +50,14 @@
 - [x] 数据目录迁移沿用现有递归复制；备份路径白名单接纳 DSH 会话 JSONL，并用 `Session.fromRestore` 校验 header、事件类型、顺序与序号；损坏会话明确拒绝，不静默重置。
 - [x] 回归：`dsh-runtime.test.ts` 覆盖写入—重启—列表—resume；`agent-facade.test.ts` 覆盖恢复投影；`data-transfer.test.ts` 覆盖会话备份与损坏拒绝。
 - [x] 全量验证：`npm test` 56 files / 326 tests；`npm run typecheck`；`npm run lint` 0 error / 6 既有 warning；`npm run package` 均通过。
-- [x] 主题思考高性价比加固（v1.28.3）：提案记录生成时的主题版本；确认写入在仓储队列内做条件检查，拒绝旧提案覆盖新认识；按别名更新时仍写回规范主题文件。主题核心闭环和旧 checkpoint 保持不变。
-- [ ] 阶段 D2 主题会话迁移：当前 DSH 工具尚未覆盖主题提案、差异展示和用户确认沉淀；只有真实使用证据证明连续 Agent 会话降低摩擦时才评估迁移，当前不为“单轨”增加第二套流程。
+- [x] 主题思考高性价比加固（历史，v1.28.3）：提案记录生成时的主题版本；确认写入在仓储队列内做条件检查，拒绝旧提案覆盖新认识；按别名更新时仍写回规范主题文件。该桌面端运行时随后由阶段 E 移除，旧 checkpoint 不主动删除。
+- [x] 阶段 D2 主题会话迁移取消：主题思考不是桌面端复盘核心闭环；不再为桌面端维护第二套主题会话、提案和确认协议，已有主题数据保留，Skill/CLI 侧能力不受影响。
 
-## DeepSeek Harness Agent 阶段 E：收敛中（2026-08-20）
+## DeepSeek Harness Agent 阶段 E：主题范围清理（2026-08-20，已完成）
 
 - [x] 生产打包启动链修复（v1.28.1）：DSH 包保持外置以保留包相对 `package.json` 解析，生产 `app.asar` 纳入 DSH 与 Koffi 原生依赖，Utility Process 使用 `process.parentPort`；打包后的 Agent 会话创建和既有日志/每日/周复盘 E2E 通过。
 - [x] 无 API Key 的恢复路径（v1.28.2）：模型错误仍由 Main Process 中文化，Agent 页面新增“打开设置”按钮；不把 Key 暴露给 Renderer，不增加第二套设置真相。
-- [x] 主题思考安全加固（v1.28.3）：确认提案采用主题索引版本保护和规范文件名更新；不迁移 `TopicSessionStore`，保留现有讨论—确认—沉淀入口。
-- [x] 当前验证：`npm run test:e2e` 1 passed；`npm test` 56 files / 330 tests；`npm run typecheck` 通过；`npm run lint` 0 error / 6 个既有 warning。
-- [ ] 人工完成 Windows 安装/升级/卸载保留数据矩阵，并观察真实 Agent 多步任务；在主题提案—差异—确认闭环和真实使用证据出现前，不实施 D2 会话迁移。
+- [x] 依据第一性原理移除桌面端主题思考：删除导航、页面、复盘页跳转按钮、IPC/Preload API、主题服务/仓储/会话 checkpoint、提示词、主题 DSH 工具及其测试；日志、每日反馈、周/月/项目/年度复盘主链路保持不变。
+- [x] 旧 `topics/` 与 `runtime/topic-sessions/` 用户数据不主动删除；Skill/CLI 侧主题契约和 WorkBuddy 路由不修改。D2 主题会话迁移取消，不再为非核心辅助能力维护第二套协议。
+- [x] 当前验证：`npm run test:e2e` 1 passed；`npm test` 51 files / 285 tests；`npm run typecheck`；`npm run lint` 0 error / 6 既有 warning；`npm run package` 均通过。
+- [ ] 人工完成 Windows 安装/升级/卸载保留数据矩阵，并观察真实 Agent 多步任务。

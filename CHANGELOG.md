@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20 23:12] [破坏性变更] 从桌面端移除主题思考，收敛复盘主链路（v1.28.3 -> v2.0.0）
+
+- **受影响文件**: `apps/zhiji-desktop/` 的主题导航、页面、复盘页跳转按钮、IPC/Preload API、主题服务/仓储/会话 checkpoint、提示词、DSH 主题工具与对应测试；桌面架构、兼容矩阵、DSH 接入说明；`docs/specs/2026-08-20-deepseek-harness-agent-architecture.md`、`PROJECT_STATUS.md`、`PROGRESS.md`、`README.md`、`VERSION`
+- **改动摘要**: 依据第一性原理，主题思考只是“与 AI 讨论后沉淀认识”的辅助便利，不是日志—日反馈—周/月复盘主链路。为降低运行时、IPC、测试和数据生命周期维护成本，桌面端不再提供主题入口、主题会话或主题 DSH 工具；日志、每日反馈、周/月/项目/年度复盘、验证模式和 Agent 主链路保留。已有用户 `topics/` 与 `runtime/topic-sessions/` 数据不主动删除，Skill/CLI 侧主题契约和 WorkBuddy 路由不变；D2 主题会话迁移取消。
+
 ## [2026-08-20 22:45] [修复] 主题思考确认防止过期提案覆盖新认识（v1.28.2 -> v1.28.3）
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/application/topic-thinking.ts`、`apps/zhiji-desktop/src/main-process/infrastructure/topics/topic-repository.ts`、`apps/zhiji-desktop/src/shared/schemas/domain.ts`、主题单测与集成测试、`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`、`README.md`

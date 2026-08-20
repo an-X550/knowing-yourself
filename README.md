@@ -4,7 +4,7 @@
 
 > 把日常记录变成更可靠的行动：看见模式，试一个小改变，再用结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.28.3-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v2.0.0-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 你能用它解决什么
@@ -25,7 +25,7 @@
 
 ## 现在就开始
 
-不使用 CLI、Skill 或 Agent 的 Windows 用户，可使用 [Windows 桌面客户端](apps/zhiji-desktop/README.md)。它提供开始、日志、复盘、主题思考、项目和设置六个可视化入口，并已覆盖日反馈、周/月/项目/年复盘、日志质量检查、主题思考、快速方向校准；数据仍以本地 Markdown/JSON 保存，并支持用户自己的 OpenAI 兼容 API Key。
+不使用 CLI、Skill 或 Agent 的 Windows 用户，可使用 [Windows 桌面客户端](apps/zhiji-desktop/README.md)。它提供开始、Agent、日志、复盘、项目和设置六个可视化入口，并覆盖日反馈、周/月/项目/年复盘、日志质量检查和快速方向校准；数据仍以本地 Markdown/JSON 保存，并支持用户自己的 OpenAI 兼容 API Key。主题讨论与长期认识沉淀继续由 Skill/CLI 按需承载，不属于桌面端运行时。
 
 请使用完整的用户分发包，并从 [用户版使用指南](zhiji-user/README.md) 完成环境准备。然后把下面这段话连同一篇真实日志交给能读取项目目录、并能读写 Markdown 的 AI 工具（如 Codex 或 Claude Code）：
 
