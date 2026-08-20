@@ -33,7 +33,7 @@
 | 操作系统 | Windows；当前脚本使用 Windows PowerShell |
 | PowerShell | 5.1 |
 | Node.js / npm | Node.js 24.18.0；npm 11.16.0 |
-| 飞书工具 | 官方 `lark-cli` 1.0.86 |
+| 飞书工具 | 官方 `lark-cli` 1.0.86；使用下节记录的绝对路径，不依赖 Agent 会话的 PATH |
 | AI 入口 | Codex CLI 0.147.0，使用 ChatGPT 登录 |
 | 日分析模型 | 仅飞书日分析固定为 `gpt-5.4`，推理沙箱为只读 |
 | 网络 | 飞书、AI 服务和滴答连接器均须可访问；当前访问 Codex 需要 VPN |
@@ -41,6 +41,12 @@
 | 常驻项 | `.claude/workflows/local-feishu-daily-feedback.ps1 -Mode Run` 必须持续运行 |
 
 不要求打开 Codex 桌面窗口。真正执行分析的是后台启动的 `codex.exe` CLI 子进程；Codex 桌面应用关闭不影响已经独立运行的监听器。当前账号登录失效、VPN 断开、电脑休眠或监听退出时，手机端都不能获得反馈。
+
+### `lark-cli` 路径与恢复
+
+本机权威记录位于受 gitignore 保护的 `复盘/.local-feishu-daily-feedback-config.json`，字段为 `lark_cli_path`。2026-08-20 已直接复验 `C:\Users\panda\AppData\Roaming\npm\node_modules\@larksuite\cli\bin\lark-cli.exe` 和 npm shim `C:\Users\panda\AppData\Roaming\npm\lark-cli.cmd`，两者均返回 `lark-cli version 1.0.86`；脚本和 WorkBuddy 应优先使用配置中的绝对 `.exe` 路径。
+
+每次定位先读取本地配置并直接运行 `& <lark_cli_path> --version`，不要只依赖 `Get-Command lark-cli` 或 `where.exe lark-cli`。Codex 等受限 Agent 会话可能因沙箱拒绝执行 npm 目录中的程序，从而把已存在的 CLI 误报为缺失；这时应请求只读版本检查授权，不能据此重装。只有绝对路径确实不存在时，才按官方方式执行 `npx @larksuite/cli@latest install`，随后用绝对路径运行 `--version` 和 `auth status`，并把实际路径写回本地配置。不要把 App Secret、token 或用户授权写进本文档。
 
 启动前运行：
 

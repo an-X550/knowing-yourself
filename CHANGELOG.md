@@ -1,9 +1,14 @@
 ---
 created: 2026-07-05
-last_updated: 2026-08-15
+last_updated: 2026-08-20
 ---
 
 # CHANGELOG - 改动记录
+
+## [2026-08-20] [文档] 固定 lark-cli 本机路径与受限环境发现方式 (v1.27.4 -> v1.27.5)
+
+- **受影响文件**: `docs/personal-feishu-deployment.md`、`README.md`、`PROJECT_STATUS.md`、`VERSION`、`CHANGELOG.md`
+- **改动摘要**: 个人飞书部署说明现在记录已复验的 `lark-cli` 1.0.86 绝对路径和 npm shim，并要求脚本与 WorkBuddy 读取本地配置后直接调用 `.exe`；同时说明受限 Agent 沙箱可能把已存在的 CLI 误报为缺失，只有绝对路径确实不存在时才执行官方重装。
 
 ## [2026-08-20] [配置] 新增 WorkBuddy 飞书运行入口契约 (v1.27.3 -> v1.27.4)
 
