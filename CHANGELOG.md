@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20] [功能] 接入桌面端 DSH Agent 阶段 C 正式工作流桥 (v1.27.17 -> v1.27.18)
+
+- **受影响文件**: `apps/zhiji-desktop/` 的 Agent 工具协议、Main Process 分发器、日志/复盘用例取消桥、Agent 确认 IPC、Agent 页面与测试；桌面架构/兼容矩阵/DSH 接入说明；`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`、`README.md`
+- **改动摘要**: Agent 可在用户明确要求时复用既有日志创建/更新和每日反馈服务；周/月/项目及洞察复盘先返回既有材料预览，Main Process 以按会话绑定的一次性确认令牌等待页面按钮确认后才生成正式内容。取消会从 DSH 工具信号传到既有 `ReviewTaskManager`，结果只以脱敏摘要和既有页面导航卡返回，未开放 Shell、任意文件、任意 URL 或绕过确认的写入捷径。
+
 ## [2026-08-20] [功能] 完成桌面端 DSH Agent 阶段 B 只读领域工具桥 (v1.27.16 -> v1.27.17)
 
 - **受影响文件**: `apps/zhiji-desktop/` 的 DSH 工具运行时、Main Process 分发器、模型工具调用流、Agent 页面、测试与架构文档；`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`

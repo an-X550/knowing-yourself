@@ -34,3 +34,11 @@
 - [x] DSH 只注册显式的知己高层工具，以及 `ui.navigate` / `ui.present`；未加载 Shell、终端、通用文件系统、任意 URL、设置、备份、删除、确认或正式工作流工具。
 - [x] Agent 页将工具活动、导航和结果卡片视为数据：Renderer 再验证导航目标，只映射到既有页面，不执行 URL、脚本或 DOM 指令。
 - [x] 工具流可跨日志与复盘两类材料完成一轮真实 DSH Agent loop；补齐 OpenAI 兼容工具调用分片缺少后续 call ID 的解析回归，避免真实模型截断工具参数。
+
+## DeepSeek Harness Agent 阶段 C（2026-08-20，已完成）
+
+- [x] `AgentToolDispatcher` 继续作为 Main Process 唯一入口：新增日志创建/更新、每日反馈、周期复盘预览/生成和洞察预览/生成；所有入参和跨进程结果均经共享严格 Zod，正式服务仍由既有应用用例负责。
+- [x] 周/月/项目及 coach/yearly/life-design 复盘沿用既有 `previewToken + materials digest`；Main Process 另持有 30 分钟、一次性、按 session 绑定的 `approvalId`，Renderer 的“确认并继续”按钮通过具名 `agent:confirm` IPC 恢复 Agent，不接受模型或普通文本冒充确认。
+- [x] `tool.cancel` 从 DSH `ToolRunContext.signal` 经 MessagePort 传到 Main，连接 `ReviewTaskManager` 的 AbortSignal；取消测试证明模型中断后不会调用正式复盘保存。
+- [x] 成功结果只返回脱敏摘要并生成受校验的既有日志/复盘页结果卡；未开放 Shell、任意文件、任意 URL、批量删除、主题确认或验证模式确认。
+- [x] 阶段 C focused 测试覆盖预览—确认—生成、Agent 页面确认、取消和结果卡；最终回归 `npm test` 56 files / 322 tests、`npm run typecheck`、`npm run lint`（0 error / 7 既有 warning）与 `npm run package` 均通过。
