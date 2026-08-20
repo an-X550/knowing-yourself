@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-21 00:11] [修复] 更新 DeepSeek 模型并收敛连接测试超时（v2.0.1 -> v2.0.2）
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/infrastructure/ai/provider-config.ts`、`apps/zhiji-desktop/src/main-process/application/configure-ai.ts`、`apps/zhiji-desktop/src/main-process/infrastructure/ai/openai-compatible-provider.ts`、设置页与相关测试、桌面架构与 DSH 接入说明、`PROJECT_STATUS.md`、`PROGRESS.md`、`README.md`、`VERSION`
+- **改动摘要**: DeepSeek 官方已从旧的 `deepseek-chat`/`deepseek-reasoner` 模型名切换到 V4 模型；桌面端默认值原先仍指向旧模型，且连接测试复用流式请求，异常时会等待完整超时。现在默认使用 `deepseek-v4-flash`，旧配置自动迁移，连接测试改为最多 1 token 的非流式请求，保存成功与实际连接失败的边界更清晰。
+
 ## [2026-08-20 23:46] [修复] safeStorage 密文失配不再阻断桌面端启动（v2.0.0 -> v2.0.1）
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/infrastructure/credentials/credential-store.ts`、`apps/zhiji-desktop/tests/integration/credential-store.test.ts`、`apps/zhiji-desktop/package.json`、`apps/zhiji-desktop/package-lock.json`、桌面架构与 DSH 接入说明、`PROJECT_STATUS.md`、`PROGRESS.md`、`README.md`、`VERSION`

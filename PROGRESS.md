@@ -67,3 +67,9 @@
 - [x] 复现并定位截图错误：凭据密文复制到另一份 Electron `userData` 或密钥环变化后，`safeStorage.decryptString` 失败；此前异常会沿 `settings:get` 冒泡为“暂时无法读取本地数据”。
 - [x] `CredentialStore` 仅将密文解密失败视为当前 API Key 不可用，保留原 `credentials.json`，不降级明文、不删除数据；设置页可以继续加载并重新保存 API Key。
 - [x] 回归覆盖密文失配不崩溃且凭据文件仍保留；focused 6 tests、全量 51 files / 286 tests、typecheck、lint（0 error / 6 既有 warning）、package 和打包 E2E（1 passed）均通过。
+
+## DeepSeek Harness Agent 阶段 G：DeepSeek 连接可用性（2026-08-21，已完成）
+
+- [x] 依据 DeepSeek 官方当前模型清单，将桌面端默认模型更新为 `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 配置读取时自动迁移，不改动 API Key 或日志数据。
+- [x] 连接测试改为非流式、最多 1 token 的请求，避免把“鉴权/模型检查”误当成完整生成并等待 SSE 超时；正式复盘和 Agent 仍保留流式链路。
+- [x] focused 27 tests、Node HTTPS 无 Key 网络冒烟（服务端约 250ms 返回 401）、全量 51 files / 289 tests、typecheck、lint（0 error / 6 既有 warning）、标准 package 与打包 E2E（1 passed）均通过。
