@@ -34,7 +34,6 @@ last_updated: 2026-07-11
 | `context.collection_topic` | `关于我/收藏吃灰库/{topic}/{title}.md` | 单篇收藏内容；主题由用户明确指定 |
 | `context.collection_attachment` | `关于我/收藏吃灰库/{topic}/{filename}` | 用户明确收录并先复制到对应主题目录的附件；不得直接引用项目外路径 |
 | `standards.analysis` | `docs/analysis-standards.md` | 分析质量标准 |
-| `standards.review_methodology` | `docs/methodology-review.md` | 复盘方法论 |
 | `perspective.definition` | `perspectives/{视角名}.md` | 视角定义 |
 | `analysis.monthly_perspective` | `关于我/Analysis/{视角}/YYYY-MM-{视角}.md` | 月度视角分析中间产物 |
 | `analysis.yearly_perspective` | `关于我/Analysis/{视角}/[YEAR]-{视角}.md` | 年度综合回读的视角分析 |
@@ -75,4 +74,3 @@ last_updated: 2026-07-11
 | `deprecated.focus_personal` | `关于我/focus-personal.md` | 已并入 coach 视角分析 |
 | `deprecated.context_dir` | `07 Context/` | 已迁移至 `关于我/` |
 | `deprecated.legacy_journal_dir` | `06 Agenda/Journal/` | 已迁移至 `日志/` |
-| `deprecated.methodology_journal_runtime` | `docs/methodology-journal.md` | 保留为方法论文档，但运行时不读取 |
