@@ -1069,6 +1069,9 @@ if ($MyInvocation.InvocationName -ne ".") {
   if ($Mode -eq "Preflight") {
     Write-Host "lark=$($preflight.lark) codex=$($preflight.codex) config=ready"
   } else {
-    Start-ZhijiEntryListener -Config $preflight.config -Timeout $ConsumeTimeout -MaxEvents $MaxEvents
+    # 弃案（2026-08-20）：本地飞书入口已被 WorkBuddy 工作区代理替代。
+    # 为保留未来恢复和排障所需的实现，此处仅注释掉监听启动，不删除任何路由或处理逻辑。
+    # Start-ZhijiEntryListener -Config $preflight.config -Timeout $ConsumeTimeout -MaxEvents $MaxEvents
+    Write-Warning "本地飞书入口已弃案，监听未启动。实现仍保留在此文件中。"
   }
 }

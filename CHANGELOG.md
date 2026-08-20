@@ -631,3 +631,7 @@ last_updated: 2026-08-15
 
 - **受影响文件**: `.claude/agents/monthly-synthesis.md`, `.claude/agents/weekly-synthesis.md`, `docs/methodology-review.md`, `README.md`, `PROJECT_STATUS.md`, `VERSION`
 - **改动摘要**: 周报和月报统一切换为“复盘六问一级标题 + 内层综合分析”的输出协议，降低不同复盘形态之间的认知切换成本。
+## [2026-08-20] [配置] 本地飞书日反馈入口弃案并保留恢复实现 (v1.27.1 -> v1.27.2)
+
+- **受影响文件**: `.claude/workflows/local-feishu-daily-feedback.ps1`、用户版镜像、入口说明、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 因本地前台监听、Codex 额度依赖和固定前缀路由造成的实际使用摩擦，日常飞书交互改由 WorkBuddy 工作区代理承担。原实现、配置示例、测试和验收记录均保留；仅将三个入口工作流的 `-Mode Run` 监听启动调用注释为“弃案”，误启动会明确提示而不会消费事件或额度。恢复前须重新验证额度、事件连接与路由体验。
