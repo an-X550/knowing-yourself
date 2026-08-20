@@ -1,6 +1,6 @@
 ---
 created: 2026-08-20
-status: 架构已确认，待实施
+status: 架构已确认；阶段 0/A/B/C/D1 已验收，阶段 D2 待实施
 ---
 
 # 知己桌面端接入 DeepSeek Harness 的 Agent 架构
@@ -200,6 +200,20 @@ DSH 只能产生受校验的 `ui.navigate` 或 `ui.present` 事件。Renderer �
 - 保留主题归纳、差异展示和确认沉淀。
 - 完成旧 `TopicSessionStore` 会话导入，再停止创建旧格式会话。
 
+本阶段先拆成两个可独立验证的边界：
+
+#### 阶段 D1：Agent 会话生命周期（已验收）
+
+- 使用已发布的 `@deepseek-ai/dsh-session-persistence-jsonl`，把 DSH append-only 事件日志保存到知己数据根的 `agent/sessions/`。
+- Agent 页通过 `session.list` / `session.snapshot` 读取重启后的会话，并在发送新消息时由 DSH `AgentRegistry.resume` 继续原事件历史。
+- 数据目录迁移沿用现有递归复制；备份白名单和业务校验按 DSH `Session.fromRestore` 验证 JSONL，损坏会话拒绝导出/恢复而不静默清空。
+- 本次不迁移 `TopicSessionStore`：当前 DSH 工具面尚未同时覆盖主题提案、差异展示和用户确认。先保留旧主题入口，避免为了“单轨”破坏每日分析、周/月复盘或主题确认闭环。
+
+#### 阶段 D2：主题会话迁移（待真实证据）
+
+- 只有在 DSH 工具能复用现有主题归纳与确认服务、并有真实使用证据证明连续 Agent 会话降低摩擦后，才导入旧 checkpoint、停止创建旧格式会话。
+- 迁移必须先成功创建 DSH 会话并保留旧文件，再允许删除旧格式；不得静默丢失未经确认的主题提案。
+
 ### 阶段 E：收敛重复路径
 
 - 根据已完成行为删除只服务旧临时会话或重复模型调用的代码。
@@ -216,7 +230,7 @@ DSH 只能产生受校验的 `ui.navigate` 或 `ui.present` 事件。Renderer �
 - [ ] API Key 不进入 Renderer、Agent session、数据目录或备份。
 - [ ] Agent turn、工具执行和现有复盘任务均可取消，失败不会留下半写入正式产物。
 - [ ] 旧主题会话可导入并继续，已确认主题正文与索引不丢失。
-- [ ] Agent 会话随数据目录迁移，并能被备份校验与恢复。
+- [x] Agent 会话随数据目录迁移，并能被备份校验与恢复（阶段 D1）。
 - [ ] DSH 不可用时，现有专业页面和确定性工作流仍可继续使用。
 
 ## 11. 明确非目标

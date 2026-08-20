@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20] [功能] 接入 DSH Agent 会话持久化与备份生命周期（v1.27.18 -> v1.28.0）
+
+- **受影响文件**: `apps/zhiji-desktop/` 的 DSH JSONL 会话持久化、重启列表/resume 协议、数据目录备份校验与回归测试；桌面架构、Skill 兼容矩阵、DSH 接入说明；`docs/specs/2026-08-20-deepseek-harness-agent-architecture.md`、`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`、`README.md`
+- **改动摘要**: Agent 会话现在由官方 `@deepseek-ai/dsh-session-persistence-jsonl@0.1.0-rc.8` 写入知己数据根的 `agent/sessions/`，重启后可列出并由 DSH `AgentRegistry.resume` 继续；数据目录迁移会递归带走会话，备份导出/恢复按 DSH 事件协议校验，损坏会话明确拒绝而不静默清空。每日分析、周复盘、月复盘、主题和项目的既有专业入口继续保留；主题旧 checkpoint 暂不强迁移，待 DSH 覆盖提案/差异/确认闭环并有真实使用证据后作为 D2 单独实施。
+
 ## [2026-08-20] [功能] 接入桌面端 DSH Agent 阶段 C 正式工作流桥 (v1.27.17 -> v1.27.18)
 
 - **受影响文件**: `apps/zhiji-desktop/` 的 Agent 工具协议、Main Process 分发器、日志/复盘用例取消桥、Agent 确认 IPC、Agent 页面与测试；桌面架构/兼容矩阵/DSH 接入说明；`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`、`README.md`

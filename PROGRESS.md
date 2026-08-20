@@ -42,3 +42,12 @@
 - [x] `tool.cancel` 从 DSH `ToolRunContext.signal` 经 MessagePort 传到 Main，连接 `ReviewTaskManager` 的 AbortSignal；取消测试证明模型中断后不会调用正式复盘保存。
 - [x] 成功结果只返回脱敏摘要并生成受校验的既有日志/复盘页结果卡；未开放 Shell、任意文件、任意 URL、批量删除、主题确认或验证模式确认。
 - [x] 阶段 C focused 测试覆盖预览—确认—生成、Agent 页面确认、取消和结果卡；最终回归 `npm test` 56 files / 322 tests、`npm run typecheck`、`npm run lint`（0 error / 7 既有 warning）与 `npm run package` 均通过。
+
+## DeepSeek Harness Agent 阶段 D1：会话生命周期（2026-08-20，已完成）
+
+- [x] 采用 npm 发布的 `@deepseek-ai/dsh-session-persistence-jsonl@0.1.0-rc.8`，不复制上游源码；Main Process 将当前数据根的 `agent/sessions/` 传给 Utility Process，使用 plain JSONL，API Key 不进入会话。
+- [x] 新增 `session.list` / `session.snapshot` 协议；Agent 页面可在重启后列出有限长度的会话投影，发送消息时由 DSH `AgentRegistry.resume` 继续事件历史。
+- [x] 数据目录迁移沿用现有递归复制；备份路径白名单接纳 DSH 会话 JSONL，并用 `Session.fromRestore` 校验 header、事件类型、顺序与序号；损坏会话明确拒绝，不静默重置。
+- [x] 回归：`dsh-runtime.test.ts` 覆盖写入—重启—列表—resume；`agent-facade.test.ts` 覆盖恢复投影；`data-transfer.test.ts` 覆盖会话备份与损坏拒绝。
+- [x] 全量验证：`npm test` 56 files / 326 tests；`npm run typecheck`；`npm run lint` 0 error / 6 既有 warning；`npm run package` 均通过。
+- [ ] 阶段 D2 主题会话迁移：当前 DSH 工具尚未覆盖主题提案、差异展示和用户确认沉淀，继续保留 `TopicSessionStore`，待真实使用证据和同等确认语义后再迁移。
