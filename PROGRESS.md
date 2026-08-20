@@ -12,3 +12,11 @@
 - [x] 最终：npm test 50 files/229 tests 全过；typecheck 通过；lint 0 error/5 既有 warning；package x64 成功。handoff/PROJECT_STATUS/CHANGELOG 已更新。BLOCKED.md：无。
 
 高性价比决策记录：WebSourceContent 与 WorkflowIntent Schema 统一放 shared/domain（避免 renderer 跨层引 infrastructure）；P3/P4 提示词为自有快照，只把 `.claude` 契约当规则源参考。
+
+## DeepSeek Harness Agent 阶段 0（2026-08-20，已完成）
+
+- [x] 基线：`npm test` 54 files / 308 tests 全绿、跳过 0；`npm run typecheck` 通过；`npm run lint` 0 error / 7 个既有 warning。
+- [x] 修复 `reviews-page.test.tsx` 的日期敏感断言：改为由同一默认范围函数计算的相对期望，不改产品日期逻辑，也不冻结其他异步页面测试的时钟。
+- [x] 核验 DSH 源码 `D:\AI\deepseek-harness`：`0.1.0-rc.8`、提交 `141eb6f`、Node `24.18.0`、`pnpm run build` 成功；上游工作树保持干净。
+- [x] 核验 Agent、Agent loop、session、tools、LLM、JSONL persistence、Cordis 和 SDK 的发布包与扩展点；阶段 A 优先采用发布包，接入面见 `apps/zhiji-desktop/docs/dsh-integration-notes.md`。
+- [x] 未进入阶段 A：未新增 DSH 依赖、IPC、Utility Process、Agent 页面或领域工具。

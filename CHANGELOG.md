@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20] [修复] 建立 DSH Agent 阶段 0 可判基线 (v1.27.13 -> v1.27.14)
+
+- **受影响文件**: `apps/zhiji-desktop/tests/unit/reviews-page.test.tsx`、`apps/zhiji-desktop/docs/dsh-integration-notes.md`、`PROGRESS.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 修复周复盘页面测试把运行日期写死造成的失败，改为验证同一默认范围函数计算出的相对日期，产品日期行为不变。同步核验 DSH `0.1.0-rc.8` 源码构建、npm 发布包、会话/工具/取消扩展点及 Utility Process 接入边界；阶段 A 可在不依赖本地源码路径的前提下开始，当前未引入 DSH 运行时代码或改变既有产品入口。
+
 ## [2026-08-20] [重构] 移除外部课程化方法论与重复分析约束 (v1.27.12 -> v1.27.13)
 
 - **受影响文件**: 日志质量与复盘运行规则、方法论说明、路径契约、用户版导出、状态与版本文档
