@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20 22:45] [修复] 主题思考确认防止过期提案覆盖新认识（v1.28.2 -> v1.28.3）
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/application/topic-thinking.ts`、`apps/zhiji-desktop/src/main-process/infrastructure/topics/topic-repository.ts`、`apps/zhiji-desktop/src/shared/schemas/domain.ts`、主题单测与集成测试、`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`、`README.md`
+- **改动摘要**: 主题思考继续保留原有独立入口和“讨论—归纳—用户确认—沉淀”闭环，不为尚无真实收益证据的 DSH 迁移复制第二套流程。提案现在记录生成时的主题版本，确认写入在仓储串行队列内做条件检查；若主题已被其他窗口更新，旧提案会被拒绝而不会覆盖新认识。按别名更新时也会写回规范主题文件。主题内容、旧 checkpoint 和每日/周/月复盘入口均不变。
+
 ## [2026-08-20 22:20] [修复] Agent 缺少 API Key 时提供设置恢复入口（v1.28.1 -> v1.28.2）
 
 - **受影响文件**: `apps/zhiji-desktop/src/renderer/pages/agent-page.tsx`、`apps/zhiji-desktop/tests/unit/agent-page.test.tsx`、`apps/zhiji-desktop/docs/dsh-integration-notes.md`、`PROGRESS.md`、`PROJECT_STATUS.md`、`VERSION`、`README.md`
