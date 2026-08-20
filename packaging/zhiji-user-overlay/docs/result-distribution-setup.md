@@ -2,7 +2,7 @@
 
 > 仓库示例默认关闭。只有用户明确启用的运行配置才会调用官方工具。
 
-手机飞书消息入口、AI 后端替换和云服务器迁移见[飞书每日反馈的 AI 部署指南](feishu-ai-deployment.md)；本文只维护飞书与滴答的分发授权和安全边界。
+本文只维护飞书与滴答的分发授权和安全边界；消息入口、AI 后端和部署方式由各运行环境的部署指南负责。
 
 结果分发只在白名单产物新写入并重新读取校验后运行：飞书保存正式复盘、人生设计、已确认主题思考和明确收录的收藏/附件；滴答/TickTick 仍只创建报告中已有的合格行动。本地文件始终是权威结果，任一外部失败都不回滚本地结果。
 
@@ -72,6 +72,12 @@ lark-cli drive +import --file "<WORKSPACE_RELATIVE_DISPOSABLE_MD>" --type docx -
 `FOLDER_TOKEN` 是目标位置标识，不是应用密钥；把根目录及分类目录 token 写入被忽略的运行配置。必须确认返回最终文档 token/URL、文件位于对应分类目录，且用户可访问。未确认前不启用真实 result type。
 
 ## 滴答 / TickTick：官方 MCP 设置门
+
+### WorkBuddy 连接器
+
+中国区账号在 WorkBuddy 的“连接器 / 自定义 MCP”中添加 `https://mcp.dida365.com`，在官方页面完成 OAuth，并把该连接器绑定到“知己”智能体。工具管理中只启用 `create_task`；不要启用 list、get、search、update、complete 或删除类工具。国际区账号改用对应的 TickTick 官方 MCP，不混用区域。
+
+WorkBuddy 运行入口只向唯一的 `create_task` 传递标题、截止时间和被忽略配置中已绑定的 `project_id`。连接器缺失、未授权或创建能力不唯一时，该渠道必须返回 `mcp_missing`、`auth_required` 或 `create_capability_ambiguous`，但不得回退到 Codex 子进程、其他 Agent 的额度或自写 HTTP 脚本；飞书渠道和本地结果继续独立完成。
 
 ### 状态
 

@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20] [修复] WorkBuddy 已启用分发配置恢复默认执行 (v1.27.7 -> v1.27.8)
+
+- **受影响文件**: WorkBuddy 运行规格与回归测试、飞书/滴答分发设置、用户版镜像、版本与状态文档
+- **改动摘要**: 修正多通道入口仍要求每次消息显式授权、导致既有飞书沉淀和滴答同步继续断链的问题。用户主动启用的本地分发配置现在作为持续授权，新结果写入并复读成功后默认分发；“仅本地”保留为单次退出。飞书固定使用本地 `lark_cli_path`，滴答由 WorkBuddy 的 create-only 官方 MCP 承担，缺失时不回退 Codex，两个渠道独立失败。
+
 ## [2026-08-20] [文档] 确认桌面端 DeepSeek Harness Agent 架构 (v1.27.6 -> v1.27.7)
 
 - **受影响文件**: `docs/specs/2026-08-20-deepseek-harness-agent-architecture.md`、`PROJECT_STATUS.md`、`README.md`、`VERSION`、`CHANGELOG.md`
