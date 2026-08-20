@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20] [功能] 完成桌面端 DSH Agent 阶段 A 会话桥 (v1.27.15 -> v1.27.16)
+
+- **受影响文件**: `apps/zhiji-desktop/` 的 DSH 运行时、Main/Preload/IPC 契约、Agent 页面、测试与架构文档；`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`
+- **改动摘要**: 新增独立 Electron Utility Process 中的最小 DeepSeek Harness Agent loop、结构化 MessagePort 会话协议与 Main Process 模型流代理；API Key 继续只由 Main Process 解密使用。桌面端新增“知己 Agent”会话页，支持流式消息、停止和中文崩溃降级。每日反馈、周/月/项目复盘、主题和项目仍由既有页面与应用服务负责，未迁移或绕过既有校验、确认和正式写入链路；下一阶段才会以受控只读工具复用这些能力。
+
 ## [2026-08-20] [文档] 用户版接入 WorkBuddy 飞书智能体部署路径 (v1.27.14 -> v1.27.15)
 
 - **受影响文件**: `zhiji-user/` 导出源、WorkBuddy 运行入口、用户版 README/离线说明、`README.md`、`PROJECT_STATUS.md`、`VERSION`

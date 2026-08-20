@@ -20,3 +20,10 @@
 - [x] 核验 DSH 源码 `D:\AI\deepseek-harness`：`0.1.0-rc.8`、提交 `141eb6f`、Node `24.18.0`、`pnpm run build` 成功；上游工作树保持干净。
 - [x] 核验 Agent、Agent loop、session、tools、LLM、JSONL persistence、Cordis 和 SDK 的发布包与扩展点；阶段 A 优先采用发布包，接入面见 `apps/zhiji-desktop/docs/dsh-integration-notes.md`。
 - [x] 未进入阶段 A：未新增 DSH 依赖、IPC、Utility Process、Agent 页面或领域工具。
+
+## DeepSeek Harness Agent 阶段 A（2026-08-20，已完成）
+
+- [x] 使用 npm 发布的 DSH 核心包建立独立 Electron Utility Process 构建入口；`npm run package` 成功并在 `app.asar` 确认 `utility.js` 产物。
+- [x] 建立 `AgentFacade`、共享 Zod MessagePort 协议、`agent.start/send/cancel/list/get` IPC、Preload 订阅和 Agent 一级页面；原有六页职责未改变。
+- [x] Main Process `AgentModelTransport` 经 `ConfigureAi.stream()` 代理模型流；API Key 不进入 Renderer、Utility Process 或会话结构。
+- [x] 新增真实 DSH loop + 假模型、假 DSH 两轮流事件/取消/退出/崩溃、Agent 页面和 schema 测试；阶段 B 前未接入领域工具或持久化会话。
