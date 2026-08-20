@@ -5,7 +5,7 @@ last_updated: 2026-08-20
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.27.3
+**当前版本**：1.27.4
 
 ## 项目概述
 
@@ -18,7 +18,7 @@ last_updated: 2026-08-20
 
 | 层面 | 选型 |
 |------|------|
-| 运行平台 | Codex 自然语言入口；Claude 命令兼容；Electron Windows 客户端 |
+| 运行平台 | Codex 自然语言入口；Claude 命令兼容；WorkBuddy 飞书入口；Electron Windows 客户端 |
 | 内容格式 | Markdown + YAML frontmatter |
 | 核心入口 | 自然语言 + 兼容 Slash Commands |
 | 共享契约 | `.claude/shared/` |
@@ -40,6 +40,7 @@ last_updated: 2026-08-20
 |------|------|------|
 | 日反馈闭环 | 已完成 | 日志粘贴与 `/daily-review` 统一进入 `daily-analyzer`；输出按单洞察、单行动、可观察预测收敛，输入不足按 A-D 证据等级降级。 |
 | 本地飞书日反馈入口 | 弃案；实现保留、监听已注释 | 2026-08-20 因本地前台监听、Codex 额度依赖和前缀路由带来的使用摩擦，改由 WorkBuddy 工作区代理承担飞书交互。主工作流及用户版镜像保留，`-Mode Run` 的监听启动调用已注释并显示弃案提示；恢复前需重新验证额度、事件连接与路由体验。 |
+| WorkBuddy 飞书运行入口 | 契约已实现；待首次真实人工验收 | 飞书智能体通过固定提示词进入 `.claude/workflows/workbuddy-feishu-entry.md`；该入口只路由至既有日志、复盘、主题思考等权威定义，不复制模板。默认仅本地，写入经复读校验；核心画像和当前状态只允许提出拟议变更，主题写入需显式确认。实现规格见 [`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。 |
 | 日志质量教练 | 已完成 | `journal-quality-coach` 独立评估分析就绪度与六步法写作习惯。 |
 | 周/月/项目复盘 | 已完成真实验收 | 统一复盘六问；按会改变判断、重来选择或行动的内容自适应展开，保留证据、边界、项目锚点与行动质量门。Codex 可直接理解三类自然语言请求，Claude slash command 保持兼容。 |
 | 闭环缺口检查与提醒 | 语义检查已完成；滴答通知待首次真实验证 | Codex 的“下一步、遗漏、更新、复盘”语义继续进入统一检查。一次性与周期性纯提醒默认由滴答原生通知承担，只通知用户手动开始；Codex 定时派发经受控测试和完整重启后仍未送达，不再作为默认通道。已创建每周日 19:00（`Asia/Shanghai`）周复盘滴答任务，首次真实通知待 2026-08-16 验证。 |
@@ -56,7 +57,7 @@ last_updated: 2026-08-20
 
 ## 待办事项
 
-当前仍有引用价值的实现规格：[`audit-cleanup`](docs/specs/audit-cleanup.md)、[`directory-boundary-tightening`](docs/specs/directory-boundary-tightening.md)、[`evolution-roadmap`](docs/specs/evolution-roadmap.md)、[`git-commit-escalation-flow`](docs/specs/git-commit-escalation-flow.md)、[`monthly-perspective-audit`](docs/specs/monthly-perspective-audit-2026-07-08.md)、[`monthly-processor-evidence-packets`](docs/specs/monthly-processor-evidence-packets.md)、[`monthly-synthesis-theme-compression`](docs/specs/monthly-synthesis-theme-compression.md)。
+当前仍有引用价值的实现规格：[`audit-cleanup`](docs/specs/audit-cleanup.md)、[`directory-boundary-tightening`](docs/specs/directory-boundary-tightening.md)、[`evolution-roadmap`](docs/specs/evolution-roadmap.md)、[`git-commit-escalation-flow`](docs/specs/git-commit-escalation-flow.md)、[`monthly-perspective-audit`](docs/specs/monthly-perspective-audit-2026-07-08.md)、[`monthly-processor-evidence-packets`](docs/specs/monthly-processor-evidence-packets.md)、[`monthly-synthesis-theme-compression`](docs/specs/monthly-synthesis-theme-compression.md)、[`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。
 
 ### 高优先级
 
@@ -70,6 +71,7 @@ last_updated: 2026-08-20
 - [ ] 按 `packaging/zhiji-user-boundaries.json` 与质量矩阵补真实素材验收；只收敛已有证据支持的 shared 文件。
 - [ ] 2026-08-16 19:00 验证滴答周复盘任务首次真实通知；创建成功不等于通知送达，未验证前不增加其他复盘提醒。
 - [x] 本地飞书日反馈入口验证已停止（2026-08-20 弃案）：保留实现与验收记录，不继续观察 14 天或扩展该入口。
+- [ ] 用一份脱敏单日日志完成 WorkBuddy 飞书入口首次人工验收：原文、每日反馈和验证沉淀均按权威路径写入；再验证周复盘、主题首次讨论与确认沉淀的写入边界。
 
 ### 中优先级
 
@@ -95,6 +97,7 @@ last_updated: 2026-08-20
 6. 没有“日志 / 日记 / 记录一下”等意图的自由文本无法仅靠 Hook 安全区分普通对话，当前会先确认一次再存档。
 7. 本地飞书入口为弃案：实现仍保留但监听已注释；历史上依赖 Windows、网络、前台监听和 Codex 额度，且通常需 2–5 分钟，不提供离线补偿。
 8. Windows 客户端当前安装包未签名，首次安装可能出现 SmartScreen 提示；尚未实际验证安装、升级、卸载与 Windows 10 兼容性。
+9. WorkBuddy 与飞书平台无法由仓库回归测试模拟；当前只验证静态入口边界，仍需一次脱敏真实消息验收。
 
 ## 关键决策记录
 

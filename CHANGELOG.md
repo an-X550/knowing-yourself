@@ -5,6 +5,11 @@ last_updated: 2026-08-15
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20] [配置] 新增 WorkBuddy 飞书运行入口契约 (v1.27.3 -> v1.27.4)
+
+- **受影响文件**: `.claude/workflows/workbuddy-feishu-entry.md`、`docs/workbuddy-feishu-agent-prompt.md`、回归测试、入口与状态文档
+- **改动摘要**: 飞书智能体现在可通过固定提示词进入唯一的 WorkBuddy 本地运行入口：日志走 `log` 编排而非只读分析器，周/月/项目复盘和主题思考严格复用既有契约。入口默认仅本地、写入后复读校验；核心画像和当前状态只可提出拟议变更，主题必须显式确认后才能沉淀，避免模板漂移与高权限误写。
+
 ## [2026-08-20 00:00] [配置] 禁用 Superpowers 自动工作流约束 (v1.27.2 -> v1.27.3)
 
 - **受影响文件**: `AGENTS.md`、`CLAUDE.md`、`docs/development-governance.md`、`VERSION`、`PROJECT_STATUS.md`
