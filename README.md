@@ -4,7 +4,7 @@
 
 > 把日常记录变成更可靠的行动：看见模式，试一个小改变，再用结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v1.27.5-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v1.27.6-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 你能用它解决什么
@@ -73,7 +73,7 @@
 
 ## 可选：手机记录入口
 
-本地飞书日反馈入口已于 2026-08-20 **弃案**：代码、配置示例和验收记录仍保留，但监听启动已注释，当前不应部署。日常飞书交互改由 WorkBuddy 的工作区代理承担；将[固定提示词](docs/workbuddy-feishu-agent-prompt.md)配置到飞书智能体后，它会按唯一的本地入口契约路由日志、周/月/项目复盘与主题思考，默认仅本地写入并保护长期画像。恢复旧入口前须重新验证额度、事件连接与路由体验。详见[弃案说明](docs/local-feishu-daily-feedback-entry.md)。
+本地飞书日反馈入口已于 2026-08-20 **弃案**：代码、配置示例和验收记录仍保留，但监听启动已注释，当前不应部署。日常消息交互可改由 WorkBuddy 的项目代理承担；将[多通道固定提示词](docs/workbuddy-agent-prompt.md)配置到飞书、微信等已绑定“知己”工作区的智能体后，它会按唯一的本地入口契约路由日志、周/月/项目复盘与主题思考。默认只写本地；仅当你本次明确要求时，才按既有分发契约尝试同步允许结果。恢复旧入口前须重新验证额度、事件连接与路由体验。详见[弃案说明](docs/local-feishu-daily-feedback-entry.md)。
 
 ## 项目与协作
 

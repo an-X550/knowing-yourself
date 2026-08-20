@@ -2,8 +2,10 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
 $repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$entryPath = Join-Path $repoRoot '.claude/workflows/workbuddy-feishu-entry.md'
-$promptPath = Join-Path $repoRoot 'docs/workbuddy-feishu-agent-prompt.md'
+$entryPath = Join-Path $repoRoot '.claude/workflows/workbuddy-message-entry.md'
+$promptPath = Join-Path $repoRoot 'docs/workbuddy-agent-prompt.md'
+$legacyEntryPath = Join-Path $repoRoot '.claude/workflows/workbuddy-feishu-entry.md'
+$legacyPromptPath = Join-Path $repoRoot 'docs/workbuddy-feishu-agent-prompt.md'
 $failures = New-Object System.Collections.Generic.List[string]
 
 function Add-Failure {
@@ -43,10 +45,16 @@ function Get-RouteLine {
 }
 
 if (-not (Test-Path -LiteralPath $entryPath -PathType Leaf)) {
-  Add-Failure 'missing WorkBuddy Feishu runtime entry contract'
+  Add-Failure 'missing WorkBuddy multi-channel runtime entry contract'
 }
 if (-not (Test-Path -LiteralPath $promptPath -PathType Leaf)) {
-  Add-Failure 'missing copyable Feishu agent prompt'
+  Add-Failure 'missing copyable WorkBuddy agent prompt'
+}
+if (-not (Test-Path -LiteralPath $legacyEntryPath -PathType Leaf)) {
+  Add-Failure 'missing legacy Feishu entry compatibility redirect'
+}
+if (-not (Test-Path -LiteralPath $legacyPromptPath -PathType Leaf)) {
+  Add-Failure 'missing legacy Feishu prompt compatibility redirect'
 }
 
 if ($failures.Count -eq 0) {
@@ -59,6 +67,7 @@ if ($failures.Count -eq 0) {
     '.claude/agents/daily-analyzer.md',
     '.claude/shared/contracts/daily-feedback.md',
     '.claude/shared/contracts/evidence-and-verification.md',
+    '.claude/shared/contracts/result-distribution.md',
     '.claude/shared/contracts/codex-natural-language-routing.md',
     '.claude/shared/contracts/topic-thinking.md',
     '.claude/shared/contracts/topic-thinking-persistence.md',
@@ -72,7 +81,7 @@ if ($failures.Count -eq 0) {
     Assert-Contains $entry $requiredRoute "entry must declare route $requiredRoute"
   }
 
-  foreach ($requiredBoundary in @('policy.local_only', 'policy.no_direct_profile_write', 'policy.propose_long_term_changes', 'policy.topic_confirmation_required', 'policy.single_clarification', 'policy.readback_required', 'policy.no_template_duplication')) {
+  foreach ($requiredBoundary in @('policy.configured_distribution_default', 'policy.local_only_opt_out', 'policy.ingress_not_distribution_authorization', 'policy.channel_agnostic', 'policy.channel_independent', 'policy.no_direct_profile_write', 'policy.propose_long_term_changes', 'policy.topic_confirmation_required', 'policy.single_clarification', 'policy.readback_required', 'policy.no_template_duplication')) {
     Assert-Contains $entry $requiredBoundary "entry must enforce boundary: $requiredBoundary"
   }
 
@@ -97,13 +106,27 @@ if ($failures.Count -eq 0) {
   $dailyRouteLine = Get-RouteLine $entry 'route.daily_log'
   Assert-NotContains $dailyRouteLine 'context.core_profile' 'daily route must not write core profile'
   Assert-NotContains $dailyRouteLine 'context.current' 'daily route must not write current status'
-  Assert-Contains $entry 'policy.no_external_distribution' 'entry must prohibit external distribution'
-  Assert-NotContains $entry 'distribute output.' 'entry must not invoke result distribution handoffs'
+  Assert-Contains $entry '.claude/shared/contracts/result-distribution.md' 'entry must delegate external distribution to the shared contract'
+  Assert-Contains $entry 'distribute <path-key> <resolved-local-path>' 'entry must use the existing distribution handoff'
+  Assert-Contains $entry 'distribute output.daily_feedback' 'daily route must hand a verified new feedback to result distribution'
+  Assert-Contains $entry 'https://mcp.dida365.com' 'entry must bind TickTick to the WorkBuddy custom MCP connector'
+  Assert-Contains $entry 'create_task' 'entry must restrict TickTick to create_task'
+  Assert-Contains $entry 'lark_cli_path' 'entry must resolve Feishu CLI from the local config path'
+  Assert-Contains $entry 'mcp_missing' 'entry must expose a portable missing-connector failure'
+  Assert-NotContains $entry 'policy.no_external_distribution' 'entry must not hard-code a permanent external-distribution ban'
+  Assert-NotContains $entry '默认只执行本地持久化' 'entry must not keep the obsolete default-local-only behavior'
   Assert-NotContains $entry '```' 'entry must not duplicate report templates in code fences'
   Assert-Contains $entry 'policy.no_template_duplication' 'entry must forbid duplicate output templates'
-  Assert-Contains $prompt '.claude/workflows/workbuddy-feishu-entry.md' 'prompt must direct the agent to the unique entry contract'
+  Assert-Contains $prompt '.claude/workflows/workbuddy-message-entry.md' 'prompt must direct the agent to the unique entry contract'
   Assert-Contains $prompt 'instruction.no_self_analysis' 'prompt must forbid self-authored analysis'
   Assert-Contains $prompt 'instruction.no_development' 'prompt must forbid development requests'
+  Assert-Contains $prompt 'instruction.configured_distribution_default' 'prompt must honor enabled distribution config by default'
+  Assert-Contains $prompt 'instruction.local_only_opt_out' 'prompt must preserve the per-request local-only opt-out'
+
+  $legacyEntry = Get-Content -LiteralPath $legacyEntryPath -Raw -Encoding UTF8
+  $legacyPrompt = Get-Content -LiteralPath $legacyPromptPath -Raw -Encoding UTF8
+  Assert-Contains $legacyEntry '.claude/workflows/workbuddy-message-entry.md' 'legacy Feishu entry must redirect to the multi-channel entry'
+  Assert-Contains $legacyPrompt 'workbuddy-agent-prompt.md' 'legacy Feishu prompt must redirect to the multi-channel prompt'
 }
 
 if ($failures.Count -gt 0) {
@@ -111,4 +134,4 @@ if ($failures.Count -gt 0) {
   exit 1
 }
 
-Write-Host 'PASS: WorkBuddy Feishu runtime entry contract checks'
+Write-Host 'PASS: WorkBuddy multi-channel runtime entry contract checks'

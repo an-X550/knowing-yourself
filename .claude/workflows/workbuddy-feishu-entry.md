@@ -1,6 +1,6 @@
 ---
 type: runtime_contract
-purpose: WorkBuddy 驱动的飞书智能体进入知己本地项目时的唯一运行入口
+purpose: 已部署飞书提示词的兼容跳转；运行真相见 workbuddy-message-entry.md
 last_updated: 2026-08-20
 machine_rules:
   - route.daily_log
@@ -23,7 +23,13 @@ machine_rules:
   - policy.no_template_duplication
 ---
 
-# WorkBuddy 飞书运行入口
+# 已迁移：WorkBuddy 多通道运行入口
+
+此文件仅为兼容已部署的飞书提示词而保留，不再承载运行规则。读取后必须立即改读并执行 `.claude/workflows/workbuddy-message-entry.md`；若下文旧规则与多通道入口冲突，以多通道入口为准。
+
+---
+
+# 历史飞书入口（不再维护）
 
 本文件只服务于已绑定本地“知己”项目的个人飞书智能体。它是路由与权限边界，不是第二套分析器：不得复制、缩写、改写或自行补充日反馈、周报、月报、项目复盘或主题思考的模板与质量规则。
 
