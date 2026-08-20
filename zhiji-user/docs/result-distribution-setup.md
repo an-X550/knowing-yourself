@@ -75,9 +75,9 @@ lark-cli drive +import --file "<WORKSPACE_RELATIVE_DISPOSABLE_MD>" --type docx -
 
 ### WorkBuddy 连接器
 
-中国区账号在 WorkBuddy 的“连接器 / 自定义 MCP”中添加 `https://mcp.dida365.com`，在官方页面完成 OAuth，并把该连接器绑定到“知己”智能体。工具管理中只启用 `create_task`；不要启用 list、get、search、update、complete 或删除类工具。国际区账号改用对应的 TickTick 官方 MCP，不混用区域。
+中国区账号在 WorkBuddy 的“连接器 / 自定义 MCP”中添加 `https://mcp.dida365.com`，在官方页面完成 OAuth，并把该连接器绑定到“知己”智能体。WorkBuddy 当前将创建工具显示为 `dida365_create_task`；在工具管理中只保留这一项，并禁用 list、get、search、update、complete、delete 及其他创建类工具。国际区账号改用对应的 TickTick 官方 MCP，不混用区域。
 
-WorkBuddy 运行入口只向唯一的 `create_task` 传递标题、截止时间和被忽略配置中已绑定的 `project_id`。连接器缺失、未授权或创建能力不唯一时，该渠道必须返回 `mcp_missing`、`auth_required` 或 `create_capability_ambiguous`，但不得回退到 Codex 子进程、其他 Agent 的额度或自写 HTTP 脚本；飞书渠道和本地结果继续独立完成。
+WorkBuddy 的自定义 MCP 配置使用 `disabledTools` 保存单工具禁用状态。每次首次绑定、MCP 更新或工具清单改变后，都要重连并核对模型实际允许集合恰好只有 `dida365_create_task`；如果仍暴露其他 `dida365_*` 工具，保持该渠道停用。运行入口只向这一项传递标题、截止时间和被忽略配置中已绑定的 `project_id`。连接器缺失、未授权或允许集合不唯一时，该渠道必须返回 `mcp_missing`、`auth_required` 或 `create_capability_ambiguous`，但不得回退到 Codex 子进程、其他 Agent 的额度或自写 HTTP 脚本；飞书渠道和本地结果继续独立完成。
 
 ### 状态
 

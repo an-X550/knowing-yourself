@@ -331,6 +331,8 @@ foreach ($path in @($mainContract, $overlayContract)) {
     '恰好一个',
     '已授权',
     'create-task',
+    'dida365_create_task',
+    'disabledTools',
     'list/get/search/update/complete',
     '只有四类来源可以产生滴答任务',
     '`output.daily_feedback`',

@@ -92,6 +92,8 @@ foreach ($path in @($mainGuide, $overlayGuide)) {
     '账号区域对应的官方 MCP',
     '官方授权页面',
     '恰好一个 create-task',
+    'dida365_create_task',
+    'disabledTools',
     '一次性测试任务',
     '任务标题、截止时间和目标清单',
     '`project_id`',

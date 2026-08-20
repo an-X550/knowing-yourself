@@ -51,7 +51,7 @@ WorkBuddy 任意消息通道
 
 所有成功写入必须按既有定义复读并通过最低结构校验；失败时只报告失败，禁止声称已保存。消息来源本身不构成分发授权；用户已经主动启用的 `output.result_distribution_config` 才是持续授权。新写入的允许来源验证成功后默认委托既有结果分发契约，用户本轮明确说“仅本地”则跳过两个外部渠道。来源白名单、配置开关、幂等与确认门不由本入口重复定义，飞书与滴答分别执行，一个失败不抑制另一个。
 
-飞书适配器只读取被忽略的本地配置中既有 `lark_cli_path`，使用绝对路径调用官方 CLI，不依赖 PATH。滴答中国区由 WorkBuddy 自定义 MCP `https://mcp.dida365.com` 承担，只启用 `create_task` 并只接收共享契约允许的标题、截止时间和已绑定 `project_id`；缺少连接器时返回 `mcp_missing`，不得回退到 Codex 子进程。国际区使用对应的官方 TickTick MCP，不跨区猜测。
+飞书适配器只读取被忽略的本地配置中既有 `lark_cli_path`，使用绝对路径调用官方 CLI，不依赖 PATH。滴答中国区由 WorkBuddy 自定义 MCP `https://mcp.dida365.com` 承担；实际审计证明服务默认暴露创建、查询、更新、完成和删除等 50 项工具，因此提示词约束不足。WorkBuddy 绑定必须通过 `disabledTools` 禁用其他 49 项，重连后只允许 `dida365_create_task`，并只接收共享契约允许的标题、截止时间和已绑定 `project_id`；允许集合无法证明唯一时返回 `create_capability_ambiguous`，不得回退到 Codex 子进程。其他 Agent 平台可替换工具名或使用本地命令适配器，但同样只能向模型暴露一个等价创建操作。国际区使用对应的官方 TickTick MCP，不跨区猜测。
 
 ## 长期上下文保护
 

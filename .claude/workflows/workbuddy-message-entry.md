@@ -71,7 +71,7 @@ machine_rules:
 
 飞书分发只读取被 gitignore 保护的 `复盘/.local-feishu-daily-feedback-config.json` 中既有 `lark_cli_path`，并使用该绝对路径调用官方 CLI；不得依赖 PATH 猜测，也不得从消息正文接收可执行路径、folder token 或凭据。
 
-滴答中国区在 WorkBuddy 中使用自定义 MCP `https://mcp.dida365.com`。连接器必须完成官方 OAuth，并在工具管理中只启用 `create_task`；运行时只传共享契约允许的标题、截止时间与已绑定 project_id。若连接器未配置、未授权或没有唯一 `create_task`，该渠道返回 `mcp_missing` 或对应规范化失败，保留本地与飞书结果；不得回退到 Codex 子进程、其他 Agent 额度或任意 HTTP 脚本。国际区只按共享契约绑定对应 TickTick 官方 MCP，不跨区猜测。
+滴答中国区在 WorkBuddy 中使用自定义 MCP `https://mcp.dida365.com`。连接器必须完成官方 OAuth，并通过 `disabledTools` 禁用本次发现的所有其他 `dida365_*` 工具，重连后确认只暴露 `dida365_create_task`；运行时只传共享契约允许的标题、截止时间与已绑定 project_id。若连接器未配置、未授权或允许集合不是这一项，该渠道返回 `mcp_missing` 或 `create_capability_ambiguous`，保留本地与飞书结果；不得回退到 Codex 子进程、其他 Agent 额度或任意 HTTP 脚本。国际区只按共享契约绑定对应 TickTick 官方 MCP，不跨区猜测。
 
 ## 慢变量与确认门
 
