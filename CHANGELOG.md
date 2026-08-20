@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20 21:06] [修复] 修复桌面端 DSH 主进程启动崩溃（v1.28.0 -> v1.28.1）
+
+- **受影响文件**: `apps/zhiji-desktop/vite.main.config.ts`、`apps/zhiji-desktop/forge.config.ts`、`apps/zhiji-desktop/src/main-process/agent/utility.ts`、`apps/zhiji-desktop/e2e/desktop.spec.ts`、`VERSION`、`README.md`、`PROJECT_STATUS.md`
+- **改动摘要**: DSH 发布包不再被 Vite 内联到主进程和 Utility Process bundle；生产 asar 同时带入 DSH 运行时及 Windows FFI 依赖，保留包自己的 `package.json` 相对解析，并按 Electron Utility Process 契约从 `process.parentPort` 接收端口，使开发启动、打包启动和 Agent 会话创建都能正常工作。此前启动时会因找不到 `../package.json`、外置的 `@deepseek-ai/dsh-session`，或错误读取 `electron.parentPort` 直接退出，桌面日志闭环和 Agent 均无法使用。
+
 ## [2026-08-20] [功能] 接入 DSH Agent 会话持久化与备份生命周期（v1.27.18 -> v1.28.0）
 
 - **受影响文件**: `apps/zhiji-desktop/` 的 DSH JSONL 会话持久化、重启列表/resume 协议、数据目录备份校验与回归测试；桌面架构、Skill 兼容矩阵、DSH 接入说明；`docs/specs/2026-08-20-deepseek-harness-agent-architecture.md`、`PROJECT_STATUS.md`、`PROGRESS.md`、`VERSION`、`README.md`
