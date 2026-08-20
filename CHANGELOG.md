@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20 23:46] [修复] safeStorage 密文失配不再阻断桌面端启动（v2.0.0 -> v2.0.1）
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/infrastructure/credentials/credential-store.ts`、`apps/zhiji-desktop/tests/integration/credential-store.test.ts`、`apps/zhiji-desktop/package.json`、`apps/zhiji-desktop/package-lock.json`、桌面架构与 DSH 接入说明、`PROJECT_STATUS.md`、`PROGRESS.md`、`README.md`、`VERSION`
+- **改动摘要**: Windows 安装迁移、切换 Electron userData 或旧密钥环失效时，`safeStorage.decryptString` 可能无法解开旧密文。此前该可恢复问题会冒泡为“暂时无法读取本地数据”，遮挡日志与复盘页面；现在保留原凭据文件并按“当前没有可用 API Key”继续启动，用户可在设置页重新保存 Key，重新加密后恢复 Agent 与复盘 AI，不降低明文安全边界。
+
 ## [2026-08-20 23:12] [破坏性变更] 从桌面端移除主题思考，收敛复盘主链路（v1.28.3 -> v2.0.0）
 
 - **受影响文件**: `apps/zhiji-desktop/` 的主题导航、页面、复盘页跳转按钮、IPC/Preload API、主题服务/仓储/会话 checkpoint、提示词、DSH 主题工具与对应测试；桌面架构、兼容矩阵、DSH 接入说明；`docs/specs/2026-08-20-deepseek-harness-agent-architecture.md`、`PROJECT_STATUS.md`、`PROGRESS.md`、`README.md`、`VERSION`

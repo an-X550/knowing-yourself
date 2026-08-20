@@ -59,5 +59,11 @@
 - [x] 无 API Key 的恢复路径（v1.28.2）：模型错误仍由 Main Process 中文化，Agent 页面新增“打开设置”按钮；不把 Key 暴露给 Renderer，不增加第二套设置真相。
 - [x] 依据第一性原理移除桌面端主题思考：删除导航、页面、复盘页跳转按钮、IPC/Preload API、主题服务/仓储/会话 checkpoint、提示词、主题 DSH 工具及其测试；日志、每日反馈、周/月/项目/年度复盘主链路保持不变。
 - [x] 旧 `topics/` 与 `runtime/topic-sessions/` 用户数据不主动删除；Skill/CLI 侧主题契约和 WorkBuddy 路由不修改。D2 主题会话迁移取消，不再为非核心辅助能力维护第二套协议。
-- [x] 当前验证：`npm run test:e2e` 1 passed；`npm test` 51 files / 285 tests；`npm run typecheck`；`npm run lint` 0 error / 6 既有 warning；`npm run package` 均通过。
+- [x] 当前验证：`npm run test:e2e` 1 passed（重跑通过）；`npm test` 51 files / 286 tests；`npm run typecheck`；`npm run lint` 0 error / 6 既有 warning；`npm run package` 均通过。
 - [ ] 人工完成 Windows 安装/升级/卸载保留数据矩阵，并观察真实 Agent 多步任务。
+
+## DeepSeek Harness Agent 阶段 F：API 凭据恢复（2026-08-20，已完成）
+
+- [x] 复现并定位截图错误：凭据密文复制到另一份 Electron `userData` 或密钥环变化后，`safeStorage.decryptString` 失败；此前异常会沿 `settings:get` 冒泡为“暂时无法读取本地数据”。
+- [x] `CredentialStore` 仅将密文解密失败视为当前 API Key 不可用，保留原 `credentials.json`，不降级明文、不删除数据；设置页可以继续加载并重新保存 API Key。
+- [x] 回归覆盖密文失配不崩溃且凭据文件仍保留；focused 6 tests、全量 51 files / 286 tests、typecheck、lint（0 error / 6 既有 warning）、package 和打包 E2E（1 passed）均通过。

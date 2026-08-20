@@ -5,7 +5,7 @@ last_updated: 2026-08-20
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：2.0.0
+**当前版本**：2.0.1
 
 ## 项目概述
 
@@ -49,7 +49,7 @@ last_updated: 2026-08-20
 | 运行快路径 | 已完成 | 日反馈优先复用已有反馈；复盘优先消费沉淀物和证据包，仅在冲突或引用缺失时扩大读取范围。 |
 | 用户版分发与边界 | 已完成 WorkBuddy 入口同步；真实用户部署待验收 | overlay、manifest、导出链路、Codex 日志路由、Windows Stop Hook、年度目录和分发边界测试已具备。用户版现包含与主项目逐字一致的 WorkBuddy 多通道入口，以及可由 AI 执行、但保留人类授权的 WorkBuddy/飞书智能体/飞书云文档/滴答 MCP 部署说明；不包含维护者的 open_id、目录 token、清单 ID、凭证、状态或个人远程偏好。仍需真实用户按说明完成一次脱敏部署验收。 |
 | 用户版浏览入口 | 已完成 | `zhiji-user/` 的 `index.html`、`guide.html` 与 `setup.html` 由 overlay 和 manifest 受控导出，分别面向首次了解、完整使用说明与 WorkBuddy 飞书智能体/飞书云文档/滴答设置；HTML 只承担离线阅读与导航，Markdown 保留技术细节。 |
-| Windows 桌面客户端 | 核心 Skill 用户闭环、日志完整性、复盘能力和 Agent 会话数据生命周期已完成；2026-08-14 全面审计优化（P0+P1）已落地；目标用户理解测试和安装矩阵待人工验收 | 一级导航为开始、Agent、日志、复盘、项目、设置；桌面端不再承载主题思考。桌面端不运行 Claude Skill/Agent，而由 Main Process 通过受校验的结构化契约实现同等复盘行为：每日反馈现按 Skill 的昨日闭环、单一盲点、可选历史连接、单一原子行动与认知追踪格式确定性排版；日志质量检查按 A-D 分析就绪度、六步法、重复模式和一项改进输出。反馈与复盘在前端安全渲染标题、引用、列表和表格，不再裸显 Markdown 符号或执行原始 HTML。个人背景仅在用户明确开启后注入 AI；数据目录、可验证备份、安全 IPC 和 OpenAI 兼容接口保持不变。2026-08-14 审计优化落地：首页意图路由整体删除（用户拍板）；全部用户可见错误中文化、网络层加固；契约类型归位 shared 与返回类型命名化；新鲜度逻辑抽 shared 去重；五个未使用依赖与 react-query 死接线移除；D1-D6 漂移点全部登记入兼容矩阵与契约对照表。阶段 C 的 Agent 正式工作流仍复用既有日志、每日反馈、周/月复盘和洞察服务；阶段 D1 新增官方 DSH JSONL 会话持久化、重启列表/resume、数据目录迁移和备份损坏校验，不改变专业页面职责。v1.28.1 修复生产 asar 的 DSH 依赖与 Utility Process 启动链；v1.28.2 在 Agent 遇到 API Key 缺失时提供直达设置页的恢复入口；v2.0.0 按第一性原理移除主题思考桌面入口及其运行时接入，历史主题数据不删除，Skill/CLI 侧能力不变。验收门：`npm test` 51 files / 285 tests、`npm run typecheck`、`npm run lint` 0 error / 6 既有 warning、`npm run package` 和打包后 `npm run test:e2e` 1 passed；独立假说台账、关闭窗口草稿保护、合并恢复、安装/升级/卸载和 Windows 10 仍未实现或验证。 |
+| Windows 桌面客户端 | 核心 Skill 用户闭环、日志完整性、复盘能力和 Agent 会话数据生命周期已完成；2026-08-14 全面审计优化（P0+P1）已落地；目标用户理解测试和安装矩阵待人工验收 | 一级导航为开始、Agent、日志、复盘、项目、设置；桌面端不再承载主题思考。桌面端不运行 Claude Skill/Agent，而由 Main Process 通过受校验的结构化契约实现同等复盘行为：每日反馈现按 Skill 的昨日闭环、单一盲点、可选历史连接、单一原子行动与认知追踪格式确定性排版；日志质量检查按 A-D 分析就绪度、六步法、重复模式和一项改进输出。反馈与复盘在前端安全渲染标题、引用、列表和表格，不再裸显 Markdown 符号或执行原始 HTML。个人背景仅在用户明确开启后注入 AI；数据目录、可验证备份、安全 IPC 和 OpenAI 兼容接口保持不变。2026-08-14 审计优化落地：首页意图路由整体删除（用户拍板）；全部用户可见错误中文化、网络层加固；契约类型归位 shared 与返回类型命名化；新鲜度逻辑抽 shared 去重；五个未使用依赖与 react-query 死接线移除；D1-D6 漂移点全部登记入兼容矩阵与契约对照表。阶段 C 的 Agent 正式工作流仍复用既有日志、每日反馈、周/月复盘和洞察服务；阶段 D1 新增官方 DSH JSONL 会话持久化、重启列表/resume、数据目录迁移和备份损坏校验，不改变专业页面职责。v1.28.1 修复生产 asar 的 DSH 依赖与 Utility Process 启动链；v1.28.2 在 Agent 遇到 API Key 缺失时提供直达设置页的恢复入口；v2.0.0 按第一性原理移除主题思考桌面入口及其运行时接入，历史主题数据不删除，Skill/CLI 侧能力不变；v2.0.1 在 safeStorage 密文失配时保留数据并让设置页恢复，不再阻断本地日志与复盘页面。验收门：`npm test` 51 files / 286 tests、`npm run typecheck`、`npm run lint` 0 error / 6 既有 warning、`npm run package` 和打包后 `npm run test:e2e` 1 passed；独立假说台账、关闭窗口草稿保护、合并恢复、安装/升级/卸载和 Windows 10 仍未实现或验证。 |
 | DeepSeek Harness Agent 升级 | 阶段 0、A、B、C、D1 已完成；阶段 E 已完成桌面主题范围清理，D2 不适用 | DSH `0.1.0-rc.8` 发布包在独立 Electron Utility Process 运行，Main Process 以 MessagePort 代理模型并独占 API Key。Agent 可通过 Main Process Zod 校验的高层工具读取脱敏日志/复盘/项目/验证模式、受控搜索与读源；阶段 C 已接入日志创建/更新、每日反馈及周期/洞察复盘的预览—页面确认—生成链路，阶段 D1 已接入官方 JSONL 会话持久化、重启后的列表与 `resume`，并纳入数据目录迁移、备份路径白名单和 DSH 事件校验。生产 asar 的 DSH 依赖和 Utility Process 启动链已修复；无 API Key 时 Agent 错误可直达设置页。正式结果以既有页面展示，不暴露路径、URL、Shell、任意文件或写入捷径。桌面端不再初始化主题服务或注册主题 DSH 工具；已有主题数据不主动删除，Skill/CLI 侧继续独立运行。接入面和验证证据见 [`dsh-integration-notes`](apps/zhiji-desktop/docs/dsh-integration-notes.md)。 |
 | 质量基线 | 已完成 | 覆盖日反馈、周/月/项目/年度复盘、人生设计和用户版的组件边界；真实样本仍需持续补齐。 |
 | 主题思考库 | 桌面端已移除；Skill/CLI 侧保留 | 桌面端不再提供主题页面、IPC、会话、仓储或 DSH 主题工具；用户已有 `topics/` 与旧 checkpoint 数据不删除、不主动迁移，继续讨论和沉淀使用 Skill/CLI 侧契约。 |
@@ -64,6 +64,7 @@ last_updated: 2026-08-20
 
 - [x] 按 DeepSeek Harness Agent 架构完成阶段 0/A/B/C/D1/E：Utility Process、DSH 会话桥、模型传输、Agent 页面、日志/复盘只读与正式工作流工具、JSONL 会话持久化、重启 resume、备份生命周期和桌面主题范围清理均已实现；日志与复盘主链路保留。
 - [x] 阶段 D2 取消：主题思考不是桌面端复盘核心闭环；桌面端主题入口及运行时已删除，已有主题数据不主动删除，Skill/CLI 侧能力不受影响。
+- [x] v2.0.1 凭据恢复：safeStorage 无法解开旧密文时不再阻断 `settings:get` 和本地数据加载；凭据文件保留，设置页重新保存 API Key 后恢复当前密钥环。
 - [ ] 连续运行至少 5 次真实 `/daily-review`，验证 `verified-patterns.md` 写回质量。
 - [ ] 完成至少 3 次真实闭环缺口检查，记录建议是否可执行、是否被忽略为噪声、是否漏掉必要动作；未出现重复证据前不调整阈值或增加类别。
 - [ ] 以真实样本观察周/月/项目复盘；仅在出现可复现的重复、证据缺口或行动不可检查时修复。
