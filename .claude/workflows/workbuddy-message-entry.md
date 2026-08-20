@@ -26,6 +26,8 @@ machine_rules:
   - policy.no_template_duplication
   - policy.absolute_project_root
   - policy.memory_not_delivery
+  - policy.daily_log_fast_path
+  - policy.local_markdown_authoritative
 ---
 
 # WorkBuddy 多通道运行入口
@@ -44,6 +46,7 @@ machine_rules:
 8. 含糊消息只追问一个会改变任务对象、日期、周期或项目主题的问题；在得到答案前不分析、不写入。`policy.single_clarification`
 9. 只有当前路由明确写入并按其既有规则重新读取到非空、结构合格的文件后，才可回复“已保存”。失败、缺少材料或复读校验失败时如实说明，绝不冒充成功。外部分发只按共享分发契约单列实际结果。`policy.readback_required`
 10. WorkBuddy 的 `.workbuddy/memory`、`MEMORY.md` 或其他平台记忆只能是平台自身的补充记录，永远不是 `paths.md` 声明的日志、反馈、报告、验证沉淀或分发状态。写入平台记忆不得替代业务写入、触发分发或成为“已保存”的证据。`policy.memory_not_delivery`
+11. `paths.md` 声明的本地日志、反馈和报告一律以 UTF-8 Markdown（`.md`）读写；不得在项目目录创建、改名或替换为 `.doc` / `.docx`。飞书分发可以将已复读的 Markdown **导入为飞书在线文档**，但那只是远端副本，不能改变本地 Markdown 权威文件，也不得上传原始日志。`policy.local_markdown_authoritative`
 
 ## 路由表
 
@@ -69,6 +72,14 @@ machine_rules:
 若本轮没有“仅本地”，新的正式反馈保存、复读和验证沉淀完成后，必须按共享分发契约执行 `distribute output.daily_feedback <resolved-local-path>`。不能只回复反馈而省略分发，也不能把旧反馈文件伪装成本轮新写入。
 
 不得在本文件、WorkBuddy 固定提示词或回复中复制日反馈输出模板。`policy.no_template_duplication`
+
+### WorkBuddy 单日日志快路径
+
+本路由的价值是“本地 Markdown 反馈 + 两个已授权的外部副作用”，不是探索项目结构。开始后应一次并行读取路由所列的最小权威材料；日期已从消息解析时，直接使用 `paths.md` 的 `input.daily_journal`、`output.daily_feedback` 和 `context.verified_patterns` 解析目标，禁止目录枚举、通配猜测、读取无关历史反馈，或为了确认路径而探查整月日志。
+
+本地原文、反馈和必要验证完成写入与复读后，立即进入既有 `distribute output.daily_feedback <resolved-local-path>`。分发时只读取一次配置与对应的单个状态分支；以程序化 JSON 读改写入该分支，禁止浏览完整状态、反复检查 CLI/配置，或把状态结构当作分析材料。飞书与滴答可独立执行；仍保留各自的失败隔离、幂等和写后落状态。`policy.daily_log_fast_path`
+
+除确有失败、缺少授权或证据缺口外，禁止为“更全面”增加探索性工具调用；调用次数不是成功证据，业务文件复读和各渠道实际结果才是。
 
 ## 外部分发适配边界
 

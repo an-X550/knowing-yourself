@@ -126,10 +126,16 @@ if ($failures.Count -eq 0) {
   Assert-Contains $prompt '“仅本地”仍是单次退出' 'prompt must preserve the per-request local-only opt-out'
   Assert-Contains $entry 'policy.absolute_project_root' 'entry must resolve business paths from a trusted absolute project root'
   Assert-Contains $entry 'policy.memory_not_delivery' 'entry must reject WorkBuddy memory as a business deliverable'
+  Assert-Contains $entry 'policy.daily_log_fast_path' 'entry must define a bounded fast path for WorkBuddy daily logs'
+  Assert-Contains $entry 'policy.local_markdown_authoritative' 'entry must keep local business files authoritative Markdown'
+  Assert-Contains $entry '禁止目录枚举' 'daily fast path must forbid exploratory directory scans'
+  Assert-Contains $entry '不得在项目目录创建、改名或替换为 `.doc` / `.docx`' 'entry must forbid local Word output'
   Assert-Contains $prompt '<知己项目根目录>\.claude\workflows\workbuddy-message-entry.md' 'prompt must read the entry through an absolute project path'
   Assert-Contains $prompt '[知己]' 'prompt must provide a channel-independent explicit trigger'
   Assert-Contains $prompt '不依赖当前会话工作目录' 'prompt must enforce absolute project-root resolution'
   Assert-Contains $prompt '不是日志、反馈、报告、分发状态或成功证据' 'prompt must not treat platform memory as the requested deliverable'
+  Assert-Contains $prompt 'WorkBuddy 单日日志快路径' 'prompt must direct WorkBuddy to the daily fast path'
+  Assert-Contains $prompt '只能读写 UTF-8 `.md`' 'prompt must preserve local Markdown authority'
   Assert-NotContains $prompt '工作目录必须限制为项目根目录' 'prompt must not assume WorkBuddy remote assistants can change workspace'
 
   $legacyEntry = Get-Content -LiteralPath $legacyEntryPath -Raw -Encoding UTF8
