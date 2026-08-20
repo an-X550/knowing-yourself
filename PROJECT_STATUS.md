@@ -5,7 +5,7 @@ last_updated: 2026-08-20
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：1.28.1
+**当前版本**：1.28.2
 
 ## 项目概述
 
@@ -49,8 +49,8 @@ last_updated: 2026-08-20
 | 运行快路径 | 已完成 | 日反馈优先复用已有反馈；复盘优先消费沉淀物和证据包，仅在冲突或引用缺失时扩大读取范围。 |
 | 用户版分发与边界 | 已完成 WorkBuddy 入口同步；真实用户部署待验收 | overlay、manifest、导出链路、Codex 日志路由、Windows Stop Hook、年度目录和分发边界测试已具备。用户版现包含与主项目逐字一致的 WorkBuddy 多通道入口，以及可由 AI 执行、但保留人类授权的 WorkBuddy/飞书智能体/飞书云文档/滴答 MCP 部署说明；不包含维护者的 open_id、目录 token、清单 ID、凭证、状态或个人远程偏好。仍需真实用户按说明完成一次脱敏部署验收。 |
 | 用户版浏览入口 | 已完成 | `zhiji-user/` 的 `index.html`、`guide.html` 与 `setup.html` 由 overlay 和 manifest 受控导出，分别面向首次了解、完整使用说明与 WorkBuddy 飞书智能体/飞书云文档/滴答设置；HTML 只承担离线阅读与导航，Markdown 保留技术细节。 |
-| Windows 桌面客户端 | 核心 Skill 用户闭环、日志完整性和 Agent 会话数据生命周期已完成；2026-08-14 全面审计优化（P0+P1）已落地；目标用户理解测试和安装矩阵待人工验收 | 一级导航保持开始、日志、复盘、主题思考、项目、设置，Agent 为额外工作区。桌面端不运行 Claude Skill/Agent，而由 Main Process 通过受校验的结构化契约实现同等产品行为：每日反馈现按 Skill 的昨日闭环、单一盲点、可选历史连接、单一原子行动与认知追踪格式确定性排版；日志质量检查按 A-D 分析就绪度、六步法、重复模式和一项改进输出。反馈与复盘在前端安全渲染标题、引用、列表和表格，不再裸显 Markdown 符号或执行原始 HTML。个人背景仅在用户明确开启后注入 AI；数据目录、可验证备份、安全 IPC 和 OpenAI 兼容接口保持不变。2026-08-14 审计优化落地：首页意图路由整体删除（用户拍板）；全部用户可见错误中文化、网络层加固；主题思考 v2（带上下文跳转、合并式更新、提案持久化到 checkpoint）；契约类型归位 shared 与返回类型命名化；新鲜度逻辑抽 shared 去重；五个未使用依赖与 react-query 死接线移除；D1-D6 漂移点全部登记入兼容矩阵与契约对照表（D2 仅登记不实现）。阶段 C 的 Agent 正式工作流仍复用既有日志、每日反馈、周/月复盘和洞察服务；阶段 D1 新增官方 DSH JSONL 会话持久化、重启列表/resume、数据目录迁移和备份损坏校验，不改变专业页面职责。验收门：npm test 56 files / 326 tests、tsc --noEmit、lint 0 error。独立假说台账、旧格式主题会话迁移、关闭窗口草稿保护、合并恢复、安装/升级/卸载和 Windows 10 仍未实现或验证。 |
-| DeepSeek Harness Agent 升级 | 阶段 0、A、B、C、D1 已完成；阶段 D2 待实施 | DSH `0.1.0-rc.8` 发布包在独立 Electron Utility Process 运行，Main Process 以 MessagePort 代理模型并独占 API Key。Agent 可通过 Main Process Zod 校验的高层工具读取脱敏日志/复盘/项目/主题/验证模式、受控搜索与读源；阶段 C 已接入日志创建/更新、每日反馈及周期/洞察复盘的预览—页面确认—生成链路，阶段 D1 已接入官方 JSONL 会话持久化、重启后的列表与 `resume`，并纳入数据目录迁移、备份路径白名单和 DSH 事件校验。正式结果以既有页面展示，不暴露路径、URL、Shell、任意文件或写入捷径。主题 `TopicSessionStore` 暂保留，等待 DSH 具备主题提案/差异/确认的同等闭环和真实使用证据后再迁移。接入面和验证证据见 [`dsh-integration-notes`](apps/zhiji-desktop/docs/dsh-integration-notes.md)。 |
+| Windows 桌面客户端 | 核心 Skill 用户闭环、日志完整性和 Agent 会话数据生命周期已完成；2026-08-14 全面审计优化（P0+P1）已落地；目标用户理解测试和安装矩阵待人工验收 | 一级导航保持开始、日志、复盘、主题思考、项目、设置，Agent 为额外工作区。桌面端不运行 Claude Skill/Agent，而由 Main Process 通过受校验的结构化契约实现同等产品行为：每日反馈现按 Skill 的昨日闭环、单一盲点、可选历史连接、单一原子行动与认知追踪格式确定性排版；日志质量检查按 A-D 分析就绪度、六步法、重复模式和一项改进输出。反馈与复盘在前端安全渲染标题、引用、列表和表格，不再裸显 Markdown 符号或执行原始 HTML。个人背景仅在用户明确开启后注入 AI；数据目录、可验证备份、安全 IPC 和 OpenAI 兼容接口保持不变。2026-08-14 审计优化落地：首页意图路由整体删除（用户拍板）；全部用户可见错误中文化、网络层加固；主题思考 v2（带上下文跳转、合并式更新、提案持久化到 checkpoint）；契约类型归位 shared 与返回类型命名化；新鲜度逻辑抽 shared 去重；五个未使用依赖与 react-query 死接线移除；D1-D6 漂移点全部登记入兼容矩阵与契约对照表（D2 仅登记不实现）。阶段 C 的 Agent 正式工作流仍复用既有日志、每日反馈、周/月复盘和洞察服务；阶段 D1 新增官方 DSH JSONL 会话持久化、重启列表/resume、数据目录迁移和备份损坏校验，不改变专业页面职责。v1.28.1 修复生产 asar 的 DSH 依赖与 Utility Process 启动链；v1.28.2 在 Agent 遇到 API Key 缺失时提供直达设置页的恢复入口。验收门：npm test 56 files / 326 tests、tsc --noEmit、lint 0 error。独立假说台账、旧格式主题会话迁移、关闭窗口草稿保护、合并恢复、安装/升级/卸载和 Windows 10 仍未实现或验证。 |
+| DeepSeek Harness Agent 升级 | 阶段 0、A、B、C、D1 已完成；阶段 D2 待实施，阶段 E 收敛中 | DSH `0.1.0-rc.8` 发布包在独立 Electron Utility Process 运行，Main Process 以 MessagePort 代理模型并独占 API Key。Agent 可通过 Main Process Zod 校验的高层工具读取脱敏日志/复盘/项目/主题/验证模式、受控搜索与读源；阶段 C 已接入日志创建/更新、每日反馈及周期/洞察复盘的预览—页面确认—生成链路，阶段 D1 已接入官方 JSONL 会话持久化、重启后的列表与 `resume`，并纳入数据目录迁移、备份路径白名单和 DSH 事件校验。生产 asar 的 DSH 依赖和 Utility Process 启动链已修复；无 API Key 时 Agent 错误可直达设置页。正式结果以既有页面展示，不暴露路径、URL、Shell、任意文件或写入捷径。主题 `TopicSessionStore` 暂保留，等待 DSH 具备主题提案/差异/确认的同等闭环和真实使用证据后再迁移。接入面和验证证据见 [`dsh-integration-notes`](apps/zhiji-desktop/docs/dsh-integration-notes.md)。 |
 | 质量基线 | 已完成 | 覆盖日反馈、周/月/项目/年度复盘、人生设计和用户版的组件边界；真实样本仍需持续补齐。 |
 | 主题思考库 | 已完成首轮审查 | 首稿先给可确认主线；确认后才按用途写入 0–6 或短结构。新认知先分类其影响，再重组受影响的当前论证；篇幅按理解所需决定，默认执行第一性原理审查与合并更新。 |
 | 收藏吃灰库 | 已完成 | 用户明确收录时按标题、摘要、关键词、原文/摘录、链接五段式保存，并有主项目与用户版路由回归。 |

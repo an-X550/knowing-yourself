@@ -5,6 +5,11 @@ last_updated: 2026-08-20
 
 # CHANGELOG - 改动记录
 
+## [2026-08-20 22:20] [修复] Agent 缺少 API Key 时提供设置恢复入口（v1.28.1 -> v1.28.2）
+
+- **受影响文件**: `apps/zhiji-desktop/src/renderer/pages/agent-page.tsx`、`apps/zhiji-desktop/tests/unit/agent-page.test.tsx`、`apps/zhiji-desktop/docs/dsh-integration-notes.md`、`PROGRESS.md`、`PROJECT_STATUS.md`、`VERSION`、`README.md`
+- **改动摘要**: Agent 仍由 Main Process 负责密钥读取和错误映射；当模型明确返回缺少 API Key 时，页面显示“打开设置”恢复动作，用户无需离开 Agent 页面自行寻找配置入口。未改变密钥存储、日志/复盘确认门或任何正式数据写入路径。
+
 ## [2026-08-20 21:06] [修复] 修复桌面端 DSH 主进程启动崩溃（v1.28.0 -> v1.28.1）
 
 - **受影响文件**: `apps/zhiji-desktop/vite.main.config.ts`、`apps/zhiji-desktop/forge.config.ts`、`apps/zhiji-desktop/src/main-process/agent/utility.ts`、`apps/zhiji-desktop/e2e/desktop.spec.ts`、`VERSION`、`README.md`、`PROJECT_STATUS.md`
