@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22] [修复] 修复 Agent 受控联网在 Windows 网络栈下失败 (v2.4.1 -> v2.4.2)
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/bootstrap.ts`、`apps/zhiji-desktop/src/main-process/infrastructure/web/web-search-service.ts`、联网回归验证；`docs/2026-08-22-agent-web-connectivity-analysis-and-plan.md`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
+- **改动摘要**: 修复 DeepSeek Agent 已发起 `web.search`、但 Node/Undici 访问 DuckDuckGo 在本机连接超时而返回“联网内容暂时不可用”的问题。桌面端现在通过 Electron 官方 `net.fetch` 复用 Chromium 网络栈、系统代理/WPAD 与 HTTPS 隧道；不改变工具契约、来源会话绑定、API Key 隔离或 renderer 网络边界。
+- **验证结果**: `npm test` 52 files / 296 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 6 既有 warning；打包 Main Process 对 DuckDuckGo 与 Open-Meteo 的联网冒烟均返回 HTTP 200；`npm run test:e2e` 1 passed。
+
 ## [2026-08-22] [修复] 修复桌面端 Agent 打包后 Utility 启动失败 (v2.4.0 -> v2.4.1)
 
 - **受影响文件**: `apps/zhiji-desktop/forge.config.ts`、Agent Utility/Main Process 启动错误链、打包回归；`docs/reviews/2026-08-22-desktop-agent-packaged-start-failure.md`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
