@@ -5,7 +5,7 @@ last_updated: 2026-08-21
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：2.0.4
+**当前版本**：2.0.5
 
 ## 项目概述
 
@@ -51,6 +51,7 @@ last_updated: 2026-08-21
 | 用户版浏览入口 | 已完成 | `zhiji-user/` 的 `index.html`、`guide.html` 与 `setup.html` 由 overlay 和 manifest 受控导出，分别面向首次了解、完整使用说明与 WorkBuddy 飞书智能体/飞书云文档/滴答设置；HTML 只承担离线阅读与导航，Markdown 保留技术细节。 |
 | Windows 桌面客户端 | 核心 Skill 用户闭环、日志完整性、复盘能力和 Agent 会话数据生命周期已完成；2026-08-14 全面审计优化（P0+P1）已落地；目标用户理解测试和安装矩阵待人工验收 | 一级导航为开始、Agent、日志、复盘、项目、设置；桌面端不再承载主题思考。桌面端不运行 Claude Skill/Agent，而由 Main Process 通过受校验的结构化契约实现同等复盘行为：每日反馈现按 Skill 的昨日闭环、单一盲点、可选历史连接、单一原子行动与认知追踪格式确定性排版；日志质量检查按 A-D 分析就绪度、六步法、重复模式和一项改进输出。反馈与复盘在前端安全渲染标题、引用、列表和表格，不再裸显 Markdown 符号或执行原始 HTML。个人背景仅在用户明确开启后注入 AI；数据目录、可验证备份、安全 IPC 和 OpenAI 兼容接口保持不变。2026-08-14 审计优化落地：首页意图路由整体删除（用户拍板）；全部用户可见错误中文化、网络层加固；契约类型归位 shared 与返回类型命名化；新鲜度逻辑抽 shared 去重；五个未使用依赖与 react-query 死接线移除；D1-D6 漂移点全部登记入兼容矩阵与契约对照表。阶段 C 的 Agent 正式工作流仍复用既有日志、每日反馈、周/月复盘和洞察服务；阶段 D1 新增官方 DSH JSONL 会话持久化、重启列表/resume、数据目录迁移和备份损坏校验，不改变专业页面职责。v1.28.1 修复生产 asar 的 DSH 依赖与 Utility Process 启动链；v1.28.2 在 Agent 遇到 API Key 缺失时提供直达设置页的恢复入口；v2.0.0 按第一性原理移除主题思考桌面入口及其运行时接入，历史主题数据不删除，Skill/CLI 侧能力不变；v2.0.1 在 safeStorage 密文失配时保留数据并让设置页恢复，不再阻断本地日志与复盘页面；v2.0.2 更新 DeepSeek V4 模型默认值、迁移旧模型并将连接测试改为非流式短请求；v2.0.3 修复 Agent 工具名不符合 DeepSeek API 约束，DeepSeek Agent 关闭思考模式以避免桥接协议缺少 `reasoning_content`；v2.0.4 修复 Agent 对相对日期的错误回答，增加明确确认后的会话回收站删除，并支持 Enter 发送、Shift+Enter 换行。验收门：`npm test` 51 files / 293 tests、`npm run typecheck`、`npm run lint` 0 error / 6 既有 warning、`npm run package` 和打包后 `npm run test:e2e` 1 passed；独立假说台账、关闭窗口草稿保护、合并恢复、安装/升级/卸载和 Windows 10 仍未实现或验证。 |
 | DeepSeek Harness Agent 升级 | 阶段 0、A、B、C、D1 已完成；阶段 E 已完成桌面主题范围清理，D2 不适用 | DSH `0.1.0-rc.8` 发布包在独立 Electron Utility Process 运行，Main Process 以 MessagePort 代理模型并独占 API Key。Agent 可通过 Main Process Zod 校验的高层工具读取脱敏日志/复盘/项目/验证模式、受控搜索与读源；阶段 C 已接入日志创建/更新、每日反馈及周期/洞察复盘的预览—页面确认—生成链路，阶段 D1 已接入官方 JSONL 会话持久化、重启后的列表与 `resume`，并纳入数据目录迁移、备份路径白名单和 DSH 事件校验。生产 asar 的 DSH 依赖和 Utility Process 启动链已修复；无 API Key 时 Agent 错误可直达设置页。正式结果以既有页面展示，不暴露路径、URL、Shell、任意文件或写入捷径。桌面端不再初始化主题服务或注册主题 DSH 工具；已有主题数据不主动删除，Skill/CLI 侧继续独立运行。接入面和验证证据见 [`dsh-integration-notes`](apps/zhiji-desktop/docs/dsh-integration-notes.md)。 |
+| 知己 DSH 独立插件 | S0 架构与执行规划已完成；S1 待单独确认 | 放弃把桌面端改造成 DSH 插件平台，改为将当前知己复盘能力转化为独立 Bundle，直接使用用户已有 DSH Runtime 与 Web UI。桌面 React、固定 Runtime 和正式仓储保持不变；插件不修改 DSH 源码、不建设市场或同步工具，也不要求与桌面端持续源码同构。S1 只验证一个可安装、运行、移除的每日复盘 MVP，详见 [`zhiji-dsh-plugin-architecture`](docs/specs/2026-08-21-zhiji-dsh-plugin-architecture.md)。 |
 | 质量基线 | 已完成 | 覆盖日反馈、周/月/项目/年度复盘、人生设计和用户版的组件边界；真实样本仍需持续补齐。 |
 | 主题思考库 | 桌面端已移除；Skill/CLI 侧保留 | 桌面端不再提供主题页面、IPC、会话、仓储或 DSH 主题工具；用户已有 `topics/` 与旧 checkpoint 数据不删除、不主动迁移，继续讨论和沉淀使用 Skill/CLI 侧契约。 |
 | 收藏吃灰库 | 已完成 | 用户明确收录时按标题、摘要、关键词、原文/摘录、链接五段式保存，并有主项目与用户版路由回归。 |
@@ -58,7 +59,7 @@ last_updated: 2026-08-21
 
 ## 待办事项
 
-当前仍有引用价值的实现规格：[`audit-cleanup`](docs/specs/audit-cleanup.md)、[`deepseek-harness-agent-architecture`](docs/specs/2026-08-20-deepseek-harness-agent-architecture.md)、[`directory-boundary-tightening`](docs/specs/directory-boundary-tightening.md)、[`evolution-roadmap`](docs/specs/evolution-roadmap.md)、[`git-commit-escalation-flow`](docs/specs/git-commit-escalation-flow.md)、[`monthly-perspective-audit`](docs/specs/monthly-perspective-audit-2026-07-08.md)、[`monthly-processor-evidence-packets`](docs/specs/monthly-processor-evidence-packets.md)、[`monthly-synthesis-theme-compression`](docs/specs/monthly-synthesis-theme-compression.md)、[`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。
+当前仍有引用价值的实现规格：[`audit-cleanup`](docs/specs/audit-cleanup.md)、[`deepseek-harness-agent-architecture`](docs/specs/2026-08-20-deepseek-harness-agent-architecture.md)、[`zhiji-dsh-plugin-architecture`](docs/specs/2026-08-21-zhiji-dsh-plugin-architecture.md)、[`directory-boundary-tightening`](docs/specs/directory-boundary-tightening.md)、[`evolution-roadmap`](docs/specs/evolution-roadmap.md)、[`git-commit-escalation-flow`](docs/specs/git-commit-escalation-flow.md)、[`monthly-perspective-audit`](docs/specs/monthly-perspective-audit-2026-07-08.md)、[`monthly-processor-evidence-packets`](docs/specs/monthly-processor-evidence-packets.md)、[`monthly-synthesis-theme-compression`](docs/specs/monthly-synthesis-theme-compression.md)、[`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。
 
 ### 高优先级
 
@@ -69,6 +70,8 @@ last_updated: 2026-08-21
 - [x] v2.0.3 Agent 连接恢复：DeepSeek 工具函数名在 API 边界转换为合法格式并映射回 DSH 内部名称；Agent 使用非思考模式，避免工具回合缺少 `reasoning_content`。
 - [x] v2.0.4 Agent 可用性恢复：每轮请求注入桌面端真实日期；会话可在确认后移入系统回收站；Enter 发送、Shift+Enter 换行。
 - [x] v2.0.4 打包版真实可用性验收：当前 API Key 可用；Enter 提问“今天星期几”得到本机正确星期；只读日志查询返回真实摘要；验收会话确认删除后进入回收站，重启不恢复，既有日志与复盘未改动。
+- [x] S0 知己 DSH 独立插件路线定稿：桌面端不再平台化；旧 P1-P4 取消，P0 证据保留；新架构和 S0-S4 执行计划明确直接使用 DSH Web UI，不建设同步工具或跨项目源码同构门禁。
+- [ ] S1 待用户单独确认：只实现可通过官方 Profile 机制安装、运行和移除的每日复盘 Bundle MVP；未确认前不创建插件代码、周期复盘、文件适配或发布链路。
 - [ ] 连续运行至少 5 次真实 `/daily-review`，验证 `verified-patterns.md` 写回质量。
 - [ ] 完成至少 3 次真实闭环缺口检查，记录建议是否可执行、是否被忽略为噪声、是否漏掉必要动作；未出现重复证据前不调整阈值或增加类别。
 - [ ] 以真实样本观察周/月/项目复盘；仅在出现可复现的重复、证据缺口或行动不可检查时修复。
@@ -141,3 +144,4 @@ last_updated: 2026-08-21
 | 2026-08-20 | 桌面端以 DSH 编排层升级为 Agent，现有知己内核继续掌握正式产物 | 用户目标是拥有能够连续理解、调用工具和多步执行的知己 Agent；最小替代不是恢复只负责跳转的意图路由。DSH 置于独立 Utility Process，现有 React 页面、领域服务、LangGraph、Schema、确认和本地安全边界继续保留；不采用 DSH Web UI，不给模型通用文件或 Shell 权限。 |
 | 2026-08-20 | DSH 阶段 D1 先做会话生命周期，主题迁移延后 | 实际需要先解决的是 Agent 重启后不丢上下文、数据根迁移不漏文件、备份损坏可判定；官方 JSONL persistence 与 `AgentRegistry.resume` 已能直接满足。当前 DSH 工具尚未覆盖主题提案、差异展示和确认沉淀，强制迁移会破坏已有主题闭环，因此保留 `TopicSessionStore`，把主题迁移作为 D2，待同等确认语义和真实使用证据出现后再做。每日分析、周复盘、月复盘及专业页面不受影响。 |
 | 2026-08-20 | 依据第一性原理移除桌面端主题思考 | 主题思考只是讨论后沉淀认识的辅助便利，不是复盘核心闭环；维护独立页面、会话、提案、确认和 DSH 工具的成本高于当前收益。因此删除桌面端主题入口与运行时链路，保留已有 `topics/` 与旧 checkpoint 数据，Skill/CLI 侧契约不变，D2 取消；日志、每日反馈、周/月复盘和项目链路保持不变。 |
+| 2026-08-21 | 知己能力改为独立 DSH 插件发行，不把桌面端改造成插件平台 | P0 证明官方 Profile/Bundle/CLI 可复用，但桌面端开放任意 Host 插件会引入信任、打包和产品定位成本。新路线保持桌面端 React 与固定 Runtime 不变，把当前复盘能力转化为仓库外 Bundle 并直接使用 DSH Web UI；第一版只验证每日复盘，不建设市场、同步工具或两端源码同构门禁。 |

@@ -5,6 +5,11 @@ last_updated: 2026-08-21
 
 # CHANGELOG - 改动记录
 
+## [2026-08-21 11:32] [文档] 将 DSH 扩展路线收敛为独立知己插件（v2.0.4 -> v2.0.5）
+
+- **受影响文件**: 独立 DSH 插件架构与执行计划、旧桌面插件平台文档、P0 证据引用、`PROJECT_STATUS.md`、`README.md`、`VERSION`
+- **改动摘要**: P0 已证明 DSH Profile/Bundle/CLI 路径可复用，但没有证据支持把知己桌面端改造成社区插件平台。新路线保持桌面 React、固定 Runtime 和正式仓储不变，把当前复盘能力转化为独立 Bundle，并直接使用 DSH Web UI；S1 只验证每日复盘 MVP。文档明确不建设同步工具、不要求两端源码持续同构，旧 P1-P4 标记为被取代。
+
 ## [2026-08-21 01:02] [修复] 修复知己 Agent 日期事实、会话删除和键盘发送（v2.0.3 -> v2.0.4）
 
 - **受影响文件**: Agent DSH/IPC/Preload/Renderer 链路、Agent 页面与回归测试、桌面架构与 DSH 接入说明、`PROJECT_STATUS.md`、`PROGRESS.md`、`README.md`、`VERSION`
