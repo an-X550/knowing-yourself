@@ -5,6 +5,12 @@ last_updated: 2026-08-21
 
 # CHANGELOG - 改动记录
 
+## [2026-08-21] [功能] 完成知己 DSH 独立插件 S1 每日复盘 Bundle MVP (v2.0.5 -> v2.1.0)
+
+- **受影响文件**: `apps/zhiji-dsh-plugin/`、S1 验证报告、架构与执行计划状态、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 新增一个独立、Skill-only 的 DSH Bundle。已经安装 DSH 的用户可以通过官方 Profile 机制安装插件，在 Web UI/官方 headless Runtime 中对会话内粘贴的单日日志获得事实与推断分离、单一洞察、单一行动和明天验证方式；插件不读取知己桌面端、不写正式报告、不使用 Host Tool、native dependency 或安装脚本。S1 已实测 add、加载、运行、remove 和移除后 Profile 重启，暂不进入 S2。
+- **验证结果**: 插件契约测试 4 passed；DSH `0.1.0-rc.8` 临时 Profile 官方 add → Bundle/Skill 加载 → 固定日志 keyless headless Runtime → remove → restart 全部通过。
+
 ## [2026-08-21 11:32] [文档] 将 DSH 扩展路线收敛为独立知己插件（v2.0.4 -> v2.0.5）
 
 - **受影响文件**: 独立 DSH 插件架构与执行计划、旧桌面插件平台文档、P0 证据引用、`PROJECT_STATUS.md`、`README.md`、`VERSION`

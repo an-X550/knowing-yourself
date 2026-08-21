@@ -1,6 +1,6 @@
 ---
 created: 2026-08-21
-status: 已采纳；S0 完成，S1 待用户单独确认
+status: 已采纳；S1 MVP 完成，S2 暂缓
 architecture: docs/specs/2026-08-21-zhiji-dsh-plugin-architecture.md
 evidence: docs/reviews/2026-08-21-dsh-plugin-p0-feasibility.md
 supersedes: docs/2026-08-20-dsh-plugin-platform-execution-plan.md
@@ -193,6 +193,8 @@ S1 完成后只允许三种结论：
 - **保持 MVP**：每日复盘有用，但暂无扩展证据；发布或内部保留，不继续堆功能。
 - **停止**：DSH 适配成本、输出体验或维护成本不值得；保留报告并移除实验接线。
 
+当前裁决：**保持 MVP**。Skill-only Bundle 已完成官方安装、运行和移除闭环，但本次没有可用的 `DEEPSEEK_API_KEY`，也没有真实用户连续使用证据；因此不把 keyless Runtime 证据扩大为模型效果或 S2 需求证据。
+
 ## 6. S2：周期与项目复盘扩展
 
 ### 6.1 进入条件
@@ -339,8 +341,6 @@ S1 已经真实完成安装、复盘和移除，且至少有一个明确理由�
 
 ## 13. 下一步
 
-S0 完成后停止。只有用户明确要求实施 S1，执行模型才开始创建插件 package 和每日复盘 MVP。
+S1 已完成并形成独立 package、fixture、契约测试和验证报告。当前保持 MVP，不执行 S2-S4；只有在真实 DSH 用户或可用模型运行中出现明确的周期复盘需求，才重新评估 S2。
 
-S1 的第一项工作不是铺设完整目录，而是用 DSH 官方公开教程确认最小 Bundle 形状，并选择当前知己每日复盘中真正需要转化的规则。完成 S1 后先展示实际 DSH 结果，再决定 S2。
-
-# 当前状态：S0 完成，等待用户单独确认 S1
+# 当前状态：S1 MVP 完成，保持 MVP；S2-S4 未执行

@@ -1,6 +1,6 @@
 ---
 created: 2026-08-21
-status: 已采纳；S0 文档阶段完成，S1 待单独确认
+status: 已采纳；S1 MVP 完成，S2 暂缓
 evidence: docs/reviews/2026-08-21-dsh-plugin-p0-feasibility.md
 supersedes: docs/specs/2026-08-20-dsh-plugin-platform-architecture.md
 ---
@@ -290,7 +290,7 @@ S1 优先使用本地、预构建、无安装脚本、无 native dependency 的 
 | 阶段 | 目标 | 当前裁决 |
 |---|---|---|
 | S0 | 新路线架构和执行规划，旧路线标记被取代 | 本文完成 |
-| S1 | 一个可安装、可运行、可移除的每日复盘 Bundle | 待用户单独确认后执行 |
+| S1 | 一个可安装、可运行、可移除的每日复盘 Bundle | 已完成；Skill-only MVP 通过官方 Profile add、运行、remove 和重启验证，暂不扩展 |
 | S2 | 周/月/项目复盘能力扩展 | 仅在 S1 证明价值后 |
 | S3 | 显式日志目录、范围聚合和可选保存 | 仅在出现文件使用需求后 |
 | S4 | 独立发布、兼容矩阵和用户安装文档 | 仅在插件能力可用后 |
@@ -342,4 +342,4 @@ S1 优先使用本地、预构建、无安装脚本、无 native dependency 的 
 - DSH Profile/插件管理：<https://github.com/deepseek-ai/deepseek-harness/blob/master/apps/cli/reference/README.md>
 - DSH Extension Cookbook：<https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/extension-cookbook.md>
 
-# 当前状态：新架构已采纳，等待单独确认 S1
+# 当前状态：新架构已采纳，S1 MVP 已完成；S2 暂缓，等待真实使用证据

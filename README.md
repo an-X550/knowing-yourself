@@ -4,7 +4,7 @@
 
 > 把日常记录变成更可靠的行动：看见模式，试一个小改变，再用结果校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v2.0.5-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v2.1.0-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ## 你能用它解决什么
@@ -45,6 +45,8 @@
 ```
 
 这就是最小闭环。先完成它，再考虑更长周期的复盘；没有行动和验证时，增加报告通常不会带来更多改变。
+
+已经安装 DeepSeek Harness 的用户，可以使用 [知己 DSH 独立插件](apps/zhiji-dsh-plugin/README.md)。它通过 DSH 官方 Profile 和 Web UI 接收会话中粘贴的单日日志，只返回一个有证据边界的洞察、一个小行动和明天的验证方式；不会读取知己桌面端或写入正式报告。
 
 ## 你可以怎样使用
 
