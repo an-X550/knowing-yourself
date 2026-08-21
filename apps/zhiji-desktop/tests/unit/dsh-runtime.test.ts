@@ -58,7 +58,10 @@ describe('DshRuntime', () => {
     const firstRequest = await port.next('model.request');
     expect(firstRequest.tools?.map((tool) => tool.name)).toContain('zhiji.journals.list');
     expect(firstRequest.tools?.map((tool) => tool.name)).toContain('zhiji.reviews.list');
+    expect(firstRequest.tools?.map((tool) => tool.name)).toContain('zhiji.memory.search');
     expect(firstRequest.system).toContain('必须先预览材料，再等待用户点击知己 Agent 页面中的确认按钮');
+    expect(firstRequest.system).toContain('上下文压缩已由 DSH 官方');
+    expect(firstRequest.system).toContain('没有标准 MCP Client');
 
     port.receive({ type: 'model.reasoning-delta', requestId: firstRequest.requestId, delta: '先分析可用材料。' });
     port.receive({ type: 'model.tool-call', requestId: firstRequest.requestId, index: 1, callId: 'call_journals', name: 'zhiji.journals.list', argumentsDelta: '{}' });

@@ -38,6 +38,8 @@ const AGENT_PERSONA = [
   '你是知己的对话助手。通过已注册的知己能力帮助用户完成目标；可读取经脱敏的日志、复盘、项目和验证模式，也可在用户明确要求时保存或更新日志、生成每日反馈。',
   '周/月/项目复盘和洞察复盘必须先预览材料，再等待用户点击知己 Agent 页面中的确认按钮；不要把自己的判断或普通聊天中的“确认”当成用户确认。不要声称已写入或生成正式内容，除非对应工具返回成功；正式内容始终由知己既有校验、证据降级和保存服务负责。',
   '输出格式要求：普通回复使用自然语言或 Markdown，不要默认输出 JSON。标题、列表、引用、表格和代码块必须使用真实换行；块级结构之间留空行；Markdown 标记与正文不能挤在同一行。短答也要保留清晰的段落边界；只有确实适合时才使用表格。',
+  '能力自述必须以当前宿主事实为准，不要把模型 API 的理论能力说成知己已经具备：上下文压缩已由 DSH 官方 TokenMeter、ToolResultPruner 和 BasicCompactionEngine 提供；Function Calling、有限多步工具规划和工具结果结构化校验已具备；本地长期记忆可通过 zhiji.memory.search 做关键词/短语检索，但不是向量记忆。',
+  '能力边界：知己没有标准 MCP Client、图片/音频/视频输入、通用 Computer Use 或递归自我修改能力；内部 MessagePort 工具桥不是 MCP。Structured Output 只用于工具和明确的工作流，普通回复保持 Markdown。涉及日志、复盘和验证模式时，优先使用本地记忆检索；没有命中时明确说未检索到，不要编造“记得”。',
 ].join('\n\n');
 const TOOL_DEFINITIONS: Array<{ name: string; action: string; label: string; description: string; parameters: Record<string, unknown> }> = [
   { name: 'zhiji.journals.list', action: 'journals.list', label: '读取日志摘要', description: '读取经过脱敏的日志摘要，可按日期或项目筛选。', parameters: { type: 'object', properties: { start: { type: 'string' }, end: { type: 'string' }, projectId: { type: 'string' } }, additionalProperties: false } },
@@ -46,6 +48,7 @@ const TOOL_DEFINITIONS: Array<{ name: string; action: string; label: string; des
   { name: 'zhiji.reviews.get', action: 'reviews.get', label: '读取复盘摘要', description: '按复盘 ID 读取经过脱敏的摘要。', parameters: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'], additionalProperties: false } },
   { name: 'zhiji.projects.list', action: 'projects.list', label: '读取项目列表', description: '读取项目名称、状态和 ID。', parameters: { type: 'object', properties: {}, additionalProperties: false } },
   { name: 'zhiji.patterns.list', action: 'patterns.list', label: '读取已验证模式', description: '读取用户已确认的验证模式。', parameters: { type: 'object', properties: {}, additionalProperties: false } },
+  { name: 'zhiji.memory.search', action: 'memory.search', label: '检索长期记忆', description: '只读检索知己本地日志、复盘和已确认验证模式的关键词/短语；结果是有限脱敏摘要，不会写入记忆。', parameters: { type: 'object', properties: { query: { type: 'string' }, limit: { type: 'integer', minimum: 1, maximum: 8 } }, required: ['query'], additionalProperties: false } },
   { name: 'zhiji.web.search', action: 'web.search', label: '搜索公开来源', description: '通过受控搜索查找公开来源；结果只提供本次会话的 sourceId。', parameters: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'], additionalProperties: false } },
   { name: 'zhiji.web.read-source', action: 'web.read-source', label: '读取搜索来源', description: '只读取同一搜索会话返回的 sourceId 对应来源。', parameters: { type: 'object', properties: { searchSessionId: { type: 'string' }, sourceId: { type: 'string' } }, required: ['searchSessionId', 'sourceId'], additionalProperties: false } },
   { name: 'zhiji.journals.create', action: 'journals.create', label: '保存日志', description: '在用户明确要求记录时，通过知己正式日志服务保存一条日志。', parameters: { type: 'object', properties: { date: { type: 'string' }, body: { type: 'string' }, projectIds: { type: 'array', items: { type: 'string' } } }, required: ['date', 'body'], additionalProperties: false } },

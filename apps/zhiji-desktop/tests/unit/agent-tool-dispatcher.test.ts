@@ -9,6 +9,7 @@ function makeDispatcher() {
   const reviews = { list: vi.fn(async () => [{ schemaVersion: 1 as const, id: 'review_a1', type: 'weekly' as const, periodStart: '2026-08-10', periodEnd: '2026-08-16', sourceIds: ['journal_a1'], projectId: null, provider: 'openai-compatible' as const, model: 'test', promptVersion: 'periodic-review-v1', createdAt: '2026-08-20T00:00:00.000Z', body: '本周收获明确。' }]), get: vi.fn() };
   const projects = { list: vi.fn(async () => [{ schemaVersion: 1 as const, id: 'project_a1', name: '桌面端', status: 'active' as const, createdAt: '2026-08-20T00:00:00.000Z', archivedAt: null }]) };
   const verifiedPatterns = { list: vi.fn(async () => ({ schemaVersion: 1 as const, updatedAt: '2026-08-20T00:00:00.000Z', patterns: [] })) };
+  const memorySearch = { search: vi.fn(async () => ({ hits: [{ id: 'journal_a1', kind: 'journal' as const, date: '2026-08-20', excerpt: '长期记忆命中' }] })) };
   const webSearch = {
     search: vi.fn(async () => ({ searchSessionId: 'search_a1', results: [{ sourceId: 'source_a1', title: '可信来源', url: 'https://example.com/private', snippet: '搜索摘要', publishedAt: null, retrievedAt: '2026-08-20T00:00:00.000Z' }] })),
     readSource: vi.fn(async (input: { searchSessionId: string; sourceId: string }) => {
@@ -22,7 +23,7 @@ function makeDispatcher() {
   const generatePeriodicReview = { preview: vi.fn(), execute: vi.fn() };
   const generateInsightReview = { preview: vi.fn(), execute: vi.fn() };
   const configureAi = { getPublicConfig: vi.fn(async () => ({ providerId: 'custom' as const, baseUrl: 'https://example.test', model: 'test', agentThinking: 'disabled' as const, hasApiKey: true })) };
-  return { dispatcher: new AgentToolDispatcher({ journals, reviews, projects, verifiedPatterns, webSearch, createJournal, updateJournal, generateDailyReview, generatePeriodicReview, generateInsightReview, configureAi }), journals, reviews, webSearch };
+  return { dispatcher: new AgentToolDispatcher({ journals, reviews, projects, verifiedPatterns, memorySearch, webSearch, createJournal, updateJournal, generateDailyReview, generatePeriodicReview, generateInsightReview, configureAi }), journals, reviews, webSearch, memorySearch };
 }
 
 describe('AgentToolDispatcher', () => {
@@ -56,6 +57,15 @@ describe('AgentToolDispatcher', () => {
     expect(accepted).toEqual({ kind: 'web.read-source', source: { title: '可信来源', excerpt: '来源正文' } });
     expect(JSON.stringify(accepted)).not.toContain('https://');
     expect(webSearch.readSource).toHaveBeenCalledTimes(2);
+  });
+
+  it('searches bounded local memory without exposing paths or URLs', async () => {
+    const { dispatcher, memorySearch } = makeDispatcher();
+    const result = await dispatcher.dispatch(request('memory.search', { query: '长期记忆', limit: 3 }));
+
+    expect(memorySearch.search).toHaveBeenCalledWith({ query: '长期记忆', limit: 3 });
+    expect(result).toEqual({ kind: 'memory.search', hits: [{ id: 'journal_a1', kind: 'journal', date: '2026-08-20', excerpt: '长期记忆命中' }] });
+    expect(JSON.stringify(result)).not.toMatch(/[A-Za-z]:[\\/]|https?:\/\//);
   });
 
   it('allows navigation only to a valid existing product target', async () => {

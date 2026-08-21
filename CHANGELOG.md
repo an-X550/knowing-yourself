@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22] [功能] 增加 Agent 本地长期记忆检索并校准十项能力自述 (v2.4.2 -> v2.5.0)
+
+- **受影响文件**: `apps/zhiji-desktop/src/main-process/agent/agent-memory-search-service.ts`、Agent DSH persona/工具定义、Main Process dispatcher、shared Zod contract 与回归测试；`docs/2026-08-22-agent-capabilities-first-principles-analysis.md`、`docs/specs/2026-08-22-agent-memory-search.md`、`docs/2026-08-22-agent-capabilities-execution-plan.md`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
+- **改动摘要**: Agent 现在能真实说明上下文压缩、Function Calling、有限多步规划、Structured Output、MCP、多模态、Computer Use 与递归自改的边界；新增 `zhiji.memory.search` 只读工具，按关键词/短语检索既有日志、复盘和已确认验证模式，返回有限脱敏摘要，不建立第二份记忆、不自动写入、不引入向量数据库或外部服务。Pi、Hermes、Reasonix 和官方 MCP/DeepSeek 方案的取舍记录在分析文档中。
+- **验证结果**: focused Agent tests 17 passed；完整测试 53 files / 300 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 6 既有 warning；`npm run package` 通过；`npm run test:e2e` 1 passed。
+
 ## [2026-08-22] [修复] 修复 Agent 受控联网在 Windows 网络栈下失败 (v2.4.1 -> v2.4.2)
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/bootstrap.ts`、`apps/zhiji-desktop/src/main-process/infrastructure/web/web-search-service.ts`、联网回归验证；`docs/2026-08-22-agent-web-connectivity-analysis-and-plan.md`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
