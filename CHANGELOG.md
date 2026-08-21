@@ -5,6 +5,18 @@ last_updated: 2026-08-21
 
 # CHANGELOG - 改动记录
 
+## [2026-08-21] [文档] 完成知己 DSH 独立插件 S4 本地发行准备 (v2.3.0 -> v2.3.1)
+
+- **受影响文件**: `apps/zhiji-dsh-plugin/`、S4 验证报告、架构与执行计划状态、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 补齐 `zhiji-dsh-plugin@0.3.1` 的 `dsh-plugin` package metadata、Node/DSH 兼容声明、tarball 白名单、安装/更新/移除/重启示例、隐私/信任/限制/排错说明；S4 停在本地可发布状态，不执行公开发布或外部市场接入。
+- **验证结果**: `npm test` 8 passed；S4 tarball 内容检查、DSH `0.1.0-rc.8` 精确版本/commit 检查、仓库外 tarball add、Bundle 识别、official remove 和 Profile restart 全部通过。
+
+## [2026-08-21] [功能] 完成知己 DSH 独立插件 S3 日志范围只读适配 (v2.2.0 -> v2.3.0)
+
+- **受影响文件**: `apps/zhiji-dsh-plugin/`、S3 验证报告、架构与执行计划状态、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 新增 `zhiji_read_journal_range` 最小 Host Tool。它只读取用户显式配置的 `ZHIJI_DSH_LOG_ROOT` 顶层 Markdown，按确定的日期范围聚合日文件或日期段；不接受任意路径、不递归、不读取非 Markdown、不写文件，也不把桌面端作为依赖。周/月/项目 Skill 在用户明确要求时消费聚合材料。为避免同模块多入口重复注册 Tool，Bundle patch 收敛为一个官方入口。
+- **验证结果**: 插件契约与范围边界测试 8 passed；DSH `0.1.0-rc.8` 临时 Profile 已通过 S3 Tool 回合驱动周/月/项目复盘、tarball 内容检查、S1/S2 回归、official remove 和移除后 restart。未执行 npm publish、GitHub Release、远程 push 或外部市场提交。
+
 ## [2026-08-21] [功能] 完成知己 DSH 独立插件 S2 周/月/项目复盘 (v2.1.0 -> v2.2.0)
 
 - **受影响文件**: `apps/zhiji-dsh-plugin/`、S2 验证报告、架构与执行计划状态、`README.md`、`PROJECT_STATUS.md`、`VERSION`

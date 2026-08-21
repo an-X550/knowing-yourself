@@ -1,6 +1,6 @@
 ---
 created: 2026-08-21
-status: 已采纳；S2 完成，S3/S4 待执行
+status: 已采纳；S4 完成
 architecture: docs/specs/2026-08-21-zhiji-dsh-plugin-architecture.md
 evidence: docs/reviews/2026-08-21-dsh-plugin-p0-feasibility.md
 supersedes: docs/2026-08-20-dsh-plugin-platform-execution-plan.md
@@ -251,6 +251,12 @@ S2 已完成：插件新增 `zhiji-weekly-review`、`zhiji-monthly-review` 和 `
 
 两端无需持续同步源码或输出；只需对实际支持的数据格式和写入风险做准确说明。
 
+### 7.4 S3 实施结果
+
+S3 已完成：插件新增一个 `zhiji_read_journal_range` raw Host Tool，使用 `ZHIJI_DSH_LOG_ROOT` 作为唯一显式配置，参数只接受 `start_date` 和 `end_date`。它只读取配置根目录顶层 Markdown，支持 `YYYY-MM-DD.md` 日文件，以及含年份文件名中的 `YYYY-MM-DD`/`M月D日` 日期段；不接受模型提供的路径、不递归、不读取非 Markdown、不写文件、不输出配置根目录绝对路径。周/月/项目 Skill 在用户明确要求时调用该 Tool，并将聚合结果作为分析材料；项目日志仍不被当作验收证明。
+
+S3 先发现并修正了一个官方 Loader 组合问题：S2 的四个同模块入口在增加 Tool 后会重复注册同名 Tool，官方 Runtime 明确拒绝。Bundle patch 已收敛为一个入口，一次性注册四个 Skill 和一个 Tool；S1/S2/S3 官方 Profile 回归均通过。详细命令和输出见 [`zhiji-dsh-plugin-s3-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s3-validation.md)。
+
 ## 8. S4：独立发布与使用文档
 
 ### 8.1 进入条件
@@ -272,6 +278,10 @@ S2 已完成：插件新增 `zhiji-weekly-review`、`zhiji-monthly-review` 和 `
 ### 8.3 是否拆仓库
 
 如果插件已经需要独立版本、Issue、贡献者或发布节奏，可以迁移到独立仓库；否则保留为当前仓库中的独立发行 package 也符合架构。
+
+### 8.4 S4 实施结果
+
+S4 已完成本地发行准备：插件修订为 `0.3.1`，补齐 `dsh-plugin` package keyword、公开访问声明、仓库目录、Node/DSH 兼容版本、安装/更新/移除/重启示例、隐私/信任/限制/排错说明。`npm pack` 白名单检查和从仓库外临时目录执行官方 tarball add、Bundle 识别、remove、Profile restart 均通过。未执行 npm publish、GitHub Release、远程 push、topic 创建或外部市场提交。
 
 拆仓库时不建设同步工具。插件以拆分时的能力为起点独立维护，需要时人工参考知己后续变化。
 
@@ -347,6 +357,6 @@ S2 已完成：插件新增 `zhiji-weekly-review`、`zhiji-monthly-review` 和 `
 
 ## 13. 下一步
 
-S2 已完成并形成独立 Skill、fixture、契约测试和验证报告。下一步只执行 S3 的显式日志根目录只读范围聚合；S3 完成后再执行 S4 本地发行准备。仍不执行公开 publish、远程 push、GitHub Release 或外部市场提交。
+S4 已完成并形成 `0.3.1` 本地发行包、包内容检查、仓外 tarball 安装、兼容版本和使用文档。S1-S3 回归保持通过；本次任务到此停止，不执行公开 publish、远程 push、GitHub Release、topic 创建或外部市场提交。
 
-# 当前状态：S2 完成；S3 日志目录适配和 S4 本地发行准备待执行
+# 当前状态：S4 本地发行准备已完成；公开发布不在本次范围

@@ -1,6 +1,6 @@
 ---
 created: 2026-08-21
-status: 已采纳；S2 完成，S3/S4 待执行
+status: 已采纳；S4 完成
 evidence: docs/reviews/2026-08-21-dsh-plugin-p0-feasibility.md
 supersedes: docs/specs/2026-08-20-dsh-plugin-platform-architecture.md
 ---
@@ -154,14 +154,16 @@ S1 只实现每日复盘：
 
 ### 5.2 后续候选能力
 
-S1 验收通过后，用户明确要求继续执行 S2；S2 已完成 Skill-only 周/月/项目复盘。S3/S4 仍按各自范围单独实现，不提前合并：
+S1 验收通过后，用户明确要求继续执行 S2-S4；S2 已完成 Skill-only 周/月/项目复盘，S3 已完成显式日志范围只读聚合，S4 已完成本地发行准备。公开发布仍不在本次范围内：
 
-- 配置日志目录和日期范围聚合；
+- 经验证的本地发行包、包内容检查和仓外安装；
 - 经用户确认保存 Markdown 报告；
 - 与知己桌面数据格式的只读兼容；
 - DSH headless 场景。
 
 S2 已交付：周、月、项目三个独立 Skill，均只消费用户在会话中明确粘贴的材料；输入不足时降级，输出分别保留周趋势、月度主题和项目结果/过程/偏差差异。S2 没有增加 Host Tool。
+
+S3 已交付：一个 `zhiji_read_journal_range` raw Tool 读取用户通过 `ZHIJI_DSH_LOG_ROOT` 显式配置的顶层 Markdown 根目录，按 `start_date`/`end_date` 确定性聚合日文件或日期段。Tool 不接受任意路径、不递归、不写入、不读取桌面端；错误和空范围均显式返回。周/月/项目 Skill 只在用户明确要求时消费该聚合结果。S3 没有增加保存报告能力。
 
 ### 5.3 不移植的桌面能力
 
@@ -196,13 +198,15 @@ S2 已交付：周、月、项目三个独立 Skill，均只消费用户在会�
 
 ### 6.3 后续文件适配
 
-如果 S1 证明用户确实需要读取长期日志，优先增加一个显式配置的只读根目录：
+S3 已按该最小路径实现显式配置的只读根目录：
 
 - 路径由用户选择或配置；
 - 只读取明确支持的 Markdown；
 - 日期和范围解析有确定性测试；
 - 错误不会回退为任意目录搜索；
 - 默认不与知己桌面端同时写同一文件。
+
+实际实现只注册一个 Bundle 入口；该入口一次性注册四个 Skill 和一个 Tool，避免多个相同模块入口重复注册 Tool。
 
 写入能力必须另行说明写入目标、覆盖/并发语义和恢复方式，不能作为“顺手补齐”。
 
@@ -291,10 +295,10 @@ S1 优先使用本地、预构建、无安装脚本、无 native dependency 的 
 | 阶段 | 目标 | 当前裁决 |
 |---|---|---|
 | S0 | 新路线架构和执行规划，旧路线标记被取代 | 本文完成 |
-| S1 | 一个可安装、可运行、可移除的每日复盘 Bundle | 已完成；Skill-only MVP 通过官方 Profile add、运行、remove 和重启验证，暂不扩展 |
+| S1 | 一个可安装、可运行、可移除的每日复盘 Bundle | 已完成；历史裁决为 Skill-only MVP，后续用户明确要求继续，不改变 S1 历史证据 |
 | S2 | 周/月/项目复盘能力扩展 | 已完成；三个独立 Skill 通过代表性材料、输入不足降级、S1 回归和官方 Profile 闭环验证 |
-| S3 | 显式日志目录、范围聚合和可选保存 | 待执行；先做显式根目录只读聚合，不绑定报告写入 |
-| S4 | 独立发布、兼容矩阵和用户安装文档 | 待执行；只做本地可发布状态，不自动 publish、push 或提交外部市场 |
+| S3 | 显式日志目录、范围聚合和可选保存 | 已完成；只做显式根目录只读聚合，不绑定报告写入，验证见 S3 报告 |
+| S4 | 独立发布、兼容矩阵和用户安装文档 | 已完成本地可发布状态；未自动 publish、push 或提交外部市场 |
 | 自定义 DSH UI | 插件专用页面或复杂卡片 | 暂不规划 |
 | 知己桌面插件平台 | 安装和管理任意 DSH 插件 | 已取消 |
 
@@ -343,4 +347,4 @@ S1 优先使用本地、预构建、无安装脚本、无 native dependency 的 
 - DSH Profile/插件管理：<https://github.com/deepseek-ai/deepseek-harness/blob/master/apps/cli/reference/README.md>
 - DSH Extension Cookbook：<https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/extension-cookbook.md>
 
-# 当前状态：新架构已采纳，S2 已完成；S3/S4 按用户明确决定继续执行
+# 当前状态：新架构已采纳，S4 本地发行准备已完成；不执行公开发布
