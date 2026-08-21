@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22] [修复] 修复桌面端 Agent 打包后 Utility 启动失败 (v2.4.0 -> v2.4.1)
+
+- **受影响文件**: `apps/zhiji-desktop/forge.config.ts`、Agent Utility/Main Process 启动错误链、打包回归；`docs/reviews/2026-08-22-desktop-agent-packaged-start-failure.md`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
+- **改动摘要**: 修复 Forge asar 白名单遗漏 `zod` 和 `@standard-schema/spec` 导致 `@deepseek-ai/dsh-token-meter` 在生产包中 `ERR_MODULE_NOT_FOUND`、Utility Process 退出、`agent:start` 只显示“运行已停止”的问题。生产包现在保留 DSH 外置 ESM 所需的非 DSH 运行时依赖；同时保留脱敏后的 Utility 启动诊断。不改变 API Key 隔离、thinking 选择或正式工作流确认边界。
+- **验证结果**: `npm run test:e2e` 1 passed；`npm test` 52 files / 296 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 6 既有 warning；asar 内容确认包含 `zod` 与 `@standard-schema/spec`。
+
 ## [2026-08-22] [功能] 优化桌面 Agent 输出可读性、思考模式与上下文管理 (v2.3.2 -> v2.4.0)
 
 - **受影响文件**: `apps/zhiji-desktop/` 的 Markdown 渲染、Agent persona、provider/config/shared schema、DSH Utility runtime、设置页、Agent 页面及回归测试；新增官方 DSH compaction/token-meter/tool-result-pruner 依赖；Agent 第一性原理分析、规格、执行规划、`PROJECT_STATUS.md`、`README.md`、`VERSION`
