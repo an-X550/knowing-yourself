@@ -11,9 +11,9 @@ beforeEach(() => {
     templates: { list: vi.fn(async () => []), get: vi.fn(), save: vi.fn(), delete: vi.fn() },
     app: { getInfo: vi.fn(async () => ({ version: '1.27.0', updateUrl: null })), setUpdateUrl: vi.fn() },
     settings: {
-      getPublicConfig: vi.fn(async () => ({ providerId: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-5-mini', hasApiKey: true })),
-      save: vi.fn(async () => ({ providerId: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-5-mini', hasApiKey: true })),
-      clearApiKey: vi.fn(async () => ({ providerId: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-5-mini', hasApiKey: false })),
+      getPublicConfig: vi.fn(async () => ({ providerId: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-5-mini', agentThinking: 'disabled' as const, hasApiKey: true })),
+      save: vi.fn(async () => ({ providerId: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-5-mini', agentThinking: 'disabled' as const, hasApiKey: true })),
+      clearApiKey: vi.fn(async () => ({ providerId: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-5-mini', agentThinking: 'disabled' as const, hasApiKey: false })),
       testConnection: vi.fn(async () => undefined),
     },
   } as unknown as Window['zhiji'];
@@ -66,7 +66,7 @@ describe('SettingsPage', () => {
     fireEvent.change(screen.getByLabelText('模型'), { target: { value: 'deepseek-v4-flash' } });
     fireEvent.change(screen.getByLabelText('API Key'), { target: { value: 'sk-deepseek' } });
     fireEvent.click(screen.getByRole('button', { name: '测试连接' }));
-    const expected = { providerId: 'deepseek', baseUrl: 'https://api.deepseek.com', model: 'deepseek-v4-flash', apiKey: 'sk-deepseek' };
+    const expected = { providerId: 'deepseek', baseUrl: 'https://api.deepseek.com', model: 'deepseek-v4-flash', agentThinking: 'disabled', apiKey: 'sk-deepseek' };
     await waitFor(() => expect(window.zhiji.settings.testConnection).toHaveBeenCalledWith(expected));
     expect(window.zhiji.settings.save).toHaveBeenCalledWith(expected);
     expect(onSaved).toHaveBeenCalled();

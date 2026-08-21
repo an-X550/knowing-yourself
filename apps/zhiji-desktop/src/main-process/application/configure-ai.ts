@@ -8,7 +8,7 @@ import { OpenAiCompatibleProvider } from '../infrastructure/ai/openai-compatible
 import type { AgentStreamDelta, AgentToolSpec, ChatMessage, CollectOptions } from '../infrastructure/ai/openai-compatible-provider';
 import type { CredentialStore } from '../infrastructure/credentials/credential-store';
 
-const defaults: ProviderConfig = { providerId: 'openai', baseUrl: PROVIDER_PRESETS.openai.baseUrl, model: PROVIDER_PRESETS.openai.defaultModel };
+const defaults: ProviderConfig = { providerId: 'openai', baseUrl: PROVIDER_PRESETS.openai.baseUrl, model: PROVIDER_PRESETS.openai.defaultModel, agentThinking: 'disabled' };
 
 function migrateProviderConfig(config: ProviderConfig): ProviderConfig {
   if (config.providerId === 'deepseek' && (config.model === 'deepseek-chat' || config.model === 'deepseek-reasoner')) {

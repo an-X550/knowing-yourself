@@ -16,7 +16,7 @@ const presets = {
 } as const;
 
 export function SettingsPage({ onSaved }: { onSaved?(): void | Promise<void> }) {
-  const [form, setForm] = useState<SaveProviderConfigInput>({ providerId: 'openai', ...presets.openai });
+  const [form, setForm] = useState<SaveProviderConfigInput>({ providerId: 'openai', ...presets.openai, agentThinking: 'disabled' });
   const [hasApiKey, setHasApiKey] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -44,7 +44,7 @@ export function SettingsPage({ onSaved }: { onSaved?(): void | Promise<void> }) 
   useEffect(() => { void Promise.all([window.zhiji.settings.getPublicConfig(), window.zhiji.dataDirectory.getInfo(), window.zhiji.profile.get()]).then(([{ hasApiKey: saved, ...config }, info, savedProfile]) => { setForm(config); setHasApiKey(saved); setDataInfo(info); if (savedProfile) setProfile({ body: savedProfile.body, enabledForAi: savedProfile.enabledForAi }); }); }, []);
   const updateProvider = (providerId: SaveProviderConfigInput['providerId']) => {
     setMessage(''); setError('');
-    setForm((old) => ({ ...old, providerId, ...(providerId === 'custom' ? {} : presets[providerId]) }));
+    setForm((old) => ({ ...old, providerId, agentThinking: providerId === 'deepseek' ? old.agentThinking : 'disabled', ...(providerId === 'custom' ? {} : presets[providerId]) }));
   };
   const run = async (kind: 'save' | 'test') => {
     setBusy(kind); setMessage(''); setError('');
@@ -59,7 +59,7 @@ export function SettingsPage({ onSaved }: { onSaved?(): void | Promise<void> }) 
         setHasApiKey(result.hasApiKey);
         await onSaved?.();
       }
-      setForm((current) => ({ providerId: current.providerId, baseUrl: current.baseUrl, model: current.model }));
+      setForm((current) => ({ providerId: current.providerId, baseUrl: current.baseUrl, model: current.model, agentThinking: current.agentThinking }));
       setMessage(kind === 'save' ? '设置已安全保存' : '连接成功，设置已安全保存');
     } catch (reason) { setError(reason instanceof Error ? reason.message : '请检查配置后重试'); }
     finally { setBusy(null); }
@@ -88,6 +88,7 @@ export function SettingsPage({ onSaved }: { onSaved?(): void | Promise<void> }) 
       <div className="settings-fields">
         {form.providerId === 'custom' && <Field label="API 地址"><input aria-label="API 地址" value={form.baseUrl} placeholder="https://api.example.com/v1" onChange={(event) => setForm({ ...form, baseUrl: event.target.value })}/><small>必须使用 HTTPS；开发环境仅允许 localhost HTTP。</small></Field>}
         <Field label="模型"><input aria-label="模型" value={form.model} onChange={(event) => setForm({ ...form, model: event.target.value })}/></Field>
+        <Field label="Agent 思考模式"><select aria-label="Agent 思考模式" value={form.agentThinking} disabled={form.providerId !== 'deepseek'} onChange={(event) => setForm({ ...form, agentThinking: event.target.value as SaveProviderConfigInput['agentThinking'] })}><option value="disabled">关闭（更快、更省）</option><option value="enabled">开启（更深思考）</option></select><small>{form.providerId === 'deepseek' ? '仅影响 Agent 对话；日志和复盘生成链路不变。开启后通常会增加延迟和用量。' : '当前服务商未声明 DeepSeek thinking 协议，Agent 保持关闭。'}</small></Field>
         <Field label="API Key"><input aria-label="API Key" type="password" value={form.apiKey ?? ''} placeholder={hasApiKey ? '留空即保留当前 Key' : '输入你的 API Key'} autoComplete="new-password" onChange={(event) => setForm({ ...form, apiKey: event.target.value || undefined })}/><small>Key 由 Windows 安全存储加密，界面不会再次显示原值。</small></Field>
       </div>
       {message && <StatusBanner tone="success">{message}</StatusBanner>}

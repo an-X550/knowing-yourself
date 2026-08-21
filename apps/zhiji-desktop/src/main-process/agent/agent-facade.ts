@@ -9,7 +9,7 @@ import type { AgentToolDispatcher } from './agent-tool-dispatcher';
 
 export interface AgentRuntimePort {
   start(): Promise<void>;
-  request(command: Exclude<AgentUtilityCommand, { type: 'model.delta' | 'model.completed' | 'model.failed' | 'model.cancelled' }>): Promise<void>;
+  request(command: Exclude<AgentUtilityCommand, { type: 'model.delta' | 'model.reasoning-delta' | 'model.completed' | 'model.failed' | 'model.cancelled' }>): Promise<void>;
   send(command: AgentRuntimeResponse): void;
   onEvent(listener: (event: AgentUtilityEvent) => void): () => void;
   onExit(listener: () => void): () => void;
@@ -113,7 +113,7 @@ export class AgentFacade {
   }
 
   private handleRuntimeEvent(event: AgentUtilityEvent): void {
-    if (event.type === 'model.request') { void this.modelTransport.stream(event as AgentModelRequest, (command) => this.runtime.send(command)); return; }
+    if (event.type === 'model.request') { void this.prepareAndStreamModel(event as AgentModelRequest); return; }
     if (event.type === 'model.cancel') { this.modelTransport.cancel(event.requestId); return; }
     if (event.type === 'tool.request') { void this.dispatchTool(event); return; }
     if (event.type === 'tool.cancel') { this.toolControllers.get(event.requestId)?.abort(); return; }
@@ -159,6 +159,15 @@ export class AgentFacade {
         this.emit({ type: 'ui.present', sessionId: event.sessionId, card: { title: label, summary: '正式内容已由知己既有服务校验并保存，可从原有页面继续查看。', links: [{ label: '打开正式结果', target: result.navigation }] } });
       }
     } finally { this.toolControllers.delete(event.requestId); }
+  }
+
+  private async prepareAndStreamModel(request: AgentModelRequest): Promise<void> {
+    try {
+      await this.runtime.request({ type: 'runtime.configure', requestId: randomUUID(), config: await this.modelTransport.getRuntimeModelConfig() });
+      await this.modelTransport.stream(request, (command) => this.runtime.send(command));
+    } catch {
+      this.runtime.send({ type: 'model.failed', requestId: request.requestId, message: '无法同步 Agent 模型设置，请重试。' });
+    }
   }
 
   private handleRuntimeExit(): void {

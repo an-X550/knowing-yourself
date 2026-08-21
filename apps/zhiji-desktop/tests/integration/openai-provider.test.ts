@@ -98,6 +98,36 @@ describe('OpenAiCompatibleProvider', () => {
     ]);
   });
 
+  it('streams DeepSeek reasoning when Agent thinking is enabled and replays it with tool calls', async () => {
+    const requestBodies: unknown[] = [];
+    const baseUrl = await sequencingEndpoint((body) => requestBodies.push(body), [
+      'data: {"choices":[{"delta":{"reasoning_content":"先分析"}}]}\n\ndata: {"choices":[{"delta":{"tool_calls":[{"index":0,"id":"call_1","function":{"name":"zhiji_journals_get","arguments":"{}"}}]}}]}\n\ndata: [DONE]\n\n',
+      'data: [DONE]\n\n',
+    ]);
+    const provider = new OpenAiCompatibleProvider({ providerId: 'deepseek', agentThinking: 'enabled', baseUrl, model: 'fake', apiKey: 'x' });
+    const tools = [{ name: 'zhiji.journals.get', description: '读取日志', parameters: { type: 'object' } }];
+    const firstFrames = [];
+    for await (const frame of provider.streamAgent([{ role: 'user', content: '读取日志' }], tools)) firstFrames.push(frame);
+    const secondFrames = [];
+    for await (const frame of provider.streamAgent([
+      { role: 'user', content: '读取日志' },
+      { role: 'assistant', content: '', reasoning: '先分析', toolCalls: [{ id: 'call_1', name: 'zhiji.journals.get', arguments: '{}' }] },
+      { role: 'tool', content: '{"items":[]}', toolCallId: 'call_1' },
+    ], tools)) secondFrames.push(frame);
+
+    expect(firstFrames).toEqual([
+      { kind: 'reasoning', text: '先分析' },
+      { kind: 'tool-call', index: 0, callId: 'call_1', name: 'zhiji.journals.get', argumentsDelta: '{}' },
+    ]);
+    expect(secondFrames).toEqual([]);
+    expect(requestBodies[0]).toMatchObject({ thinking: { type: 'enabled' } });
+    expect(requestBodies[1]).toMatchObject({ messages: [
+      { role: 'user' },
+      { role: 'assistant', reasoning_content: '先分析', tool_calls: [{ function: { name: 'zhiji_journals_get' } }] },
+      { role: 'tool' },
+    ] });
+  });
+
   it('uses API-safe names when replaying assistant tool calls', async () => {
     const requestBodies: unknown[] = [];
     const baseUrl = await sequencingEndpoint((body) => requestBodies.push(body), [

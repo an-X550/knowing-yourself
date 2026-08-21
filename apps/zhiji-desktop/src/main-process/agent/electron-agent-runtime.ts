@@ -34,7 +34,7 @@ export class ElectronAgentRuntime implements AgentRuntimePort {
     catch (error) { this.startup = undefined; throw error; }
   }
 
-  async request(command: Exclude<AgentUtilityCommand, { type: 'model.delta' | 'model.completed' | 'model.failed' | 'model.cancelled' }>): Promise<void> {
+  async request(command: Exclude<AgentUtilityCommand, { type: 'model.delta' | 'model.reasoning-delta' | 'model.completed' | 'model.failed' | 'model.cancelled' }>): Promise<void> {
     await this.start();
     const port = this.port;
     if (!port) throw new Error('知己 Agent 未启动。');

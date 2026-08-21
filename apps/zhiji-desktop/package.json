@@ -57,6 +57,9 @@
     "@deepseek-ai/cordis": "4.0.1",
     "@deepseek-ai/dsh-agent": "0.1.0-rc.8",
     "@deepseek-ai/dsh-agent-loop": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-compaction": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-compaction-basic": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-compaction-tool-result-pruner": "0.1.0-rc.8",
     "@deepseek-ai/dsh-invariants": "0.1.0-rc.8",
     "@deepseek-ai/dsh-llm": "0.1.0-rc.8",
     "@deepseek-ai/dsh-scope": "0.1.0-rc.8",
@@ -64,6 +67,7 @@
     "@deepseek-ai/dsh-session-persistence-jsonl": "0.1.0-rc.8",
     "@deepseek-ai/dsh-settings": "0.1.0-rc.8",
     "@deepseek-ai/dsh-system-prompt": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-token-meter": "0.1.0-rc.8",
     "@deepseek-ai/dsh-tools": "0.1.0-rc.8",
     "@langchain/core": "^1.2.7",
     "@langchain/langgraph": "^1.4.9",
@@ -72,6 +76,8 @@
     "gray-matter": "^4.0.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-markdown": "10.1.0",
+    "remark-gfm": "4.0.1",
     "zod": "^4.4.3"
   }
 }

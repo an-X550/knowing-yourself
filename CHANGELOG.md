@@ -1,9 +1,16 @@
 ---
 created: 2026-07-05
-last_updated: 2026-08-21
+last_updated: 2026-08-22
 ---
 
 # CHANGELOG - 改动记录
+
+## [2026-08-22] [功能] 优化桌面 Agent 输出可读性、思考模式与上下文管理 (v2.3.2 -> v2.4.0)
+
+- **受影响文件**: `apps/zhiji-desktop/` 的 Markdown 渲染、Agent persona、provider/config/shared schema、DSH Utility runtime、设置页、Agent 页面及回归测试；新增官方 DSH compaction/token-meter/tool-result-pruner 依赖；Agent 第一性原理分析、规格、执行规划、`PROJECT_STATUS.md`、`README.md`、`VERSION`
+- **改动摘要**: 使用 `react-markdown@10.1.0` + `remark-gfm@4.0.1` 渲染合法 Markdown，要求模型为标题、列表、表格、引用和代码块输出真实换行，并保持 raw HTML 不执行。DeepSeek Agent 新增 thinking 开启/关闭选项，保留 reasoning 流与工具回合重放，Agent 页面显示实际 provider/model/thinking。复用官方 DSH `0.1.0-rc.8` 的 token meter、basic compaction 和工具结果裁剪能力，接入现有 Utility、JSONL 会话与工具桥；不整体替换为 Pi runtime、不自研压缩、不强制普通回复 Structured Output。
+- **边界说明**: 单行内已经丢失块边界的非法 Markdown 不做猜测式修复；响应速度不能证明模型质量，真实 Flash thinking A/B 和极限长度摘要质量留待受控样本观察。
+- **验证结果**: `npm test` 52 files / 296 tests 全过；`npm run typecheck` 通过；`npm run lint` 0 error / 6 既有 warning；`npm run package` 通过。未执行真实 API Key 下的质量评分或自动 gate。
 
 ## [2026-08-21] [文档] 统一记录知己四个仓库地址与推送边界 (v2.3.1 -> v2.3.2)
 

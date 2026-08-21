@@ -8,6 +8,8 @@ import { PageHeader } from '../components/page-header';
 import { StatusBanner } from '../components/status-banner';
 import { agentNavigationTarget, type NavigationTarget } from '../app/navigation';
 
+const PROVIDER_LABELS = { openai: 'OpenAI', deepseek: 'DeepSeek', custom: '自定义' } as const;
+
 export function AgentPage({ onNavigate = () => undefined }: { onNavigate?: (target: NavigationTarget) => void }) {
   const [sessions, setSessions] = useState<AgentSession[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -19,6 +21,7 @@ export function AgentPage({ onNavigate = () => undefined }: { onNavigate?: (targ
   const [approvals, setApprovals] = useState<Array<{ sessionId: string; approval: AgentWorkflowApproval }>>([]);
   const [needsApiKey, setNeedsApiKey] = useState(false);
   const [deleteSessionId, setDeleteSessionId] = useState<string | null>(null);
+  const [aiConfig, setAiConfig] = useState<Awaited<ReturnType<Window['zhiji']['settings']['getPublicConfig']>> | null>(null);
 
   useEffect(() => {
     void window.zhiji.agent.list().then((items) => {
@@ -49,6 +52,11 @@ export function AgentPage({ onNavigate = () => undefined }: { onNavigate?: (targ
         setNeedsApiKey(/API Key|密钥/.test(event.message));
       }
     });
+  }, []);
+
+  useEffect(() => {
+    if (!window.zhiji.settings) return;
+    void window.zhiji.settings.getPublicConfig().then(setAiConfig).catch(() => setAiConfig(null));
   }, []);
 
   const selected = useMemo(() => sessions.find((item) => item.id === selectedId) ?? null, [selectedId, sessions]);
@@ -105,7 +113,7 @@ export function AgentPage({ onNavigate = () => undefined }: { onNavigate?: (targ
   };
 
   return <div className="agent-page">
-    <PageHeader title="知己 Agent" description="用自然语言组织目标；已有日志与复盘能力会继续沿用原有的校验和确认流程。" action={<Button variant="secondary" onClick={() => void createSession()}>新建会话</Button>}/>
+    <PageHeader title="知己 Agent" description="用自然语言组织目标；已有日志与复盘能力会继续沿用原有的校验和确认流程。" action={<div className="button-row"><Button variant="ghost" onClick={() => onNavigate({ view: 'settings' })}>模型设置</Button><Button variant="secondary" onClick={() => void createSession()}>新建会话</Button></div>}/>
     <div className="agent-layout">
       <aside className="agent-sessions card" aria-label="Agent 会话列表">
         <h3>会话</h3>
@@ -115,7 +123,7 @@ export function AgentPage({ onNavigate = () => undefined }: { onNavigate?: (targ
       <section className="agent-conversation card">
         {!selected && <div className="agent-empty"><h3>从一个目标开始</h3><p>例如：帮我梳理本周值得复盘的问题。</p><Button variant="primary" onClick={() => void createSession()}>开始对话</Button></div>}
         {selected && <>
-          <div className="agent-conversation__header"><div><h3>{selected.title}</h3><span className="muted">{selected.status === 'running' ? 'Agent 正在思考与组织回复' : selected.status === 'failed' ? '运行已停止，可新建会话继续' : '可以继续输入'}</span></div><div className="button-row">{selected.status === 'running' && <Button variant="ghost" onClick={() => void stop()}>停止</Button>}<Button variant="danger" disabled={selected.status === 'running'} onClick={() => setDeleteSessionId(selected.id)}>删除会话</Button></div></div>
+          <div className="agent-conversation__header"><div><h3>{selected.title}</h3><span className="muted">{selected.status === 'running' ? 'Agent 正在思考与组织回复' : selected.status === 'failed' ? '运行已停止，可新建会话继续' : '可以继续输入'}</span>{aiConfig && <span className="agent-model-status" aria-label="当前 Agent 模型">模型：{PROVIDER_LABELS[aiConfig.providerId]} / {aiConfig.model} · 思考：{aiConfig.providerId === 'deepseek' && aiConfig.agentThinking === 'enabled' ? '开启' : '关闭'}</span>}</div><div className="button-row">{selected.status === 'running' && <Button variant="ghost" onClick={() => void stop()}>停止</Button>}<Button variant="danger" disabled={selected.status === 'running'} onClick={() => setDeleteSessionId(selected.id)}>删除会话</Button></div></div>
           <div className="agent-messages">{selected.messages.map((item) => <article key={item.id} className={`agent-message agent-message--${item.role}`}><strong>{item.role === 'user' ? '你' : '知己 Agent'}</strong>{item.role === 'assistant' ? <MarkdownDocument>{item.content}</MarkdownDocument> : <p>{item.content}</p>}</article>)}
             {stream?.sessionId === selected.id && <article className="agent-message agent-message--assistant"><strong>知己 Agent</strong><MarkdownDocument>{stream.content}</MarkdownDocument><span className="stream-caret" aria-hidden="true"/></article>}
           </div>

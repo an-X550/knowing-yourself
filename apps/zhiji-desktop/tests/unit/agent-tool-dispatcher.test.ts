@@ -21,7 +21,7 @@ function makeDispatcher() {
   const generateDailyReview = { execute: vi.fn() };
   const generatePeriodicReview = { preview: vi.fn(), execute: vi.fn() };
   const generateInsightReview = { preview: vi.fn(), execute: vi.fn() };
-  const configureAi = { getPublicConfig: vi.fn(async () => ({ providerId: 'custom' as const, baseUrl: 'https://example.test', model: 'test', hasApiKey: true })) };
+  const configureAi = { getPublicConfig: vi.fn(async () => ({ providerId: 'custom' as const, baseUrl: 'https://example.test', model: 'test', agentThinking: 'disabled' as const, hasApiKey: true })) };
   return { dispatcher: new AgentToolDispatcher({ journals, reviews, projects, verifiedPatterns, webSearch, createJournal, updateJournal, generateDailyReview, generatePeriodicReview, generateInsightReview, configureAi }), journals, reviews, webSearch };
 }
 

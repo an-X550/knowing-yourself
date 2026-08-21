@@ -97,10 +97,12 @@ export type WebSourceContent = z.infer<typeof WebSourceContentSchema>;
 
 // —— 契约层共享类型（S5：从 main-process 归位到 shared，消除反向依赖） ——
 
+export const AgentThinkingModeSchema = z.enum(['disabled', 'enabled']).default('disabled');
 export const ProviderConfigSchema = z.object({
   providerId: z.enum(['openai', 'deepseek', 'custom']),
   baseUrl: z.string().trim().min(1).max(2048),
   model: z.string().trim().min(1).max(160),
+  agentThinking: AgentThinkingModeSchema,
 }).strict();
 export const PublicProviderConfigSchema = ProviderConfigSchema.extend({ hasApiKey: z.boolean() }).strict();
 export type ProviderConfig = z.infer<typeof ProviderConfigSchema>;

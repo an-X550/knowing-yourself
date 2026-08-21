@@ -60,6 +60,7 @@ describe('DshRuntime', () => {
     expect(firstRequest.tools?.map((tool) => tool.name)).toContain('zhiji.reviews.list');
     expect(firstRequest.system).toContain('必须先预览材料，再等待用户点击知己 Agent 页面中的确认按钮');
 
+    port.receive({ type: 'model.reasoning-delta', requestId: firstRequest.requestId, delta: '先分析可用材料。' });
     port.receive({ type: 'model.tool-call', requestId: firstRequest.requestId, index: 1, callId: 'call_journals', name: 'zhiji.journals.list', argumentsDelta: '{}' });
     port.receive({ type: 'model.tool-call', requestId: firstRequest.requestId, index: 2, callId: 'call_reviews', name: 'zhiji.reviews.list', argumentsDelta: '{}' });
     port.receive({ type: 'model.completed', requestId: firstRequest.requestId });
@@ -76,7 +77,7 @@ describe('DshRuntime', () => {
     const requestsToModel = port.sent.filter((event): event is Extract<AgentUtilityEvent, { type: 'model.request' }> => event.type === 'model.request');
     const secondRequest = requestsToModel[1];
     expect(secondRequest.messages).toEqual(expect.arrayContaining([
-      expect.objectContaining({ role: 'assistant', toolCalls: expect.arrayContaining([expect.objectContaining({ name: 'zhiji.journals.list' }), expect.objectContaining({ name: 'zhiji.reviews.list' })]) }),
+      expect.objectContaining({ role: 'assistant', reasoning: '先分析可用材料。', toolCalls: expect.arrayContaining([expect.objectContaining({ name: 'zhiji.journals.list' }), expect.objectContaining({ name: 'zhiji.reviews.list' })]) }),
       expect.objectContaining({ role: 'tool', toolCallId: 'call_journals' }),
       expect.objectContaining({ role: 'tool', toolCallId: 'call_reviews' }),
     ]));
