@@ -83,6 +83,7 @@
 
 - 想了解当前能力、待验证事项与已知限制：阅读 [PROJECT_STATUS.md](PROJECT_STATUS.md)；桌面端开发与发布说明见 [Windows 客户端 README](apps/zhiji-desktop/README.md)。
 - 想了解版本变化：阅读 [CHANGELOG.md](CHANGELOG.md)。
+- 想检索或提交/发布四个知己仓库：先查阅[仓库地址与推送边界](docs/standalone-repositories.md)。
 - 想维护或贡献：从 [AGENTS.md](AGENTS.md) 开始；用户包同步流程见 [用户版同步说明](docs/zhiji-user-sync-workflow.md)。
 - 想理解方法的底线：阅读 [第一性原理提醒](docs/first-principles.md)。
 

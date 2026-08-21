@@ -5,6 +5,11 @@ last_updated: 2026-08-21
 
 # CHANGELOG - 改动记录
 
+## [2026-08-21] [文档] 统一记录知己四个仓库地址与推送边界 (v2.3.1 -> v2.3.2)
+
+- **受影响文件**: `apps/zhiji-desktop/package.json`、`apps/zhiji-dsh-plugin/package.json`、`docs/standalone-repositories.md`、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 将主仓库、`zhiji-user`、桌面端和 DSH 插件四个 GitHub 仓库地址集中记录，并明确各自的提交与推送入口；主仓库 `origin` 保持不变，后续独立版本推送到对应仓库的 `main`。
+
 ## [2026-08-21] [文档] 完成知己 DSH 独立插件 S4 本地发行准备 (v2.3.0 -> v2.3.1)
 
 - **受影响文件**: `apps/zhiji-dsh-plugin/`、S4 验证报告、架构与执行计划状态、`README.md`、`PROJECT_STATUS.md`、`VERSION`
