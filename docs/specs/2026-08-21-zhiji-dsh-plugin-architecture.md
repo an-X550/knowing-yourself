@@ -1,6 +1,6 @@
 ---
 created: 2026-08-21
-status: 已采纳；S1 MVP 完成，S2 暂缓
+status: 已采纳；S2 完成，S3/S4 待执行
 evidence: docs/reviews/2026-08-21-dsh-plugin-p0-feasibility.md
 supersedes: docs/specs/2026-08-20-dsh-plugin-platform-architecture.md
 ---
@@ -154,13 +154,14 @@ S1 只实现每日复盘：
 
 ### 5.2 后续候选能力
 
-只有 S1 验收通过后，才按证据考虑：
+S1 验收通过后，用户明确要求继续执行 S2；S2 已完成 Skill-only 周/月/项目复盘。S3/S4 仍按各自范围单独实现，不提前合并：
 
-- 周复盘、月复盘和项目复盘；
 - 配置日志目录和日期范围聚合；
 - 经用户确认保存 Markdown 报告；
 - 与知己桌面数据格式的只读兼容；
 - DSH headless 场景。
+
+S2 已交付：周、月、项目三个独立 Skill，均只消费用户在会话中明确粘贴的材料；输入不足时降级，输出分别保留周趋势、月度主题和项目结果/过程/偏差差异。S2 没有增加 Host Tool。
 
 ### 5.3 不移植的桌面能力
 
@@ -291,9 +292,9 @@ S1 优先使用本地、预构建、无安装脚本、无 native dependency 的 
 |---|---|---|
 | S0 | 新路线架构和执行规划，旧路线标记被取代 | 本文完成 |
 | S1 | 一个可安装、可运行、可移除的每日复盘 Bundle | 已完成；Skill-only MVP 通过官方 Profile add、运行、remove 和重启验证，暂不扩展 |
-| S2 | 周/月/项目复盘能力扩展 | 仅在 S1 证明价值后 |
-| S3 | 显式日志目录、范围聚合和可选保存 | 仅在出现文件使用需求后 |
-| S4 | 独立发布、兼容矩阵和用户安装文档 | 仅在插件能力可用后 |
+| S2 | 周/月/项目复盘能力扩展 | 已完成；三个独立 Skill 通过代表性材料、输入不足降级、S1 回归和官方 Profile 闭环验证 |
+| S3 | 显式日志目录、范围聚合和可选保存 | 待执行；先做显式根目录只读聚合，不绑定报告写入 |
+| S4 | 独立发布、兼容矩阵和用户安装文档 | 待执行；只做本地可发布状态，不自动 publish、push 或提交外部市场 |
 | 自定义 DSH UI | 插件专用页面或复杂卡片 | 暂不规划 |
 | 知己桌面插件平台 | 安装和管理任意 DSH 插件 | 已取消 |
 
@@ -342,4 +343,4 @@ S1 优先使用本地、预构建、无安装脚本、无 native dependency 的 
 - DSH Profile/插件管理：<https://github.com/deepseek-ai/deepseek-harness/blob/master/apps/cli/reference/README.md>
 - DSH Extension Cookbook：<https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/extension-cookbook.md>
 
-# 当前状态：新架构已采纳，S1 MVP 已完成；S2 暂缓，等待真实使用证据
+# 当前状态：新架构已采纳，S2 已完成；S3/S4 按用户明确决定继续执行

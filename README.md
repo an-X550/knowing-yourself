@@ -46,7 +46,7 @@
 
 这就是最小闭环。先完成它，再考虑更长周期的复盘；没有行动和验证时，增加报告通常不会带来更多改变。
 
-已经安装 DeepSeek Harness 的用户，可以使用 [知己 DSH 独立插件](apps/zhiji-dsh-plugin/README.md)。它通过 DSH 官方 Profile 和 Web UI 接收会话中粘贴的单日日志，只返回一个有证据边界的洞察、一个小行动和明天的验证方式；不会读取知己桌面端或写入正式报告。
+已经安装 DeepSeek Harness 的用户，可以使用 [知己 DSH 独立插件](apps/zhiji-dsh-plugin/README.md)。它通过 DSH 官方 Profile 和 Web UI 接收会话中粘贴的单日、周、月或项目材料，返回有证据边界的复盘结果；不会读取知己桌面端或写入正式报告。
 
 ## 你可以怎样使用
 

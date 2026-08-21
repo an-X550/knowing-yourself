@@ -5,7 +5,7 @@ last_updated: 2026-08-21
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：2.1.0
+**当前版本**：2.2.0
 
 ## 项目概述
 
@@ -51,7 +51,7 @@ last_updated: 2026-08-21
 | 用户版浏览入口 | 已完成 | `zhiji-user/` 的 `index.html`、`guide.html` 与 `setup.html` 由 overlay 和 manifest 受控导出，分别面向首次了解、完整使用说明与 WorkBuddy 飞书智能体/飞书云文档/滴答设置；HTML 只承担离线阅读与导航，Markdown 保留技术细节。 |
 | Windows 桌面客户端 | 核心 Skill 用户闭环、日志完整性、复盘能力和 Agent 会话数据生命周期已完成；2026-08-14 全面审计优化（P0+P1）已落地；目标用户理解测试和安装矩阵待人工验收 | 一级导航为开始、Agent、日志、复盘、项目、设置；桌面端不再承载主题思考。桌面端不运行 Claude Skill/Agent，而由 Main Process 通过受校验的结构化契约实现同等复盘行为：每日反馈现按 Skill 的昨日闭环、单一盲点、可选历史连接、单一原子行动与认知追踪格式确定性排版；日志质量检查按 A-D 分析就绪度、六步法、重复模式和一项改进输出。反馈与复盘在前端安全渲染标题、引用、列表和表格，不再裸显 Markdown 符号或执行原始 HTML。个人背景仅在用户明确开启后注入 AI；数据目录、可验证备份、安全 IPC 和 OpenAI 兼容接口保持不变。2026-08-14 审计优化落地：首页意图路由整体删除（用户拍板）；全部用户可见错误中文化、网络层加固；契约类型归位 shared 与返回类型命名化；新鲜度逻辑抽 shared 去重；五个未使用依赖与 react-query 死接线移除；D1-D6 漂移点全部登记入兼容矩阵与契约对照表。阶段 C 的 Agent 正式工作流仍复用既有日志、每日反馈、周/月复盘和洞察服务；阶段 D1 新增官方 DSH JSONL 会话持久化、重启列表/resume、数据目录迁移和备份损坏校验，不改变专业页面职责。v1.28.1 修复生产 asar 的 DSH 依赖与 Utility Process 启动链；v1.28.2 在 Agent 遇到 API Key 缺失时提供直达设置页的恢复入口；v2.0.0 按第一性原理移除主题思考桌面入口及其运行时接入，历史主题数据不删除，Skill/CLI 侧能力不变；v2.0.1 在 safeStorage 密文失配时保留数据并让设置页恢复，不再阻断本地日志与复盘页面；v2.0.2 更新 DeepSeek V4 模型默认值、迁移旧模型并将连接测试改为非流式短请求；v2.0.3 修复 Agent 工具名不符合 DeepSeek API 约束，DeepSeek Agent 关闭思考模式以避免桥接协议缺少 `reasoning_content`；v2.0.4 修复 Agent 对相对日期的错误回答，增加明确确认后的会话回收站删除，并支持 Enter 发送、Shift+Enter 换行。验收门：`npm test` 51 files / 293 tests、`npm run typecheck`、`npm run lint` 0 error / 6 既有 warning、`npm run package` 和打包后 `npm run test:e2e` 1 passed；独立假说台账、关闭窗口草稿保护、合并恢复、安装/升级/卸载和 Windows 10 仍未实现或验证。 |
 | DeepSeek Harness Agent 升级 | 阶段 0、A、B、C、D1 已完成；阶段 E 已完成桌面主题范围清理，D2 不适用 | DSH `0.1.0-rc.8` 发布包在独立 Electron Utility Process 运行，Main Process 以 MessagePort 代理模型并独占 API Key。Agent 可通过 Main Process Zod 校验的高层工具读取脱敏日志/复盘/项目/验证模式、受控搜索与读源；阶段 C 已接入日志创建/更新、每日反馈及周期/洞察复盘的预览—页面确认—生成链路，阶段 D1 已接入官方 JSONL 会话持久化、重启后的列表与 `resume`，并纳入数据目录迁移、备份路径白名单和 DSH 事件校验。生产 asar 的 DSH 依赖和 Utility Process 启动链已修复；无 API Key 时 Agent 错误可直达设置页。正式结果以既有页面展示，不暴露路径、URL、Shell、任意文件或写入捷径。桌面端不再初始化主题服务或注册主题 DSH 工具；已有主题数据不主动删除，Skill/CLI 侧继续独立运行。接入面和验证证据见 [`dsh-integration-notes`](apps/zhiji-desktop/docs/dsh-integration-notes.md)。 |
-| 知己 DSH 独立插件 | S1 每日复盘 Bundle MVP 已完成；保持 MVP，S2 暂缓 | `apps/zhiji-dsh-plugin/` 使用官方 `dsh.bundle.patch` 和 `ctx.skills.register`，不含 Host Tool、native dependency、install/prepare script 或桌面端依赖。已在 DSH `0.1.0-rc.8` 的临时 Profile 中实测官方 add、Bundle/Skill 加载、keyless headless fixture、remove 和移除后重启；只支持会话内粘贴单日日志，不写正式报告。验证报告见 [`zhiji-dsh-plugin-s1-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s1-validation.md)。 |
+| 知己 DSH 独立插件 | S2 周/月/项目复盘已完成；S3 日志目录与范围聚合、S4 本地发行准备待执行 | `apps/zhiji-dsh-plugin/` 仍使用官方 `dsh.bundle.patch` 和 `ctx.skills.register`，当前 package `0.2.0` 不含 Host Tool、native dependency、install/prepare script 或桌面端依赖。S2 在 DSH `0.1.0-rc.8` 临时 Profile 中实测四种 Skill、正常材料、输入不足降级、remove 和移除后重启；周期材料仍只来自会话粘贴，不写正式报告。验证报告见 [`zhiji-dsh-plugin-s2-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s2-validation.md)。 |
 | 质量基线 | 已完成 | 覆盖日反馈、周/月/项目/年度复盘、人生设计和用户版的组件边界；真实样本仍需持续补齐。 |
 | 主题思考库 | 桌面端已移除；Skill/CLI 侧保留 | 桌面端不再提供主题页面、IPC、会话、仓储或 DSH 主题工具；用户已有 `topics/` 与旧 checkpoint 数据不删除、不主动迁移，继续讨论和沉淀使用 Skill/CLI 侧契约。 |
 | 收藏吃灰库 | 已完成 | 用户明确收录时按标题、摘要、关键词、原文/摘录、链接五段式保存，并有主项目与用户版路由回归。 |
@@ -71,7 +71,8 @@ last_updated: 2026-08-21
 - [x] v2.0.4 Agent 可用性恢复：每轮请求注入桌面端真实日期；会话可在确认后移入系统回收站；Enter 发送、Shift+Enter 换行。
 - [x] v2.0.4 打包版真实可用性验收：当前 API Key 可用；Enter 提问“今天星期几”得到本机正确星期；只读日志查询返回真实摘要；验收会话确认删除后进入回收站，重启不恢复，既有日志与复盘未改动。
 - [x] S0 知己 DSH 独立插件路线定稿：桌面端不再平台化；旧 P1-P4 取消，P0 证据保留；新架构和 S0-S4 执行计划明确直接使用 DSH Web UI，不建设同步工具或跨项目源码同构门禁。
-- [x] S1 每日复盘 Bundle MVP：官方 Profile add、Skill 加载、固定日志 keyless Runtime、remove 与移除后重启均通过；暂不进入 S2，真实模型/用户价值仍待观察（见 [`zhiji-dsh-plugin-s1-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s1-validation.md)）。
+- [x] S1 每日复盘 Bundle MVP：官方 Profile add、Skill 加载、固定日志 keyless Runtime、remove 与移除后重启均通过；真实模型/用户价值仍待观察（见 [`zhiji-dsh-plugin-s1-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s1-validation.md)）。
+- [x] S2 周/月/项目复盘：四种 DSH Skill、代表性材料、输入不足降级、输出差异、S1 回归和官方 remove/restart 均通过；S3/S4 继续按用户明确决定执行（见 [`zhiji-dsh-plugin-s2-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s2-validation.md)）。
 - [ ] 连续运行至少 5 次真实 `/daily-review`，验证 `verified-patterns.md` 写回质量。
 - [ ] 完成至少 3 次真实闭环缺口检查，记录建议是否可执行、是否被忽略为噪声、是否漏掉必要动作；未出现重复证据前不调整阈值或增加类别。
 - [ ] 以真实样本观察周/月/项目复盘；仅在出现可复现的重复、证据缺口或行动不可检查时修复。
@@ -146,3 +147,4 @@ last_updated: 2026-08-21
 | 2026-08-20 | 依据第一性原理移除桌面端主题思考 | 主题思考只是讨论后沉淀认识的辅助便利，不是复盘核心闭环；维护独立页面、会话、提案、确认和 DSH 工具的成本高于当前收益。因此删除桌面端主题入口与运行时链路，保留已有 `topics/` 与旧 checkpoint 数据，Skill/CLI 侧契约不变，D2 取消；日志、每日反馈、周/月复盘和项目链路保持不变。 |
 | 2026-08-21 | 知己能力改为独立 DSH 插件发行，不把桌面端改造成插件平台 | P0 证明官方 Profile/Bundle/CLI 可复用，但桌面端开放任意 Host 插件会引入信任、打包和产品定位成本。新路线保持桌面端 React 与固定 Runtime 不变，把当前复盘能力转化为仓库外 Bundle 并直接使用 DSH Web UI；第一版只验证每日复盘，不建设市场、同步工具或两端源码同构门禁。 |
 | 2026-08-21 | S1 采用 Skill-only 并保持 MVP | DSH 用户在会话中已经能明确粘贴单日日志；官方 Skill Registry、skill tool 和 `/zhiji-daily-review` 用户触发足以完成事实/推断区分、单一洞察、单一行动和验证。文件读取、跨日聚合和写入没有当前证据，增加 Host Tool 只会扩大宿主权限；先保留可安装、可运行、可移除的 Bundle，等待真实模型和使用证据后再决定 S2。 |
+| 2026-08-21 | 用户明确覆盖 S1 的“保持 MVP”裁决，继续执行 S2-S4 | 用户已阅读并接受 S1 报告中缺少真实模型质量和连续使用证据的风险，明确要求依次实现周期/项目复盘、显式只读日志目录适配和本地发行准备；这一决定改变的是继续开发的取舍，不改变 S1 历史证据、安全边界或“没有真实模型效果证明”的事实。 |

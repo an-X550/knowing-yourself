@@ -5,6 +5,12 @@ last_updated: 2026-08-21
 
 # CHANGELOG - 改动记录
 
+## [2026-08-21] [功能] 完成知己 DSH 独立插件 S2 周/月/项目复盘 (v2.1.0 -> v2.2.0)
+
+- **受影响文件**: `apps/zhiji-dsh-plugin/`、S2 验证报告、架构与执行计划状态、`README.md`、`PROJECT_STATUS.md`、`VERSION`
+- **改动摘要**: 在 S1 Skill-only Bundle 上新增周、月、项目三个独立 Skill。它们只分析用户在 DSH 会话中明确粘贴的材料，分别输出周期趋势/偏差/下周验证、月度主题/反例/下月假说、项目结果/过程/偏差/后续行动；材料不足时显式降级，不读取文件、不写正式报告、不增加 Host Tool。
+- **验证结果**: 插件契约测试 4 passed；DSH `0.1.0-rc.8` 临时 Profile 已通过四种 Skill 加载、周/月/项目正常 Runtime、三种输入不足降级、S1 每日回归、remove 和移除后 restart。
+
 ## [2026-08-21] [功能] 完成知己 DSH 独立插件 S1 每日复盘 Bundle MVP (v2.0.5 -> v2.1.0)
 
 - **受影响文件**: `apps/zhiji-dsh-plugin/`、S1 验证报告、架构与执行计划状态、`README.md`、`PROJECT_STATUS.md`、`VERSION`
