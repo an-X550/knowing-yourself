@@ -20,7 +20,7 @@ last_updated: 2026-08-22
 - 保留 DSH Runtime、上下文组件、Function Calling、受控工具、会话持久化和现有词法记忆检索；
 - 不为简历关键词新增 MCP、多模态、向量数据库、Computer Use 或递归自改；
 - 不把当前词法检索称为 RAG；
-- 下一项唯一值得进入 Spec 的产品能力是**只读证据卡片**，让观看者直接核实 Agent 使用了哪些本地记录；
+- 下一阶段只做一条连续能力链：先用成熟内存 BM25+ 和标准中文分词修复复合查询，再做**只读证据卡片**；不直接上向量库；
 - 本轮只形成审计、Spec 和计划，不实施代码。
 
 ## 2. 审计范围与证据
@@ -88,7 +88,7 @@ last_updated: 2026-08-22
 
 > 跨日志、复盘和已验证模式的本地可解释词法检索。
 
-只有未来出现明确漏召回，再优先考虑 SQLite FTS5/BM25；仍不足时才考虑 embedding 或混合检索。
+当前已经确认连续中文整句漏召回，因此先采用 MiniSearch 内存 BM25+、`Intl.Segmenter` 和 CJK 二元词片，不新增 SQLite 生命周期；只有该方案仍出现可复现规模或语义失败，才分别评估 FTS5 trigram 或 embedding/混合检索。
 
 ### 4.3 “有限脱敏摘要”实际是有限原文摘录
 
@@ -96,11 +96,11 @@ last_updated: 2026-08-22
 
 ### 4.4 自动测试不能替代用户可见证据
 
-现有 Git、类型、Zod 和单元测试足以证明工具契约可运行，但 Agent 页只展示工具名称和状态。观看者无法判断最终回答中的日期和事实是否真的来自检索结果。证据卡片解决的是这个具体展示失败，不需要新增长期 baseline、hash 或发布 gate。
+现有 Git、类型和 Zod 能证明代码形态与工具契约合法，却不能让中文长问题获得正确召回；现有普通测试又只覆盖“行动”单关键词。这里需要增加直接对应复合查询和候选查询的普通测试，不需要独立 baseline、hash 或发布 gate。检索命中后，Agent 页仍只展示工具名称和状态；证据卡片继续解决用户可见来源问题。
 
 ### 4.5 版本事实存在冲突
 
-根 `VERSION` 与 `PROJECT_STATUS.md` 是 `2.5.0`，Electron `apps/zhiji-desktop/package.json` 和对应锁文件仍是 `2.0.4`。在修复并重新打包前，不能把 Electron 安装包对外表述为已确认的 `2.5.0`。该问题独立于本轮证据卡片需求，不在本轮修改。
+根 `VERSION` 与 `PROJECT_STATUS.md` 是 `2.5.0`，Electron `apps/zhiji-desktop/package.json` 和对应锁文件仍是 `2.0.4`。在修复并重新打包前，不能把 Electron 安装包对外表述为已确认的 `2.5.0`。该问题不通过文档猜测修正，已纳入实施计划的阶段 0：先查清 Forge、安装包元数据和 UI 的版本来源，再统一并验证。
 
 ### 4.6 DSH 成熟度需要准确表述
 
@@ -113,6 +113,7 @@ last_updated: 2026-08-22
 | Pi | Agent runtime、tool calling、state management 与 provider 解耦 | 整体替换 DSH；文件、进程、网络和凭据权限面 |
 | Hermes | Memory Provider 生命周期、prefetch、turn sync、单一 Provider 选择 | Python Runtime、外部记忆 SaaS、自动记忆写入和大工具面 |
 | Reasonix | 指令与背景事实分层、来源/作用域/新鲜度、BM25/CJK 演进思路 | coding-agent 终端、自改和更大权限面 |
+| MiniSearch | 内存 BM25+、字段存储、自定义 tokenizer、零传递依赖 | 不把 fuzzy 当中文语义，不持久化索引或建立第二真相 |
 | MCP 官方 SDK | 有具体外部 Server 时复用 Client、transport、session 和 auth | 为关键词接入空 Server；让外部 Schema 绕过 Main Process |
 | DeepSeek API | 正确回放 tool call 与 `reasoning_content`；按消费者使用 JSON Output | 把 API 支持误写为宿主执行能力；普通回复全局 JSON |
 
@@ -142,6 +143,6 @@ last_updated: 2026-08-22
 
 ## 7. 最终裁决
 
-当前不需要继续堆叠 Agent 能力名词。最有性价比的下一步，是把已经存在的本地检索从“后台工具调用成功”提升为“前台证据可核实”，并用三条脱敏演示场景证明事实查询、模式查询和冲突处理。
+当前不需要继续堆叠 Agent 能力名词。最有性价比的下一步，是先把现有字符串包含检索升级为 MiniSearch 内存 BM25+、标准中文分词、CJK 二元词片和受限同义候选，再把同一份安全结果从“后台工具调用成功”提升为“前台证据可核实”。脱敏演示应覆盖事实、中文复合/同义、模式和冲突四类场景。
 
-需求见 [`agent-evidence-cards`](../specs/2026-08-22-agent-evidence-cards.md)，执行步骤见 [`agent-evidence-cards-execution-plan`](../2026-08-22-agent-evidence-cards-execution-plan.md)。
+需求见 [`agent-evidence-cards`](../specs/2026-08-22-agent-evidence-cards.md)，执行步骤见 [`agent-evidence-cards-execution-plan`](../2026-08-22-agent-evidence-cards-execution-plan.md)，可直接交给开发 Agent 的提示词见 [`agent-retrieval-evidence-execution-prompt`](../2026-08-22-agent-retrieval-evidence-execution-prompt.md)。

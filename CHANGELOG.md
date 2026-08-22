@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 12:02] [文档] 将 Agent 下一阶段调整为中文检索优化后展示证据 (v2.5.0 -> v2.5.0)
+
+- **受影响文件**: `docs/specs/2026-08-22-agent-memory-search.md`、`docs/specs/2026-08-22-agent-evidence-cards.md`、`docs/2026-08-22-agent-evidence-cards-execution-plan.md`、`docs/2026-08-22-agent-retrieval-evidence-execution-prompt.md`、能力分析/审计与 `PROJECT_STATUS.md`
+- **改动摘要**: 根据连续中文被当成长词项、自然问题可能零命中的确定性失败，将实施顺序改为“MiniSearch 内存 BM25+ + `Intl.Segmenter`/CJK 二元词片 + 至多 3 个受限候选查询 → 当前回合只读证据卡片”。索引每次从 Markdown 权威仓储在内存重建，不新增 SQLite、向量库、MCP、持久化索引或第二份记忆；新增可直接交给开发 Agent 的详细执行提示词，并保留认证、数据、确认、备份和发布安全边界。
+- **验证结果**: 文档术语、相对链接、项目状态同步和 `git diff --check` 通过；不修改产品代码，不运行产品测试。
+
 ## [2026-08-22 11:41] [文档] 修正 Agent 能力报告中的 RAG 与长期记忆过度表述 (v2.5.0 -> v2.5.0)
 
 - **受影响文件**: `docs/2026-08-22-agent-capabilities-first-principles-analysis.md`、`docs/reviews/2026-08-22-agent-capabilities-audit.md`、`PROJECT_STATUS.md`
