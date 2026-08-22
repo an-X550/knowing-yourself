@@ -1,12 +1,12 @@
 # 仓库地址与推送边界
 
-为方便检索和推送，知己相关仓库统一记录如下。四个仓库是独立 Git 仓库；主仓库继续保存知己 Skill、共享契约、运行定义和迁移时的目录快照。
+为方便检索和推送，ReflectLoop（知己）相关仓库统一记录如下。四个仓库是独立 Git 仓库；主仓库继续保存知己 Skill、共享契约、运行定义和迁移时的目录快照。
 
 | 组件 | 本地目录 | GitHub 仓库 | 默认分支 | 推送方式 |
 | --- | --- | --- | --- | --- |
-| 知己主仓库 | `./` | <https://github.com/an-X550/knowing-yourself> | `main` | `git push origin main` |
+| ReflectLoop（知己）主仓库 | `./` | <https://github.com/an-X550/knowing-yourself> | `main` | `git push origin main` |
 | 知己用户版分发包 | `zhiji-user/` | <https://github.com/an-X550/knowing-yourself-zhiji-user> | `main` | `git -C zhiji-user push origin main` |
-| 知己 Windows 桌面端 | `apps/zhiji-desktop/`（主仓库快照） | <https://github.com/an-X550/zhiji-desktop> | `main` | 在独立仓库工作目录执行 `git push origin main` |
+| ReflectLoop Desktop（知己 Windows 客户端） | `apps/zhiji-desktop/`（主仓库快照） | <https://github.com/an-X550/zhiji-desktop> | `main` | 在独立仓库工作目录执行 `git push origin main` |
 | 知己 DSH 插件 | `apps/zhiji-dsh-plugin/`（主仓库快照） | <https://github.com/an-X550/zhiji-dsh-plugin> | `main` | 在独立仓库工作目录执行 `git push origin main` |
 
 ## 提交与推送约定
@@ -16,6 +16,7 @@
 - 两个组件的 `package.json` 中的 `repository`、`bugs` 和 `homepage` 字段与上表保持一致；它们是包 metadata，不会改变主仓库的 Git `origin`。
 - 主仓库的 `origin` 继续指向 `knowing-yourself`。不要为了推送独立组件而修改主仓库 remote；在对应独立仓库中提交并推送到各自的 `main`。
 - 现有 `apps/zhiji-desktop/` 和 `apps/zhiji-dsh-plugin/` 目录保留用于历史、参考和主仓库兼容；后续独立版本默认以对应新仓库为开发与发布真相，不要求两边自动同步。
+- ReflectLoop 是英文项目名，“知己”是中文产品名。表中的 GitHub URL 记录当前远程事实；维护者完成平台侧仓库改名后，再同步更新本文件、Git remote 和包 metadata，不提前写入尚未生效的新地址。
 
 ## 快速核对 remote
 

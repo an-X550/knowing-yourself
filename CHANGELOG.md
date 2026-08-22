@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 21:51] [文档] 采用 ReflectLoop 英文项目名并重构公开入口 (v2.6.5 -> v2.6.5)
+
+- **受影响文件**: 根 `README.md`、`apps/zhiji-desktop/README.md`、`PROJECT_STATUS.md`、`docs/standalone-repositories.md`。
+- **改动摘要**: 保留“知己”作为中文产品名，采用 ReflectLoop 作为英文项目名；根 README 以“记录—复盘—行动—验证—校准”解释稳定价值并前置入口选择，Windows 客户端 README 前置下载、适用人群与最小闭环。AI 和 Agent 回到受控实现手段，不再定义整个项目。仓库 URL 和 GitHub About 简介本次不改，等待维护者在平台设置中完成。
+- **验证结果**: 版本保持 2.6.5；公开 Markdown 相对链接、双仓库命名、当前远程 URL 和 README 能力边界完成一致性检查后推送主仓库与独立桌面仓库。
+
 ## [2026-08-22 20:50] [文档] 以 Agent 为核心重写项目入口说明 (v2.6.4 -> v2.6.5)
 
 - **受影响文件**: 根 `README.md`、`apps/zhiji-desktop/README.md`、`PROJECT_STATUS.md`、版本同步文件、桌面端版本断言。
