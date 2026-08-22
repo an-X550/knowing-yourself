@@ -5,6 +5,11 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 23:45] [配置] 最终统一四个 GitHub 仓库为 zhiji 命名空间 (v2.6.5 -> v2.6.5)
+
+- **受影响文件**: 四仓库公开 README、交叉链接、边界文档、package metadata、同步 metadata、Git remote 与 GitHub About/Topics；迁移记录重命名为 `docs/2026-08-22-zhiji-repository-naming-migration.md`。
+- **改动摘要**: 放弃此前采用的 ReflectLoop 前缀，最终使用 `zhiji`、`zhiji-Desktop-Agent`、`zhiji-Agent-Skill` 和 `zhiji-DSH-Plugin`。版本保持不变；产品名“知己”、本地目录、数据目录、`ZHIJI_*` 环境变量、`.zhiji.zip` 备份格式、Bundle ID、用户数据结构以及既有 Release 均不变，不创建 tag 或 Release。
+
 ## [2026-08-22 23:30] [配置] 完成用户版与 DSH 仓库改名后的地址同步 (v2.6.5 -> v2.6.5)
 
 - **受影响文件**: 主仓库公开 README/交叉文档/状态记录、`zhiji-user/README.md`、独立 DSH README 与 `package.json`、两个独立仓库的 Git remote。

@@ -59,7 +59,7 @@ manifest 中的同步任务分为三种：
 
 ## 最小双仓库提交流程
 
-主仓库 `Reflectloop` 和用户版分发仓库 `Reflectloop-Agent-Skill` 是两个独立 Git 仓库。主仓库提交和推送只更新开发 / 自用真相；`zhiji-user/` 内层仓库提交和推送才会更新 GitHub 分发版。
+主仓库 `zhiji` 和用户版分发仓库 `zhiji-Agent-Skill` 是两个独立 Git 仓库。主仓库提交和推送只更新开发 / 自用真相；`zhiji-user/` 内层仓库提交和推送才会更新 GitHub 分发版。
 
 主项目提交推送：
 
