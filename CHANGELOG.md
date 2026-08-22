@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 13:36] [修复] 修复 Agent 当前回合证据生命周期与冲突裁决规则 (v2.6.0 -> v2.6.1)
+
+- **受影响文件**: `apps/zhiji-desktop/src/renderer/pages/agent-page.tsx`、`apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts` 及对应回归测试；版本文件、`PROJECT_STATUS.md`、`README.md`、Agent 证据 Spec/执行计划/审计
+- **改动摘要**: 发送下一条非空消息时只清除目标会话上一回合的证据卡片，其他会话和新回合不受影响；DSH Runtime persona 明确要求列出冲突、以日志原文优先裁决事实/时间/用户原始表述、将复盘与模式视为归纳，并在证据不足时说明无法确认且不得编造结论。不修改 DSH JSONL、搜索排序、持久化索引、安全边界或写入确认流程。
+- **验证结果**: 定向 4 个文件 / 29 个测试通过；完整 53 个文件 / 315 个测试通过；`npm run typecheck` 通过；`npm run lint` 0 error / 6 个既有 warning；2.6.1 安装包和 `npm run test:e2e` 通过（1 passed）。未 push、未发布。
+
 ## [2026-08-22 12:54] [功能] 完成 Agent 中文历史检索与当前回合证据卡片 (v2.5.0 -> v2.6.0)
 
 - **受影响文件**: Agent Memory Search、DSH Runtime、Main Process facade、shared Zod schema、Agent Page/CSS 及回归测试；版本文件、能力分析、审计、Spec、执行计划、`PROJECT_STATUS.md`、`README.md`

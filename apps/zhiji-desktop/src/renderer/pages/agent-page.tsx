@@ -100,6 +100,7 @@ export function AgentPage({ onNavigate = () => undefined }: { onNavigate?: (targ
     setMessage('');
     setError('');
     setNeedsApiKey(false);
+    setEvidenceGroups((items) => { const next = { ...items }; delete next[session.id]; return next; });
     try { await window.zhiji.agent.send({ sessionId: session.id, message: content }); }
     catch (reason) { setError(reason instanceof Error ? reason.message : '发送失败，请重试。'); }
   };

@@ -5,7 +5,7 @@ last_updated: 2026-08-22
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：2.6.0
+**当前版本**：2.6.1
 
 ## 项目概述
 
@@ -38,7 +38,7 @@ last_updated: 2026-08-22
 
 | 项目 | 状态 | 当前能力或证据缺口 |
 |------|------|------|
-| Agent 打包启动兼容性 | 已修复 | Forge 生产 asar 已保留外置 DSH 依赖 `zod`、`@standard-schema/spec`；打包后 Agent 新建会话 E2E 通过。Utility 启动错误现在保留有限、脱敏诊断，不再只显示“运行已停止”。当前版本 `2.6.0` 的最终人工验收应使用本次重新生成的安装包，不使用依赖清单不同的旧安装目录。 |
+| Agent 打包启动兼容性 | 已修复 | Forge 生产 asar 已保留外置 DSH 依赖 `zod`、`@standard-schema/spec`；打包后 Agent 新建会话 E2E 通过。Utility 启动错误现在保留有限、脱敏诊断，不再只显示“运行已停止”。当前版本 `2.6.1` 的最终人工验收应使用本次重新生成的安装包，不使用依赖清单不同的旧安装目录。 |
 | 日反馈闭环 | 已完成 | 日志粘贴与 `/daily-review` 统一进入 `daily-analyzer`；输出按单洞察、单行动、可观察预测收敛，输入不足按 A-D 证据等级降级。 |
 | 本地飞书日反馈入口 | 弃案；实现保留、监听已注释 | 2026-08-20 因本地前台监听、Codex 额度依赖和前缀路由带来的使用摩擦，改由 WorkBuddy 工作区代理承担飞书交互。主工作流及用户版镜像保留，`-Mode Run` 的监听启动调用已注释并显示弃案提示；恢复前需重新验证额度、事件连接与路由体验。 |
 | WorkBuddy 多通道运行入口 | 每日日志默认分发已通过脱敏真实验收；已加入快路径约束 | `[知己]` 已真实触发绝对路径入口：原文、每日反馈和验证沉淀完成写入与复读后，飞书使用既有 `lark_cli_path` 成功导入在线文档，滴答只通过唯一的 `dida365_create_task` 创建 1 项任务，两个渠道状态独立写入既有幂等文件。本地权威产物固定为 UTF-8 Markdown；飞书在线文档只是导入副本。首次实测约 8 分钟主要耗在 WorkBuddy 的路径、配置和状态探索，现已加入直接路径、最小并行读取与禁止探索性调用的快路径约束，待下一次脱敏日志复测耗时。用户决定不再重复两次外部人工写入；同内容防重与单次“仅本地”退出继续由已通过的自动化回归覆盖。WorkBuddy `disabledTools` 仍禁用滴答其余 49 个工具，不回退 Codex。周复盘和主题路由尚未做真实验收。实现规格见 [`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。 |
@@ -53,7 +53,7 @@ last_updated: 2026-08-22
 | Windows 桌面客户端 | 核心 Skill 用户闭环、日志完整性、复盘能力和 Agent 会话数据生命周期已完成；2026-08-14 全面审计优化（P0+P1）已落地；目标用户理解测试和安装矩阵待人工验收 | 一级导航为开始、Agent、日志、复盘、项目、设置；桌面端不再承载主题思考。桌面端不运行 Claude Skill/Agent，而由 Main Process 通过受校验的结构化契约实现同等复盘行为：每日反馈现按 Skill 的昨日闭环、单一盲点、可选历史连接、单一原子行动与认知追踪格式确定性排版；日志质量检查按 A-D 分析就绪度、六步法、重复模式和一项改进输出。反馈与复盘在前端安全渲染标题、引用、列表和表格，不再裸显 Markdown 符号或执行原始 HTML。个人背景仅在用户明确开启后注入 AI；数据目录、可验证备份、安全 IPC 和 OpenAI 兼容接口保持不变。2026-08-14 审计优化落地：首页意图路由整体删除（用户拍板）；全部用户可见错误中文化、网络层加固；契约类型归位 shared 与返回类型命名化；新鲜度逻辑抽 shared 去重；五个未使用依赖与 react-query 死接线移除；D1-D6 漂移点全部登记入兼容矩阵与契约对照表。阶段 C 的 Agent 正式工作流仍复用既有日志、每日反馈、周/月复盘和洞察服务；阶段 D1 新增官方 DSH JSONL 会话持久化、重启列表/resume、数据目录迁移和备份损坏校验，不改变专业页面职责。v1.28.1 修复生产 asar 的 DSH 依赖与 Utility Process 启动链；v1.28.2 在 Agent 遇到 API Key 缺失时提供直达设置页的恢复入口；v2.0.0 按第一性原理移除主题思考桌面入口及其运行时接入，历史主题数据不删除，Skill/CLI 侧能力不变；v2.0.1 在 safeStorage 密文失配时保留数据并让设置页恢复，不再阻断本地日志与复盘页面；v2.0.2 更新 DeepSeek V4 模型默认值、迁移旧模型并将连接测试改为非流式短请求；v2.0.3 修复 Agent 工具名不符合 DeepSeek API 约束，DeepSeek Agent 关闭思考模式以避免桥接协议缺少 `reasoning_content`；v2.0.4 修复 Agent 对相对日期的错误回答，增加明确确认后的会话回收站删除，并支持 Enter 发送、Shift+Enter 换行。验收门：`npm test` 51 files / 293 tests、`npm run typecheck`、`npm run lint` 0 error / 6 既有 warning、`npm run package` 和打包后 `npm run test:e2e` 1 passed；独立假说台账、关闭窗口草稿保护、合并恢复、安装/升级/卸载和 Windows 10 仍未实现或验证。 |
 | Agent 输出质量与上下文 | v2.4.0 已完成最小高性价比闭环；真实模型质量 A/B 与安装矩阵仍待人工验收 | Agent 使用 `react-markdown@10.1.0` + `remark-gfm@4.0.1` 渲染合法 Markdown，persona 要求标题、列表、表格、引用、代码块使用真实换行；raw HTML 不执行。DeepSeek Agent 支持 thinking 开启/关闭、reasoning 流和工具回合重放，Agent 页显示 provider/model/thinking，API Key 仍只在 Main Process。官方 `dsh-token-meter`、`dsh-compaction-basic`、`dsh-compaction-tool-result-pruner` 均以 `0.1.0-rc.8` 接入当前 Utility runtime，保留 JSONL 会话与工具桥；不整体替换为 Pi runtime、不自研压缩、不强制普通回复 JSON。自动验收：`npm test` 52 files / 296 tests、`npm run typecheck`、`npm run lint` 0 error / 6 既有 warning、`npm run package` 通过。 |
 | Agent 受控联网 | 已修复；真实模型工具回合待人工验收 | 现有 `web.search` 在 Main Process 使用 Electron 官方 `net.fetch`，复用 Chromium 网络栈及 Windows 系统代理/WPAD/HTTPS 隧道能力；保留搜索会话来源绑定和 Main Process 网络边界。Node `fetch` 对 DuckDuckGo 的本机连接超时已用 Electron 网络栈替换；打包 Main Process 对 DuckDuckGo 与 Open-Meteo 的联网冒烟均返回 HTTP 200，既有打包 E2E 通过；未新增搜索供应商、天气专用工具或额外 API Key。分析与执行规划见 [`agent-web-connectivity-analysis-and-plan`](docs/2026-08-22-agent-web-connectivity-analysis-and-plan.md)。 |
-| Agent 本地历史检索与能力自述 | v2.6.0 已完成中文召回与证据卡片 | Agent 会说明 DSH 上下文组件、Function Calling、有限多步工具规划和内部结构化校验的真实边界；`zhiji.memory.search` 现在以 MiniSearch 内存 BM25+、`Intl.Segmenter`/CJK 二元词片和最多 3 个受限候选查询复用日志、复盘和已确认验证模式仓储，返回有限脱敏原文摘录。Main Process 只把同一份已校验安全结果以当前回合证据事件发送到 Renderer；Agent 页按会话隔离、默认 3 条、最多 8 条并提供安全导航。它仍不是 RAG 或完整长期记忆；索引不持久化，不新增向量数据库、外部服务或自动写入。见 [`agent-capabilities-first-principles-analysis`](docs/2026-08-22-agent-capabilities-first-principles-analysis.md)、[`agent-memory-search`](docs/specs/2026-08-22-agent-memory-search.md)、[`agent-evidence-cards`](docs/specs/2026-08-22-agent-evidence-cards.md)。 |
+| Agent 本地历史检索与能力自述 | v2.6.1 已完成中文召回、当前回合证据卡片与冲突规则修复 | Agent 会说明 DSH 上下文组件、Function Calling、有限多步工具规划和内部结构化校验的真实边界；`zhiji.memory.search` 现在以 MiniSearch 内存 BM25+、`Intl.Segmenter`/CJK 二元词片和最多 3 个受限候选查询复用日志、复盘和已确认验证模式仓储，返回有限脱敏原文摘录。Main Process 只把同一份已校验安全结果以当前回合证据事件发送到 Renderer；Agent 页按会话隔离，发送下一条消息时只清除目标会话上一回合证据，默认 3 条、最多 8 条并提供安全导航。DSH persona 明确要求发现冲突时列出双方、日志原文优先且证据不足不得编造裁决。它仍不是 RAG 或完整长期记忆；索引不持久化，不新增向量数据库、外部服务或自动写入。见 [`agent-capabilities-first-principles-analysis`](docs/2026-08-22-agent-capabilities-first-principles-analysis.md)、[`agent-memory-search`](docs/specs/2026-08-22-agent-memory-search.md)、[`agent-evidence-cards`](docs/specs/2026-08-22-agent-evidence-cards.md)。 |
 | DeepSeek Harness Agent 升级 | 阶段 0、A、B、C、D1 已完成；阶段 E 已完成桌面主题范围清理，D2 不适用 | DSH `0.1.0-rc.8` 发布包在独立 Electron Utility Process 运行，Main Process 以 MessagePort 代理模型并独占 API Key。Agent 可通过 Main Process Zod 校验的高层工具读取脱敏日志/复盘/项目/验证模式、受控搜索与读源；阶段 C 已接入日志创建/更新、每日反馈及周期/洞察复盘的预览—页面确认—生成链路，阶段 D1 已接入官方 JSONL 会话持久化、重启后的列表与 `resume`，并纳入数据目录迁移、备份路径白名单和 DSH 事件校验。生产 asar 的 DSH 依赖和 Utility Process 启动链已修复；无 API Key 时 Agent 错误可直达设置页。正式结果以既有页面展示，不暴露路径、URL、Shell、任意文件或写入捷径。桌面端不再初始化主题服务或注册主题 DSH 工具；已有主题数据不主动删除，Skill/CLI 侧继续独立运行。接入面和验证证据见 [`dsh-integration-notes`](apps/zhiji-desktop/docs/dsh-integration-notes.md)。 |
 | 知己 DSH 独立插件 | S4 本地发行准备已完成；不执行公开发布 | `apps/zhiji-dsh-plugin/` 使用一个官方 Bundle 入口，一次性注册四个 Skill 和 `zhiji_read_journal_range`；当前 package `0.3.1` 无运行时依赖、native dependency、install/prepare script 或桌面端依赖。S1/S2/S3 的 Runtime、边界、remove/restart 已通过；S4 额外通过 tarball 白名单、精确 DSH 兼容声明和仓库外临时目录安装/移除/restart。验证报告见 [`zhiji-dsh-plugin-s4-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s4-validation.md)。 |
 | 质量基线 | 已完成 | 覆盖日反馈、周/月/项目/年度复盘、人生设计和用户版的组件边界；真实样本仍需持续补齐。 |
@@ -77,6 +77,7 @@ last_updated: 2026-08-22
 - [x] v2.4.0 Agent 输出与上下文最小闭环：成熟 Markdown/GFM 渲染、格式 persona、DeepSeek thinking 开关与 reasoning/tool replay、provider/model/thinking 可见性，以及官方 DSH token meter/compaction/tool-result pruner 接入均已通过自动回归和桌面打包验证；不新增自研压缩、自由回复 JSON、hash、baseline 或质量 gate。
 - [x] v2.5.0 Agent 能力边界与本地历史检索：能力自述与十项能力裁决已按第一性原理收敛；新增只读 `zhiji.memory.search` 字符串/词法检索入口，结果经过 Zod、Main Process 脱敏和 DSH 工具桥；不把现状称为 RAG，不新增 MCP、向量数据库、Computer Use 或递归自改。
 - [x] v2.6.0 Agent 中文历史检索与证据卡片：MiniSearch 内存 BM25+、`Intl.Segmenter`、CJK 二元词片和至多 3 个受限候选查询已修复自然中文复合/有限同义召回；Main Process 已校验命中结果以当前回合只读卡片展示，默认 3 条、最多 8 条。索引不持久化，不新增向量 RAG、MCP、多模态或权限；覆盖复合/同义、噪声、排序、真实摘录、契约兼容、空结果、会话隔离和安全导航（见 [`agent-evidence-cards`](docs/specs/2026-08-22-agent-evidence-cards.md)、[`execution-plan`](docs/2026-08-22-agent-evidence-cards-execution-plan.md) 与 [`execution-prompt`](docs/2026-08-22-agent-retrieval-evidence-execution-prompt.md)）。
+- [x] v2.6.1 Agent 证据生命周期与冲突规则修复：发送下一条消息时只清除当前会话上一回合的证据组，其他会话和新回合证据不受影响；DSH persona 明确要求列出冲突双方、以日志原文作为事实最高依据、不得让复盘或模式静默覆盖日志，证据不足时不得编造裁决。普通测试固定页面会话隔离/逐回合清理/3 条默认与 8 条上限，以及真实 DSH Runtime 系统规则；不修改 DSH JSONL、检索排序、持久化索引或安全边界。
 - [x] S0 知己 DSH 独立插件路线定稿：桌面端不再平台化；旧 P1-P4 取消，P0 证据保留；新架构和 S0-S4 执行计划明确直接使用 DSH Web UI，不建设同步工具或跨项目源码同构门禁。
 - [x] S1 每日复盘 Bundle MVP：官方 Profile add、Skill 加载、固定日志 keyless Runtime、remove 与移除后重启均通过；真实模型/用户价值仍待观察（见 [`zhiji-dsh-plugin-s1-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s1-validation.md)）。
 - [x] S2 周/月/项目复盘：四种 DSH Skill、代表性材料、输入不足降级、输出差异、S1 回归和官方 remove/restart 均通过；后续 S3/S4 已按用户明确决定完成（见 [`zhiji-dsh-plugin-s2-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s2-validation.md)）。
@@ -122,7 +123,7 @@ last_updated: 2026-08-22
 9. WorkBuddy 每日日志默认分发已通过一次脱敏真实消息验收；周复盘、主题讨论与确认沉淀仍只有静态边界测试，尚未真实验收。
 10. 非法或缺少块边界的单行 Markdown（如 `###`、`---`、`|` 被模型挤在同一行）无法由成熟 Markdown 解析器可靠猜测意图；本轮不做启发式修复，后续先观察真实样本再决定是否值得单独立项。
 11. DeepSeek V4/Pro 的官方上下文容量已纳入 compaction 路由；未知模型或自定义 provider 不猜测上下文窗口，因此不会伪造压缩容量。真实超长会话摘要触发和 Flash thinking 关闭/开启质量差异仍待受控样本。
-12. 版本事实已统一为 `2.6.0`：根 `VERSION`、`PROJECT_STATUS.md`、Electron `apps/zhiji-desktop/package.json`、应用锁文件和重新生成的安装包元数据一致。
+12. 版本事实已统一为 `2.6.1`：根 `VERSION`、`PROJECT_STATUS.md`、Electron `apps/zhiji-desktop/package.json`、应用锁文件和重新生成的安装包元数据一致。
 
 ## 关键决策记录
 
@@ -131,6 +132,7 @@ last_updated: 2026-08-22
 | 日期 | 决策 | 理由 |
 |------|------|------|
 | 2026-08-22 | 桌面 Agent 先修中文词法召回，再增加本地证据卡片 | 当前连续中文被当成长词项，存在自然查询零命中的确定性失败；只做卡片会更清楚地展示空结果。先复用 MiniSearch BM25+ 与 `Intl.Segmenter`/CJK 词片，有限同义由受限 Tool Call 候选处理，再展示 Main Process 已校验证据。索引不持久化，不新增向量 RAG、MCP、多模态、Computer Use、递归自改或卡片持久化。 |
+| 2026-08-22 | 当前回合证据按发送边界清理，冲突裁决由 DSH persona 明确约束 | 已确认的事故是上一回合证据在同一会话继续显示，且检索同时返回日志/复盘时运行规则未要求指出冲突；最小修复是 Renderer 发送消息时只删除目标会话运行态证据组，并在真实 DSH Runtime 系统规则中声明日志原文优先、冲突显式披露和证据不足不编造。普通测试足以验证这两个行为，不新增 hash、baseline、gate、排序器或持久化机制。 |
 | 2026-07-15 | 显式第一性原理请求采用共享复核契约而非新命令 | 用户在发现内容过长或结论可疑时已主动使用该表述；用短契约覆盖默认表达深度，不改变入口、路径或报告骨架。 |
 | 2026-08-01 | 确认后的主题更新先重组当前论证 | 仅要求比较与合并仍会诱发机械追加；新认知先分类其对当前判断的影响，再重组受影响章节并检查依据、去重、边界与行动/转向，不限制篇幅，也不增加用户成本。 |
 | 2026-07-19 | 主题思考采用默认审查、合并更新与自适应行动门槛 | 新信息会长期追加；创建和更新都比较旧内容，以保留、修正、替换、合并、归档或不写入收敛重复、冲突和失效行动；只有会改变判断、行动或验证时才展开。 |

@@ -65,6 +65,10 @@ describe('DshRuntime', () => {
     expect(firstRequest.system).toContain('必须先预览材料，再等待用户点击知己 Agent 页面中的确认按钮');
     expect(firstRequest.system).toContain('上下文压缩已由 DSH 官方');
     expect(firstRequest.system).toContain('没有标准 MCP Client');
+    expect(firstRequest.system).toContain('当 memory.search 返回相互矛盾的日志、复盘或已验证模式时，必须明确列出冲突双方');
+    expect(firstRequest.system).toContain('涉及事实是否发生、时间和用户原始表述时，以日志原文为最高依据');
+    expect(firstRequest.system).toContain('复盘和已验证模式只能作为归纳，不能静默覆盖冲突日志');
+    expect(firstRequest.system).toContain('若日志本身不足以裁决，明确说明无法确认，不得编造结论');
 
     port.receive({ type: 'model.reasoning-delta', requestId: firstRequest.requestId, delta: '先分析可用材料。' });
     port.receive({ type: 'model.tool-call', requestId: firstRequest.requestId, index: 1, callId: 'call_journals', name: 'zhiji.journals.list', argumentsDelta: '{}' });

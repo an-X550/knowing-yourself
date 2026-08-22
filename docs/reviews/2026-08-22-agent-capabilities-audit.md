@@ -44,7 +44,7 @@ last_updated: 2026-08-22
 - [DeepSeek Thinking Mode](https://api-docs.deepseek.com/guides/thinking_mode)
 - [DeepSeek JSON Output](https://api-docs.deepseek.com/guides/json_mode/)
 
-本轮实施后聚焦测试覆盖记忆服务、工具调度、facade、Runtime、Schema 和 Agent Page；完整单元测试 53 个文件 / 314 项通过。打包、E2E 和真实模型质量仍分别以本次执行记录和人工验收边界为准。
+本轮实施后聚焦测试覆盖记忆服务、工具调度、facade、Runtime、Schema 和 Agent Page；完整单元测试 53 个文件 / 315 项通过，并补齐当前会话逐回合证据清理与 DSH 冲突规则测试。打包、E2E 和真实模型质量仍分别以本次执行记录和人工验收边界为准。
 
 ## 3. 当前能力事实
 
@@ -73,7 +73,7 @@ last_updated: 2026-08-22
 → 当前回合只读证据卡片
 ```
 
-现有测试已覆盖直接关键词、同义候选、中文复合查询、噪声控制、稳定排序、真实摘录、证据事件和会话隔离；仍不能证明：
+现有测试已覆盖直接关键词、同义候选、中文复合查询、噪声控制、稳定排序、真实摘录、证据事件、会话隔离和发送下一条消息后的当前回合清理；DSH Runtime 普通测试也固定了冲突证据的运行规则。仍不能证明：
 
 - 大规模历史下的性能；
 - 模型能稳定自动调用检索；
