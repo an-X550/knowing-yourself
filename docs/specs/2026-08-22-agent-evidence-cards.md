@@ -1,7 +1,7 @@
 ---
 created: 2026-08-22
 last_updated: 2026-08-22
-status: confirmed
+status: completed
 ---
 
 # Agent 中文历史检索与本地证据卡片需求文档

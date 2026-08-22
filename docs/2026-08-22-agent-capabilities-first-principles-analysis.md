@@ -7,14 +7,14 @@ last_updated: 2026-08-22
 
 ## 0. 文档性质与结论范围
 
-本文是**分析与决策文档**，不是本轮的开发授权。本文更新只用于回答以下问题：
+本文是**分析与决策文档**，不是单独的开发授权。本文同时记录本轮执行后的当前事实，用于回答以下问题：
 
 1. 这十项能力分别解决什么真实问题？
 2. 知己桌面端当前已经具备什么，哪些只是模型或 API 的理论能力？
 3. 现在做是否值得、是否高性价比？
 4. 如果以后要做，应优先复用什么成熟方案，哪些边界不能直接照搬？
 
-本文不新增代码、依赖、配置、MCP Server、向量数据库、系统控制权限或自我修改权限；也不把“未来可以做”写成“当前已经具备”。桌面端的主要目标是作为 LLM / Agent 应用工程作品集，真实日常使用仍可由 Skill 承担。当前事实以根项目 `v2.5.0` 代码、既有测试记录和项目状态为准；Electron `package.json` / 锁文件仍为 `2.0.4`，版本统一并重新打包前，不把安装包表述为已确认的 `2.5.0`。本次不重新执行完整产品测试、打包或真实 API 质量评测。
+本文不新增 MCP Server、向量数据库、系统控制权限或自我修改权限；也不把“未来可以做”写成“当前已经具备”。桌面端的主要目标是作为 LLM / Agent 应用工程作品集，真实日常使用仍可由 Skill 承担。本轮已将中文词法召回、当前回合证据卡片和版本事实统一落地到 `v2.6.0`；完整产品验证结果以 `PROJECT_STATUS.md` 与 `CHANGELOG.md` 为准，真实模型质量仍不等同于自动化测试结论。
 
 ## 1. 结论先行
 
@@ -27,22 +27,22 @@ last_updated: 2026-08-22
 因此，最优策略不是“把知己变成通用电脑代理”，而是保留窄而可靠的本地日志闭环：
 
 - **已经具备，不重复建设**：上下文压缩、Function Calling、有限多步工具回合、会话持久化、工具/工作流结构化校验、受控联网、Markdown 输出。
-- **已经做了高性价比的工程入口**：跨日志、复盘和已验证模式的本地只读词法检索；它不是完整长期记忆，也不称为 RAG。
-- **当前只具备部分能力**：长期记忆的产品可见性、Agent 自主规划和 Structured Output 的产品层；完整 RAG 生命周期当前不存在。
+- **已经做了高性价比的工程入口**：跨日志、复盘和已验证模式的本地只读词法检索，以及当前回合可核实的证据卡片；它不是完整长期记忆，也不称为 RAG。
+- **当前只具备部分能力**：长期记忆的语义能力、Agent 自主规划和 Structured Output 的产品层；完整 RAG 生命周期当前不存在。
 - **当前不具备且不建议现在做**：标准 MCP Client、多模态输入、通用 Computer Use、递归自我修改。
-- **作品集下一优先级**：先用 MiniSearch BM25+、`Intl.Segmenter` 和 CJK 二元词片修复中文复合查询，再增加当前回合只读证据卡片；有限同义召回只允许受约束候选查询，不直接上向量库。
+- **本轮已完成的作品集链路**：MiniSearch BM25+、`Intl.Segmenter`、CJK 二元词片、受限候选查询和当前回合只读证据卡片；后续只有出现新的可复现失败才评估更重的检索方案。
 
 十项能力的总裁决如下：
 
 | # | 能力 | 当前状态 | 现在是否高性价比 | 裁决 |
 |---:|---|---|---|---|
 | 1 | 上下文压缩 | 已接入 DSH `0.1.0-rc.8` 官方组件 | 否，重复建设 | 保留并观察真实长会话质量；RC 依赖不等于稳定性已充分验证 |
-| 2 | 长期记忆检索 | 已有字符串包含入口；中文复合查询易漏召回，证据尚不可见 | 是，存在可复现失败 | 用 MiniSearch BM25+ 和标准中文分词优化召回，再增加只读证据卡片；暂不接向量或外部记忆 |
+| 2 | 长期记忆检索 | 已完成 MiniSearch 中文词法召回、受限候选查询和当前回合证据卡片 | 是，已解决已确认的失败 | 保留来源可追踪和只读边界；暂不接向量或外部记忆 |
 | 3 | Function Calling | 已有模型调用—宿主执行—结果回传闭环 | 否，已具备 | 继续收紧工具契约，不增加通用任意函数 |
 | 4 | MCP 工具调用 | 内部工具桥不是 MCP，标准 Client 尚无 | 暂不值得 | 等出现明确外部 MCP Server 和真实任务后再接官方 SDK |
 | 5 | 多模态理解 | 当前 Agent 消息契约为文本 | 暂不值得 | 先等一个明确图片、音频或视频场景，再按单一媒体类型接入 |
 | 6 | Agent 自主规划 | 已有有限多轮工具规划，无通用任务编排 | 暂不新增 Planner | 保留受工具和确认门约束的有限自主性 |
-| 7 | RAG 检索增强 | 完整生命周期不存在；当前只有待优化的词法检索入口 | 暂不值得作为 RAG 立项 | 中文漏召回归入 #2，用 MiniSearch BM25+ 修复；仍不引入向量、混合检索或 RAG 产品层 |
+| 7 | RAG 检索增强 | 完整生命周期不存在；当前是可解释的本地词法检索入口 | 暂不值得作为 RAG 立项 | 中文漏召回已归入 #2 修复；仍不引入向量、混合检索或 RAG 产品层 |
 | 8 | Structured Output | 工具和正式工作流结构化；普通回复 Markdown | 不适合全局强制 | 按下游消费者逐工作流启用，不把聊天变成 JSON |
 | 9 | Computer Use | 没有桌面感知、操作、沙箱和回滚 | 否，风险远大于当前收益 | 不实现通用电脑控制 |
 | 10 | 递归自我改进 | 没有自改代码、提示词、工具和权限的能力 | 否，边界不成立 | 只允许人工审查的提案/补丁流程，不允许自主递归执行 |
@@ -114,7 +114,7 @@ last_updated: 2026-08-22
 | 会话状态 | DSH JSONL 持久化、列表、resume 和 reasoning 重放 | [`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L12)、[`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L316) | 会话历史不是语义长期记忆 |
 | Function Calling | AgentLoop 生成工具调用，Main Process 校验并执行，结果回传 | [`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L139)、[`agent-tool-dispatcher.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-tool-dispatcher.ts#L66) | 只允许知己注册的高层工具，不是任意函数执行 |
 | 工具安全边界 | 共享 Zod request/result、Main Process dispatcher、路径/URL 脱敏 | [`agent-tools.ts`](../apps/zhiji-desktop/src/shared/schemas/agent-tools.ts#L56)、[`agent-tool-dispatcher.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-tool-dispatcher.ts#L17) | 内部 MessagePort 是私有桥接协议，不是标准 MCP |
-| 本地记忆 | `zhiji.memory.search` 以字符串包含方式只读检索日志、复盘、已确认验证模式 | [`agent-memory-search-service.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-memory-search-service.ts#L23)、[`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L51) | 中文连续字符作为整段词项；返回有限原文摘录；界面只显示活动标签；不是 RAG 或语义记忆 |
+| 本地记忆 | `zhiji.memory.search` 用 MiniSearch 内存 BM25+、`Intl.Segmenter`/CJK 二元词片和最多 3 个受限候选查询只读检索日志、复盘、已确认验证模式；Main Process 将同一份安全结果发为证据事件 | [`agent-memory-search-service.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-memory-search-service.ts#L23)、[`agent-facade.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-facade.ts#L121)、[`agent-page.tsx`](../apps/zhiji-desktop/src/renderer/pages/agent-page.tsx#L63) | 词法召回不是语义记忆；索引每次调用重建，证据卡片只保留当前 Renderer 会话运行态；不是 RAG |
 | 受控联网 | `web.search` / `web.read-source` 通过 Main Process 受控调用；Windows 网络栈使用 Electron `net.fetch` | [`bootstrap.ts`](../apps/zhiji-desktop/src/main-process/bootstrap.ts#L53) | 公开来源搜索不等于本地 RAG 或任意浏览器控制 |
 | 输出展示 | 工具/工作流使用结构化契约；普通回答使用 React Markdown/GFM | [`markdown-document.tsx`](../apps/zhiji-desktop/src/renderer/components/markdown-document.tsx#L1) | 普通自然语言不强制 JSON；非法单行 Markdown 不做猜测式修复 |
 | 写入边界 | 日志保存、周期复盘、洞察复盘走既有领域服务和用户确认 | [`agent-tool-dispatcher.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-tool-dispatcher.ts#L130) | Agent 不能自行修改 Skill、代码、权限或桌面环境 |
@@ -173,28 +173,28 @@ Reasonix 的 Context Engine v2 明确把 standing instructions 与 background me
 
 #### 当前状态
 
-根项目 `v2.5.0` 已有 `zhiji.memory.search`：
+根项目 `v2.6.0` 已有 `zhiji.memory.search`：
 
 - 只读复用日志、复盘和已确认验证模式的权威仓储；
-- 以完整查询命中和词项包含数量排序，中文连续字符会作为一个完整词项；
+- 使用 MiniSearch BM25+、标准中文分词和 CJK 二元词片召回，原始查询与最多 3 个候选查询按稳定 ID 合并；
 - 返回稳定 ID、日期和最多 800 字符的有限原文摘录，不是模型摘要；
 - 结果经过共享 Zod 契约和 Main Process `safeText`；
 - 不创建第二份日志真相，不自动抽取、自动写入或调用外部记忆服务；
-- Agent 页面目前只显示“正在/已完成：检索长期记忆”，不会结构化展示命中证据；
+- Main Process 只从已校验的工具结果发出 `tool.evidence`，Agent 页面按会话展示类型、日期和真实摘录，默认 3 条、最多 8 条；
 - 空结果应明确表示“未检索到”，不能把模型猜测说成“我记得”。
 
-现有聚焦测试证明直接关键词可以命中日志、复盘和已验证模式，并证明排序与空结果的基本行为；它没有证明同义表达、中文复合查询、大规模性能、模型稳定自动检索或用户可见证据闭环。
+现有聚焦测试证明直接关键词、中文复合查询、受限候选、噪声控制、稳定排序、真实摘录、证据事件和会话隔离；完整单元测试为 53 个文件 / 314 项通过。它没有证明大规模性能、模型稳定自动检索或真实用户价值。
 
 因此当前是“有来源的本地历史检索”，不是完整的语义长期记忆系统。它还没有：
 
 - 每轮自动 prefetch；
 - 记忆的类型、范围、过期、冲突和用户纠错模型；
-- 语义向量、BM25/FTS5 索引、重排或召回解释层；
+- 持久化索引、向量召回、FTS5 生命周期或语义重排；
 - 记忆写入、删除、忘记和隐私导出的一套独立产品界面。
 
 #### 是否值得现在做
 
-**长期记忆方向值得保留，但当前只能确认工程入口已经实现，不能宣称用户问题已经解决。** 知己的核心数据本来就是 Markdown 日志和复盘，先复用权威数据做只读词法检索，比接入云端记忆 SaaS 更直接。面向作品集，当前更高性价比的缺口不是更换检索引擎，而是让命中的日期、类型和摘录在界面中可核实。
+**长期记忆方向值得保留，但当前只能确认本地词法证据链已经实现，不能宣称语义记忆或真实用户价值已经解决。** 知己的核心数据本来就是 Markdown 日志和复盘，复用权威数据做只读词法检索和证据卡片，比接入云端记忆 SaaS 更直接。后续只在新的可复现召回或规模失败出现时升级检索引擎。
 
 #### 成熟方案与复用边界
 
@@ -211,7 +211,7 @@ forget(id)           → 必须可追踪、可验证、可恢复或明确不可�
 
 #### 裁决
 
-当前已经出现确定性失败：连续中文问题会被当成一个长词项，现有单关键词测试不能代表自然查询可用。下一步用 MiniSearch 的内存 BM25+ 复用成熟排序，以 `Intl.Segmenter` 和 CJK 二元词片改善中文复合查询；DeepSeek 只可通过至多 3 个受限候选查询处理有限同义表达。随后增加当前回合证据卡片；卡片只消费 Main Process 已校验的 ID、类型、日期和有限摘录，不持久化、不建立第二份记忆。只有上述方案仍出现明确语义漏召回，才评估 embedding、向量库或外部 Provider。不要把会话历史、强制指令和背景事实混成自动写入池。
+已确认的确定性失败已通过最小方案修复：MiniSearch 内存 BM25+、`Intl.Segmenter` 和 CJK 二元词片改善中文复合查询，DeepSeek 只可通过至多 3 个受限候选查询处理有限同义表达；当前回合证据卡片只消费 Main Process 已校验的 ID、类型、日期和有限摘录，不持久化、不建立第二份记忆。只有该方案仍出现新的明确漏召回或规模失败，才评估 embedding、向量库或外部 Provider。不要把会话历史、强制指令和背景事实混成自动写入池。
 
 ### 4.3 Function Calling
 
@@ -521,16 +521,16 @@ DSH AgentLoop
   → JSONL 会话持久化与恢复
 ```
 
-这条链已经覆盖知己最主要的 Agent 工程价值，不需要再叠加一个通用 Agent 平台。当前有两个连续缺口：自然中文问题容易因整句词项而漏召回；命中后 Renderer 也只显示工具活动标签。已确认的下一步是先优化中文词法召回，再增加不持久化的只读证据卡片。
+这条链已经覆盖知己最主要的 Agent 工程价值，不需要再叠加一个通用 Agent 平台。自然中文召回和命中后 Renderer 证据可见这两个连续缺口已在 `v2.6.0` 补齐；仍保留不持久化、只读和来源可核实边界。
 
 ### 6.2 后续再评估的证据顺序
 
 | 优先级 | 可能扩展 | 必须先出现的证据 | 首选成熟路径 |
 |---:|---|---|---|
-| 1 | 中文词法召回 | 自然长问题被当成长词项，现有“行动”单词测试不能覆盖 | MiniSearch 内存 BM25+ + `Intl.Segmenter` + CJK 二元词片 |
-| 2 | 有限同义候选 | “任务过大”与“行动拆解”词面不同 | DeepSeek Tool Call 提供至多 3 个受限候选；不写入记忆 |
-| 3 | 只读证据卡片 | 当前界面无法让观看者核实模型使用了哪些本地记录 | 复用 Main Process 已校验结果；默认 3 条、最多 8 条；不持久化 |
-| 4 | 版本事实统一 | 根项目 `2.5.0` 与 Electron `2.0.4` 冲突，影响安装包和简历演示可信度 | 查清 Forge 元数据来源并统一后重新打包验证 |
+| 1 | 中文词法召回 | 已修复自然长问题整段词项漏召回 | MiniSearch 内存 BM25+ + `Intl.Segmenter` + CJK 二元词片 |
+| 2 | 有限同义候选 | 已支持“任务过大”与“行动拆解”这类有限词面差异 | DeepSeek Tool Call 提供至多 3 个受限候选；不写入记忆 |
+| 3 | 只读证据卡片 | 已让观看者核实模型使用的本地记录 | 复用 Main Process 已校验结果；默认 3 条、最多 8 条；不持久化 |
+| 4 | 版本事实统一 | 已消除根项目与 Electron 的版本冲突 | `v2.6.0` 统一版本并通过打包验证 |
 | 5 | 记忆自动预取 | 用户反复手动要求“先搜索我的记录”，且误召回风险可控 | 参考 Hermes `prefetch`，加入预算、来源和关闭选项 |
 | 6 | 单一多模态输入 | 有稳定的图片或音频任务，且模型端点、隐私、回放都可验证 | 复用 provider content parts，只做一种媒体 |
 | 7 | MCP | 有具体外部 Server、真实任务和明确权限需求 | 使用官方 MCP SDK，Main Process 统一适配 |
@@ -569,7 +569,7 @@ DeepSeek V4-Flash “很快”只能说明当前请求的响应延迟较低，�
 
 ### 仅部分具备
 
-- **长期记忆**：有本地词法检索入口，但命中证据尚未结构化展示；无语义记忆、自动预取、冲突/过期/忘记产品层；
+- **长期记忆**：有本地词法检索与当前回合证据卡片，但无语义记忆、自动预取、冲突/过期/忘记产品层；
 - **Agent 自主规划**：有工具回合，无通用任务队列、后台调度、子 Agent 和任意文件操作；
 - **Structured Output**：工具和工作流结构化，普通回答不做全局 JSON；
 - **上下文管理**：有运行时压缩和会话持久化，但极限长度下的信息保真仍需真实样本观察。
@@ -586,7 +586,7 @@ DeepSeek V4-Flash “很快”只能说明当前请求的响应延迟较低，�
 
 **知己现在不需要成为“什么都能做的 Agent”；作为作品集，它需要证明自己能从真实记录中检索证据、通过受控工具完成有限步骤，并让观看者直接核实依据。**
 
-保留 DSH 的上下文和工具基础，准确表述现有检索边界；先完成“MiniSearch 中文词法召回 → 受限同义候选 → 证据卡片 → 版本事实统一”。只有明确任务证明当前层不够时，才评估 embedding、多模态、MCP 或最小任务状态。Computer Use 和递归自我改进不属于当前产品边界。
+保留 DSH 的上下文和工具基础，准确表述现有检索边界；“MiniSearch 中文词法召回 → 受限同义候选 → 证据卡片 → 版本事实统一”已完成。只有明确任务证明当前层不够时，才评估 embedding、多模态、MCP 或最小任务状态。Computer Use 和递归自我改进不属于当前产品边界。
 
 ## 9. 相关项目文档
 

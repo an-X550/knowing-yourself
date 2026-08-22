@@ -59,6 +59,9 @@ describe('DshRuntime', () => {
     expect(firstRequest.tools?.map((tool) => tool.name)).toContain('zhiji.journals.list');
     expect(firstRequest.tools?.map((tool) => tool.name)).toContain('zhiji.reviews.list');
     expect(firstRequest.tools?.map((tool) => tool.name)).toContain('zhiji.memory.search');
+    const memoryTool = firstRequest.tools?.find((tool) => tool.name === 'zhiji.memory.search');
+    expect(memoryTool?.description).toContain('最多 3 个 alternates');
+    expect(memoryTool?.parameters).toMatchObject({ properties: { alternates: { type: 'array', maxItems: 3, items: { type: 'string', maxLength: 80 } } } });
     expect(firstRequest.system).toContain('必须先预览材料，再等待用户点击知己 Agent 页面中的确认按钮');
     expect(firstRequest.system).toContain('上下文压缩已由 DSH 官方');
     expect(firstRequest.system).toContain('没有标准 MCP Client');

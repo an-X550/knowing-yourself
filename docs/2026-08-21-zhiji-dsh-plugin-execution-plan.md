@@ -255,7 +255,7 @@ S2 已完成：插件新增 `zhiji-weekly-review`、`zhiji-monthly-review` 和 `
 
 S3 已完成：插件新增一个 `zhiji_read_journal_range` raw Host Tool，使用 `ZHIJI_DSH_LOG_ROOT` 作为唯一显式配置，参数只接受 `start_date` 和 `end_date`。它只读取配置根目录顶层 Markdown，支持 `YYYY-MM-DD.md` 日文件，以及含年份文件名中的 `YYYY-MM-DD`/`M月D日` 日期段；不接受模型提供的路径、不递归、不读取非 Markdown、不写文件、不输出配置根目录绝对路径。周/月/项目 Skill 在用户明确要求时调用该 Tool，并将聚合结果作为分析材料；项目日志仍不被当作验收证明。
 
-S3 先发现并修正了一个官方 Loader 组合问题：S2 的四个同模块入口在增加 Tool 后会重复注册同名 Tool，官方 Runtime 明确拒绝。Bundle patch 已收敛为一个入口，一次性注册四个 Skill 和一个 Tool；S1/S2/S3 官方 Profile 回归均通过。详细命令和输出见 [`zhiji-dsh-plugin-s3-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s3-validation.md)。
+S3 先发现并修正了一个官方 Loader 组合问题：S2 的四个同模块入口在增加 Tool 后会重复注册同名 Tool，官方 Runtime 明确拒绝。Bundle patch 已收敛为一个入口，一次性注册四个 Skill 和一个 Tool；S1/S2/S3 官方 Profile 回归均通过。详细命令和输出见 [`zhiji-dsh-plugin-s3-validation`](reviews/2026-08-21-zhiji-dsh-plugin-s3-validation.md)。
 
 ## 8. S4：独立发布与使用文档
 

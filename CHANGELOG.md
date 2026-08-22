@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 12:54] [功能] 完成 Agent 中文历史检索与当前回合证据卡片 (v2.5.0 -> v2.6.0)
+
+- **受影响文件**: Agent Memory Search、DSH Runtime、Main Process facade、shared Zod schema、Agent Page/CSS 及回归测试；版本文件、能力分析、审计、Spec、执行计划、`PROJECT_STATUS.md`、`README.md`
+- **改动摘要**: 引入 MiniSearch 7.2.0 内存 BM25+，结合 `Intl.Segmenter` 与 CJK 二元词片修复自然中文复合查询；支持原查询与至多 3 个受限候选查询，合并为最多 8 条带真实原文摘录的安全命中。命中由 Main Process 校验结果生成当前回合 `tool.evidence`，Renderer 按会话展示默认 3 条、最多展开 8 条的只读证据卡片；不新增 SQLite、向量库、MCP、持久化索引、第二份记忆或写入按钮；同时修复一条当前文档死链。
+- **验证结果**: `npm test` 53 个文件 / 314 个测试全过；`npm run typecheck` 通过；`npm run lint` 0 error / 6 个既有 warning；`npm run package` 通过且 asar 为 `2.6.0` 并包含 MiniSearch；`npm run test:e2e` 1 passed。未 push、未发布。
+
 ## [2026-08-22 12:02] [文档] 将 Agent 下一阶段调整为中文检索优化后展示证据 (v2.5.0 -> v2.5.0)
 
 - **受影响文件**: `docs/specs/2026-08-22-agent-memory-search.md`、`docs/specs/2026-08-22-agent-evidence-cards.md`、`docs/2026-08-22-agent-evidence-cards-execution-plan.md`、`docs/2026-08-22-agent-retrieval-evidence-execution-prompt.md`、能力分析/审计与 `PROJECT_STATUS.md`

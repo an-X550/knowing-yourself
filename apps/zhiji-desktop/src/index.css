@@ -462,6 +462,18 @@ select:hover { border-color: var(--ink-tertiary); }
 .agent-message--assistant > strong { color: var(--accent); }
 .agent-message p { margin: 0; white-space: pre-wrap; }
 .stream-caret { display: inline-block; width: 8px; height: 15px; margin-left: 2px; vertical-align: -2px; border-radius: 2px; background: var(--accent); animation: caret-blink 1s steps(2) infinite; }
+.agent-tool-results { display: grid; gap: var(--space-3); padding-top: var(--space-4); border-top: 1px solid var(--separator); }
+.agent-tool-results__activity { margin: 0; color: var(--ink-secondary); font: var(--text-caption); }
+.agent-result-card { display: grid; gap: var(--space-2); padding: var(--space-4); border: 1px solid var(--separator); border-radius: var(--radius-m); background: var(--surface-secondary); }
+.agent-result-card h4, .agent-result-card p { margin: 0; }
+.agent-result-card p { line-height: 1.6; overflow-wrap: anywhere; }
+.agent-evidence-group__header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
+.agent-evidence-group__count { flex: 0 0 auto; color: var(--ink-tertiary); font: var(--text-caption); }
+.agent-evidence-list { display: grid; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.agent-evidence-card { display: grid; gap: var(--space-2); padding: var(--space-3); border-radius: 10px; background: var(--surface); }
+.agent-evidence-card__meta { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); color: var(--ink-tertiary); font: var(--text-caption); }
+.agent-evidence-card__meta time { flex: 0 0 auto; }
+.agent-evidence-card p { max-height: 12rem; overflow: auto; white-space: pre-wrap; }
 .agent-composer { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-3); align-items: end; padding-top: var(--space-4); border-top: 1px solid var(--separator); }
 .agent-composer textarea { width: 100%; padding: 10px var(--space-3); border: 1px solid var(--separator); border-radius: 10px; background: var(--surface); resize: vertical; line-height: 1.6; }
 .agent-empty { display: grid; place-items: center; min-height: 360px; text-align: center; color: var(--ink-secondary); }

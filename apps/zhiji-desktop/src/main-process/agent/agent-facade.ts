@@ -153,6 +153,7 @@ export class AgentFacade {
     try {
       const result = await (this.toolDispatcher?.dispatch(event, controller.signal) ?? Promise.resolve({ kind: 'error' as const, message: '知己工具当前不可用。' }));
       this.runtime.send({ type: 'tool.result', requestId: event.requestId, result });
+      if (result.kind === 'memory.search' && result.hits.length > 0) this.emit({ type: 'tool.evidence', sessionId: event.sessionId, callId: event.requestId, source: 'memory.search', hits: result.hits });
       if (result.kind === 'workflow.approval-required') this.emit({ type: 'workflow.approval', sessionId: event.sessionId, approval: result.approval });
       if (result.kind === 'workflow.completed') {
         const label = result.workflow === 'journals.create' ? '日志已保存' : result.workflow === 'journals.update' ? '日志已更新' : '正式复盘已保存';

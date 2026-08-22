@@ -1,7 +1,7 @@
 ---
 created: 2026-08-22
 last_updated: 2026-08-22
-status: awaiting-implementation
+status: completed
 ---
 
 # Agent 中文历史检索与证据卡片执行计划
@@ -10,7 +10,7 @@ status: awaiting-implementation
 
 先把 `zhiji.memory.search` 从整句字符串包含升级为适合自然中文问题的本地词法检索，再把同一份 Main Process 已校验命中结果展示为当前回合只读证据卡片。
 
-需求来源：[`agent-evidence-cards`](specs/2026-08-22-agent-evidence-cards.md)；检索契约：[`agent-memory-search`](specs/2026-08-22-agent-memory-search.md)；可直接执行的任务提示词：[`agent-retrieval-evidence-execution-prompt`](2026-08-22-agent-retrieval-evidence-execution-prompt.md)。本计划只描述实施顺序，本轮不执行代码。
+需求来源：[`agent-evidence-cards`](specs/2026-08-22-agent-evidence-cards.md)；检索契约：[`agent-memory-search`](specs/2026-08-22-agent-memory-search.md)；可直接执行的任务提示词：[`agent-retrieval-evidence-execution-prompt`](2026-08-22-agent-retrieval-evidence-execution-prompt.md)。本计划已完成实施与验证；结果以代码、测试、打包产物和 `CHANGELOG.md` 为准。
 
 ## 2. 已确认失败场景
 

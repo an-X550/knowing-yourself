@@ -31,7 +31,25 @@ export const AgentPresentationCardSchema = z.object({
 const JournalListInputSchema = z.object({ start: IsoDate.optional(), end: IsoDate.optional(), projectId: StableProjectId.optional() }).strict();
 const JournalGetInputSchema = z.object({ id: StableJournalId }).strict();
 const ReviewGetInputSchema = z.object({ id: StableReviewId }).strict();
-const MemorySearchInputSchema = z.object({ query: z.string().trim().min(1).max(200), limit: z.number().int().min(1).max(8).optional() }).strict();
+const MemorySearchAlternatesSchema = z.preprocess(
+  (value) => {
+    if (!Array.isArray(value)) {
+      return value;
+    }
+
+    const trimmed = value.map((item) =>
+      typeof item === 'string' ? item.trim() : item,
+    );
+    return trimmed.filter((item, index) => trimmed.indexOf(item) === index);
+  },
+  z.array(z.string().min(1).max(80)).max(3).optional(),
+);
+
+const MemorySearchInputSchema = z.object({
+  query: z.string().trim().min(1).max(200),
+  alternates: MemorySearchAlternatesSchema,
+  limit: z.number().int().min(1).max(8).optional(),
+}).strict();
 const WebSearchInputSchema = z.object({ query: z.string().trim().min(1).max(500) }).strict();
 const WebReadInputSchema = z.object({ searchSessionId: SearchSessionIdSchema, sourceId: SourceIdSchema }).strict();
 const validDateRange = (value: { start: string; end: string }) => value.start <= value.end;
@@ -78,7 +96,7 @@ const AgentJournalSummarySchema = z.object({ id: StableJournalId, date: IsoDate,
 const AgentReviewSummarySchema = z.object({ id: StableReviewId, type: z.enum(['daily', 'weekly', 'monthly', 'project', 'coach', 'yearly', 'life-design']), periodStart: IsoDate, periodEnd: IsoDate, projectId: StableProjectId.nullable(), excerpt: SafeExcerpt }).strict();
 const AgentProjectSummarySchema = z.object({ id: StableProjectId, name: z.string().trim().min(1).max(80), status: z.enum(['active', 'archived']) }).strict();
 const AgentPatternSummarySchema = z.object({ id: z.string().regex(/^pattern_[a-z0-9]+$/), statement: SafeExcerpt, evidenceSummary: SafeExcerpt, sourceReviewIds: z.array(StableReviewId).max(20) }).strict();
-const AgentMemoryHitSchema = z.object({ id: z.string().regex(/^(journal|review|pattern)_[a-z0-9]+$/), kind: z.enum(['journal', 'review', 'pattern']), date: IsoDate.nullable(), excerpt: SafeExcerpt }).strict();
+export const AgentMemoryHitSchema = z.object({ id: z.string().regex(/^(journal|review|pattern)_[a-z0-9]+$/), kind: z.enum(['journal', 'review', 'pattern']), date: IsoDate.nullable(), excerpt: z.string().trim().min(1).max(800) }).strict();
 const AgentSearchResultSchema = z.object({ sourceId: SourceIdSchema, title: z.string().trim().min(1).max(300), snippet: z.string().max(1_000) }).strict();
 const AgentReviewPreviewSourceSchema = z.object({ id: z.string().regex(/^(journal|review)_[a-z0-9]+$/), date: IsoDate, excerpt: SafeExcerpt }).strict();
 export const AgentReviewPreviewSchema = z.object({ token: z.string().uuid(), type: z.enum(['weekly', 'monthly', 'project', 'coach', 'yearly', 'life-design']), start: IsoDate, end: IsoDate, sources: z.array(AgentReviewPreviewSourceSchema).max(100) }).strict();

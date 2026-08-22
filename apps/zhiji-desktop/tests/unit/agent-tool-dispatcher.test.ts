@@ -68,6 +68,24 @@ describe('AgentToolDispatcher', () => {
     expect(JSON.stringify(result)).not.toMatch(/[A-Za-z]:[\\/]|https?:\/\//);
   });
 
+  it('accepts at most three bounded alternate memory queries and rejects invalid shapes', async () => {
+    const { dispatcher, memorySearch } = makeDispatcher();
+    const accepted = await dispatcher.dispatch(request('memory.search', { query: '任务定得太大', alternates: ['行动 拆解 步骤'], limit: 3 }));
+
+    expect(accepted).toEqual({ kind: 'memory.search', hits: [{ id: 'journal_a1', kind: 'journal', date: '2026-08-20', excerpt: '长期记忆命中' }] });
+    expect(memorySearch.search).toHaveBeenCalledWith({ query: '任务定得太大', alternates: ['行动 拆解 步骤'], limit: 3 });
+
+    for (const input of [
+      { query: '任务', alternates: ['', '行动'] },
+      { query: '任务', alternates: ['一', '二', '三', '四'] },
+      { query: '任务', alternates: ['x'.repeat(81)] },
+      { query: '任务', unexpected: true },
+    ]) {
+      await expect(dispatcher.dispatch(request('memory.search', input))).resolves.toEqual({ kind: 'error', message: '工具请求格式不合法，已拒绝执行。' });
+    }
+    expect(memorySearch.search).toHaveBeenCalledOnce();
+  });
+
   it('allows navigation only to a valid existing product target', async () => {
     const { dispatcher } = makeDispatcher();
     const valid = await dispatcher.dispatch(request('ui.navigate', { target: { view: 'reviews', intent: 'project', projectId: 'project_a1' } }));

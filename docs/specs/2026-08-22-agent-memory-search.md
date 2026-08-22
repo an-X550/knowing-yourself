@@ -1,7 +1,7 @@
 ---
 created: 2026-08-22
 last_updated: 2026-08-22
-status: revision-confirmed
+status: completed
 ---
 
 # Agent 本地中文历史检索 Spec
