@@ -21,8 +21,8 @@ ReflectLoop 是项目总称；Windows 客户端、Codex/Claude、DSH 插件和 W
 | 你的使用方式 | 推荐入口 | 说明 |
 | --- | --- | --- |
 | 希望直接安装 Windows 应用 | [ReflectLoop Desktop Agent（知己 Windows 客户端）](https://github.com/an-X550/Reflectloop-Desktop-Agent) | 提供受控 Agent、开始、日志、复盘、项目和设置六个可视化入口；数据默认保存在本机；主仓库快照见 [桌面端说明](apps/zhiji-desktop/README.md) |
-| 使用 Codex 或 Claude 读取本地 Markdown | [用户版分发仓库](https://github.com/an-X550/knowing-yourself-zhiji-user) | 下载或复制完整工作区后，Codex 可直接使用自然语言；Claude 保留 Slash Command 兼容入口；本地快照见 [用户版使用指南](zhiji-user/README.md) |
-| 已安装 DeepSeek Harness | [ReflectLoop DSH 插件](https://github.com/an-X550/zhiji-dsh-plugin) | 在 DSH 会话中处理粘贴材料，或在显式配置后按日期范围只读聚合日志；主仓库快照见 [插件说明](apps/zhiji-dsh-plugin/README.md) |
+| 使用 Codex 或 Claude 读取本地 Markdown | [用户版分发仓库](https://github.com/an-X550/Reflectloop-Agent-Skill) | 下载或复制完整工作区后，Codex 可直接使用自然语言；Claude 保留 Slash Command 兼容入口；本地快照见 [用户版使用指南](zhiji-user/README.md) |
+| 已安装 DeepSeek Harness | [ReflectLoop DSH 插件](https://github.com/an-X550/Reflectloop-DSH-Plugin) | 在 DSH 会话中处理粘贴材料，或在显式配置后按日期范围只读聚合日志；主仓库快照见 [插件说明](apps/zhiji-dsh-plugin/README.md) |
 | 需要手机消息入口 | [WorkBuddy + 飞书智能体部署说明](zhiji-user/docs/workbuddy-deployment.md) | 通过 `[知己]` 前缀路由日志、复盘和主题讨论；外部写入仍受授权边界约束 |
 
 想先快速浏览而不配置运行环境，可以打开[用户上手页](zhiji-user/index.html)和[浏览器版使用说明](zhiji-user/guide.html)。四个仓库是独立发布边界：主仓库维护产品与 Skill/CLI 运行真相，用户版是安装入口，Desktop Agent 是 Windows 应用，DSH 插件是 DeepSeek Harness 适配层。

@@ -102,8 +102,8 @@ Agent 是完成复盘闭环的一种受控能力，不是能够操作整台电�
 | 你想做什么 | 应进入哪里 | 是否与本应用自动共享数据 |
 | --- | --- | --- |
 | Windows 本地日志、复盘和受控 Agent | 本仓库 | 本应用自己的数据目录 |
-| 用 Codex/Claude 读取 Markdown 并运行完整 Skill | [用户版分发包](https://github.com/an-X550/knowing-yourself-zhiji-user) | 否 |
-| 在 DeepSeek Harness Profile 中使用复盘 Skill | [DSH 插件](https://github.com/an-X550/zhiji-dsh-plugin) | 否 |
+| 用 Codex/Claude 读取 Markdown 并运行完整 Skill | [用户版分发包](https://github.com/an-X550/Reflectloop-Agent-Skill) | 否 |
+| 在 DeepSeek Harness Profile 中使用复盘 Skill | [DSH 插件](https://github.com/an-X550/Reflectloop-DSH-Plugin) | 否 |
 | 查看产品总览、共享契约和开发入口 | [ReflectLoop 主项目](https://github.com/an-X550/Reflectloop) | 不代表运行时同步 |
 
 桌面端不读取、执行或修改 Claude/Codex 的 `.claude` Skill 系统，也不要求安装 DSH。需要手机消息入口或飞书/滴答结果分发时，请从用户版说明开始，而不是把本应用当作同步服务。

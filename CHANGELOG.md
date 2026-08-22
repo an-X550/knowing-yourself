@@ -5,6 +5,11 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 23:30] [配置] 完成用户版与 DSH 仓库改名后的地址同步 (v2.6.5 -> v2.6.5)
+
+- **受影响文件**: 主仓库公开 README/交叉文档/状态记录、`zhiji-user/README.md`、独立 DSH README 与 `package.json`、两个独立仓库的 Git remote。
+- **改动摘要**: 将用户版和 DSH 独立仓库的当前地址统一为 `Reflectloop-Agent-Skill` 与 `Reflectloop-DSH-Plugin`，同步 clone、Release、Issues、公开链接和 package repository metadata。保留本地快照目录以及 `zhiji-dsh-plugin` 的包、Bundle 和安装运行时 ID，版本不变。
+
 ## [2026-08-22 23:04] [文档] 建立仓库命名迁移与兼容性查询入口 (v2.6.5 -> v2.6.5)
 
 - **受影响文件**: `docs/2026-08-22-reflectloop-repository-naming-migration.md`、`docs/standalone-repositories.md`、根 `README.md`、`PROJECT_STATUS.md`。

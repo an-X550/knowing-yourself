@@ -137,7 +137,7 @@ last_updated: 2026-08-22
 
 | 日期 | 决策 | 理由 |
 |------|------|------|
-| 2026-08-22 | 采用 ReflectLoop 作为英文项目名，保留“知己”作为中文产品名 | `knowing-yourself` 是早期直译，不能稳定表达软件身份；单独使用拼音 `Zhiji` 又缺少英文语义。ReflectLoop 直接对应“记录—复盘—行动—验证—校准”的核心闭环。主仓库与桌面独立仓库已分别改名为 `Reflectloop` 和 `Reflectloop-Desktop-Agent`，GitHub 简介、远程地址与包 metadata 已完成同步；用户版与 DSH 插件的最终名称仍待四仓库定位统一后决定。本地目录、中文产品名与持久化兼容标识不要求和远程仓库同名，完整经过与排障见[命名迁移记录](docs/2026-08-22-reflectloop-repository-naming-migration.md)。 |
+| 2026-08-22 | 采用 ReflectLoop 作为英文项目名，保留“知己”作为中文产品名，并完成四仓库统一命名 | `knowing-yourself` 与 `zhiji` 是早期仓库 slug，不能一眼表达四个组件属于 ReflectLoop。ReflectLoop 直接对应“记录—复盘—行动—验证—校准”的核心闭环；四个公开仓库最终为 `Reflectloop`、`Reflectloop-Agent-Skill`、`Reflectloop-Desktop-Agent` 和 `Reflectloop-DSH-Plugin`。本地目录、中文产品名、DSH package/Bundle ID 与持久化兼容标识不要求和远程仓库同名，完整经过与排障见[命名迁移记录](docs/2026-08-22-reflectloop-repository-naming-migration.md)。 |
 | 2026-08-22 | 桌面端先修本地安装包质量与设置页信息架构，GitHub 远程后置 | 用户真实分发的 `v2.0.5` 暴露核心闭环和 UI 问题，而开发模式成功不能代表安装包可用；本轮以全新安装包为完成标准，设置页收敛为三标签，删除伪更新控件，日反馈只补一次结构重试，并让每个版本产生独立 RC。Pi、Hermes Memory、Reasonix Context Engine 和 MCP 不能直接解决当前事故，不接入；远程旧 Release 不覆盖，后续只上传本地已验收的同一份新版本制品。 |
 | 2026-08-22 | 桌面 Agent 先修中文词法召回，再增加本地证据卡片 | 当前连续中文被当成长词项，存在自然查询零命中的确定性失败；只做卡片会更清楚地展示空结果。先复用 MiniSearch BM25+ 与 `Intl.Segmenter`/CJK 词片，有限同义由受限 Tool Call 候选处理，再展示 Main Process 已校验证据。索引不持久化，不新增向量 RAG、MCP、多模态、Computer Use、递归自改或卡片持久化。 |
 | 2026-08-22 | 当前回合证据按发送边界清理，冲突裁决由 DSH persona 明确约束 | 已确认的事故是上一回合证据在同一会话继续显示，且检索同时返回日志/复盘时运行规则未要求指出冲突；最小修复是 Renderer 发送消息时只删除目标会话运行态证据组，并在真实 DSH Runtime 系统规则中声明日志原文优先、冲突显式披露和证据不足不编造。普通测试足以验证这两个行为，不新增 hash、baseline、gate、排序器或持久化机制。 |

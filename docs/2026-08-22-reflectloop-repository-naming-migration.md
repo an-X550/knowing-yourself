@@ -21,10 +21,10 @@ keywords:
 
 - GitHub 仓库名、Git remote、当前 README 链接和包的仓库 metadata 应指向同一公开地址。
 - 本地目录名不需要与 GitHub 仓库名一致；Git 根据 `.git` 和 remote 工作，不根据外层文件夹名称工作。
-- “知己”是继续沿用的中文产品名，不是待清理的旧名称。
+- “知己”是继续沿用的中文产品名，不再作为独立 GitHub 仓库名称的一部分。
 - `zhiji` 出现在数据目录、环境变量、备份格式、代码标识和本地快照路径时，可能承担兼容性职责；没有迁移方案时不应全局替换。
 - 历史 CHANGELOG、归档文档和旧提交应保留当时事实，不追改成今天的名称。
-- 当前四仓库的最终命名体系尚未全部定稿。主仓库和桌面仓库已经改名；用户版与 DSH 插件是否改名，应在四仓库定位统一后另行决定。
+- 当前四仓库的最终命名体系已经定稿：`Reflectloop`、`Reflectloop-Agent-Skill`、`Reflectloop-Desktop-Agent` 和 `Reflectloop-DSH-Plugin`。本地目录与 DSH 内部包 ID 保持兼容，不因 GitHub 仓库改名而全局替换。
 
 ## 截至 2026-08-22 的当前事实
 
@@ -32,10 +32,10 @@ keywords:
 | --- | --- | --- | --- |
 | 项目、Skill/CLI 与共享契约主仓库 | [`an-X550/Reflectloop`](https://github.com/an-X550/Reflectloop) | 仓库根目录 | 已完成平台改名、remote 和公开入口同步 |
 | Windows 客户端 | [`an-X550/Reflectloop-Desktop-Agent`](https://github.com/an-X550/Reflectloop-Desktop-Agent) | `apps/zhiji-desktop/` 是主仓库快照；独立仓库另有工作目录 | 已完成平台改名、README、包名和仓库 metadata 同步 |
-| Codex/Claude 用户分发包 | [`an-X550/knowing-yourself-zhiji-user`](https://github.com/an-X550/knowing-yourself-zhiji-user) | `zhiji-user/`，且自身是独立 Git 仓库 | 仍使用早期 slug，最终名称待四仓库定位讨论 |
-| DeepSeek Harness 插件 | [`an-X550/zhiji-dsh-plugin`](https://github.com/an-X550/zhiji-dsh-plugin) | `apps/zhiji-dsh-plugin/` 是主仓库快照 | 仍使用早期 slug，最终名称待四仓库定位讨论 |
+| Codex/Claude 用户分发包 | [`an-X550/Reflectloop-Agent-Skill`](https://github.com/an-X550/Reflectloop-Agent-Skill) | `zhiji-user/`，且自身是独立 Git 仓库 | 已完成仓库改名、remote 和公开链接同步 |
+| DeepSeek Harness 插件 | [`an-X550/Reflectloop-DSH-Plugin`](https://github.com/an-X550/Reflectloop-DSH-Plugin) | `apps/zhiji-dsh-plugin/` 是主仓库快照 | 已完成仓库改名、remote、README 和 package repository metadata 同步 |
 
-ReflectLoop 是英文项目品牌，“知己”是中文产品名。GitHub 上当前显示的仓库 slug 以表中地址为准；品牌正文使用 `ReflectLoop`。
+ReflectLoop 是英文项目品牌，“知己”是中文产品名。GitHub 上当前显示的四个仓库名称以表中地址为准；品牌正文使用 `ReflectLoop`，本地 `zhiji-*` 路径和 DSH 包 ID 属于兼容性标识。
 
 ## 晚间更新顺序
 
@@ -62,13 +62,22 @@ ReflectLoop 是英文项目品牌，“知己”是中文产品名。GitHub 上�
 | 22:41 | `d03f4df` | 明确 Desktop Agent 定位，统一仓库 URL、包名、关键词和安装说明，版本保持 2.6.5 |
 | 22:50 | `5281ce1` | 依据第一性原理重构独立仓库 README，版本保持 2.6.5 |
 
+### Agent Skill 与 DSH 独立仓库
+
+用户在 GitHub 完成以下平台改名后，本轮同步了本地 remote、当前 README、跨仓库公开链接和适用的 package repository metadata：
+
+- `knowing-yourself-zhiji-user` → `Reflectloop-Agent-Skill`
+- `zhiji-dsh-plugin` → `Reflectloop-DSH-Plugin`
+
+DSH 的 npm 包名、Bundle ID、Skill 运行入口和 remove 命令仍保持 `zhiji-dsh-plugin`，因为它们是安装与运行时兼容标识，不是 GitHub 仓库名。
+
 ## 为什么不能全局替换“知己/zhiji”
 
 从第一性原理看，命名的作用是让某一层的对象可被稳定识别。不同层解决的问题不同：
 
 | 层级 | 例子 | 主要作用 | 改名原则 |
 | --- | --- | --- | --- |
-| 公开仓库与品牌 | `Reflectloop`、`Reflectloop-Desktop-Agent`、ReflectLoop | 搜索、识别、分享和定位 | 名称确定后同步 GitHub、remote 和当前链接 |
+| 公开仓库与品牌 | `Reflectloop`、`Reflectloop-Agent-Skill`、`Reflectloop-Desktop-Agent`、`Reflectloop-DSH-Plugin`、ReflectLoop | 搜索、识别、分享和定位 | 名称确定后同步 GitHub、remote 和当前链接 |
 | 本地源码目录 | `zhiji-user/`、`apps/zhiji-desktop/`、`apps/zhiji-dsh-plugin/` | 代码引用、脚本和主仓库快照定位 | 不要求与远程同名；只有真实维护收益大于迁移成本时才改 |
 | 包 metadata | `reflectloop-desktop-agent`、`repository`、`bugs`、`homepage` | 构建和生态工具识别 | 与 lock 文件及公开仓库地址一起修改和验证 |
 | 用户可见产品名 | `productName: "知己"` | Windows 应用名称和中文品牌连续性 | 继续保留“知己” |
@@ -115,7 +124,7 @@ git grep -n -E "apps/zhiji-desktop|apps/zhiji-dsh-plugin|zhiji-user/"
 git grep -n -E "ZHIJI_|Documents/知己|APPDATA.*知己|\.zhiji\.zip"
 ```
 
-预期主仓库 remote 为 `https://github.com/an-X550/Reflectloop.git`；用户版独立仓库 remote 仍为 `https://github.com/an-X550/knowing-yourself-zhiji-user.git`。Desktop Agent 和 DSH 插件必须在各自独立仓库根目录核对 remote，不能把主仓库快照目录当成独立 Git 根目录。
+预期主仓库 remote 为 `https://github.com/an-X550/Reflectloop.git`；用户版独立仓库 remote 为 `https://github.com/an-X550/Reflectloop-Agent-Skill.git`。Desktop Agent 和 DSH 插件必须在各自独立仓库根目录核对 remote，不能把主仓库快照目录当成独立 Git 根目录；DSH 的 package name、Bundle ID 和 remove 命令仍为 `zhiji-dsh-plugin`。
 
 如果问题只涉及旧名称是否“残留”，先看命中属于当前链接、内部路径、兼容标识还是历史记录；只有当前链接错误或真实接口迁移不完整时才需要修改。
 

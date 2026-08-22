@@ -2,10 +2,10 @@
 
 `zhiji-dsh-plugin` 是 ReflectLoop（知己）面向 DeepSeek Harness 的独立适配包。它把四个复盘 Skill 和一个受控只读日志 Tool 注册到 DSH Profile，面向已经安装 DSH 的用户；它不是桌面 Agent、不是完整用户版工作区，也不提供模型、API Key 或独立 Web UI。
 
-- 独立仓库：[an-X550/zhiji-dsh-plugin](https://github.com/an-X550/zhiji-dsh-plugin)
+- 独立仓库：[an-X550/Reflectloop-DSH-Plugin](https://github.com/an-X550/Reflectloop-DSH-Plugin)
 - 产品总入口：[an-X550/Reflectloop](https://github.com/an-X550/Reflectloop)
 - Windows Agent：[Reflectloop-Desktop-Agent](https://github.com/an-X550/Reflectloop-Desktop-Agent)
-- 用户版分发包：[knowing-yourself-zhiji-user](https://github.com/an-X550/knowing-yourself-zhiji-user)
+- 用户版分发包：[Reflectloop-Agent-Skill](https://github.com/an-X550/Reflectloop-Agent-Skill)
 
 四个仓库之间不会自动共享日志或会话结果。本插件的结果只存在于当前 DSH 会话；需要正式保存时，由用户选择合适入口并明确整理或写入。
 
