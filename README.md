@@ -4,7 +4,7 @@
 
 ReflectLoop（中文名“知己”）是一个面向中文个人日志的本地优先 AI 复盘系统。它帮助你从真实记录中整理证据、发现模式、形成一个低成本行动，并在后续记录中验证和校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v2.6.5-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v2.6.6-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ```text
@@ -20,7 +20,7 @@ ReflectLoop 是项目总称；Windows 客户端、Codex/Claude、DSH 插件和 W
 
 | 你的使用方式 | 推荐入口 | 说明 |
 | --- | --- | --- |
-| 希望直接安装 Windows 应用 | [ReflectLoop Desktop（知己 Windows 客户端）](apps/zhiji-desktop/README.md) | 提供开始、Agent、日志、复盘、项目和设置六个可视化入口；数据默认保存在本机 |
+| 希望直接安装 Windows 应用 | [ReflectLoop Desktop Agent（知己 Windows 客户端）](apps/zhiji-desktop/README.md) | 提供受控 Agent、开始、日志、复盘、项目和设置六个可视化入口；数据默认保存在本机 |
 | 使用 Codex 或 Claude 读取本地 Markdown | [用户版使用指南](zhiji-user/README.md) | Codex 可直接使用自然语言；Claude 保留 Slash Command 兼容入口 |
 | 已安装 DeepSeek Harness | [ReflectLoop DSH 插件](apps/zhiji-dsh-plugin/README.md) | 在 DSH 会话中处理粘贴材料，或在显式配置后按日期范围只读聚合日志 |
 | 需要手机消息入口 | [WorkBuddy + 飞书智能体部署说明](zhiji-user/docs/workbuddy-deployment.md) | 通过 `[知己]` 前缀路由日志、复盘和主题讨论；外部写入仍受授权边界约束 |

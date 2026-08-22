@@ -1,5 +1,5 @@
 {
-  "name": "reflectloop-desktop",
+  "name": "reflectloop-desktop-agent",
   "productName": "知己",
   "version": "2.6.5",
   "description": "本地优先的 AI 日志复盘客户端",
@@ -22,12 +22,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/an-X550/ReflectLoop-Desktop.git"
+    "url": "git+https://github.com/an-X550/reflectloop-desktop-agent.git"
   },
   "bugs": {
-    "url": "https://github.com/an-X550/ReflectLoop-Desktop/issues"
+    "url": "https://github.com/an-X550/reflectloop-desktop-agent/issues"
   },
-  "homepage": "https://github.com/an-X550/ReflectLoop-Desktop",
+  "homepage": "https://github.com/an-X550/reflectloop-desktop-agent",
   "devDependencies": {
     "@electron-forge/cli": "^7.11.2",
     "@electron-forge/maker-deb": "^7.11.2",
