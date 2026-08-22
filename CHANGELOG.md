@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 11:41] [文档] 修正 Agent 能力报告中的 RAG 与长期记忆过度表述 (v2.5.0 -> v2.5.0)
+
+- **受影响文件**: `docs/2026-08-22-agent-capabilities-first-principles-analysis.md`、`docs/reviews/2026-08-22-agent-capabilities-audit.md`、`PROJECT_STATUS.md`
+- **改动摘要**: 将 `zhiji.memory.search` 从“RAG v0 / 长期记忆最小闭环”纠正为字符串包含式本地词法检索入口，把“有限脱敏摘要”纠正为“有限脱敏摘录”；补充中文复合查询、同义召回、用户可见证据、DSH `0.1.0-rc.8` 成熟度和 Electron `2.0.4` / 根项目 `2.5.0` 版本冲突边界。作品集下一优先级明确为只读证据卡片和版本事实统一，不为关键词新增 MCP、多模态、向量库、Computer Use 或递归自改。
+- **验证结果**: 报告问题术语扫描、Markdown 相对链接和 `git diff --check` 通过；不修改产品代码，不重新运行产品测试。
+
 ## [2026-08-22 11:31] [文档] 明确桌面 Agent 作品集定位与本地证据卡片需求 (v2.5.0 -> v2.5.0)
 
 - **受影响文件**: `docs/reviews/2026-08-22-agent-capabilities-audit.md`、`docs/specs/2026-08-22-agent-evidence-cards.md`、`docs/2026-08-22-agent-evidence-cards-execution-plan.md`、`PROJECT_STATUS.md`

@@ -3,108 +3,595 @@ created: 2026-08-22
 last_updated: 2026-08-22
 ---
 
-# 知己 Agent 十项能力：第一性原理分析与裁决
+# 知己 Agent 十项能力：第一性原理详细分析、现状盘点与高性价比裁决
 
-## 结论先行
+## 0. 文档性质与结论范围
 
-不建议为了“能力清单看起来完整”把十项能力全部接入。知己的核心价值不是成为通用电脑代理，而是把本地日志、复盘、验证模式收敛成可验证的行动闭环。当前最值得立即做的只有两项：
+本文是**分析与决策文档**，不是本轮的开发授权。本文更新只用于回答以下问题：
 
-1. **能力自述校准**：让 Agent 按当前真实代码回答“我有什么能力”，修正截图中把已具备的上下文压缩误报为“不具备”、把内部工具桥说成模糊能力的问题。
-2. **本地长期记忆关键词检索**：新增一个只读 `zhiji.memory.search` 工具，检索知己已有的日志、复盘和已确认验证模式。它先解决“能找回过去发生过什么”，不引入外部记忆服务、向量数据库或自动写入。
+1. 这十项能力分别解决什么真实问题？
+2. 知己桌面端当前已经具备什么，哪些只是模型或 API 的理论能力？
+3. 现在做是否值得、是否高性价比？
+4. 如果以后要做，应优先复用什么成熟方案，哪些边界不能直接照搬？
 
-其余能力的裁决是：已有能力不重复建设；没有当前证据、会扩大安全边界或会显著增加维护成本的能力暂不做。这个结论不是拒绝未来演进，而是把每项能力放在“真实问题—最小机制—可验证收益”的顺序中。
+本文不新增代码、依赖、配置、MCP Server、向量数据库、系统控制权限或自我修改权限；也不把“未来可以做”写成“当前已经具备”。桌面端的主要目标是作为 LLM / Agent 应用工程作品集，真实日常使用仍可由 Skill 承担。当前事实以根项目 `v2.5.0` 代码、既有测试记录和项目状态为准；Electron `package.json` / 锁文件仍为 `2.0.4`，版本统一并重新打包前，不把安装包表述为已确认的 `2.5.0`。本次不重新执行完整产品测试、打包或真实 API 质量评测。
 
-## 评估基准
+## 1. 结论先行
 
-从第一性原理看，能力是否值得做取决于四个问题：
-
-- 是否有当前、具体的使用问题，而不是行业清单带来的焦虑？
-- 是否直接服务“发现模式 → 形成行动 → 后续验证”的核心闭环？
-- 现有能力、提示词或一个小适配器是否已经足够？
-- 能否在本地立即验证正确性、隐私边界和用户收益？
-
-还要区分五层概念：
+不值得为了补齐一张行业能力清单，把十项能力全部接入知己。知己的核心目标仍然是：
 
 ```text
-模型能力（能生成什么）
-  ≠ API 协议（能否输出工具调用/JSON）
-  ≠ Agent Runtime（能否循环、压缩、持久化）
-  ≠ Host Tool（宿主实际允许访问什么）
-  ≠ 产品能力（用户能否安全完成目标）
+发现跨时间模式 → 形成一个可执行行动 → 用后续日志验证
 ```
 
-例如 DeepSeek API 的 Function Calling 只会生成函数名和 JSON 参数，函数本身必须由宿主执行；模型不会因为 API 支持 tool call 就自动访问网页、文件或电脑。[DeepSeek Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/)
+因此，最优策略不是“把知己变成通用电脑代理”，而是保留窄而可靠的本地日志闭环：
 
-## 当前代码事实
+- **已经具备，不重复建设**：上下文压缩、Function Calling、有限多步工具回合、会话持久化、工具/工作流结构化校验、受控联网、Markdown 输出。
+- **已经做了高性价比的工程入口**：跨日志、复盘和已验证模式的本地只读词法检索；它不是完整长期记忆，也不称为 RAG。
+- **当前只具备部分能力**：长期记忆的产品可见性、Agent 自主规划和 Structured Output 的产品层；完整 RAG 生命周期当前不存在。
+- **当前不具备且不建议现在做**：标准 MCP Client、多模态输入、通用 Computer Use、递归自我修改。
+- **作品集下一优先级**：不升级检索引擎，先增加当前回合只读证据卡片，让观看者直接核实命中的日期、类型和有限摘录。
 
-截至本次审计，桌面端已经具备：
+十项能力的总裁决如下：
 
-- DSH `TokenMeter`、`ToolResultPruner`、`BasicCompactionEngine`，并在 Utility runtime 启动时注册；不是截图所说的“没有主动上下文压缩”。
-- DSH `AgentLoop`、工具定义、Main Process `AgentToolDispatcher`、共享 Zod schema 和 DeepSeek API 工具名映射；Function Calling 已是正式链路。
-- JSONL 会话持久化、重启后的列表/resume、工具回合重放和 reasoning 流。
-- `journals/reviews/projects/patterns/web` 等受控工具；web 搜索结果通过会话内 `sourceId` 读取，最近已切换到 Electron `net.fetch`。
-- 具体工作流的 JSON/Zod 结构化输出，例如验证模式候选和正式复盘；普通 Agent 回复故意使用 Markdown，不强制输出 JSON。
-
-当前尚未具备或只具备部分能力：
-
-- 没有专门的本地长期记忆检索工具；现有日志/复盘工具主要是列表、按 ID 读取和日期/项目筛选，模型不能稳定按关键词找回较早内容。
-- 没有标准 MCP Client；现有工具桥是知己自己的 MessagePort + Main Process 校验协议。
-- Renderer 到模型的消息契约目前是文本块，没有图片、音频、视频和附件的端到端传输。
-- Agent 可以连续进行多轮工具调用，但没有通用的自主任务队列、子 Agent 编排、任意文件修改或后台运行权限。
-- 没有向量数据库、embedding 管线、chunk/index 生命周期或检索评测闭环；当前 web 搜索是受控公开来源检索，不等于本地 RAG。
-- 没有 Computer Use 权限、桌面截图/坐标输入、沙箱和回滚系统，也没有递归修改自身代码/提示词/工具的机制。
-
-## 十项能力裁决
-
-| # | 能力 | 当前事实 | 是否值得现在做 | 裁决与最小路径 |
+| # | 能力 | 当前状态 | 现在是否高性价比 | 裁决 |
 |---:|---|---|---|---|
-| 1 | 上下文压缩 | 已接入 DSH 官方 token meter、工具结果裁剪和 basic compaction；会话仍保留 JSONL 原始事件 | 否，重复建设 | **不新增**。补齐能力自述和验证说明即可；不自研摘要器、不复制 Pi/Hermes 的另一套压缩链。 |
-| 2 | 长期记忆检索 | 可读取日志/复盘/模式，但缺少跨时间关键词入口；截图中的“部分具备”基本正确 | 是，收益直接且成本低 | **立即做** `zhiji.memory.search`。只读检索现有权威 Markdown/模式仓储，返回有限脱敏摘要和 ID；不自动写记忆。 |
-| 3 | Function Calling | DSH ToolRuntime + Main Process dispatcher + DeepSeek 工具名兼容映射已在用 | 否，已具备 | **不新增**。继续让所有工具经过共享 Zod、Main Process 权限和已有确认门。 |
-| 4 | MCP 工具调用 | 当前内部工具桥不是 MCP；官方 TypeScript SDK 可做 Client，但需要管理 stdio/HTTP、进程生命周期、认证和每个 server 的权限 | 暂不值得 | **暂不做**。当前没有明确 MCP server、用户配置需求或验收场景；先保留适配边界。若未来接入，使用官方 SDK v1 生产线，不复制协议。 |
-| 5 | 多模态理解 | 当前消息、provider 和 Agent 回放都是文本契约；图片/音频/视频还没有安全的附件生命周期 | 暂不值得 | **暂不做**。先确认目标场景（图片日志、截图诊断还是语音输入）和 V4-Flash 端到端支持，再做单一媒体类型，不一次铺开多模态平台。 |
-| 6 | Agent 自主规划 | DSH AgentLoop 可多轮思考、调用多个工具；正式写入、周期复盘仍有用户确认门 | 暂不新增独立规划器 | **保留现状并校准表述**。多步工具回合已经是有限自主规划；不引入复杂 Planner、子 Agent 或后台任务，避免与知己确认边界冲突。 |
-| 7 | RAG 检索增强 | web 是公开来源检索；本地资料缺少关键词召回，向量 RAG 全链路不存在 | 是，但先做可解释基线 | **与 #2 合并做第一阶段**。关键词/短语召回是可验证的本地 RAG v0；暂不引入 embedding、向量库和外部记忆服务。 |
-| 8 | Structured Output | 工具参数/结果走 Zod；验证模式和正式工作流已有 JSON 输出；普通回复按产品要求使用 Markdown | 否，不能全局强制 | **不新增全局 JSON 模式**。未来仅为有明确下游消费者的单个工作流开启 strict/JSON；不牺牲对话可读性。 |
-| 9 | Computer Use | 当前没有桌面控制、截图定位、权限审批、沙箱、回滚和防误操作机制 | 否，风险高且偏离核心 | **明确不做**。它会把本地日志助手扩大为可操作电脑的高风险代理；没有具体业务闭环和安全设施时不接入。 |
-| 10 | 递归自我改进 | 没有也不应默认拥有自改代码、提示词、工具或权限的能力 | 否，边界不成立 | **明确不做**。允许用户和开发流程显式更新代码/Skill/提示词，但不允许 Agent 自主修改并再次执行自身。 |
+| 1 | 上下文压缩 | 已接入 DSH `0.1.0-rc.8` 官方组件 | 否，重复建设 | 保留并观察真实长会话质量；RC 依赖不等于稳定性已充分验证 |
+| 2 | 长期记忆检索 | 已有本地只读字符串/词法检索入口，证据尚不可见 | 是，但下一步是展示而非换引擎 | 保留 `zhiji.memory.search`，增加只读证据卡片；暂不接外部记忆或自动写入 |
+| 3 | Function Calling | 已有模型调用—宿主执行—结果回传闭环 | 否，已具备 | 继续收紧工具契约，不增加通用任意函数 |
+| 4 | MCP 工具调用 | 内部工具桥不是 MCP，标准 Client 尚无 | 暂不值得 | 等出现明确外部 MCP Server 和真实任务后再接官方 SDK |
+| 5 | 多模态理解 | 当前 Agent 消息契约为文本 | 暂不值得 | 先等一个明确图片、音频或视频场景，再按单一媒体类型接入 |
+| 6 | Agent 自主规划 | 已有有限多轮工具规划，无通用任务编排 | 暂不新增 Planner | 保留受工具和确认门约束的有限自主性 |
+| 7 | RAG 检索增强 | 完整生命周期不存在；当前只有词法检索入口 | 暂不值得 | 不把现有实现称为 RAG；只有明确漏召回才评估 SQLite FTS5/BM25，再评估向量方案 |
+| 8 | Structured Output | 工具和正式工作流结构化；普通回复 Markdown | 不适合全局强制 | 按下游消费者逐工作流启用，不把聊天变成 JSON |
+| 9 | Computer Use | 没有桌面感知、操作、沙箱和回滚 | 否，风险远大于当前收益 | 不实现通用电脑控制 |
+| 10 | 递归自我改进 | 没有自改代码、提示词、工具和权限的能力 | 否，边界不成立 | 只允许人工审查的提案/补丁流程，不允许自主递归执行 |
 
-## 成熟方案调研与复用边界
+## 2. 第一性原理：先拆问题，再决定能力
 
-### Pi Agent
+### 2.1 真实问题不是“缺少名词”
 
-Pi 提供统一多供应商 API、Agent loop、tool calling 和 state management，适合参考运行时抽象；但其 README 明确指出默认没有内置文件、进程、网络和凭据权限限制，需要宿主自行 sandbox/containerize。[Pi Agent README](https://github.com/earendil-works/pi)
+“上下文压缩、RAG、MCP、Computer Use”是工程名词，不是用户价值。需要先把用户真正要解决的问题拆开：
 
-知己已经有 DSH AgentLoop 和更窄的 Main Process 工具边界。整体替换 Pi 会重复运行时、打包和持久化工作，还可能削弱现有安全边界，因此不采用整体迁移；只借鉴其“runtime 与工具解耦”的思路。
+| 用户问题 | 真正需要的机制 | 不一定需要的机制 |
+|---|---|---|
+| Agent 忘记此前记录 | 有权威来源、可检索、可引用的历史事实 | 不一定需要向量数据库或云端记忆 |
+| 多轮后越来越慢、跑偏 | token 预算、工具结果裁剪、上下文压缩 | 不一定需要换整个 Agent 框架 |
+| Agent 需要查天气或读日志 | 受限工具调用、宿主执行、结果回传 | 不一定需要 MCP |
+| 结果要进入 UI、文件或工作流 | 有明确 Schema 的结构化输出 | 不一定需要普通聊天全部 JSON 化 |
+| 任务需要多个步骤 | 可取消、可观测、有限权限的工具循环 | 不一定需要子 Agent 或通用 Planner |
+| 要读图片或听语音 | 媒体输入、附件生命周期、模型兼容 | 不一定需要一次性支持图片、音频、视频 |
+| 要自动操作电脑 | 感知、动作、权限、停止、回滚和沙箱 | 绝不是加一个鼠标工具就完成 |
 
-### Hermes Agent
+如果一个能力不能直接改善“发现模式—形成行动—后续验证”，或者会引入更大的权限、数据和维护边界，就不应仅因为其他 Agent 有它而接入。
 
-Hermes 的成熟做法是把长期记忆抽象为 provider 生命周期：`prefetch`、`sync_turn`、工具检索和可替换后端；它还用 FTS5 做跨会话搜索，并把外部 memory provider 做成可插拔选项。[Hermes memory providers](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/memory-providers.md) [Hermes README](https://github.com/NousResearch/hermes-agent)
+### 2.2 五层边界不能混淆
 
-这证明“记忆检索应与 Agent loop 解耦”是成熟方向。但知己目前的权威数据是本地 Markdown，规模和具体痛点尚不足以支付 SQLite/embedding/外部 provider 的维护成本；本次先做不引入依赖的只读关键词适配器，并把将来切换 FTS5/向量后端的边界写清楚。
+```text
+模型能力
+  ≠ API 协议能力
+  ≠ Agent Runtime 能力
+  ≠ 宿主工具能力
+  ≠ 产品安全能力
+```
 
-### Reasonix
+例如 DeepSeek 的 Tool Calls 让模型返回工具名称和 JSON 参数，但**模型不会执行函数**；函数由宿主程序执行，再把工具结果传回模型。[DeepSeek Tool Calls 官方文档](https://api-docs.deepseek.com/guides/tool_calls/)
 
-Reasonix 的 README 已说明旧 TypeScript 线处于 maintenance mode，活跃开发已转向 Go rewrite；它提供 MCP、插件、hooks、memory 分类和 cache-aware context maintenance 等可参考设计。[Reasonix README](https://github.com/esengine/DeepSeek-Reasonix)
+同理：
 
-Reasonix 更像通用 coding agent 平台，不适合直接嵌入知己的 Electron Main/Utility 安全架构。只复用“插件/工具/上下文维护应有明确生命周期”的思想，不引入其终端、hooks、shell 或自改能力。
+- API 支持 JSON，不代表知己普通回答应全部输出 JSON。
+- 模型能输出“点击按钮”的文字，不代表产品具备 Computer Use。
+- Agent Runtime 能循环调用工具，不代表它拥有后台任务队列或任意写入权限。
+- 有会话 JSONL，不代表已经有抽象、可纠错、可过期的长期记忆。
+- 有网页搜索，不代表已经有本地资料 RAG。
 
-### MCP 官方 SDK
+### 2.3 判断“值得做”的四个问题
 
-官方 TypeScript SDK 提供 MCP Client/Server、stdio、Streamable HTTP、认证和工具发现；当前 main 分支 v2 仍是 pre-alpha，仓库建议生产使用 v1.x。[MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) [MCP Client Guide](https://github.com/modelcontextprotocol/typescript-sdk/blob/main/docs/client.md)
+每项能力按以下顺序判断，不使用没有真实样本支撑的精确分数：
 
-MCP 是成熟协议，但“协议成熟”不等于“此刻值得接入”。知己缺少具体 server 配置、权限 UI、进程退出策略、工具数量上限和用户验收样本。本轮不安装 SDK，不启动任意外部进程，不改变既有安全边界。
+1. **问题证据**：是否已有具体失败、重复劳动或可观察损失？
+2. **核心关联**：是否直接服务日志、复盘、行动和验证闭环？
+3. **最小替代**：提示词、既有能力、一个适配器或只读索引是否已经足够？
+4. **验证闭环**：完成后能否在本地用真实数据立即检查正确性、隐私和用户收益？
 
-### DeepSeek 官方接口
+四项中任一项明显不成立，就先不扩展。此处不新增 hash、baseline、冻结 contract 或质量 gate；普通单元测试、类型约束、打包回归和真实样本观察已经足够作为当前证据。
 
-DeepSeek 当前 API 已支持 Function Calling、并行工具调用和 Beta strict tool schema；JSON Output 适合有明确机器消费者的场景。Thinking 模式的工具回合要求完整回传 `reasoning_content`，当前知己已在 DSH 回放链路中保留 reasoning。[Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/) [JSON Output](https://api-docs.deepseek.com/guides/json_mode/) [Thinking Mode](https://api-docs.deepseek.com/guides/thinking_mode/)
+### 2.4 知己的不可突破约束
 
-因此不把 DeepSeek API 的“支持”误写成产品的“自动具备”：函数执行、校验、权限、记忆存储和输出展示仍由知己负责。
+- `.claude/` 是现有 Skill、命令、工作流和共享契约的运行真相，不能被新 Agent 框架替换。
+- 桌面端是 Electron Windows 应用，API Key 只应留在 Main Process，Renderer 不应获得任意网络、文件或 Shell 权限。
+- 日志、复盘和验证模式是用户数据；记忆检索必须能说明来源、保持只读和可删除，不应复制出第二份不可追踪的真相。
+- 正式日志、周期复盘和洞察生成已有预览—确认—执行边界，规划能力不能绕过确认门。
+- DeepSeek V4-Flash 的响应速度不能直接证明回答质量；速度、思考开关、工具回合完整性和任务正确性是不同变量。
 
-## 风险边界
+## 3. 当前能力事实：知己现在真正有什么
 
-- 本次不删除、不迁移、不重写现有 Skill 系统、日志仓储、DSH 会话或用户数据。
-- `memory.search` 只读现有数据，不接受路径、URL、Shell、写入指令或任意代码。
-- 结果只回传稳定 ID、日期、有限摘要；沿用现有路径/URL 脱敏策略。
-- 不增加 hash、baseline、冻结 contract 或质量 gate；用普通单元测试、类型检查、打包和可复现样例验证即可。
-- 不新增 MCP、Computer Use、递归自改、外部向量服务或新的 API Key。
+以下是代码事实，不是模型自述：
+
+| 能力层 | 当前事实 | 证据位置 | 明确限制 |
+|---|---|---|---|
+| 上下文运行时 | DSH `0.1.0-rc.8` 的 `TokenMeter`、`ToolResultPruner`、`BasicCompactionEngine` 已注册 | [`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L6)、[`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L123) | 官方 RC 组件已接入，不等于稳定性和极限长会话质量已充分验证 |
+| 会话状态 | DSH JSONL 持久化、列表、resume 和 reasoning 重放 | [`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L12)、[`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L316) | 会话历史不是语义长期记忆 |
+| Function Calling | AgentLoop 生成工具调用，Main Process 校验并执行，结果回传 | [`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L139)、[`agent-tool-dispatcher.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-tool-dispatcher.ts#L66) | 只允许知己注册的高层工具，不是任意函数执行 |
+| 工具安全边界 | 共享 Zod request/result、Main Process dispatcher、路径/URL 脱敏 | [`agent-tools.ts`](../apps/zhiji-desktop/src/shared/schemas/agent-tools.ts#L56)、[`agent-tool-dispatcher.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-tool-dispatcher.ts#L17) | 内部 MessagePort 是私有桥接协议，不是标准 MCP |
+| 本地记忆 | `zhiji.memory.search` 以字符串包含方式只读检索日志、复盘、已确认验证模式 | [`agent-memory-search-service.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-memory-search-service.ts#L23)、[`dsh-runtime.ts`](../apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts#L51) | 中文连续字符作为整段词项；返回有限原文摘录；界面只显示活动标签；不是 RAG 或语义记忆 |
+| 受控联网 | `web.search` / `web.read-source` 通过 Main Process 受控调用；Windows 网络栈使用 Electron `net.fetch` | [`bootstrap.ts`](../apps/zhiji-desktop/src/main-process/bootstrap.ts#L53) | 公开来源搜索不等于本地 RAG 或任意浏览器控制 |
+| 输出展示 | 工具/工作流使用结构化契约；普通回答使用 React Markdown/GFM | [`markdown-document.tsx`](../apps/zhiji-desktop/src/renderer/components/markdown-document.tsx#L1) | 普通自然语言不强制 JSON；非法单行 Markdown 不做猜测式修复 |
+| 写入边界 | 日志保存、周期复盘、洞察复盘走既有领域服务和用户确认 | [`agent-tool-dispatcher.ts`](../apps/zhiji-desktop/src/main-process/agent/agent-tool-dispatcher.ts#L130) | Agent 不能自行修改 Skill、代码、权限或桌面环境 |
+
+因此，截图式“能力清单”只能作为待核对假设，不能作为当前代码事实。特别是上下文压缩、Function Calling 和部分结构化能力已经存在；而标准 MCP、多模态、Computer Use 和递归自改并不存在。
+
+## 4. 十项能力逐项分析
+
+### 4.1 上下文压缩
+
+#### 它真正解决什么问题
+
+上下文有三个不同问题，不能都叫“压缩”：
+
+1. **请求上下文预算**：消息、工具结果和 reasoning 逐步变长，接近模型上下文上限。
+2. **信息保真**：压缩后仍要保留用户约束、关键事实、未完成任务、工具结果和确认状态。
+3. **会话存储体积**：磁盘上的 JSONL 事件是否压缩，与发给模型的上下文是否压缩是两回事。
+
+#### 当前状态
+
+知己已经复用 DSH `0.1.0-rc.8` 的官方 `TokenMeter`、工具结果裁剪和 `BasicCompactionEngine`。这意味着“没有主动上下文压缩”的判断不准确，但 RC 版本也不能被写成稳定性已经充分验证。另一方面，当前 JSONL 会话持久化仍保持可读事件，运行配置中的 `compression: 'none'` 不能被误读为“运行时没有上下文压缩”，它主要说明持久化事件没有被压成不可直接重放的另一种格式。
+
+当前能确认的是：压缩机制已接入；当前不能据此确认：
+
+- 复杂中文日志在压缩后是否仍保留全部关键事实；
+- 长时间工具循环是否会错误遗忘确认门或来源 ID；
+- Flash 与 Pro、思考开关不同组合下的压缩质量是否相同；
+- 极限长度场景下的延迟和费用是否改善到用户可感知的程度。
+
+#### 是否值得现在做
+
+**不值得新增实现。** 当前真实问题是“是否接入、是否正确接入、极端样本质量如何”，不是“再写一个压缩器”。重新引入 Pi、Hermes 或自研摘要链，会产生两套上下文真相、重复 token 预算计算和新的回放兼容问题。
+
+#### 成熟方案与复用边界
+
+Pi 已把 Agent loop、工具调用和状态管理拆成可复用运行时，但其权限模型需要宿主自行 sandbox/containerize；它适合参考运行时分层，不适合整体替换知己的安全边界。[Pi Agent README](https://github.com/earendil-works/pi)
+
+#### 裁决
+
+保留现有 DSH 压缩链。未来只有在真实长会话出现“压缩后关键事实丢失”时，才针对 DSH 的 compaction hook 增加保真修正或领域摘要；不建立第二个独立压缩系统。
+
+### 4.2 长期记忆检索
+
+#### 它真正解决什么问题
+
+长期记忆不是“把历史全部塞进 system prompt”，而是让 Agent 在需要时从有来源的历史事实中召回内容。至少要分清四层：
+
+| 层 | 作用 | 是否应自动绑定每轮 |
+|---|---|---|
+| 强制指令 | 必须遵守的规则、边界、工作方式 | 是，但应短 |
+| 项目事实 | 只对某项目有效的约束、决定和背景 | 按相关性检索 |
+| 用户事实/偏好 | 用户明确选择长期保留的信息 | 按范围和授权检索 |
+| 会话历史 | 原始措辞、工具结果、尚未沉淀的讨论 | 按会话或搜索读取 |
+
+Reasonix 的 Context Engine v2 明确把 standing instructions 与 background memory 分开，并提醒事实不能悄悄变成命令；这是比“一个 MEMORY.md 解决所有问题”更可靠的设计。[Reasonix Context Engine v2](https://github.com/esengine/DeepSeek-Reasonix/blob/main-v2/docs/SESSION_MEMORY_RETRIEVAL.md)
+
+#### 当前状态
+
+根项目 `v2.5.0` 已有 `zhiji.memory.search`：
+
+- 只读复用日志、复盘和已确认验证模式的权威仓储；
+- 以完整查询命中和词项包含数量排序，中文连续字符会作为一个完整词项；
+- 返回稳定 ID、日期和最多 800 字符的有限原文摘录，不是模型摘要；
+- 结果经过共享 Zod 契约和 Main Process `safeText`；
+- 不创建第二份日志真相，不自动抽取、自动写入或调用外部记忆服务；
+- Agent 页面目前只显示“正在/已完成：检索长期记忆”，不会结构化展示命中证据；
+- 空结果应明确表示“未检索到”，不能把模型猜测说成“我记得”。
+
+现有聚焦测试证明直接关键词可以命中日志、复盘和已验证模式，并证明排序与空结果的基本行为；它没有证明同义表达、中文复合查询、大规模性能、模型稳定自动检索或用户可见证据闭环。
+
+因此当前是“有来源的本地历史检索”，不是完整的语义长期记忆系统。它还没有：
+
+- 每轮自动 prefetch；
+- 记忆的类型、范围、过期、冲突和用户纠错模型；
+- 语义向量、BM25/FTS5 索引、重排或召回解释层；
+- 记忆写入、删除、忘记和隐私导出的一套独立产品界面。
+
+#### 是否值得现在做
+
+**长期记忆方向值得保留，但当前只能确认工程入口已经实现，不能宣称用户问题已经解决。** 知己的核心数据本来就是 Markdown 日志和复盘，先复用权威数据做只读词法检索，比接入云端记忆 SaaS 更直接。面向作品集，当前更高性价比的缺口不是更换检索引擎，而是让命中的日期、类型和摘录在界面中可核实。
+
+#### 成熟方案与复用边界
+
+Hermes 已将记忆抽象成 Provider，并提供 `prefetch`、每轮同步、会话结束抽取和 Provider 工具；它还限制同时启用的外部 Provider 数量，避免工具 Schema 膨胀和多个记忆后端相互冲突。[Hermes Memory Providers](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/memory-providers.md)
+
+知己应复用的是接口思想，而不是现在就引入 Hermes 的 Python 运行时或外部服务：
+
+```text
+search(query, scope) → 带来源的结果
+prefetch(query)      → 可选、受预算限制的上下文补充
+store(fact)          → 只有明确授权和独立审计后才允许
+forget(id)           → 必须可追踪、可验证、可恢复或明确不可恢复
+```
+
+#### 裁决
+
+保留当前只读词法检索，并按已确认 Spec 增加当前回合证据卡片；卡片只消费 Main Process 已校验的 ID、类型、日期和有限摘录，不持久化、不建立第二份记忆。未来若演示或实际查询出现明确漏召回，先在同一服务接口后评估本地 SQLite FTS5/BM25；只有出现明确的语义召回需求、数据规模和隐私方案后，才评估 embedding、向量库或外部 Provider。不要把会话历史、强制指令和背景事实混成一个自动写入池。
+
+### 4.3 Function Calling
+
+#### 它真正解决什么问题
+
+Function Calling 的本质是把自然语言决策连接到一个有 Schema、可验证、可拒绝的宿主动作：
+
+```text
+模型提出工具调用 → 宿主校验参数 → 宿主执行 → 返回工具结果 → 模型继续或结束
+```
+
+它不是模型获得电脑权限，也不是“模型自己会调用函数”。DeepSeek 官方文档明确说明函数实现由用户提供，模型只返回调用信息；官方 API 还提醒工具参数必须在代码中验证，因为模型可能生成无效 JSON 或未定义参数。[DeepSeek Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/)、[DeepSeek Chat Completion API](https://api-docs.deepseek.com/api/create-chat-completion/)
+
+#### 当前状态
+
+知己已经具备完整但受限的 Function Calling 链路：
+
+- DSH `AgentLoop` 接收工具定义并处理多轮回合；
+- DeepSeek 模型适配器保留 tool call、reasoning 和流式增量；
+- Main Process 的 `AgentToolDispatcher` 是唯一工具执行入口；
+- shared Zod schema 校验请求和结果；
+- 工具只暴露日志、复盘、项目、验证模式、受控联网、UI 跳转和确认后的工作流；
+- 不暴露任意路径、Shell、URL 直读或任意 JavaScript 执行。
+
+#### 是否值得现在做
+
+**不值得重新实现。** 当前需要的是工具设计质量和错误处理，而不是再装一套 Function Calling SDK。再增加任意函数会扩大安全边界，使模型能从“日志助手”滑向“本机执行器”。
+
+#### 裁决
+
+继续采用“模型提议、宿主校验、领域服务执行、结果脱敏”的闭环。未来若增加工具，应先说明工具的真实用户任务、输入/输出、权限、失败语义和确认要求；不为了数量增加工具。
+
+### 4.4 MCP 工具调用
+
+#### 它真正解决什么问题
+
+MCP 主要解决**跨应用工具、资源和提示词的互操作协议**，不是比 Function Calling 更聪明的模型能力。Function Calling 是一次模型—宿主调用机制；MCP 还要解决 Server 发现、传输、会话、认证、生命周期和跨进程信任。
+
+#### 当前状态
+
+知己当前的 `MessagePort + Main Process + Zod` 是内部桥接协议，不是 MCP Client。它已经足够承载知己自有工具，但没有：
+
+- MCP Server 配置和发现；
+- stdio/HTTP Server 生命周期；
+- 每个 Server 的权限、认证和撤销界面；
+- 工具数量、超时、并发和结果大小限制；
+- 外部工具的来源、版本和供应链审查。
+
+#### 是否值得现在做
+
+**暂不值得。** “MCP 很成熟”只说明协议和 SDK 可用，不说明知己当前存在需要外接的 Server。若没有真实的外部工具任务，接入 MCP 只会重复已有 Dispatcher，并新增子进程、权限、认证和打包问题。
+
+#### 成熟方案与复用边界
+
+官方 TypeScript SDK 已提供 MCP Server/Client、工具、资源、提示词以及 stdio、HTTP、会话和授权相关能力；当前仓库主线已经进入新的 v2 SDK 线路。[MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
+
+未来接入时应：
+
+1. 只在 Main Process 或隔离的受控 Utility 中接入，Renderer 不直接连外部 Server；
+2. 固定已发布 SDK 和协议版本，不依赖浮动 `main`；
+3. 只允许用户明确启用的 Server 和工具；
+4. 为每个工具保留超时、取消、结果大小和错误脱敏；
+5. 写入、外部发送、删除等动作继续经过知己自己的确认门；
+6. 把 MCP 工具映射为知己内部统一契约，而不是让外部 Schema 直接穿透 UI 和领域服务。
+
+#### 裁决
+
+不安装 SDK，不启动任意 MCP Server，不改变当前工具桥。触发条件是用户给出一个具体 Server、传输方式和真实任务，而不是“以后可能用到 MCP”。
+
+### 4.5 多模态理解
+
+#### 它真正解决什么问题
+
+多模态不是在提示词中写“请看图”，而是一条端到端数据链：
+
+```text
+附件选择 → 类型/大小校验 → 安全存储或上传 → provider content parts
+→ 模型回放/持久化 → 结果展示 → 删除与隐私控制
+```
+
+图片、音频、视频的传输、费用、延迟、可回放性和隐私风险都不同，不能一次性作为一个模糊的“多模态开关”。
+
+#### 当前状态
+
+知己 Agent 的模型消息、工具桥、会话回放和 Renderer 消息契约当前以文本为主。桌面端可以展示用户提供的截图，但这不等于截图已经作为模型输入完成安全、可重放的多模态链路。当前没有统一的：
+
+- 图片/音频/视频附件 Schema；
+- MIME、大小、分辨率、时长和恶意文件限制；
+- 本地文件与远端上传的隐私选择；
+- 多模态消息持久化和删除策略；
+- DeepSeek V4-Flash 当前端点对目标媒体类型的兼容验收。
+
+#### 是否值得现在做
+
+**暂不值得铺开。** 没有明确场景时，三种媒体类型一起接入的成本高于收益。若用户真实需求是“分析截图中的日志排版”，图片可能是第一个候选；若需求是语音日志，音频转写和时间戳又是另一条产品链。必须先选一个场景。
+
+#### 成熟方案与复用边界
+
+优先复用 provider 已有的标准 content-part 结构和成熟媒体解析库，不自创 `imageData1/imageData2` 之类协议；可以参考 Pi 的多供应商抽象，但不能因此把整个 Pi coding-agent 权限面带入桌面端。[Pi Agent README](https://github.com/earendil-works/pi)
+
+#### 裁决
+
+当前不修改 Renderer、IPC、会话格式和模型适配器。未来若有具体场景，先做图片或音频中的一种，明确附件生命周期和隐私边界，再判断是否值得扩大。
+
+### 4.6 Agent 自主规划
+
+#### 它真正解决什么问题
+
+“自主规划”至少包含四个层次：
+
+1. 模型在一次回复中列出步骤；
+2. AgentLoop 根据工具结果继续下一步；
+3. 可恢复的任务计划，包含状态、取消、重试和进度；
+4. 多 Agent、后台任务和跨会话编排。
+
+前两层不能自动等同于后两层。思考模式输出了更多 reasoning，也不代表形成了可审计、可恢复的计划。
+
+#### 当前状态
+
+知己已有 DSH AgentLoop，可以在一次会话内连续读取资料、搜索来源、提出工作流预览并等待确认。它是**有限自主规划**：
+
+- 模型可以决定调用哪些已注册工具；
+- 领域工具负责真实执行；
+- 正式写入和周期复盘必须经过既有确认门；
+- Agent 没有任意后台任务队列、子 Agent 编排、Shell、任意文件修改和无人值守运行权限。
+
+#### 是否值得现在做
+
+**不新增独立 Planner。** 通用 Planner 往往带来额外 token、延迟、状态同步和失败分支；对于日志读取—复盘预览—用户确认这一类有限流程，现有工具回合已经足够。一个“看起来更会规划”的系统，如果不能取消、解释、恢复和守住确认门，反而降低可靠性。
+
+#### 成熟方案与复用边界
+
+Pi 的 `pi-agent-core` 已将 Agent loop、tool calling 和 state management 做成独立运行时，适合借鉴职责拆分；Hermes 也把工具、记忆 Provider 和 Agent 生命周期分开。复用这些抽象比自研一套 planner 更高性价比，但不应直接引入 coding-agent 的 Shell 和任意文件能力。[Pi Agent](https://github.com/earendil-works/pi)、[Hermes Agent](https://github.com/NousResearch/hermes-agent)
+
+#### 裁决
+
+保留有限多步工具规划。未来只有当出现一个重复、明确、耗时且用户愿意授权的多步流程时，才设计最小任务状态对象；计划必须可见、可取消、可恢复，并把写入步骤继续交给现有领域确认门。
+
+### 4.7 RAG 检索增强
+
+#### 它真正解决什么问题
+
+RAG 不是“加一个向量数据库”，而是一个完整生命周期：
+
+```text
+资料来源 → 切分 → 索引 → 查询召回 → 重排/过滤 → 带来源注入 → 回答引用
+   ↑                                                        ↓
+   └────────────── 更新、删除、过期和权限同步 ──────────────┘
+```
+
+如果没有来源、更新、删除和权限模型，向量库只会制造一份难以解释的第二真相。
+
+#### 当前状态
+
+知己当前有两类容易被混淆的检索：
+
+- `web.search`：搜索公开来源并绑定本次会话的 `sourceId`，属于受控联网搜索；
+- `zhiji.memory.search`：从本地日志、复盘和已确认验证模式做字符串包含/词法召回，是未来检索增强可复用的入口，但当前不称为 RAG。
+
+当前没有独立切分、索引生命周期、召回评测、重排、自动引用闭环，也没有 embedding、向量数据库或混合召回。因此“RAG v0”仍会高估现有实现；准确表述是“本地可解释词法检索”。
+
+#### 是否值得现在做
+
+**检索增强方向可以保留，但现在既不值得向量化，也不需要用 RAG 名称包装。** 知己的本地资料规模、权威格式和核心查询都是中文日志/复盘；当前作品集首先要证明的是“检索结果来自哪里、用户能否核实”，不是检索技术名词是否完整。如果以后出现明确漏召回，再用更成熟的词法索引解决具体问题。
+
+#### 成熟方案与复用边界
+
+Hermes 的 Provider 文档展示了从自动 prefetch、会话同步，到本地 SQLite FTS5、混合检索、信任分数和外部 Provider 的成熟路线；Reasonix 还提供了 CJK 词法召回、作用域、过期降权和指令/事实分离的设计参考。[Hermes Memory Providers](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/memory-providers.md)、[Reasonix Session Memory Retrieval](https://github.com/esengine/DeepSeek-Reasonix/blob/main-v2/docs/SESSION_MEMORY_RETRIEVAL.md)
+
+推荐的演进顺序是：
+
+1. 当前只读字符串/词法检索，并补齐用户可见证据卡片；
+2. 若出现明确漏召回，优先本地 SQLite FTS5 或 BM25，并保留来源 ID；
+3. 若仍无法处理同义、隐含语义和跨语言查询，再评估本地 embedding 或可替换 Provider；
+4. 任何语义召回都必须保留来源、时间、作用域和用户删除路径。
+
+#### 裁决
+
+当前 #7 不作为一项已具备能力；#2 只提供可复用的本地词法检索入口。没有明确召回失败证据，不启动 embedding、Qdrant、pgvector、云端记忆或自动知识抽取，也不在简历中把现状写成 RAG。
+
+### 4.8 Structured Output
+
+#### 它真正解决什么问题
+
+Structured Output 的价值在于**下游程序需要稳定解析**，例如：
+
+- 保存日志所需的日期、正文、项目 ID；
+- UI 展示所需的卡片、导航目标和审批信息；
+- 复盘工作流所需的预览材料、确认 token 和正式结果。
+
+它不等于“回答有 Markdown 标题”，也不等于“所有自然语言都必须 JSON”。
+
+#### 当前状态
+
+知己已经在工具和正式工作流使用共享 Zod Schema 校验请求/结果；Renderer 对普通回答使用 Markdown/GFM，保证标题、列表、表格和代码块可读。当前是：
+
+- **工具参数结构化**：有；
+- **工具结果结构化**：有；
+- **工作流结果结构化**：有；
+- **普通聊天全局 JSON**：没有，也不应默认有；
+- **所有下游 Schema 都由模型严格生成并自动修复**：没有。
+
+DeepSeek JSON Output 需要 `response_format: { type: 'json_object' }`、提示词中的 JSON 约束和合理的 token 预算；官方文档也提示可能出现空内容或截断风险。DeepSeek Tool Calls 的 strict Schema 是针对工具调用格式，不等于普通回复的业务 Schema。[DeepSeek JSON Output](https://api-docs.deepseek.com/guides/json_mode/)、[DeepSeek Tool Calls strict mode](https://api-docs.deepseek.com/guides/tool_calls/)
+
+#### 是否值得现在做
+
+**不值得全局强制。** 普通聊天的下游消费者是人，Markdown 比 JSON 更适合阅读；日志、复盘和 UI 卡片已有明确消费者，现有结构化边界已经解决主要问题。全局 JSON 会让开放式问答变差，还会放大模型兼容、空 JSON、截断和修复成本。
+
+#### 裁决
+
+继续采用“有下游消费者才结构化”的策略。未来为单个工作流增加 Schema 时，按以下流程：
+
+```text
+定义消费者需要的最小 Schema → 模型生成 → Zod 解析
+→ 失败时有限重试或转人工澄清 → 领域服务执行
+```
+
+不把普通 Agent 回复变成 JSON，也不重复实现 JSON Schema 校验器。
+
+### 4.9 Computer Use
+
+#### 它真正解决什么问题
+
+Computer Use 是一个高风险闭环，不是“加鼠标键盘 API”：
+
+```text
+屏幕/窗口感知 → 动作规划 → 坐标或控件操作 → 新画面反馈
+        ↑              ↓
+     状态判断 ← 停止、超时、撤销、回滚和人工接管
+```
+
+它还需要操作系统权限、沙箱或隔离用户、敏感页面保护、动作白名单、破坏性操作确认和失败恢复。
+
+#### 当前状态
+
+知己没有桌面截图识别、鼠标键盘控制、窗口定位、浏览器会话接管、操作审计、沙箱和回滚系统。打开知己页面、展示 UI 卡片或导航到既有页面属于受限 UI 工具，不是 Computer Use。
+
+Hermes 的 CLI 文档把 Computer Use 作为独立 toolset 和 driver 生命周期处理，这本身说明它需要单独的安装、运行时和平台适配，不是普通 Function Calling 的自然延伸。[Hermes CLI / Computer Use](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/cli-commands.md)
+
+#### 是否值得现在做
+
+**不值得做。** 它偏离知己“记录—复盘—验证”的核心，且会把当前安全边界从“允许访问少量结构化数据”扩大到“允许代理操作整台电脑”。没有具体高价值流程和完整安全设施时，收益无法覆盖风险。
+
+#### 裁决
+
+明确不接入通用 Computer Use。以后如果出现明确任务，也只能先做隔离、只读、可见、可停止的单一流程；不允许从“能点按钮”直接演进成无人值守电脑代理。
+
+### 4.10 递归自我改进
+
+#### 它真正解决什么问题
+
+需要先区分三种不同概念：
+
+- **记忆**：保存用户或项目事实，供以后检索；
+- **反馈**：用户或测试告诉 Agent 某次输出哪里不好；
+- **自我修改**：Agent 改写自己的代码、提示词、工具、权限或执行策略，并自动再次运行修改后的自己。
+
+前两种是产品能力，第三种是开发与安全边界变化。
+
+#### 当前状态
+
+知己没有、也不应默认拥有 Agent 自主修改代码、Skill、共享契约、工具定义、权限配置或自身提示词的能力。当前更新这些内容必须由用户或开发流程显式修改，并经过普通代码审查和验证。
+
+Pi 的项目描述包含 self-extensible coding agent，但其 README 同时明确提示默认不提供文件、进程、网络和凭据的内置权限隔离，需要宿主自行沙箱化；这不能被理解为“可以安全地让桌面 Agent 自改”。[Pi Agent README](https://github.com/earendil-works/pi)
+
+Reasonix 的记忆文档则强调长期事实不应悄悄变成强制指令，这同样说明“记忆召回”和“修改行为规则”必须分离。[Reasonix Session Memory Retrieval](https://github.com/esengine/DeepSeek-Reasonix/blob/main-v2/docs/SESSION_MEMORY_RETRIEVAL.md)
+
+#### 是否值得现在做
+
+**不值得做，且不是普通功能缺口。** 递归自改会引入权限升级、供应链、回滚、不可预测行为、隐私泄露和验证污染。它也不能直接改善知己的核心闭环；更快地产生代码变化不等于更可靠地发现和验证生活行动。
+
+#### 裁决
+
+不实现 Agent 自主递归自改。安全的未来替代形式只能是：
+
+```text
+Agent 提出改动建议 → 生成独立补丁/文档 → 人工审查
+→ 隔离环境测试 → 人工选择是否应用 → 再次验证
+```
+
+这属于开发辅助流程，不属于产品运行时的自主权限。
+
+## 5. 成熟方案调研：什么可以复用，什么不能照搬
+
+| 方案 | 成熟能力 | 对知己最有价值的借鉴 | 不应直接搬入的部分 |
+|---|---|---|---|
+| [Pi Agent](https://github.com/earendil-works/pi) | 多供应商 API、Agent loop、tool calling、state management、可扩展 coding agent | runtime 与 provider/tool 解耦；统一模型适配的边界 | 默认权限接近启动它的用户；不带内置文件/进程/网络/凭据隔离，不适合作为桌面端整体替换 |
+| [Hermes Agent](https://github.com/NousResearch/hermes-agent) | Memory Provider、自动 prefetch、turn sync、插件、MCP、Computer Use | 记忆 Provider 生命周期；单一外部 Provider；记忆与 Agent loop 解耦 | Python 运行时、外部记忆服务、Shell/浏览器/Computer Use 权限和配置复杂度 |
+| [Reasonix Context Engine v2](https://github.com/esengine/DeepSeek-Reasonix/blob/main-v2/docs/SESSION_MEMORY_RETRIEVAL.md) | 指令/项目记忆/全局记忆/会话历史分层；作用域、冲突、过期和 BM25/CJK 召回 | 不让背景事实偷偷变成强制指令；项目事实优先；词法召回先于语义平台化 | coding-agent 的终端、hooks、自改和更大权限面 |
+| [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) | MCP Client/Server、工具/资源/提示词、stdio/HTTP、会话与授权 | 将来需要外部工具时使用官方 SDK 和固定版本 | 没有外部任务时不引入；不让外部 Schema 绕过知己 Main Process 权限边界 |
+| [DeepSeek API](https://api-docs.deepseek.com/guides/tool_calls/) | Tool Calls、Thinking tool turns、JSON Output、strict tool schema | 遵守官方消息回放、`reasoning_content`、工具参数和 JSON 约束 | 把 API 支持误写成产品能力；模型不能替代宿主执行、校验和权限控制 |
+
+复用原则是：**复用接口、生命周期和成熟协议；不复用不适合知己的权限、存储、运行时和产品入口。**
+
+## 6. 高性价比路线：现在保留什么，未来只在什么证据下扩展
+
+### 6.1 当前应保持的最小闭环
+
+```text
+DSH AgentLoop
+  → 受控工具定义
+  → Main Process Zod 校验与领域服务
+  → 本地日志/复盘/验证模式检索
+  → 必要时受控联网
+  → 预览—用户确认—正式写入
+  → JSONL 会话持久化与恢复
+```
+
+这条链已经覆盖知己最主要的 Agent 工程价值，不需要再叠加一个通用 Agent 平台。当前作品集展示缺口是检索命中只进入模型上下文，Renderer 只显示工具活动标签；已确认的下一步是增加不持久化的只读证据卡片。
+
+### 6.2 后续再评估的证据顺序
+
+| 优先级 | 可能扩展 | 必须先出现的证据 | 首选成熟路径 |
+|---:|---|---|---|
+| 1 | 只读证据卡片 | 当前界面无法让观看者核实模型使用了哪些本地记录 | 复用 Main Process 已校验结果；默认 3 条、最多 8 条；不持久化 |
+| 2 | 版本事实统一 | 根项目 `2.5.0` 与 Electron `2.0.4` 冲突，影响安装包和简历演示可信度 | 独立修复版本来源并重新打包验证 |
+| 3 | 记忆检索升级 | 演示或实际查询出现明确漏召回、同义表达失败 | 先 SQLite FTS5/BM25；接口不变 |
+| 4 | 记忆自动预取 | 用户反复手动要求“先搜索我的记录”，且误召回风险可控 | 参考 Hermes `prefetch`，加入预算、来源和关闭选项 |
+| 5 | 单一多模态输入 | 有稳定的图片或音频任务，且模型端点、隐私、回放都可验证 | 复用 provider content parts，只做一种媒体 |
+| 6 | MCP | 有具体外部 Server、真实任务和明确权限需求 | 使用官方 MCP SDK，Main Process 统一适配 |
+| 7 | 结构化工作流 | 某个下游消费者因自然语言解析反复失败 | 单工作流 Schema + Zod + 有限重试 |
+| 8 | 任务规划器 | 有可重复、长耗时、需要取消/恢复的多步业务流程 | 先做可见任务状态，不先做多 Agent |
+| 不做 | Computer Use | 无论何时都不能仅凭行业趋势启动 | 只有独立安全设计和具体任务后重新立项 |
+| 不做 | 递归自改 | 不接受运行时自主修改自身权限和代码 | 只保留人工审查的补丁/提案流程 |
+
+### 6.3 不把速度当质量结论
+
+DeepSeek V4-Flash “很快”只能说明当前请求的响应延迟较低，不能推出答案质量高或低。质量至少受以下因素共同影响：
+
+- 任务是否需要真实外部事实；
+- 是否正确调用并理解工具结果；
+- 是否保留 thinking tool turn 的 `reasoning_content`；
+- 是否在压缩后保留关键约束；
+- 是否给出可读、可执行、可验证的行动；
+- 是否在不确定时承认没有证据。
+
+因此，当前更高性价比的做法是保持工具、上下文、记忆和输出边界清晰，再通过真实使用样本观察，而不是因为速度快就更换整个 Agent 框架或堆叠能力名词。
+
+## 7. 最终能力清单
+
+### 当前具备
+
+- DSH `0.1.0-rc.8` 官方上下文 token 计量、工具结果裁剪和基础压缩；
+- DeepSeek Function Calling 的受限宿主执行闭环；
+- 有限多轮工具规划和 thinking/reasoning 回放；
+- JSONL 会话持久化、列表、resume 和工具回合重放；
+- 本地日志、复盘、项目、验证模式读取；
+- `zhiji.memory.search` 本地字符串/词法历史检索入口；
+- 受控公开来源联网搜索和来源绑定读取；
+- 工具/工作流的 Zod 结构化输入输出；
+- 普通回答的 Markdown/GFM 可读渲染；
+- 正式写入的预览—确认—执行边界。
+
+### 仅部分具备
+
+- **长期记忆**：有本地词法检索入口，但命中证据尚未结构化展示；无语义记忆、自动预取、冲突/过期/忘记产品层；
+- **Agent 自主规划**：有工具回合，无通用任务队列、后台调度、子 Agent 和任意文件操作；
+- **Structured Output**：工具和工作流结构化，普通回答不做全局 JSON；
+- **上下文管理**：有运行时压缩和会话持久化，但极限长度下的信息保真仍需真实样本观察。
+
+### 当前不具备，也不建议现在接入
+
+- 完整 RAG 生命周期、语义向量检索、混合召回和重排；
+- 标准 MCP Client 与外部 MCP Server 生命周期；
+- 图片、音频、视频的端到端模型输入与附件管理；
+- 通用 Computer Use、桌面截图定位、鼠标键盘控制、沙箱和回滚；
+- Agent 自主修改代码、Skill、提示词、工具、权限并递归再次执行。
+
+## 8. 一句话决策
+
+**知己现在不需要成为“什么都能做的 Agent”；作为作品集，它需要证明自己能从真实记录中检索证据、通过受控工具完成有限步骤，并让观看者直接核实依据。**
+
+保留 DSH 的上下文和工具基础，准确表述现有本地词法检索；先完成证据卡片和版本事实统一。只有明确任务证明当前层不够时，才按“FTS5/BM25 → 单一多模态 → 明确 MCP → 最小任务状态”的顺序扩展。Computer Use 和递归自我改进不属于当前产品边界。
+
+## 9. 相关项目文档
+
+- [本地长期记忆检索 Spec](specs/2026-08-22-agent-memory-search.md)
+- [历史执行规划](2026-08-22-agent-capabilities-execution-plan.md)
+- [能力审计与作品集定位](reviews/2026-08-22-agent-capabilities-audit.md)
+- [本地证据卡片 Spec](specs/2026-08-22-agent-evidence-cards.md)
+- [本地证据卡片执行计划](2026-08-22-agent-evidence-cards-execution-plan.md)
+- [项目当前状态](../PROJECT_STATUS.md)
+- [Agent 输出与上下文历史记录](../CHANGELOG.md)
