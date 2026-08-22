@@ -141,7 +141,7 @@ export function AgentPage({ onNavigate = () => undefined }: { onNavigate?: (targ
   const selectedEvidenceGroups = selected ? evidenceGroups[selected.id] ?? [] : [];
 
   return <div className="agent-page">
-    <PageHeader title="知己 Agent" description="用自然语言组织目标；已有日志与复盘能力会继续沿用原有的校验和确认流程。" action={<div className="button-row"><Button variant="ghost" onClick={() => onNavigate({ view: 'settings' })}>模型设置</Button><Button variant="secondary" onClick={() => void createSession()}>新建会话</Button></div>}/>
+      <PageHeader title="知己 Agent" description="用自然语言组织目标；已有日志与复盘能力会继续沿用原有的校验和确认流程。" action={<div className="button-row"><Button variant="ghost" onClick={() => onNavigate({ view: 'settings', settingsSection: 'ai' })}>模型设置</Button><Button variant="secondary" onClick={() => void createSession()}>新建会话</Button></div>}/>
     <div className="agent-layout">
       <aside className="agent-sessions card" aria-label="Agent 会话列表">
         <h3>会话</h3>
@@ -166,6 +166,6 @@ export function AgentPage({ onNavigate = () => undefined }: { onNavigate?: (targ
       </section>
     </div>
     <ConfirmDialog open={deleteSessionId !== null} title="删除这个 Agent 会话？" description="会话消息会移入系统回收站，日志、复盘和其他会话不受影响。" confirmLabel="确认删除" onCancel={() => setDeleteSessionId(null)} onConfirm={() => void removeSession()}/>
-    {error && <StatusBanner tone="error"><span>{error}</span>{needsApiKey && <Button variant="secondary" onClick={() => onNavigate({ view: 'settings' })}>打开设置</Button>}</StatusBanner>}
+    {error && <StatusBanner tone="error"><span>{error}</span>{needsApiKey && <Button variant="secondary" onClick={() => onNavigate({ view: 'settings', settingsSection: 'ai' })}>打开设置</Button>}</StatusBanner>}
   </div>;
 }

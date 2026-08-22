@@ -133,6 +133,6 @@ describe('AgentPage', () => {
 
     expect(await screen.findByText('请先在设置中保存可用的 API Key。')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '打开设置' }));
-    expect(onNavigate).toHaveBeenCalledWith({ view: 'settings' });
+    expect(onNavigate).toHaveBeenCalledWith({ view: 'settings', settingsSection: 'ai' });
   });
 });

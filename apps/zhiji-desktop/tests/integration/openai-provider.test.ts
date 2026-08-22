@@ -63,6 +63,19 @@ async function inspectingJsonEndpoint(onBody: (body: unknown) => void) {
   return `http://127.0.0.1:${address.port}/v1`;
 }
 
+async function inspectingStructuredEndpoint(onBody: (body: unknown) => void) {
+  const server = createServer((request, response) => {
+    let raw = '';
+    request.on('data', (chunk) => { raw += chunk; });
+    request.on('end', () => { onBody(JSON.parse(raw)); response.writeHead(200, { 'content-type': 'application/json' }); response.end(JSON.stringify({ choices: [{ message: { content: '{"ok":true}' }, finish_reason: 'stop' }] })); });
+  });
+  servers.push(server);
+  await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const address = server.address();
+  if (!address || typeof address === 'string') throw new Error('Missing test server port');
+  return `http://127.0.0.1:${address.port}/v1`;
+}
+
 describe('OpenAiCompatibleProvider', () => {
   it.each([[401, 'INVALID_API_KEY'], [404, 'MODEL_NOT_FOUND'], [429, 'RATE_LIMITED']] as const)('maps HTTP %s to %s', async (status, code) => {
     const baseUrl = await endpoint(status, '{}');
@@ -168,5 +181,13 @@ describe('OpenAiCompatibleProvider', () => {
     const provider = new OpenAiCompatibleProvider({ baseUrl, model: 'deepseek-v4-flash', apiKey: 'x' });
     await expect(provider.testConnection()).resolves.toBeUndefined();
     expect(requestBody).toMatchObject({ model: 'deepseek-v4-flash', stream: false, max_tokens: 1 });
+  });
+
+  it('uses a bounded non-stream JSON request and preserves finish_reason', async () => {
+    let requestBody: unknown;
+    const baseUrl = await inspectingStructuredEndpoint((value) => { requestBody = value; });
+    const provider = new OpenAiCompatibleProvider({ baseUrl, model: 'deepseek-v4-flash', apiKey: 'x' });
+    await expect(provider.collectStructured([{ role: 'user', content: 'Return JSON.' }], undefined, { maxTokens: 1200 })).resolves.toEqual({ content: '{"ok":true}', finishReason: 'stop' });
+    expect(requestBody).toMatchObject({ model: 'deepseek-v4-flash', stream: false, max_tokens: 1200, response_format: { type: 'json_object' } });
   });
 });

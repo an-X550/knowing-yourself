@@ -5,6 +5,8 @@ export type ChatMessage =
   | { role: 'assistant'; content: string; reasoning?: string; toolCalls?: Array<{ id: string; name: string; arguments: string }> }
   | { role: 'tool'; content: string; toolCallId: string };
 export interface CollectOptions { jsonObject?: boolean }
+export interface StructuredCompletion { content: string; finishReason: string | null }
+export interface StructuredCollectOptions { maxTokens: number }
 export interface AgentToolSpec { name: string; description: string; parameters: Record<string, unknown> }
 export type AgentStreamDelta = { kind: 'text'; text: string } | { kind: 'reasoning'; text: string } | { kind: 'tool-call'; index: number; callId: string; name?: string; argumentsDelta: string };
 
@@ -126,6 +128,40 @@ export class OpenAiCompatibleProvider {
     let output = '';
     for await (const delta of this.stream(messages, signal, options)) output += delta;
     return output;
+  }
+
+  /**
+   * 结构化内容专用的非流式收集路径：保留服务商的 finish_reason，
+   * 让日反馈可以区分空内容、截断、JSON 错误和 Schema 错误。
+   */
+  async collectStructured(messages: ChatMessage[], signal?: AbortSignal, options: StructuredCollectOptions = { maxTokens: 1200 }): Promise<StructuredCompletion> {
+    const combined = signal
+      ? AbortSignal.any([signal, AbortSignal.timeout(AI_REQUEST_TIMEOUT_MS)])
+      : AbortSignal.timeout(AI_REQUEST_TIMEOUT_MS);
+    let response: Response;
+    try {
+      response = await fetch(`${this.config.baseUrl}/chat/completions`, {
+        method: 'POST', signal: combined,
+        headers: { authorization: `Bearer ${this.config.apiKey}`, 'content-type': 'application/json' },
+        body: JSON.stringify({
+          model: this.config.model,
+          messages: messages.map((message) => ({ role: message.role, content: message.content })),
+          stream: false,
+          max_tokens: options.maxTokens,
+          response_format: { type: 'json_object' },
+        }),
+      });
+    } catch {
+      throw mapNetworkError(signal);
+    }
+    ensureSuccessfulResponse(response, this.config.model);
+    let payload: unknown;
+    try { payload = await response.json(); }
+    catch { throw appError({ code: 'UNKNOWN', message: '接口返回内容无法读取。' }); }
+    const choice = (payload as { choices?: Array<{ message?: { content?: unknown }; finish_reason?: unknown }> } | null)?.choices?.[0];
+    const content = typeof choice?.message?.content === 'string' ? choice.message.content : '';
+    const finishReason = typeof choice?.finish_reason === 'string' ? choice.finish_reason : null;
+    return { content, finishReason };
   }
 
   async testConnection(signal?: AbortSignal): Promise<void> {

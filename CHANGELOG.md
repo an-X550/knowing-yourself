@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 15:52] [修复] 完成本地桌面端质量修复与 v2.6.2 RC (v2.6.1 -> v2.6.2)
+
+- **受影响文件**: `apps/zhiji-desktop/` 设置页、日志模板、日反馈结构化输出、Forge 生产依赖、测试与安装分发文档；根 `VERSION`、`README.md`、`PROJECT_STATUS.md`
+- **改动摘要**: 设置页收敛为通用 / AI 与个性化 / 数据与隐私三标签，模板管理迁移到日志页，移除伪更新控件并修复桌面滚动与暗色下拉样式；日反馈对空内容、截断、非法 JSON 和 Schema 不匹配只重试一次且不回显失败模型输出；补齐 DSH peer-only 运行依赖，修复安装包主进程缺少 `@deepseek-ai/dsh-timeout` 导致的 `ERR_MODULE_NOT_FOUND`。
+- **验证结果**: `npm test` 53 files / 317 tests；`npm run typecheck`；`npm run lint` 0 errors / 6 个既有 warnings；打包版 `npm run test:e2e` 5 passed；安装版 RC CDP E2E 4 passed；`npm run make` 经 ASCII junction 成功；`out/release-candidate/v2.6.2/` 三件套生成并安装到 `app-2.6.2`，安装版启动烟测通过且生产 `app.asar` 包含 DSH peer-only 依赖。未执行真实 API Key / DeepSeek 质量测试，未 push、未发布。
+
 ## [2026-08-22 13:36] [修复] 修复 Agent 当前回合证据生命周期与冲突裁决规则 (v2.6.0 -> v2.6.1)
 
 - **受影响文件**: `apps/zhiji-desktop/src/renderer/pages/agent-page.tsx`、`apps/zhiji-desktop/src/main-process/agent/dsh-runtime.ts` 及对应回归测试；版本文件、`PROJECT_STATUS.md`、`README.md`、Agent 证据 Spec/执行计划/审计

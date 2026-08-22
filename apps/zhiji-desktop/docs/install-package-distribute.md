@@ -1,6 +1,6 @@
 # 知己桌面端：安装 · 打包 · 分发指南
 
-> 适用版本：v1.27.0 起。本文回答三个问题：怎么装、怎么打包、怎么发给别人；并附当前产品的文件职责清单。
+> 适用版本：v2.6.2 起。本文回答三个问题：怎么装、怎么打包、怎么发给别人；并附当前产品的文件职责清单。
 
 ---
 
@@ -10,14 +10,14 @@
 
 | 形态 | 路径 | 说明 |
 | --- | --- | --- |
-| **安装版**（推荐分发） | `out/make/squirrel.windows/x64/Setup.exe` | Windows 安装程序，双击下一步即装好，会建开始菜单/桌面快捷方式 |
+| **安装版**（推荐分发） | `out/release-candidate/v2.6.2/Zhiji-Setup-v2.6.2.exe` | Windows 安装程序，双击下一步即装好，会建开始菜单/桌面快捷方式 |
 | **免安装版**（直接运行） | `out/知己-win32-x64/知己.exe` | 解压即用，双击 `知己.exe` 直接运行，无需安装 |
 
 ### 安装版流程（Setup.exe）
 
 1. 双击 `Setup.exe` → 等待安装进度条走完。
 2. 安装位置：`%LOCALAPPDATA%\知己\`（Squirrel 默认装到本机应用目录，不需要选择）。
-3. 首次启动后，数据默认落在 **`文档\知己`**；应用设置页可查看/更改/打开该目录。
+3. 首次启动后，数据默认落在 **`文档\知己`**；在设置 → 数据与隐私可查看、打开或更改该目录。
 
 ### 免安装版流程
 
@@ -45,9 +45,11 @@ npm run package
 npm run make
 ```
 
+DSH 的外置 ESM 包使用了 peer-only 运行依赖；桌面端已将实际运行所需的 DSH peer 包声明为 production dependencies，并由 Forge 保留在 `app.asar` 中。不要只依赖本机 `node_modules` 中的传递安装结果，否则开发模式可能正常而安装版会在主进程启动时出现 `ERR_MODULE_NOT_FOUND`。
+
 ### 本机打包的两个环境坑（必须带上）
 
-本机（WorkBuddy 环境）打包需要绕过两个注入，否则会失败：
+本机（WorkBuddy 环境）打包需要绕过两个注入，否则可能失败：
 
 ```bash
 # 完整可用命令（复制使用）
@@ -87,6 +89,8 @@ unzip -oq "$LOCALAPPDATA/electron/Cache/<hash>/electron-v<版本>-win32-x64.zip"
 
 > ⚠️ **中文路径导致的 rcedit 报错（可忽略）**：本项目路径含中文「知己」时，`make` 末尾给 `Setup.exe` 写版本信息（rcedit）会报 `Fatal error: Unable to load file` 并让 `make` 以非零码退出。**安装包已正常生成、可正常安装使用**，只是 `Setup.exe` 自身的「属性 → 详细信息」里版本字段缺失（安装进去的仍是正确版本）。如需彻底消除，把项目放到纯英文路径（如 `C:\projects\zhiji`）再打包。
 
+本次 v2.6.2 已在 ASCII junction `C:\zhiji-build` 下成功执行 `npm run make`，并用生成的安装器完成安装版启动烟测；中文工作区直跑仍可能触发上述 rcedit 问题。
+
 ---
 
 ## 三、如何分发
@@ -96,20 +100,18 @@ unzip -oq "$LOCALAPPDATA/electron/Cache/<hash>/electron-v<版本>-win32-x64.zip"
 **给普通用户安装 → 只需发一个文件：**
 
 ```
-out/make/squirrel.windows/x64/Setup.exe
+out/release-candidate/v2.6.2/Zhiji-Setup-v2.6.2.exe
 ```
 
-**支持应用内「检查更新」→ 需要把这三个文件放到同一个可访问的网址/网盘目录：**
+**一次发布的安装包由这三个 Squirrel 文件组成；对普通用户直接提供安装器即可：**
 
 ```
 zhiji-x.y.z-full.nupkg   # 完整安装包（核心）
-RELEASES                 # 版本清单（列出各版本的包哈希）
+RELEASES                 # Squirrel 版本清单
 Setup.exe                # 引导安装器
 ```
 
-用户在设置页「关于」卡片填上这个目录的 `RELEASES` 所在 URL（例如 `https://你的域名/releases/`），点「检查更新」即可在浏览器打开获取最新版。
-
-> 当前实现是「打开网页获取最新包」的轻量更新，**不是**自动静默升级（那需要代码签名证书 + 独立更新服务器，尚未做）。
+知己当前不提供应用内版本检查或自动更新；不要让用户填写发布地址，也不要把旧版 `检查更新` 文案当作发布能力。需要升级时，提供经人工验收的对应版本安装器。
 
 ### 免安装分发
 
@@ -118,8 +120,21 @@ Setup.exe                # 引导安装器
 ### 当前限制（诚实边界）
 
 - **未代码签名**：Windows SmartScreen 可能提示「未知发布者」，需点「仍要运行」。正式对外分发前建议购买代码签名证书。
-- 未做自动更新、未验证 Windows 10 干净虚拟机、未做安装/升级/卸载的完整回归。
-- 数据目录与用户数据（API Key）是两处：换机器或重装需用「设置 → 导出备份」迁移。
+- 未做自动更新、未验证 Windows 10 干净虚拟机、未做升级/卸载的完整回归；v2.6.2 已用临时数据根完成安装后启动烟测。
+- 数据目录与用户数据（API Key）是两处：换机器或重装需用「设置 → 数据与隐私 → 创建备份」迁移。
+
+### 版本独立的本地 Release Candidate
+
+每次准备分发时，先完成 `npm run package`、`npm run test:e2e`，再执行 `npm run make`。确认 `out/make/squirrel.windows/x64/` 是本次新生成的目录后，把本次三件套复制到版本独立目录：
+
+```text
+out/release-candidate/v2.6.2/
+├─ Zhiji-Setup-v2.6.2.exe
+├─ zhiji-2.6.2-full.nupkg
+└─ RELEASES
+```
+
+只用该目录中的 `Zhiji-Setup-v2.6.2.exe` 做全新用户数据和安装功能验收；不要把旧 `out/make` 中的 `Setup.exe` 当成本次构建。后续远程发布只能上传已经验收的同一份文件，且需要单独明确授权。
 
 ---
 
@@ -145,7 +160,7 @@ Setup.exe                # 引导安装器
 | 路径 | 内容 | 用途 |
 | --- | --- | --- |
 | `credentials.json` | 加密的 API Key | 用 Windows safeStorage 加密，仅主进程读取 |
-| `zhiji-config.json` | 应用级配置 | 自定义数据目录路径、更新地址 |
+| `zhiji-config.json` | 应用级配置 | 自定义数据目录路径；历史 `updateUrl` 仅兼容读取，不再有用户界面或运行行为 |
 
 ### 4.3 源码结构（`apps/zhiji-desktop/src/`）
 

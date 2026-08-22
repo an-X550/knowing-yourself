@@ -11,6 +11,7 @@ import type { GenerateDailyReview } from '../application/generate-daily-review';
 import type { GeneratePeriodicReview } from '../application/generate-periodic-review';
 import type { GenerateInsightReview } from '../application/generate-insight-review';
 import type { ConfigureAi } from '../application/configure-ai';
+import { appError } from '../../shared/errors/app-error';
 
 const PATH_OR_URL = /(?:[a-z]:[\\/]|\\\\|\/[a-z0-9._~-]+(?:[\\/]|$)|https?:\/\/)/i;
 
@@ -140,6 +141,7 @@ export class AgentToolDispatcher {
       case 'reviews.generate-daily': {
         const result = await this.deps.generateDailyReview.execute({ ...request.input, model: (await this.deps.configureAi.getPublicConfig()).model }, signal);
         if (result.kind === 'clarification') return { kind: 'workflow.clarification', workflow: 'reviews.generate-daily', question: result.question };
+        if (result.kind === 'error') throw appError({ code: 'INVALID_MODEL_OUTPUT', message: result.message, diagnostics: result.diagnostics });
         return { kind: 'workflow.completed', workflow: 'reviews.generate-daily', review: this.reviewSummary(result.review), navigation: { view: 'journal', intent: 'records' } };
       }
       case 'reviews.preview-periodic': {
