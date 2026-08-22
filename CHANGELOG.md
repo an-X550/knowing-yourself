@@ -5,6 +5,11 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 23:10] [文档] 统一三个公开入口的仓库边界与 Desktop Agent 地址 (v2.6.5 -> v2.6.5)
+
+- **受影响文件**: `README.md`、`apps/zhiji-dsh-plugin/README.md`、独立 DSH 插件 README。
+- **改动摘要**: 主仓库首屏改为直接指向四个独立入口；DSH 插件说明明确其 DeepSeek Harness 适配层边界，并同步 `Reflectloop-Desktop-Agent` 公开地址。版本、运行逻辑和发布制品不变。
+
 ## [2026-08-22 22:50] [文档] 依据第一性原理重构 Desktop Agent README (v2.6.5 -> v2.6.5)
 
 - **受影响文件**: `apps/zhiji-desktop/README.md`、独立 Desktop Agent 仓库 README、两仓库 CHANGELOG。
