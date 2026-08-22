@@ -97,6 +97,7 @@ Windows 客户端内置受控 Agent，支持有限的本地历史检索、公开
 - 当前能力、待验证事项与已知限制：[PROJECT_STATUS.md](PROJECT_STATUS.md)
 - 版本变化：[CHANGELOG.md](CHANGELOG.md)
 - 仓库地址与独立推送边界：[docs/standalone-repositories.md](docs/standalone-repositories.md)
+- 仓库改名经过、旧名称兼容与排障：[docs/2026-08-22-reflectloop-repository-naming-migration.md](docs/2026-08-22-reflectloop-repository-naming-migration.md)
 - 维护与贡献规范：[AGENTS.md](AGENTS.md)
 - 用户版同步流程：[docs/zhiji-user-sync-workflow.md](docs/zhiji-user-sync-workflow.md)
 - 方法底线：[docs/first-principles.md](docs/first-principles.md)

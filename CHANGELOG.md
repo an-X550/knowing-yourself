@@ -5,7 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
-## [2026-08-22 23:10] [文档] 统一三个公开入口的仓库边界与 Desktop Agent 地址 (v2.6.5 -> v2.6.5)
+## [2026-08-22 23:04] [文档] 建立仓库命名迁移与兼容性查询入口 (v2.6.5 -> v2.6.5)
+
+- **受影响文件**: `docs/2026-08-22-reflectloop-repository-naming-migration.md`、`docs/standalone-repositories.md`、根 `README.md`、`PROJECT_STATUS.md`。
+- **改动摘要**: 记录 ReflectLoop 与 Desktop Agent 的改名提交链、2.6.6 误改后的前向纠正、四仓库当前定位，以及 GitHub 名称、本地目录、中文产品名、包 metadata 和持久化兼容标识的边界；补充旧名称残留的风险判断、排障命令和多入口引用。版本、运行逻辑和发布制品不变。
+
+## [2026-08-22 22:56] [文档] 统一三个公开入口的仓库边界与 Desktop Agent 地址 (v2.6.5 -> v2.6.5)
 
 - **受影响文件**: `README.md`、`apps/zhiji-dsh-plugin/README.md`、独立 DSH 插件 README。
 - **改动摘要**: 主仓库首屏改为直接指向四个独立入口；DSH 插件说明明确其 DeepSeek Harness 适配层边界，并同步 `Reflectloop-Desktop-Agent` 公开地址。版本、运行逻辑和发布制品不变。

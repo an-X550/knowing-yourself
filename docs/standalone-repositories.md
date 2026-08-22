@@ -2,6 +2,8 @@
 
 为方便检索和推送，ReflectLoop（知己）相关仓库统一记录如下。四个仓库是独立 Git 仓库；主仓库继续保存知己 Skill、共享契约、运行定义和迁移时的目录快照。
 
+> 2026-08-22 的改名经过、版本纠正、`知己/zhiji` 兼容性边界和故障排查，统一见[《ReflectLoop 仓库命名迁移与兼容性记录》](2026-08-22-reflectloop-repository-naming-migration.md)。
+
 | 组件 | 本地目录 | GitHub 仓库 | 默认分支 | 推送方式 |
 | --- | --- | --- | --- | --- |
 | ReflectLoop（知己）主仓库 | `./` | <https://github.com/an-X550/Reflectloop> | `main` | `git push origin main` |
