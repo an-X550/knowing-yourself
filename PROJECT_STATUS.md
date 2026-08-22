@@ -63,10 +63,11 @@ last_updated: 2026-08-22
 
 ## 待办事项
 
-当前仍有引用价值的实现规格：[`audit-cleanup`](docs/specs/audit-cleanup.md)、[`deepseek-harness-agent-architecture`](docs/specs/2026-08-20-deepseek-harness-agent-architecture.md)、[`zhiji-dsh-plugin-architecture`](docs/specs/2026-08-21-zhiji-dsh-plugin-architecture.md)、[`directory-boundary-tightening`](docs/specs/directory-boundary-tightening.md)、[`evolution-roadmap`](docs/specs/evolution-roadmap.md)、[`git-commit-escalation-flow`](docs/specs/git-commit-escalation-flow.md)、[`monthly-perspective-audit`](docs/specs/monthly-perspective-audit-2026-07-08.md)、[`monthly-processor-evidence-packets`](docs/specs/monthly-processor-evidence-packets.md)、[`monthly-synthesis-theme-compression`](docs/specs/monthly-synthesis-theme-compression.md)、[`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)、[`agent-memory-search`](docs/specs/2026-08-22-agent-memory-search.md)。
+当前仍有引用价值的实现规格：[`audit-cleanup`](docs/specs/audit-cleanup.md)、[`deepseek-harness-agent-architecture`](docs/specs/2026-08-20-deepseek-harness-agent-architecture.md)、[`zhiji-dsh-plugin-architecture`](docs/specs/2026-08-21-zhiji-dsh-plugin-architecture.md)、[`directory-boundary-tightening`](docs/specs/directory-boundary-tightening.md)、[`evolution-roadmap`](docs/specs/evolution-roadmap.md)、[`git-commit-escalation-flow`](docs/specs/git-commit-escalation-flow.md)、[`monthly-perspective-audit`](docs/specs/monthly-perspective-audit-2026-07-08.md)、[`monthly-processor-evidence-packets`](docs/specs/monthly-processor-evidence-packets.md)、[`monthly-synthesis-theme-compression`](docs/specs/monthly-synthesis-theme-compression.md)、[`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)、[`agent-memory-search`](docs/specs/2026-08-22-agent-memory-search.md)、[`desktop-release-quality-and-settings-ux`](docs/specs/2026-08-22-desktop-release-quality-and-settings-ux.md)。
 
 ### 高优先级
 
+- [ ] 按 [`desktop-release-quality-and-settings-ux`](docs/specs/2026-08-22-desktop-release-quality-and-settings-ux.md) 与 [`execution-plan`](docs/2026-08-22-desktop-release-quality-and-settings-ux-execution-plan.md) 修复桌面端本地发布质量：先以同服务商/模型/输入对照开发模式、免安装包和全新安装包；再完成设置三标签、日志模板入口迁移、伪更新控件删除、侧栏固定、暗色下拉框、日反馈一次结构重试与版本独立 RC。GitHub `v2.0.5` 只在本地验收后进入单独授权的只读核对与新版本发布阶段，不覆盖旧 Release。
 - [x] 按 DeepSeek Harness Agent 架构完成阶段 0/A/B/C/D1/E：Utility Process、DSH 会话桥、模型传输、Agent 页面、日志/复盘只读与正式工作流工具、JSONL 会话持久化、重启 resume、备份生命周期和桌面主题范围清理均已实现；日志与复盘主链路保留。
 - [x] 阶段 D2 取消：主题思考不是桌面端复盘核心闭环；桌面端主题入口及运行时已删除，已有主题数据不主动删除，Skill/CLI 侧能力不受影响。
 - [x] v2.0.1 凭据恢复：safeStorage 无法解开旧密文时不再阻断 `settings:get` 和本地数据加载；凭据文件保留，设置页重新保存 API Key 后恢复当前密钥环。
@@ -123,7 +124,8 @@ last_updated: 2026-08-22
 9. WorkBuddy 每日日志默认分发已通过一次脱敏真实消息验收；周复盘、主题讨论与确认沉淀仍只有静态边界测试，尚未真实验收。
 10. 非法或缺少块边界的单行 Markdown（如 `###`、`---`、`|` 被模型挤在同一行）无法由成熟 Markdown 解析器可靠猜测意图；本轮不做启发式修复，后续先观察真实样本再决定是否值得单独立项。
 11. DeepSeek V4/Pro 的官方上下文容量已纳入 compaction 路由；未知模型或自定义 provider 不猜测上下文窗口，因此不会伪造压缩容量。真实超长会话摘要触发和 Flash thinking 关闭/开启质量差异仍待受控样本。
-12. 版本事实已统一为 `2.6.1`：根 `VERSION`、`PROJECT_STATUS.md`、Electron `apps/zhiji-desktop/package.json`、应用锁文件和重新生成的安装包元数据一致。
+12. 源码与免安装包版本事实已统一为 `2.6.1`：根 `VERSION`、`PROJECT_STATUS.md`、Electron `apps/zhiji-desktop/package.json`、应用锁文件和当前 `out/知己-win32-x64` 程序元数据一致；Squirrel `out/make` 仍是旧 `1.27.1` 制品，不属于当前可分发安装包。
+13. GitHub `v2.0.5` 用户已报告每日反馈格式失败、设置页堆叠、侧栏滚动归属和暗色下拉框问题；本地开发每日反馈可成功，但服务商/模型/输入是否相同尚未确认。当前本机免安装包为 `2.6.1`，`out/make` 仍残留 `1.27.1` 安装制品，固定路径存在误选旧 `Setup.exe` 的风险；根因须由版本独立 RC 的同条件对照裁决。
 
 ## 关键决策记录
 
@@ -131,6 +133,7 @@ last_updated: 2026-08-22
 
 | 日期 | 决策 | 理由 |
 |------|------|------|
+| 2026-08-22 | 桌面端先修本地安装包质量与设置页信息架构，GitHub 远程后置 | 用户真实分发的 `v2.0.5` 暴露核心闭环和 UI 问题，而开发模式成功不能代表安装包可用；本轮以全新安装包为完成标准，设置页收敛为三标签，删除伪更新控件，日反馈只补一次结构重试，并让每个版本产生独立 RC。Pi、Hermes Memory、Reasonix Context Engine 和 MCP 不能直接解决当前事故，不接入；远程旧 Release 不覆盖，后续只上传本地已验收的同一份新版本制品。 |
 | 2026-08-22 | 桌面 Agent 先修中文词法召回，再增加本地证据卡片 | 当前连续中文被当成长词项，存在自然查询零命中的确定性失败；只做卡片会更清楚地展示空结果。先复用 MiniSearch BM25+ 与 `Intl.Segmenter`/CJK 词片，有限同义由受限 Tool Call 候选处理，再展示 Main Process 已校验证据。索引不持久化，不新增向量 RAG、MCP、多模态、Computer Use、递归自改或卡片持久化。 |
 | 2026-08-22 | 当前回合证据按发送边界清理，冲突裁决由 DSH persona 明确约束 | 已确认的事故是上一回合证据在同一会话继续显示，且检索同时返回日志/复盘时运行规则未要求指出冲突；最小修复是 Renderer 发送消息时只删除目标会话运行态证据组，并在真实 DSH Runtime 系统规则中声明日志原文优先、冲突显式披露和证据不足不编造。普通测试足以验证这两个行为，不新增 hash、baseline、gate、排序器或持久化机制。 |
 | 2026-07-15 | 显式第一性原理请求采用共享复核契约而非新命令 | 用户在发现内容过长或结论可疑时已主动使用该表述；用短契约覆盖默认表达深度，不改变入口、路径或报告骨架。 |
