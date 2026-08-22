@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 20:36] [修复] 完成 Agent 受控联网与 v2.6.4 远程发布准备 (v2.6.3 -> v2.6.4)
+
+- **受影响文件**: 桌面端 Tavily provider、搜索服务、Agent 工具契约与 DSH Runtime；Forge/package/lock、离线单测、provider smoke、安装版 E2E；根版本、架构/安装说明、`PROJECT_STATUS.md` 与发布 RC。
+- **改动摘要**: 以官方 `@tavily/core@0.7.7` keyless `search/extract` 替换 DuckDuckGo HTML 直连与任意 URL 读取；搜索结果只向 Agent 暴露 sourceId、标题、域名、摘要和时间，来源正文受限保存；错误统一为不可用、超时、共享限额、空结果和来源不可读；同一 query 每回合最多自动重试一次并抑制重复调用；生产 asar 明确保留 Tavily 依赖。
+- **验证结果**: `npm test` 54 files / 330 tests；`npm run typecheck` 通过；`npm run lint` 0 errors / 6 个既有 warnings；keyless provider smoke 真实搜索与读源通过；`npm run package` 与 `npm run test:e2e` 通过（5 passed / 2 skipped）；ASCII junction 下 `npm run make` 退出 0，`out/release-candidate/v2.6.4/` 三件套内部一致，nupkg 含 2.6.4 `app.asar`。安装版真实 DeepSeek E2E 因未配置显式 `ZHIJI_E2E_EXECUTABLE` / `ZHIJI_E2E_API_KEY` 保持 skip，不读取或输出本地密钥。
+
 ## [2026-08-22 17:19] [修复] 完成 v2.6.3 安装验收修订与本地 RC (v2.6.2 -> v2.6.3)
 
 - **受影响文件**: AI 设置页与单元测试、安装/打包 E2E、日反馈集成测试；根 `VERSION`、`README.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、桌面 package/lock；发布质量 Spec/执行计划与安装分发说明。
