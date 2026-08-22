@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 22:07] [配置] 同步 ReflectLoop 仓库改名后的地址与元数据 (v2.6.5 -> v2.6.5)
+
+- **受影响文件**: 主仓库 Git remote、桌面快照 README/package/lock、`docs/standalone-repositories.md`、`PROJECT_STATUS.md`。
+- **改动摘要**: 主仓库和桌面独立仓库完成平台改名后，将当前地址统一为 `an-X550/Reflectloop` 与 `an-X550/ReflectLoop-Desktop`；同步克隆、Release、Issues、主页和包 metadata，并保留“知己”中文产品名与 2.6.5 版本。
+- **验证结果**: 两个新远程均解析到改名前的连续提交历史；旧主仓库和桌面仓库地址在当前文档与 metadata 中零残留，历史记录和未改名的用户版仓库地址保留。
+
 ## [2026-08-22 21:51] [文档] 采用 ReflectLoop 英文项目名并重构公开入口 (v2.6.5 -> v2.6.5)
 
 - **受影响文件**: 根 `README.md`、`apps/zhiji-desktop/README.md`、`PROJECT_STATUS.md`、`docs/standalone-repositories.md`。
