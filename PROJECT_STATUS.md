@@ -5,7 +5,7 @@ last_updated: 2026-08-22
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：2.6.2
+**当前版本**：2.6.3
 
 ## 项目概述
 
@@ -38,8 +38,8 @@ last_updated: 2026-08-22
 
 | 项目 | 状态 | 当前能力或证据缺口 |
 |------|------|------|
-| Agent 打包启动兼容性 | 已修复 | Forge 生产 asar 已保留外置 DSH 运行时及其 peer-only 依赖，包括 `zod`、`@standard-schema/spec` 与 `@deepseek-ai/dsh-timeout` 等；v2.6.2 安装版启动烟测通过，打包后 Agent 新建会话 E2E 通过。Utility 启动错误现在保留有限、脱敏诊断，不再只显示“运行已停止”。 |
-| 桌面端本地发布质量 | v2.6.2 RC 已完成 | 设置三标签、日志模板迁移、伪更新控件删除、侧栏/工作区滚动、暗色下拉框和日反馈一次结构重试已落地；`npm test` 53 files / 317 tests、打包版 `npm run test:e2e` 5 passed、安装版 RC CDP E2E 4 passed、`npm run make` 成功。版本独立 RC 位于 `apps/zhiji-desktop/out/release-candidate/v2.6.2/`，未执行真实 API Key / DeepSeek 质量测试。 |
+| Agent 打包启动兼容性 | 已修复 | Forge 生产 asar 已保留外置 DSH 运行时及其 peer-only 依赖，包括 `zod`、`@standard-schema/spec` 与 `@deepseek-ai/dsh-timeout` 等；v2.6.3 安装版启动与 Agent 新建会话 E2E 通过。Utility 启动错误现在保留有限、脱敏诊断，不再只显示“运行已停止”。 |
+| 桌面端本地发布质量 | v2.6.3 RC 已完成 | 设置三标签、日志模板迁移、伪更新控件删除、侧栏/工作区滚动、暗色下拉框、AI 高级设置分层和日反馈一次结构重试已落地；`npm test` 53 files / 324 tests、`npm run typecheck` 通过、`npm run lint` 0 errors / 6 个既有 warnings、打包版 `npm run test:e2e` 5 passed / 1 skipped、安装版 v2.6.3 E2E 4 passed / 1 skipped、ASCII 根 junction 下 `npm run make` 退出 0。版本独立 RC 位于 `apps/zhiji-desktop/out/release-candidate/v2.6.3/`，v2.6.2 RC 保留；未执行真实 API Key / DeepSeek 质量测试，因为没有安全可用配置。 |
 | 日反馈闭环 | 已完成 | 日志粘贴与 `/daily-review` 统一进入 `daily-analyzer`；输出按单洞察、单行动、可观察预测收敛，输入不足按 A-D 证据等级降级。 |
 | 本地飞书日反馈入口 | 弃案；实现保留、监听已注释 | 2026-08-20 因本地前台监听、Codex 额度依赖和前缀路由带来的使用摩擦，改由 WorkBuddy 工作区代理承担飞书交互。主工作流及用户版镜像保留，`-Mode Run` 的监听启动调用已注释并显示弃案提示；恢复前需重新验证额度、事件连接与路由体验。 |
 | WorkBuddy 多通道运行入口 | 每日日志默认分发已通过脱敏真实验收；已加入快路径约束 | `[知己]` 已真实触发绝对路径入口：原文、每日反馈和验证沉淀完成写入与复读后，飞书使用既有 `lark_cli_path` 成功导入在线文档，滴答只通过唯一的 `dida365_create_task` 创建 1 项任务，两个渠道状态独立写入既有幂等文件。本地权威产物固定为 UTF-8 Markdown；飞书在线文档只是导入副本。首次实测约 8 分钟主要耗在 WorkBuddy 的路径、配置和状态探索，现已加入直接路径、最小并行读取与禁止探索性调用的快路径约束，待下一次脱敏日志复测耗时。用户决定不再重复两次外部人工写入；同内容防重与单次“仅本地”退出继续由已通过的自动化回归覆盖。WorkBuddy `disabledTools` 仍禁用滴答其余 49 个工具，不回退 Codex。周复盘和主题路由尚未做真实验收。实现规格见 [`workbuddy-feishu-runtime-entry`](docs/specs/2026-08-20-workbuddy-feishu-runtime-entry.md)。 |
@@ -81,6 +81,7 @@ last_updated: 2026-08-22
 - [x] v2.6.0 Agent 中文历史检索与证据卡片：MiniSearch 内存 BM25+、`Intl.Segmenter`、CJK 二元词片和至多 3 个受限候选查询已修复自然中文复合/有限同义召回；Main Process 已校验命中结果以当前回合只读卡片展示，默认 3 条、最多 8 条。索引不持久化，不新增向量 RAG、MCP、多模态或权限；覆盖复合/同义、噪声、排序、真实摘录、契约兼容、空结果、会话隔离和安全导航（见 [`agent-evidence-cards`](docs/specs/2026-08-22-agent-evidence-cards.md)、[`execution-plan`](docs/2026-08-22-agent-evidence-cards-execution-plan.md) 与 [`execution-prompt`](docs/2026-08-22-agent-retrieval-evidence-execution-prompt.md)）。
 - [x] v2.6.1 Agent 证据生命周期与冲突规则修复：发送下一条消息时只清除当前会话上一回合的证据组，其他会话和新回合证据不受影响；DSH persona 明确要求列出冲突双方、以日志原文作为事实最高依据、不得让复盘或模式静默覆盖日志，证据不足时不得编造裁决。普通测试固定页面会话隔离/逐回合清理/3 条默认与 8 条上限，以及真实 DSH Runtime 系统规则；不修改 DSH JSONL、检索排序、持久化索引或安全边界。
 - [x] v2.6.2 桌面端本地发布质量：设置三标签与日志模板管理、布局/暗色下拉修复、日反馈结构化失败的一次安全重试和安装包 DSH peer-only 依赖补齐均已落地；53 files / 317 tests、typecheck、lint、5 项打包 E2E、Squirrel RC 生成和安装版启动烟测通过。失败模型输出不回显，不新增 hash、baseline 或质量 gate。
+- [x] v2.6.3 验收修订：普通 AI 路径只保留“保存并测试”，`仅保存` 与 `移除已保存 Key` 下沉到 AI 高级设置；结构化日反馈覆盖截断/Schema/非结构错误/取消边界；安装版结构化恢复明确 skip，新增真实 Agent 新建会话和日志/模板/本地保存/暗色/滚动冒烟；v2.6.3 RC 已安装验收，v2.6.2 RC 保留。截图、宽度/DPI 矩阵和像素 baseline 按用户要求取消。
 - [x] S0 知己 DSH 独立插件路线定稿：桌面端不再平台化；旧 P1-P4 取消，P0 证据保留；新架构和 S0-S4 执行计划明确直接使用 DSH Web UI，不建设同步工具或跨项目源码同构门禁。
 - [x] S1 每日复盘 Bundle MVP：官方 Profile add、Skill 加载、固定日志 keyless Runtime、remove 与移除后重启均通过；真实模型/用户价值仍待观察（见 [`zhiji-dsh-plugin-s1-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s1-validation.md)）。
 - [x] S2 周/月/项目复盘：四种 DSH Skill、代表性材料、输入不足降级、输出差异、S1 回归和官方 remove/restart 均通过；后续 S3/S4 已按用户明确决定完成（见 [`zhiji-dsh-plugin-s2-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s2-validation.md)）。
@@ -122,12 +123,12 @@ last_updated: 2026-08-22
 5. overlay 仍有已声明理由的 override，后续只在有收益证据时收敛为 byte-identical shared 文件。
 6. 没有“日志 / 日记 / 记录一下”等意图的自由文本无法仅靠 Hook 安全区分普通对话，当前会先确认一次再存档。
 7. 本地飞书入口为弃案：实现仍保留但监听已注释；历史上依赖 Windows、网络、前台监听和 Codex 额度，且通常需 2–5 分钟，不提供离线补偿。
-8. Windows 客户端当前安装包未签名，首次安装可能出现 SmartScreen 提示；v2.6.2 已用临时数据根完成安装后启动烟测，但尚未完整验证升级、卸载与 Windows 10 兼容性。
+8. Windows 客户端当前安装包未签名，首次安装可能出现 SmartScreen 提示；v2.6.3 已用隔离临时数据根完成安装版核心冒烟和 Agent 新建会话验证，但尚未完整验证升级、卸载与 Windows 10 兼容性。
 9. WorkBuddy 每日日志默认分发已通过一次脱敏真实消息验收；周复盘、主题讨论与确认沉淀仍只有静态边界测试，尚未真实验收。
 10. 非法或缺少块边界的单行 Markdown（如 `###`、`---`、`|` 被模型挤在同一行）无法由成熟 Markdown 解析器可靠猜测意图；本轮不做启发式修复，后续先观察真实样本再决定是否值得单独立项。
 11. DeepSeek V4/Pro 的官方上下文容量已纳入 compaction 路由；未知模型或自定义 provider 不猜测上下文窗口，因此不会伪造压缩容量。真实超长会话摘要触发和 Flash thinking 关闭/开启质量差异仍待受控样本。
-12. 源码、免安装包、Squirrel 制品与版本独立 RC 已统一为 `2.6.2`：根 `VERSION`、`PROJECT_STATUS.md`、Electron `apps/zhiji-desktop/package.json`、应用锁文件、当前 `out/知己-win32-x64` 和 `out/release-candidate/v2.6.2/` 一致；后续分发只使用该 RC 目录内三件套。
-13. GitHub `v2.0.5` 用户报告的每日反馈格式失败、设置页堆叠、侧栏滚动归属和暗色下拉框问题已在本地 v2.6.2 RC 修复并通过自动验收；尚未用真实 API Key / DeepSeek 做同服务商、模型和输入的质量对照，远程旧 Release 不覆盖。
+12. 源码、免安装包、Squirrel 制品与版本独立 RC 已统一为 `2.6.3`：根 `VERSION`、`PROJECT_STATUS.md`、Electron `apps/zhiji-desktop/package.json`、应用锁文件、当前 `out/知己-win32-x64` 和 `out/release-candidate/v2.6.3/` 一致；旧 `out/release-candidate/v2.6.2/` 保留，后续分发只使用已安装验收的 v2.6.3 RC 三件套。
+13. 两个事故分开记录：事故 A 是 v2.6.2 production asar 缺少 DSH peer-only 运行依赖导致 `ERR_MODULE_NOT_FOUND`，依赖已补齐且 v2.6.3 安装版 Agent 新建会话通过；事故 B 是 GitHub `v2.0.5` 用户报告的每日反馈格式失败，本地 JSON 校验/分类/一次重试已实现并覆盖回归，但尚未用同一服务商、模型、输入和远程资产做复核，原始远端根因仍未确认。
 
 ## 关键决策记录
 
@@ -139,6 +140,8 @@ last_updated: 2026-08-22
 | 2026-08-22 | 桌面 Agent 先修中文词法召回，再增加本地证据卡片 | 当前连续中文被当成长词项，存在自然查询零命中的确定性失败；只做卡片会更清楚地展示空结果。先复用 MiniSearch BM25+ 与 `Intl.Segmenter`/CJK 词片，有限同义由受限 Tool Call 候选处理，再展示 Main Process 已校验证据。索引不持久化，不新增向量 RAG、MCP、多模态、Computer Use、递归自改或卡片持久化。 |
 | 2026-08-22 | 当前回合证据按发送边界清理，冲突裁决由 DSH persona 明确约束 | 已确认的事故是上一回合证据在同一会话继续显示，且检索同时返回日志/复盘时运行规则未要求指出冲突；最小修复是 Renderer 发送消息时只删除目标会话运行态证据组，并在真实 DSH Runtime 系统规则中声明日志原文优先、冲突显式披露和证据不足不编造。普通测试足以验证这两个行为，不新增 hash、baseline、gate、排序器或持久化机制。 |
 | 2026-08-22 | DSH peer-only 运行包必须声明为桌面端生产依赖 | 安装版真实启动暴露 `@deepseek-ai/dsh-timeout` 缺少的 `ERR_MODULE_NOT_FOUND`；开发模式和普通测试不会经过生产 asar 的依赖裁剪。将 DSH 外置包实际需要的 peer-only 运行包声明为直接 production dependencies，保留既有 asar 外置规则和 Fuses，不新增 hash、baseline 或 gate。 |
+| 2026-08-22 | 分离安装事故 A 与 GitHub 日反馈事故 B 的根因结论 | A 已有生产 asar 缺依赖和 v2.6.3 安装版 Agent 新建会话证据；B 只有用户报告与本地实现/回归，缺少同服务商、模型、输入和远程资产对照，因此只能标记“原始根因未确认”，不能把本地修复冒充为远程根因证明。 |
+| 2026-08-22 | 本轮验收收敛为核心功能冒烟 | 用户取消手工截图、900px/常用宽度/宽屏、100%/125%/150% DPI、像素比较和继续风格调整；保留自动行为测试、安装版 Agent/日志/模板/本地保存/暗色/滚动验证，不新增 baseline、hash、冻结 contract 或独立 gate。 |
 | 2026-07-15 | 显式第一性原理请求采用共享复核契约而非新命令 | 用户在发现内容过长或结论可疑时已主动使用该表述；用短契约覆盖默认表达深度，不改变入口、路径或报告骨架。 |
 | 2026-08-01 | 确认后的主题更新先重组当前论证 | 仅要求比较与合并仍会诱发机械追加；新认知先分类其对当前判断的影响，再重组受影响章节并检查依据、去重、边界与行动/转向，不限制篇幅，也不增加用户成本。 |
 | 2026-07-19 | 主题思考采用默认审查、合并更新与自适应行动门槛 | 新信息会长期追加；创建和更新都比较旧内容，以保留、修正、替换、合并、归档或不写入收敛重复、冲突和失效行动；只有会改变判断、行动或验证时才展开。 |

@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { GenerateDailyReview } from '../../src/main-process/application/generate-daily-review';
+import { appError } from '../../src/shared/errors/app-error';
 import { MarkdownJournalRepository } from '../../src/main-process/infrastructure/markdown/journal-repository';
 import { MarkdownReviewRepository } from '../../src/main-process/infrastructure/markdown/review-repository';
 import { ReviewTaskManager } from '../../src/main-process/domain/review-task';
@@ -123,6 +124,50 @@ describe('GenerateDailyReview', () => {
     const result = await new GenerateDailyReview(journals, reviews, { collect: vi.fn(), collectStructured: structured }, new ReviewTaskManager()).execute({ date: journal.date, model: 'fake' });
     expect(result).toMatchObject({ kind: 'error', diagnostics: { kind: 'empty_content', outputLength: 0, schemaPaths: [] } });
     expect(structured).toHaveBeenCalledTimes(2);
+    expect(await reviews.list()).toEqual([]);
+  });
+
+  it.each([
+    ['truncated', JSON.stringify({ priorAction: null, insight: { quote: '完整内容', text: '内容完整但服务商标记为截断。' }, patternConnection: null, action: { step: '继续', prediction: '明天验证' }, newInsight: '保持验证' }), 'length'],
+    ['schema_mismatch', JSON.stringify({ insight: { quote: 'MODEL_SECRET', text: '字段缺失。' } }), 'stop'],
+  ] as const)('classifies %s structured failures without exposing output values', async (kind, content, finishReason) => {
+    const root = await mkdtemp(path.join(tmpdir(), 'zhiji-review-'));
+    const journals = new MarkdownJournalRepository(root);
+    const reviews = new MarkdownReviewRepository(root);
+    const journal = await journals.create({ schemaVersion: 1, id: 'journal_a1', date: '2026-08-13', createdAt: '2026-08-13T08:00:00.000Z', updatedAt: '2026-08-13T08:00:00.000Z', projectIds: [], body: '完成了关键模块。' });
+    const structured = vi.fn().mockResolvedValue({ content, finishReason });
+    const result = await new GenerateDailyReview(journals, reviews, { collect: vi.fn(), collectStructured: structured }, new ReviewTaskManager()).execute({ date: journal.date, model: 'fake' });
+    expect(result).toMatchObject({ kind: 'error', diagnostics: { kind, finishReason } });
+    expect(JSON.stringify(result)).not.toContain('MODEL_SECRET');
+    if (kind === 'schema_mismatch' && result.kind === 'error') {
+      expect(result.diagnostics.schemaPaths.length).toBeGreaterThan(0);
+      expect(result.diagnostics.schemaPaths.every((path) => path === '<root>' || /^[A-Za-z0-9_.-]+$/.test(path))).toBe(true);
+      expect(JSON.stringify(result.diagnostics)).not.toContain('字段缺失');
+    }
+    expect(structured).toHaveBeenCalledTimes(2);
+    expect(await reviews.list()).toEqual([]);
+  });
+
+  it.each(['INVALID_API_KEY', 'RATE_LIMITED', 'NETWORK_TIMEOUT', 'CANCELLED'] as const)('does not retry non-structured %s failures', async (code) => {
+    const root = await mkdtemp(path.join(tmpdir(), 'zhiji-review-'));
+    const journals = new MarkdownJournalRepository(root);
+    const reviews = new MarkdownReviewRepository(root);
+    const journal = await journals.create({ schemaVersion: 1, id: 'journal_a1', date: '2026-08-13', createdAt: '2026-08-13T08:00:00.000Z', updatedAt: '2026-08-13T08:00:00.000Z', projectIds: [], body: '完成了关键模块。' });
+    const structured = vi.fn().mockRejectedValue(appError({ code }));
+    await expect(new GenerateDailyReview(journals, reviews, { collect: vi.fn(), collectStructured: structured }, new ReviewTaskManager()).execute({ date: journal.date, model: 'fake' })).rejects.toMatchObject({ code });
+    expect(structured).toHaveBeenCalledOnce();
+    expect(await reviews.list()).toEqual([]);
+  });
+
+  it('does not send a retry after cancellation during the first structured attempt', async () => {
+    const root = await mkdtemp(path.join(tmpdir(), 'zhiji-review-'));
+    const journals = new MarkdownJournalRepository(root);
+    const reviews = new MarkdownReviewRepository(root);
+    const journal = await journals.create({ schemaVersion: 1, id: 'journal_cancelled', date: '2026-08-13', createdAt: '2026-08-13T08:00:00.000Z', updatedAt: '2026-08-13T08:00:00.000Z', projectIds: [], body: '完成了关键模块。' });
+    const controller = new AbortController();
+    const structured = vi.fn().mockImplementationOnce(async () => { controller.abort(); return { content: '{"insight":', finishReason: 'stop' }; });
+    await expect(new GenerateDailyReview(journals, reviews, { collect: vi.fn(), collectStructured: structured }, new ReviewTaskManager()).execute({ date: journal.date, model: 'fake' }, controller.signal)).rejects.toMatchObject({ code: 'CANCELLED' });
+    expect(structured).toHaveBeenCalledOnce();
     expect(await reviews.list()).toEqual([]);
   });
 

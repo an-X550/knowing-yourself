@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 17:19] [修复] 完成 v2.6.3 安装验收修订与本地 RC (v2.6.2 -> v2.6.3)
+
+- **受影响文件**: AI 设置页与单元测试、安装/打包 E2E、日反馈集成测试；根 `VERSION`、`README.md`、`PROJECT_STATUS.md`、`CHANGELOG.md`、桌面 package/lock；发布质量 Spec/执行计划与安装分发说明。
+- **改动摘要**: 普通 AI 路径只保留“保存并测试”，将“仅保存”和“移除已保存 Key”放入高级设置；保留 safeStorage、草稿和既有 API 边界；结构化输出补齐 `finish_reason:length`、Schema 缺字段、非结构错误和取消不重试回归；安装版结构化失败恢复明确 skip，新增 Agent 新会话及日志/模板/本地保存/暗色/滚动核心冒烟；文档分离 DSH 安装事故 A 与 GitHub v2.0.5 日反馈事故 B，并将 rcedit/任何非零 make 明确为失败。
+- **验证结果**: `npm test` 53 files / 324 tests；`npm run typecheck` 通过；`npm run lint` 0 errors / 6 个既有 warnings；`npm run package` 通过；`npm run test:e2e` 5 passed / 1 skipped；ASCII 根 junction 下 `npm run make` 退出 0，RC `out/release-candidate/v2.6.3/` 三件套内部一致且安装器元数据为 2.6.3；安装器 `/silent` 退出 0；v2.6.3 安装版 E2E 4 passed / 1 skipped。未执行真实 DeepSeek 日反馈，因为没有安全可用配置；未 push、未 tag、未修改 GitHub，v2.6.2 RC 保留。
+
 ## [2026-08-22 15:52] [修复] 完成本地桌面端质量修复与 v2.6.2 RC (v2.6.1 -> v2.6.2)
 
 - **受影响文件**: `apps/zhiji-desktop/` 设置页、日志模板、日反馈结构化输出、Forge 生产依赖、测试与安装分发文档；根 `VERSION`、`README.md`、`PROJECT_STATUS.md`

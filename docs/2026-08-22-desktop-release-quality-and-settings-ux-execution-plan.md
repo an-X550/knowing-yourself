@@ -15,7 +15,7 @@ status: approved
 3. 把日志模板管理移到日志页，删除无实际版本检查能力的更新控件；
 4. 修复侧栏滚动归属和暗色下拉框；
 5. 为结构化日反馈增加失败分类、一次重试和安全恢复入口；
-6. 生成并人工验收版本独立的本地 Release Candidate；
+6. 生成并完成核心功能冒烟的版本独立本地 Release Candidate；
 7. 把 GitHub `v2.0.5` 核对与新版本发布留到单独授权的第二阶段。
 
 对应需求：[`desktop-release-quality-and-settings-ux`](specs/2026-08-22-desktop-release-quality-and-settings-ux.md)。
@@ -27,7 +27,7 @@ status: approved
 - 不修改 `.claude/` 产品逻辑、DSH Agent、记忆检索、WorkBuddy 或用户版分发包，除非实际测试证明存在直接依赖。
 - 不清理用户数据、旧 GitHub Release 或仓库中的用户既有改动。
 - 工作区当前存在其他未跟踪文件；实施和提交必须只选择本任务文件。
-- 预计实施完成后从当时当前版本递增一个 patch；若仍为 `2.6.1`，目标版本为 `2.6.2`。
+- 当前基线为 `2.6.2`，本轮目标版本为 `2.6.3`；版本号只在实现和验证完成后同步。
 
 ## 阶段 0：建立可判诊断
 
@@ -73,7 +73,7 @@ npm run make
   -> 全新 Setup.exe 安装到干净 userData/dataRoot
 ```
 
-先用本地模型替身验证客户端链路，再用当前真实 DeepSeek 配置做一次脱敏冒烟。真实服务失败时记录 HTTP/结束原因/输出分类，不保存原文。
+先用本地模型替身验证客户端链路；若存在安全可用的真实 DeepSeek 配置，再做一次脱敏冒烟。没有安全配置时明确记录未验证，不索要 Key、不使用假成功；真实服务失败时只记录 HTTP/结束原因/输出分类，不保存原文。
 
 ### 0.4 阶段完成条件
 
@@ -138,7 +138,7 @@ npm run make
 - 深色主题下 select 的 computed style 为 `background-repeat: no-repeat`；
 - 项目选择和 AI 设置选择都只显示一个箭头；
 - 右侧工作区滚动前后，侧栏状态项的 viewport 坐标保持不变；
-- 900px 宽度下标签和主要按钮不重叠。
+- 关键导航、按钮和模板入口在自动化测试中可见且可操作；本轮不扩展宽度/DPI 人工矩阵。
 
 ## 阶段 2：重整设置与日志模板
 
@@ -302,30 +302,27 @@ interface StructuredCompletion {
 - 明确“日志和已有数据没有受到影响”；
 - 如果自动重试正在进行，阶段状态显示“正在重新整理反馈格式”，不让用户误以为按钮无响应。
 
-## 阶段 5：打包 E2E 与视觉验收
+## 阶段 5：安装版 E2E 真实性
 
 ### 5.1 扩展打包 E2E
 
-基于现有 `e2e/desktop.spec.ts` 增加独立场景，避免单个超长 E2E 难定位：
+基于现有 `e2e/desktop.spec.ts` 与 `e2e/release-quality.spec.ts` 保持场景可定位：
 
-1. `settings-navigation.spec.ts`：三标签、模板移出、更新控件删除；
-2. `dark-select.spec.ts`：深色 computed style；
-3. `sidebar-scroll.spec.ts`：工作区滚动、侧栏坐标不变；
-4. `daily-structured-output.spec.ts`：本地 fake provider 首次失败、第二次成功与连续失败；
-5. `package-version.spec.ts`：运行中的 `app.getVersion()` 与期望版本一致。
+1. `release-quality.spec.ts` 设置场景：三标签、普通/高级 AI 设置、日志模板、脱敏日志和“本地保存”入口；
+2. `release-quality.spec.ts` 暗色场景：共享 select 的 computed style；
+3. `release-quality.spec.ts` 侧栏场景：工作区滚动、侧栏坐标不变；
+4. `release-quality.spec.ts` packaged-asar 日反馈场景：本地 fake provider 首次失败、第二次成功与安全恢复；
+5. `release-quality.spec.ts` 安装版场景：真实启动 Agent 并新建会话；安装版日反馈恢复明确 skip，不伪造空通过。
 
 Playwright 不能直接拦截 Electron Main Process 原生文件对话框；备份/恢复和改目录测试按官方建议通过 `electronApplication.evaluate()` 注入确定性 dialog 替身，不点击真实系统窗口。
 
-### 5.2 截图
+### 5.2 安装版与打包版边界
 
-输出到 gitignored 临时验收目录，不纳入长期 baseline：
-
-- 设置：通用、AI 普通、AI 高级、数据与隐私；
-- 日志：模板入口、暗色项目选择、日反馈安全失败；
-- 浅色/深色；
-- 900px、常用宽度、宽屏。
-
-人工再检查 Windows 100%、125%、150% 缩放。记录通过/问题，不用像素 diff 决定成败。
+- 安装版真实 E2E 只验证启动、设置分区、日志/模板、本地保存入口、暗色 select、侧栏滚动和 Agent 新建会话；
+- 结构化日反馈失败恢复只在 `packaged-asar` 模式通过 Main Process 测试替身注入，验证分类、一次重试和不泄漏；
+- 安装版的日反馈测试必须明确跳过并说明需要真实 AI 配置，不得以没有执行步骤的空通过代替真实验证；
+- 不添加 production backdoor、不拦截真实网络、不把假 provider 当作安装版真实 AI 冒烟；
+- 本轮取消手工截图、900px/常用宽度/宽屏、100%/125%/150% DPI 和像素 baseline，也不再做颜色/圆角/阴影/风格调整。
 
 ### 5.3 回归命令
 
@@ -339,13 +336,15 @@ npm run package
 npm run test:e2e
 ```
 
-完成安装版前再执行 `npm run make`。如果构建工具因中文路径或代理失败，不把旧目录里已经存在的文件当作本次成功；必须核对进程退出、文件时间和版本名。
+完成安装版前再执行 `npm run make`。`make` 非零退出（包括 rcedit 报错）即失败；不得从失败的 `out/make` 复制任何文件。应从 ASCII 路径或已核对目标的 ASCII junction 重跑，并核对退出码、元数据、文件时间和三件套内部版本一致。
 
 ## 阶段 6：生成本地 Release Candidate
 
 ### 6.1 版本同步
 
 实施完成后按治理规范递增 patch，并同步：
+
+本轮以 `2.6.2` 为基线，目标版本固定为 `2.6.3`；旧 `v2.6.2` RC 保留，不覆盖。
 
 - 根 `VERSION`；
 - `apps/zhiji-desktop/package.json`；
@@ -377,19 +376,18 @@ out/release-candidate/vX.Y.Z/
 
 把 `Setup.exe` 重命名为 `Zhiji-Setup-vX.Y.Z.exe`；`.nupkg` 和 `RELEASES` 保持内部一致。记录 Git commit 和生成时间到人工验收记录，不新增 hash 文件。
 
-### 6.4 全新安装验收
+### 6.4 全新安装核心冒烟
 
 用 RC 目录的安装器完成：
 
 - 首次安装和启动；
 - 全新 `userData` 与数据目录；
 - 主题切换；
-- AI 配置保存并测试；
-- 写日志、模板管理和项目关联；
-- 每日反馈真实 DeepSeek 脱敏冒烟；
-- 设置页数据位置、创建备份和恢复预览；
-- 关闭重启后配置和数据仍存在；
-- 卸载是否保留数据继续按既有已知边界记录，不在本轮顺带承诺完整安装矩阵。
+- 设置分区、侧栏“本地保存”导航、写脱敏日志和模板插入；
+- Agent 页面新建会话；
+- 若有安全可用配置，再执行一次真实 DeepSeek 脱敏日反馈，否则标记未验证；
+- 关闭重启后核心配置和数据仍存在；
+- 不在本轮扩展升级/卸载/Windows 10 或 DPI 完整矩阵。
 
 只把这一份 RC 标记为“可进入远程发布评估”。
 
@@ -436,8 +434,7 @@ out/release-candidate/vX.Y.Z/
 ## 最终交付
 
 - 已实现且通过回归的本地源码；
-- 设置页与日志页改前/改后截图；
-- 本地诊断记录，明确哪些根因被证实或证伪；
+- 本地诊断记录，明确事故 A（DSH 安装缺失依赖）与事故 B（GitHub v2.0.5 日反馈根因仍未确认）的证据边界；
 - `out/release-candidate/vX.Y.Z/` 中经过安装验收的三件套；
 - 更新后的安装分发说明；
 - GitHub 第二阶段待办，不包含任何远程修改。

@@ -9,7 +9,7 @@ beforeEach(() => {
     dataDirectory: { getInfo: vi.fn(async () => ({ path: 'D:\\知己', writable: true, fileCount: 6, totalBytes: 100, categories: { journals: 3, reviews: 2, projects: 1, profile: 0, settings: 0 } })), open: vi.fn(async () => undefined), pickFolder: vi.fn(async () => ({ canceled: true })), changeLocation: vi.fn() },
     transfer: { exportBackup: vi.fn(async () => ({ canceled: true })), previewRestore: vi.fn(async () => ({ canceled: true })), restore: vi.fn(async () => ({ fileCount: 0 })) },
     templates: { list: vi.fn(async () => []), get: vi.fn(), save: vi.fn(), delete: vi.fn() },
-    app: { getInfo: vi.fn(async () => ({ version: '2.6.1' })) },
+    app: { getInfo: vi.fn(async () => ({ version: '2.6.3' })) },
     settings: {
       getPublicConfig: vi.fn(async () => ({ providerId: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-5-mini', agentThinking: 'disabled' as const, hasApiKey: true })),
       save: vi.fn(async () => ({ providerId: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-5-mini', agentThinking: 'disabled' as const, hasApiKey: true })),
@@ -39,9 +39,14 @@ describe('SettingsPage', () => {
     expect(await screen.findByRole('heading', { name: 'AI 服务' })).toBeInTheDocument();
     expect(screen.getByRole('combobox', { name: '服务商' })).toHaveValue('openai');
     expect(screen.queryByRole('textbox', { name: 'API 地址' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '仅保存' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '移除已保存 Key' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '保存并测试' })).toBeInTheDocument();
     fireEvent.change(screen.getByRole('combobox', { name: '服务商' }), { target: { value: 'custom' } });
     fireEvent.click(screen.getByText('高级设置'));
     expect(screen.getByRole('textbox', { name: 'API 地址' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '仅保存' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '移除已保存 Key' })).toBeInTheDocument();
   });
 
   it('shows a saved-key badge without ever echoing the key', async () => {
@@ -56,6 +61,7 @@ describe('SettingsPage', () => {
     vi.mocked(window.zhiji.settings.testConnection).mockReturnValueOnce(new Promise<void>((resolve) => { finishTest = resolve; }));
     render(<SettingsPage initialSection="ai"/>);
     await screen.findByText(/已安全保存/);
+    fireEvent.click(screen.getByText('高级设置'));
     fireEvent.change(screen.getByLabelText('API Key'), { target: { value: 'sk-secret' } });
     fireEvent.click(screen.getByRole('button', { name: '保存并测试' }));
     expect(screen.getByRole('button', { name: '请稍候…' })).toBeDisabled();
@@ -82,6 +88,7 @@ describe('SettingsPage', () => {
     const onSaved = vi.fn();
     render(<SettingsPage initialSection="ai" onSaved={onSaved}/>);
     await screen.findByText(/已安全保存/);
+    fireEvent.click(screen.getByText('高级设置'));
     fireEvent.click(screen.getByRole('button', { name: '移除已保存 Key' }));
     expect(screen.getByText('移除后需要重新输入才能使用 AI 功能；其他设置保持不变。')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '确认移除' }));

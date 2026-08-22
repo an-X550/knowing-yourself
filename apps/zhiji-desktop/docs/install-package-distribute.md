@@ -1,6 +1,6 @@
 # 知己桌面端：安装 · 打包 · 分发指南
 
-> 适用版本：v2.6.2 起。本文回答三个问题：怎么装、怎么打包、怎么发给别人；并附当前产品的文件职责清单。
+> 适用版本：v2.6.3 起。本文回答三个问题：怎么装、怎么打包、怎么发给别人；并附当前产品的文件职责清单。
 
 ---
 
@@ -10,7 +10,7 @@
 
 | 形态 | 路径 | 说明 |
 | --- | --- | --- |
-| **安装版**（推荐分发） | `out/release-candidate/v2.6.2/Zhiji-Setup-v2.6.2.exe` | Windows 安装程序，双击下一步即装好，会建开始菜单/桌面快捷方式 |
+| **安装版**（推荐分发） | `out/release-candidate/v2.6.3/Zhiji-Setup-v2.6.3.exe` | Windows 安装程序，双击下一步即装好，会建开始菜单/桌面快捷方式 |
 | **免安装版**（直接运行） | `out/知己-win32-x64/知己.exe` | 解压即用，双击 `知己.exe` 直接运行，无需安装 |
 
 ### 安装版流程（Setup.exe）
@@ -85,11 +85,38 @@ unzip -oq "$LOCALAPPDATA/electron/Cache/<hash>/electron-v<版本>-win32-x64.zip"
 
 ### 首次打包耗时
 
-`npm run make` 首次会下载 Squirrel 打包工具，可能耗时数十分钟；产物生成后即可用（`out/make/squirrel.windows/x64/` 下出现 `Setup.exe`、`zhiji-x.y.z-full.nupkg`、`RELEASES` 即成功）。之后再打包会快很多（工具已缓存）。
+`npm run make` 首次会下载 Squirrel 打包工具，可能耗时数十分钟；`out/make/squirrel.windows/x64/` 出现文件不等于成功，必须同时确认命令退出 0、安装器元数据正确且三件套内部版本一致。之后再打包会快很多（工具已缓存）。
 
-> ⚠️ **中文路径导致的 rcedit 报错（可忽略）**：本项目路径含中文「知己」时，`make` 末尾给 `Setup.exe` 写版本信息（rcedit）会报 `Fatal error: Unable to load file` 并让 `make` 以非零码退出。**安装包已正常生成、可正常安装使用**，只是 `Setup.exe` 自身的「属性 → 详细信息」里版本字段缺失（安装进去的仍是正确版本）。如需彻底消除，把项目放到纯英文路径（如 `C:\projects\zhiji`）再打包。
+> ⚠️ **rcedit 或任何非零 `make` 都是失败**：即使 `out/make` 已出现 `Setup.exe`、`.nupkg` 或 `RELEASES`，也不得从失败运行的目录复制或分发任何文件。应从纯 ASCII 路径（推荐已核对目标的 junction）重新执行，直到退出码为 0，并确认安装器元数据正确、`RELEASES` 指向同版本 `.nupkg`、三件套文件版本一致。
 
-本次 v2.6.2 已在 ASCII junction `C:\zhiji-build` 下成功执行 `npm run make`，并用生成的安装器完成安装版启动烟测；中文工作区直跑仍可能触发上述 rcedit 问题。
+需要绕过中文路径时，可用下面的安全 PowerShell 流程。它只在 junction 不存在时创建，且只删除本次创建并确认目标正确的 junction：
+
+```powershell
+$desktopPath = (Get-Location).Path
+$workspacePath = [IO.Path]::GetFullPath((Join-Path $desktopPath '..\..'))
+$junctionPath = 'C:\zhiji-build'
+$createdJunction = $false
+
+$existing = Get-Item -LiteralPath $junctionPath -Force -ErrorAction SilentlyContinue
+if ($existing) {
+  $existingTarget = [IO.Path]::GetFullPath([string]$existing.Target)
+  if (-not $existing.Attributes.HasFlag([IO.FileAttributes]::ReparsePoint) -or $existingTarget -ne $workspacePath) {
+    throw "已有 C:\zhiji-build，但它不是指向当前工作区的 junction。"
+  }
+} else {
+  New-Item -ItemType Junction -Path $junctionPath -Target $workspacePath | Out-Null
+  $createdJunction = $true
+}
+
+Push-Location "$junctionPath\apps\zhiji-desktop"
+try {
+  npm run make
+  if ($LASTEXITCODE -ne 0) { throw "make failed with exit code $LASTEXITCODE" }
+} finally {
+  Pop-Location
+  if ($createdJunction) { Remove-Item -LiteralPath $junctionPath -Force }
+}
+```
 
 ---
 
@@ -100,7 +127,7 @@ unzip -oq "$LOCALAPPDATA/electron/Cache/<hash>/electron-v<版本>-win32-x64.zip"
 **给普通用户安装 → 只需发一个文件：**
 
 ```
-out/release-candidate/v2.6.2/Zhiji-Setup-v2.6.2.exe
+out/release-candidate/v2.6.3/Zhiji-Setup-v2.6.3.exe
 ```
 
 **一次发布的安装包由这三个 Squirrel 文件组成；对普通用户直接提供安装器即可：**
@@ -120,7 +147,7 @@ Setup.exe                # 引导安装器
 ### 当前限制（诚实边界）
 
 - **未代码签名**：Windows SmartScreen 可能提示「未知发布者」，需点「仍要运行」。正式对外分发前建议购买代码签名证书。
-- 未做自动更新、未验证 Windows 10 干净虚拟机、未做升级/卸载的完整回归；v2.6.2 已用临时数据根完成安装后启动烟测。
+- 未做自动更新、未验证 Windows 10 干净虚拟机、未做升级/卸载的完整回归；v2.6.3 只承诺用隔离临时数据根完成核心安装冒烟。
 - 数据目录与用户数据（API Key）是两处：换机器或重装需用「设置 → 数据与隐私 → 创建备份」迁移。
 
 ### 版本独立的本地 Release Candidate
@@ -128,13 +155,13 @@ Setup.exe                # 引导安装器
 每次准备分发时，先完成 `npm run package`、`npm run test:e2e`，再执行 `npm run make`。确认 `out/make/squirrel.windows/x64/` 是本次新生成的目录后，把本次三件套复制到版本独立目录：
 
 ```text
-out/release-candidate/v2.6.2/
-├─ Zhiji-Setup-v2.6.2.exe
-├─ zhiji-2.6.2-full.nupkg
+out/release-candidate/v2.6.3/
+├─ Zhiji-Setup-v2.6.3.exe
+├─ zhiji-2.6.3-full.nupkg
 └─ RELEASES
 ```
 
-只用该目录中的 `Zhiji-Setup-v2.6.2.exe` 做全新用户数据和安装功能验收；不要把旧 `out/make` 中的 `Setup.exe` 当成本次构建。后续远程发布只能上传已经验收的同一份文件，且需要单独明确授权。
+只用该目录中的 `Zhiji-Setup-v2.6.3.exe` 做全新用户数据和核心功能验收；不要把旧 `out/make` 中的 `Setup.exe` 当成本次构建。旧 v2.6.2 RC 保留不覆盖。后续远程发布只能上传已经验收的同一份文件，且需要单独明确授权。
 
 ---
 

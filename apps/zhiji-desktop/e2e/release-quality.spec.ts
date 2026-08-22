@@ -100,6 +100,8 @@ test('settings information architecture and journal template flow are usable in 
     const { page } = running;
     await page.getByRole('button', { name: '设置', exact: true }).click();
     await expect(page.getByRole('tab', { name: '通用' })).toHaveAttribute('aria-selected', 'true');
+    await page.getByRole('button', { name: '本地保存，查看存储位置' }).click();
+    await expect(page.getByRole('tab', { name: '数据与隐私' })).toHaveAttribute('aria-selected', 'true');
     await page.getByRole('tab', { name: 'AI 与个性化' }).click();
     await expect(page.getByRole('heading', { name: 'AI 服务' })).toBeVisible();
     await page.getByRole('combobox', { name: '服务商' }).selectOption('custom');
@@ -111,7 +113,7 @@ test('settings information architecture and journal template flow are usable in 
     await expect(page.getByRole('button', { name: '创建备份' })).toBeVisible();
     await expect(page.getByRole('button', { name: '从备份恢复' })).toBeVisible();
     await expect(page.getByText(/发布地址|保存地址|检查更新/)).toHaveCount(0);
-    await expect(page.getByText('版本 2.6.2')).toBeVisible();
+    await expect(page.getByText('版本 2.6.3')).toBeVisible();
 
     await page.getByRole('button', { name: '日志', exact: true }).click();
     await page.getByRole('button', { name: '管理模板' }).click();
@@ -120,6 +122,14 @@ test('settings information architecture and journal template flow are usable in 
     await page.getByRole('textbox', { name: '模板正文' }).fill('事实：');
     await page.getByRole('button', { name: '保存模板' }).click();
     await expect(page.locator('select[aria-label="选择模板"] option[value="E2E 模板"]')).toHaveCount(1);
+    await page.getByRole('button', { name: '关闭' }).click();
+    await page.getByLabel('选择模板').selectOption('E2E 模板');
+    await expect(page.getByRole('textbox', { name: '日志内容' })).toHaveValue('事实：');
+    const previousDate = await page.evaluate(() => { const date = new Date(); date.setDate(date.getDate() - 1); return date.toISOString().slice(0, 10); });
+    await page.getByLabel('日志日期').fill(previousDate);
+    await page.getByRole('textbox', { name: '日志内容' }).fill('脱敏核心冒烟日志：完成设置与安装验证。');
+    await page.getByRole('button', { name: '保存日志' }).click();
+    await expect(page.getByText('已保存到本机')).toBeVisible();
   } finally {
     await closeClean(running);
   }
@@ -173,6 +183,7 @@ test('workspace scrolls while the sidebar keeps its viewport boundary', async ()
 });
 
 test('packaged daily feedback exposes safe recovery without leaking failed output', async () => {
+  test.skip(Boolean(process.env.ZHIJI_E2E_EXECUTABLE), '安装版真实 AI 冒烟由独立验收完成；结构化失败恢复仅在 packaged-asar 模式注入。');
   const running = await launchClean();
   try {
     const { page } = running;
@@ -201,6 +212,20 @@ test('packaged daily feedback exposes safe recovery without leaking failed outpu
     } else {
       await expect(page.getByRole('button', { name: '日志', exact: true })).toBeVisible();
     }
+  } finally {
+    await closeClean(running);
+  }
+});
+
+test('installed executable starts Agent and creates a session', async () => {
+  test.skip(!process.env.ZHIJI_E2E_EXECUTABLE, '仅在 ZHIJI_E2E_EXECUTABLE 安装版验收中运行。');
+  const running = await launchClean();
+  try {
+    const { page } = running;
+    await page.getByRole('button', { name: '知己 Agent', exact: true }).click();
+    await expect(page.getByRole('heading', { name: '知己 Agent', level: 1 })).toBeVisible();
+    await page.getByRole('button', { name: '新建会话' }).click();
+    await expect(page.getByText('新对话').first()).toBeVisible();
   } finally {
     await closeClean(running);
   }
