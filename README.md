@@ -4,7 +4,7 @@
 
 ReflectLoop（中文名“知己”）是一个面向中文个人日志的本地优先 AI 复盘系统。它帮助你从真实记录中整理证据、发现模式、形成一个低成本行动，并在后续记录中验证和校准认识。
 
-[![Version](https://img.shields.io/badge/版本-v2.6.6-green)](VERSION)
+[![Version](https://img.shields.io/badge/版本-v2.6.5-green)](VERSION)
 [![License](https://img.shields.io/badge/许可证-MIT-yellow)](LICENSE)
 
 ```text

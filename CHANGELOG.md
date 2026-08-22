@@ -5,10 +5,10 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
-## [2026-08-22 22:33] [配置] 将桌面仓库定位明确为 Desktop Agent (v2.6.5 -> v2.6.6)
+## [2026-08-22 22:33] [配置] 将桌面仓库定位明确为 Desktop Agent (v2.6.5 -> v2.6.5)
 
 - **受影响文件**: `VERSION`、根 `README.md`、`PROJECT_STATUS.md`、`apps/zhiji-desktop/README.md`、`apps/zhiji-desktop/package.json`、`apps/zhiji-desktop/package-lock.json`、`docs/standalone-repositories.md`。
-- **改动摘要**: 将桌面独立仓库的目标名称统一为 `reflectloop-desktop-agent`，在标题和首屏说明中突出受控 Agent，同时保留 Windows 桌面应用边界；同步本地快照的仓库 URL、克隆命令、Issues/Release 链接和 package metadata。GitHub 仓库设置及独立 checkout remote 尚未修改。
+- **改动摘要**: 将桌面独立仓库的目标名称统一为 `Reflectloop-Desktop-Agent` / `reflectloop-desktop-agent`，在标题和首屏说明中突出受控 Agent，同时保留 Windows 桌面应用边界；同步本地快照的仓库 URL、克隆命令、Issues/Release 链接和 package metadata。独立仓库已完成改名、提交并推送，版本保持 2.6.5。
 
 ## [2026-08-22 22:07] [配置] 同步 ReflectLoop 仓库改名后的地址与元数据 (v2.6.5 -> v2.6.5)
 

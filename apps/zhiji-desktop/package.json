@@ -22,12 +22,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/an-X550/reflectloop-desktop-agent.git"
+    "url": "git+https://github.com/an-X550/Reflectloop-Desktop-Agent.git"
   },
   "bugs": {
-    "url": "https://github.com/an-X550/reflectloop-desktop-agent/issues"
+    "url": "https://github.com/an-X550/Reflectloop-Desktop-Agent/issues"
   },
-  "homepage": "https://github.com/an-X550/reflectloop-desktop-agent",
+  "homepage": "https://github.com/an-X550/Reflectloop-Desktop-Agent",
   "devDependencies": {
     "@electron-forge/cli": "^7.11.2",
     "@electron-forge/maker-deb": "^7.11.2",
