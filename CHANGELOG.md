@@ -5,6 +5,11 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 22:50] [文档] 依据第一性原理重构 Desktop Agent README (v2.6.5 -> v2.6.5)
+
+- **受影响文件**: `apps/zhiji-desktop/README.md`、独立 Desktop Agent 仓库 README、两仓库 CHANGELOG。
+- **改动摘要**: README 首屏现在先回答产品是什么、适合谁、如何完成最短闭环，以及 Agent 的真实边界；删除把桌面端误解为整个 ReflectLoop 或通用 Computer Use 的空间。版本、发布制品和运行能力不变。
+
 ## [2026-08-22 22:33] [配置] 将桌面仓库定位明确为 Desktop Agent (v2.6.5 -> v2.6.5)
 
 - **受影响文件**: `VERSION`、根 `README.md`、`PROJECT_STATUS.md`、`apps/zhiji-desktop/README.md`、`apps/zhiji-desktop/package.json`、`apps/zhiji-desktop/package-lock.json`、`docs/standalone-repositories.md`。
