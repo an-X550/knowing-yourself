@@ -5,7 +5,7 @@ last_updated: 2026-08-22
 
 # PROJECT_STATUS - 知己
 
-**当前版本**：2.6.4
+**当前版本**：2.6.5
 
 ## 项目概述
 
@@ -128,7 +128,7 @@ last_updated: 2026-08-22
 9. WorkBuddy 每日日志默认分发已通过一次脱敏真实消息验收；周复盘、主题讨论与确认沉淀仍只有静态边界测试，尚未真实验收。
 10. 非法或缺少块边界的单行 Markdown（如 `###`、`---`、`|` 被模型挤在同一行）无法由成熟 Markdown 解析器可靠猜测意图；本轮不做启发式修复，后续先观察真实样本再决定是否值得单独立项。
 11. DeepSeek V4/Pro 的官方上下文容量已纳入 compaction 路由；未知模型或自定义 provider 不猜测上下文窗口，因此不会伪造压缩容量。真实超长会话摘要触发和 Flash thinking 关闭/开启质量差异仍待受控样本。
-12. 源码、免安装包、Squirrel 制品与版本独立 RC 应统一为 `2.6.4`：根 `VERSION`、`PROJECT_STATUS.md`、Electron `apps/zhiji-desktop/package.json`、应用锁文件、当前 `out/知己-win32-x64` 和 `out/release-candidate/v2.6.4/` 必须一致；旧 `out/release-candidate/v2.6.3/` 保留，后续分发只使用已安装验收的 v2.6.4 RC 三件套。
+12. v2.6.4 是已发布且已验收的安装版本；当前源码版本已进入 v2.6.5，暂只有 README/版本事实同步，没有新的 v2.6.5 RC 或 Release。生成下一份分发包前，根 `VERSION`、`PROJECT_STATUS.md`、Electron `apps/zhiji-desktop/package.json`、应用锁文件、免安装包和 RC 三件套必须统一为 `2.6.5`；在此之前只能继续使用已验收的 v2.6.4 RC。
 13. 两个事故分开记录：事故 A 是 v2.6.2 production asar 缺少 DSH peer-only 运行依赖导致 `ERR_MODULE_NOT_FOUND`，依赖已补齐且 v2.6.3 安装版 Agent 新建会话通过；事故 B 是 GitHub `v2.0.5` 用户报告的每日反馈格式失败，本地 JSON 校验/分类/一次重试已实现并覆盖回归，但尚未用同一服务商、模型、输入和远程资产做复核，原始远端根因仍未确认。
 
 ## 关键决策记录

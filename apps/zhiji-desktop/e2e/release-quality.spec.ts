@@ -113,7 +113,7 @@ test('settings information architecture and journal template flow are usable in 
     await expect(page.getByRole('button', { name: '创建备份' })).toBeVisible();
     await expect(page.getByRole('button', { name: '从备份恢复' })).toBeVisible();
     await expect(page.getByText(/发布地址|保存地址|检查更新/)).toHaveCount(0);
-    await expect(page.getByText('版本 2.6.4')).toBeVisible();
+    await expect(page.getByText('版本 2.6.5')).toBeVisible();
 
     await page.getByRole('button', { name: '日志', exact: true }).click();
     await page.getByRole('button', { name: '管理模板' }).click();

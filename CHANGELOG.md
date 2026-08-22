@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 20:50] [文档] 以 Agent 为核心重写项目入口说明 (v2.6.4 -> v2.6.5)
+
+- **受影响文件**: 根 `README.md`、`apps/zhiji-desktop/README.md`、`PROJECT_STATUS.md`、版本同步文件、桌面端版本断言。
+- **改动摘要**: 依据“发现模式 → 形成行动 → 后续验证”的真实价值链重排 README，前置知己 Agent 的证据检索、有限工具回合、受控联网、预览—确认—执行和安全边界；同时区分桌面 Agent、Codex/Claude、DSH 插件与 WorkBuddy 入口，不把通用 Computer Use、后台自主运行或任意写入误写成现有能力。
+- **验证结果**: Markdown 相对链接、版本一致性、README 事实与 `PROJECT_STATUS.md`/Agent 能力分析对齐后推送 `main`；本次不创建新 tag 或 Release。
+
 ## [2026-08-22 20:36] [修复] 完成 Agent 受控联网与 v2.6.4 远程发布 (v2.6.3 -> v2.6.4)
 
 - **受影响文件**: 桌面端 Tavily provider、搜索服务、Agent 工具契约与 DSH Runtime；Forge/package/lock、离线单测、provider smoke、安装版 E2E；根版本、架构/安装说明、`PROJECT_STATUS.md` 与发布 RC。

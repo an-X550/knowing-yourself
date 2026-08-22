@@ -1,6 +1,6 @@
 # 知己 Windows 客户端
 
-面向不使用 CLI、Skill 或 Agent 的普通用户。本客户端不在运行时调用 Claude Skill 或 Agent；Electron Main Process 以严格 Schema 和确定性排版实现同一套用户可见契约，避免模型自由改变报告结构。
+面向不使用 CLI 或 Skill、希望在 Windows 本地使用受控 Agent 的普通用户。本客户端内置自己的受控 Agent，但不在运行时调用 Claude Skill 或外部 Agent；Electron Main Process 以严格 Schema 和确定性排版实现同一套用户可见契约，避免模型自由改变报告结构。
 
 ## Skill Runtime 边界
 
