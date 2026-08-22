@@ -76,6 +76,7 @@ last_updated: 2026-08-22
 - [x] v2.0.4 打包版真实可用性验收：当前 API Key 可用；Enter 提问“今天星期几”得到本机正确星期；只读日志查询返回真实摘要；验收会话确认删除后进入回收站，重启不恢复，既有日志与复盘未改动。
 - [x] v2.4.0 Agent 输出与上下文最小闭环：成熟 Markdown/GFM 渲染、格式 persona、DeepSeek thinking 开关与 reasoning/tool replay、provider/model/thinking 可见性，以及官方 DSH token meter/compaction/tool-result pruner 接入均已通过自动回归和桌面打包验证；不新增自研压缩、自由回复 JSON、hash、baseline 或质量 gate。
 - [x] v2.5.0 Agent 能力边界与本地记忆检索：能力自述与十项能力裁决已按第一性原理收敛；新增只读 `zhiji.memory.search`，复用日志、复盘和已确认验证模式仓储，关键词召回结果经过 Zod、Main Process 脱敏和 DSH 工具桥；不新增 MCP、向量数据库、Computer Use 或递归自改。
+- [ ] Agent 本地证据卡片（需求已确认、待实现）：把 `zhiji.memory.search` 的 Main Process 已校验命中结果以当前回合只读卡片展示，默认 3 条、最多 8 条；不持久化卡片，不新增 RAG、MCP、多模态或权限。使用脱敏夹具验收事实、模式与冲突三场景（见 [`agent-evidence-cards`](docs/specs/2026-08-22-agent-evidence-cards.md) 与 [`execution-plan`](docs/2026-08-22-agent-evidence-cards-execution-plan.md)）。
 - [x] S0 知己 DSH 独立插件路线定稿：桌面端不再平台化；旧 P1-P4 取消，P0 证据保留；新架构和 S0-S4 执行计划明确直接使用 DSH Web UI，不建设同步工具或跨项目源码同构门禁。
 - [x] S1 每日复盘 Bundle MVP：官方 Profile add、Skill 加载、固定日志 keyless Runtime、remove 与移除后重启均通过；真实模型/用户价值仍待观察（见 [`zhiji-dsh-plugin-s1-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s1-validation.md)）。
 - [x] S2 周/月/项目复盘：四种 DSH Skill、代表性材料、输入不足降级、输出差异、S1 回归和官方 remove/restart 均通过；后续 S3/S4 已按用户明确决定完成（见 [`zhiji-dsh-plugin-s2-validation`](docs/reviews/2026-08-21-zhiji-dsh-plugin-s2-validation.md)）。
@@ -121,6 +122,7 @@ last_updated: 2026-08-22
 9. WorkBuddy 每日日志默认分发已通过一次脱敏真实消息验收；周复盘、主题讨论与确认沉淀仍只有静态边界测试，尚未真实验收。
 10. 非法或缺少块边界的单行 Markdown（如 `###`、`---`、`|` 被模型挤在同一行）无法由成熟 Markdown 解析器可靠猜测意图；本轮不做启发式修复，后续先观察真实样本再决定是否值得单独立项。
 11. DeepSeek V4/Pro 的官方上下文容量已纳入 compaction 路由；未知模型或自定义 provider 不猜测上下文窗口，因此不会伪造压缩容量。真实超长会话摘要触发和 Flash thinking 关闭/开启质量差异仍待受控样本。
+12. 根 `VERSION` / `PROJECT_STATUS.md` 为 `2.5.0`，但 Electron `apps/zhiji-desktop/package.json` 与锁文件仍为 `2.0.4`；版本事实统一并重新打包前，不把 Electron 安装包对外表述为已确认的 `2.5.0`。
 
 ## 关键决策记录
 
@@ -128,6 +130,7 @@ last_updated: 2026-08-22
 
 | 日期 | 决策 | 理由 |
 |------|------|------|
+| 2026-08-22 | 桌面 Agent 作品集只新增本地证据卡片，不为关键词堆叠通用能力 | 真实日常使用已有 Skill；桌面端主要证明 LLM / Agent 应用工程。当前检索工具已运行但界面只显示活动标签，观看者无法核实来源。最小方案是展示 Main Process 已校验的日期、类型和摘录；不新增 RAG、MCP、多模态、Computer Use、递归自改或卡片持久化。 |
 | 2026-07-15 | 显式第一性原理请求采用共享复核契约而非新命令 | 用户在发现内容过长或结论可疑时已主动使用该表述；用短契约覆盖默认表达深度，不改变入口、路径或报告骨架。 |
 | 2026-08-01 | 确认后的主题更新先重组当前论证 | 仅要求比较与合并仍会诱发机械追加；新认知先分类其对当前判断的影响，再重组受影响章节并检查依据、去重、边界与行动/转向，不限制篇幅，也不增加用户成本。 |
 | 2026-07-19 | 主题思考采用默认审查、合并更新与自适应行动门槛 | 新信息会长期追加；创建和更新都比较旧内容，以保留、修正、替换、合并、归档或不写入收敛重复、冲突和失效行动；只有会改变判断、行动或验证时才展开。 |

@@ -5,6 +5,12 @@ last_updated: 2026-08-22
 
 # CHANGELOG - 改动记录
 
+## [2026-08-22 11:31] [文档] 明确桌面 Agent 作品集定位与本地证据卡片需求 (v2.5.0 -> v2.5.0)
+
+- **受影响文件**: `docs/reviews/2026-08-22-agent-capabilities-audit.md`、`docs/specs/2026-08-22-agent-evidence-cards.md`、`docs/2026-08-22-agent-evidence-cards-execution-plan.md`、`PROJECT_STATUS.md`
+- **改动摘要**: 复核十项 Agent 能力后，将当前能力准确收敛为 DSH 上下文组件、受控 Function Calling、有限工具规划和本地可解释词法检索，不再把简单字符串召回称为 RAG。面向 LLM / Agent 应用工程作品集，确认下一项唯一新增能力为当前回合只读证据卡片，并以脱敏数据演示事实查询、模式查询和日志/复盘冲突处理；本轮不修改产品代码。
+- **验证结果**: 记忆服务、工具调度和 DSH Runtime 聚焦回归 3 个文件 / 15 项测试通过；新文档相对链接与项目状态引用检查通过；`git diff --check` 通过。
+
 ## [2026-08-22] [功能] 增加 Agent 本地长期记忆检索并校准十项能力自述 (v2.4.2 -> v2.5.0)
 
 - **受影响文件**: `apps/zhiji-desktop/src/main-process/agent/agent-memory-search-service.ts`、Agent DSH persona/工具定义、Main Process dispatcher、shared Zod contract 与回归测试；`docs/2026-08-22-agent-capabilities-first-principles-analysis.md`、`docs/specs/2026-08-22-agent-memory-search.md`、`docs/2026-08-22-agent-capabilities-execution-plan.md`、`PROJECT_STATUS.md`、`README.md`、`VERSION`
